@@ -1555,7 +1555,7 @@ tr.details td { background: var(--bg); }
   }
   function renderGrubhubMenu(menu) {
     var box = $('ghMenu');
-    var site = mirrorName(menu && menu.source_url);
+    var site = (menu && menu.site) || mirrorName(menu && menu.source_url);
     if (!menu || !menu.items || !menu.items.length) { setKids(box); return; }
     var sel = h('select', { id: 'ghMenuSelect' }, h('option', { value: '' }, 'Choose your item (' + menu.items.length + ' listings)'),
       menu.items.map(function (it, i) {

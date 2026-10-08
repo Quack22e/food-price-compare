@@ -242,3 +242,27 @@ def allmenus_page(gh_id="517712", items=None, ld_items=None, title=None, desc=No
             f'<div class="menu-container menu-nr1 active">{"".join(body)}</div>'
             f'<a href="https://www.grubhub.com/restaurant/lou-malnatis-pizzeria-85-s-buffalo-grove-rd-buffalo-grove/{gh_id}?utm_source=allmenus.com">Order online</a>'
             f'</body></html>')
+
+
+def build_allmenus(am, gh_id="517712"):
+    """SYNTHETIC AllMenus-shaped site: robots-declared sitemap index with two
+    gzipped restaurant sitemaps in no particular order (as observed live)."""
+    import gzip as _gz
+    b = am.base
+    am.route("/robots.txt", f"User-agent: *\nDisallow: /goto\nDisallow: /*/locations/*\nSitemap: {b}/sitemap-index.xml\n", ctype="text/plain")
+    am.route("/sitemap-index.xml", '<?xml version="1.0"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+             f'<sitemap><loc>{b}/sitemap-abc.xml.gz</loc></sitemap><sitemap><loc>{b}/sitemap-restaurants.xml.gz</loc></sitemap>'
+             f'<sitemap><loc>{b}/sitemap-restaurants2.xml.gz</loc></sitemap><sitemap><loc>{b}/sitemap-cities.xml.gz</loc></sitemap></sitemapindex>',
+             ctype="application/xml")
+
+    def gz(urls):
+        xml = '<?xml version="1.0"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + "".join(f"<url><loc>{u}</loc></url>" for u in urls) + "</urlset>"
+        return {"body": _gz.compress(xml.encode()), "status": 200, "headers": {}, "delay": None, "ctype": "application/x-gzip"}
+    am.routes["/sitemap-restaurants.xml.gz"] = gz([f"{b}/ca/palm-springs/812466-safari-ice-cream/menu/",
+                                                   f"{b}/il/chicago/1-lou-malnatis-pizzeria/menu/",          # same name, other city
+                                                   f"{b}/il/buffalo-grove/2-buffalo-wild-wings/menu/"])      # same city, other name
+    am.routes["/sitemap-restaurants2.xml.gz"] = gz([f"{b}/tx/donna/157110-whataburger/menu/",
+                                                    f"{b}/il/buffalo-grove/9-lou-malnatis-pizzeria/menu/",   # links to another Grubhub ID
+                                                    f"{b}/il/buffalo-grove/233783-lou-malnatis-pizzeria/menu/"])
+    am.route("/il/buffalo-grove/9-lou-malnatis-pizzeria/menu/", allmenus_page(gh_id="111"))
+    am.route("/il/buffalo-grove/233783-lou-malnatis-pizzeria/menu/", allmenus_page(gh_id=gh_id))

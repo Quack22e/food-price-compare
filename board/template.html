@@ -539,7 +539,7 @@ tr.details td { background: var(--sunken); }
       var gid = (/\/(\d+)\/?$/.exec(g.grubhub_url) || [])[1];
       box.appendChild(h('div', { class: 'field' },
         h('p', { class: 'menuhead' }, h('strong', null, m.restaurant_name), ' · ', addrLine(m.address), h('br'),
-          h('span', { class: 'sub' }, 'Grubhub ID ', gid || '?', ' · menu from ', link(m.source_url, siteName(m.source_url)), ' (Grubhub-owned), which links to this Grubhub listing · ', stamp(m.observed_at)),
+          h('span', { class: 'sub' }, 'Grubhub ID ', gid || '?', ' · menu from ', link(m.source_url, m.site || siteName(m.source_url)), ' (Grubhub-owned), which links to this Grubhub listing · ', stamp(m.observed_at)),
           h('br'), h('span', { class: 'sub' }, 'Published menu prices can lag the live Grubhub menu and leave out option charges. Check them against your Grubhub cart or receipt.')),
         sel));
     });
@@ -547,7 +547,7 @@ tr.details td { background: var(--sunken); }
   function ghUnit(cents, m) {
     return { cents: cents, text: function (q) {
       return 'Grubhub price ' + E.formatCents(cents) + (q > 1 ? ' × ' + q : '') + ' at ' + m.restaurant_name + ', ' + (m.address && m.address.city || '') +
-        ', from ' + siteName(m.source_url) + ' (Grubhub-owned), observed ' + stamp(m.observed_at) + '.';
+        ', from ' + (m.site || siteName(m.source_url)) + ' (Grubhub-owned), observed ' + stamp(m.observed_at) + '.';
     } };
   }
   function ghLookup() {

@@ -27,7 +27,7 @@ def make_cfg(tmp_path, bases: dict, **kw) -> Config:
     cfg = Config()
     # Unit tests never reach real sites: MenuPages defaults to a closed local port.
     cfg.platform_bases = {"doordash": "https://www.doordash.com", "ubereats": "https://www.ubereats.com",
-                          "grubhub": "https://www.grubhub.com", "menupages": "http://127.0.0.1:9", **bases}
+                          "grubhub": "https://www.grubhub.com", "menupages": "http://127.0.0.1:9", "allmenus": "http://127.0.0.1:9", **bases}
     cfg.test_mode = True
     cfg.data_dir = tmp_path / "data"
     cfg.min_interval_s = 0.01
@@ -636,4 +636,33 @@ def test_allmenus_reader_requires_the_same_grubhub_id(sites, tmp_path):
         r2 = read_allmenus_menu(client, am.base + "/il/buffalo-grove/1-other/menu/", "517712")
         assert not r2["ok"] and "not 517712" in r2["notes"][0]
     finally:
+        am.close()
+
+
+def test_grubhub_menu_falls_back_to_allmenus(sites, tmp_path):
+    from fake_platform import build_allmenus
+    _, _, gh = sites
+    mp, am = FakeSite(), FakeSite()
+    try:
+        _menupages_site(mp)
+        build_allmenus(am)
+        gh.route("/robots.txt", "User-agent: *\nAllow: /\n", ctype="text/plain")
+        url = "https://www.grubhub.com/restaurant/lou-malnatis-pizzeria-85-s-buffalo-grove-rd-buffalo-grove/517712"
+        cfg = make_cfg(tmp_path, {"grubhub": gh.base, "menupages": mp.base, "allmenus": am.base})
+        r = extract_grubhub(PoliteClient(cfg, DiskCache(cfg.data_dir)), url, gh.base)
+        menu = r["grubhub_menu"]
+        assert menu["source_url"].endswith("/il/buffalo-grove/233783-lou-malnatis-pizzeria/menu/")
+        assert menu["address"]["street"] == "85 S Buffalo Grove Rd" and r["fields"]["restaurant_address"]["zip"] == "60089"
+        assert "AllMenus" in r["field_sources"]["chain"] and any("not listed on MenuPages" in n for n in r["notes"])
+        assert any("not 517712" in n for n in r["notes"])                      # the other Lou's in Buffalo Grove was checked and refused
+        assert "/il/chicago/1-lou-malnatis-pizzeria/menu/" not in am.hits        # wrong city: never fetched
+        assert "/il/buffalo-grove/2-buffalo-wild-wings/menu/" not in am.hits     # wrong name: never fetched
+        assert "/sitemap-cities.xml.gz" not in am.hits and "/sitemap-abc.xml.gz" not in am.hits
+        assert {(i["name"], i["price_cents"]) for i in menu["items"]} >= {("Small - Deep Dish Margherita", 2195)}
+        # A restaurant on neither site: one clear manual-entry note.
+        r2 = extract_grubhub(PoliteClient(cfg, DiskCache(cfg.data_dir)),
+                             "https://www.grubhub.com/restaurant/some-diner-1-main-st-springfield/42", gh.base)
+        assert "grubhub_menu" not in r2 and any("not listed on AllMenus" in n for n in r2["notes"])
+    finally:
+        mp.close()
         am.close()

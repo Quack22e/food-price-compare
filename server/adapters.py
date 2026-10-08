@@ -254,7 +254,8 @@ def chain_guess_from_slug(slug: str) -> str:
     return " ".join(w.capitalize() for w in words) if words else ""
 
 
-def extract_grubhub(client: PoliteClient, url: str, grubhub_base: str, menupages_base: str | None = None) -> dict:
+def extract_grubhub(client: PoliteClient, url: str, grubhub_base: str, menupages_base: str | None = None,
+                    allmenus_base: str | None = None) -> dict:
     out = {"ok": False, "url": url, "fields": {}, "field_sources": {}, "barriers": [], "notes": [],
            "observed_at": utcnow_iso()}
     try:
@@ -312,23 +313,27 @@ def extract_grubhub(client: PoliteClient, url: str, grubhub_base: str, menupages
         if not parsed["restaurant_found"]:
             out["notes"].append("The Grubhub page publishes no structured data (its content is drawn by JavaScript).")
 
-    # 2) The same restaurant's menu on MenuPages (Grubhub-owned), matched by
-    # slug and accepted only if that page links back to this Grubhub ID.
+    # 2) The same restaurant's menu on MenuPages, then AllMenus (both
+    # Grubhub-owned), accepted only if that page links back to this Grubhub ID.
     mp_base = menupages_base or client.cfg.platform_bases.get("menupages")
+    am_base = allmenus_base or client.cfg.platform_bases.get("allmenus")
     if mp_base and not out["fields"].get("item"):
         from .grubhub_mirror import grubhub_menu_for
-        menu = grubhub_menu_for(client, m.group("slug"), gh_id, mp_base)
+        menu = grubhub_menu_for(client, m.group("slug"), gh_id, mp_base, allmenus_base=am_base)
         out["notes"] += menu.get("notes", [])
         if menu.get("barrier"):
             out["barriers"].append(menu["barrier"])
         if menu.get("ok"):
+            site = menu.get("site") or "a Grubhub-owned site"
             out["grubhub_menu"] = {k: menu.get(k) for k in ("restaurant_name", "address", "items", "source_url",
-                                                           "observed_at", "source", "price_context", "grubhub_ids_linked")}
+                                                           "observed_at", "source", "price_context", "grubhub_ids_linked",
+                                                           "checks", "site")}
             out["fields"]["chain"] = menu["restaurant_name"]
-            out["field_sources"]["chain"] = "restaurant name on MenuPages (Grubhub-owned), linked to this Grubhub ID"
+            out["field_sources"]["chain"] = f"restaurant name on {site} (Grubhub-owned), linked to this Grubhub ID"
             if menu.get("address"):
                 out["fields"]["restaurant_address"] = menu["address"]
-            out["notes"].append(f"Grubhub menu with {len(menu['items'])} priced listings found on MenuPages; "
+            priced = sum(1 for it in menu["items"] if it.get("price_cents") is not None)
+            out["notes"].append(f"Grubhub menu with {priced} priced listings found on {site}; "
                                 "pick your item to fill its name and Grubhub price.")
     if not out.get("grubhub_menu") and not out["fields"].get("item"):
         out["notes"].append("Complete the item details and the Grubhub item subtotal manually.")

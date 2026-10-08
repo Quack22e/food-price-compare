@@ -34,7 +34,7 @@ MENUPAGES_BASE = "https://menupages.com"
 GRUBHUB_LINK_RE = re.compile(r"grubhub\.com/restaurant/([^/?#]+)/(\d+)")
 
 
-def _restaurant_sitemaps(client: PoliteClient, base: str, cancel=None) -> tuple[list[str], list[str]]:
+def _restaurant_sitemaps(client: PoliteClient, base: str, cancel=None, label: str = "MenuPages") -> tuple[list[str], list[str]]:
     """Return (restaurant sitemap URLs, notes) from the robots.txt-declared index."""
     notes = []
     rules, rb = client.robots(base, cancel)
@@ -43,7 +43,7 @@ def _restaurant_sitemaps(client: PoliteClient, base: str, cancel=None) -> tuple[
     for idx in index_urls[:3]:
         f = client.fetch(idx, kind="sitemap", cancel=cancel, ttl=client.cfg.cache_ttl_sitemap_s)
         if not f.ok:
-            notes.append(f"MenuPages sitemap index unavailable ({(f.barrier or {}).get('kind') or f.error})")
+            notes.append(f"{label} sitemap index unavailable ({(f.barrier or {}).get('kind') or f.error})")
             continue
         parsed = parse_sitemap(f.body or b"", client.cfg.max_sitemap_bytes)
         locs = [l["loc"] for l in parsed["locs"]]
@@ -117,6 +117,7 @@ def read_menupages_menu(client: PoliteClient, url: str, grubhub_id: str | None, 
         "restaurant_name": parsed["name"],
         "address": address,
         "items": items,
+        "site": "MenuPages",
         "source": "MenuPages (Grubhub-owned menu site), schema.org Menu JSON-LD",
         "price_context": "Grubhub menu price as published on MenuPages; options/add-ons and fees not included",
     })
@@ -125,7 +126,9 @@ def read_menupages_menu(client: PoliteClient, url: str, grubhub_id: str | None, 
     return out
 
 
-def grubhub_menu_for(client: PoliteClient, grubhub_slug: str, grubhub_id: str, base: str = MENUPAGES_BASE, cancel=None) -> dict:
+def grubhub_menu_for(client: PoliteClient, grubhub_slug: str, grubhub_id: str, base: str = MENUPAGES_BASE, cancel=None,
+                     allmenus_base: str | None = None) -> dict:
+    """Grubhub menu prices from MenuPages, then (if configured) AllMenus."""
     found = find_menupages_pages(client, grubhub_slug, base, cancel)
     notes = list(found["notes"])
     for url in found["urls"]:
@@ -136,8 +139,22 @@ def grubhub_menu_for(client: PoliteClient, grubhub_slug: str, grubhub_id: str, b
             return menu
         notes += [f"{url}: {n}" for n in menu["notes"]]
     if found["urls"]:
-        notes.append(f"No MenuPages candidate linked to Grubhub restaurant {grubhub_id}; enter the Grubhub price manually.")
-    return {"ok": False, "notes": notes, "candidates_checked": found["candidates_checked"]}
+        notes.append(f"No MenuPages candidate linked to Grubhub restaurant {grubhub_id}.")
+    checked = found["candidates_checked"]
+    if allmenus_base:
+        for url, n_checked, note in find_allmenus_pages(client, grubhub_slug, allmenus_base, cancel):
+            checked = n_checked
+            if note:
+                notes.append(note)
+                continue
+            menu = read_allmenus_menu(client, url, grubhub_id, cancel)
+            if menu["ok"] or menu.get("barrier"):
+                menu["notes"] = notes + menu["notes"]
+                menu["candidates_checked"] = checked
+                return menu
+            notes += [f"{url}: {n}" for n in menu["notes"]]
+    notes.append("No Grubhub-owned menu page linked to this Grubhub restaurant was found; enter the Grubhub price manually.")
+    return {"ok": False, "notes": notes, "candidates_checked": checked}
 
 
 # ---------------------------------------------------------------- AllMenus
@@ -278,8 +295,53 @@ def read_allmenus_menu(client: PoliteClient, url: str, grubhub_id: str | None, c
         "restaurant_name": page["name"],
         "address": page["address"],
         "items": [{k: it.get(k) for k in ("name", "variant", "price_cents", "currency", "section", "price_note")} for it in items],
+        "site": "AllMenus",
         "source": "AllMenus (Grubhub-owned menu site): HTML item prices, checked against its schema.org item names",
         "price_context": "Grubhub menu price as published on AllMenus; options/add-ons and fees not included",
         "checks": page["checks"],
     })
     return out
+
+
+_ALLMENUS_PATH = re.compile(r"^/(?P<st>[a-z]{2})/(?P<city>[a-z0-9-]+)/(?P<id>\d+)-(?P<name>[a-z0-9-]+)/menu/?$")
+MAX_ALLMENUS_SITEMAPS = 30
+
+
+def find_allmenus_pages(client: PoliteClient, grubhub_slug: str, base: str = ALLMENUS_BASE, cancel=None):
+    """Yield (url, urls_checked, note) for AllMenus pages that may be this Grubhub listing.
+
+    Observed live (run 37826699377): AllMenus' robots-declared sitemap index
+    lists 21 restaurant sitemaps of up to 40,000 URLs shaped
+    /<state>/<city>/<allmenus id>-<name>/menu/, in no particular order, and
+    its city pages list no restaurant links in their HTML. A candidate's name
+    must begin the Grubhub slug and its city must end it, e.g.
+      /il/buffalo-grove/233783-lou-malnatis-pizzeria/menu/
+      lou-malnatis-pizzeria-85-s-buffalo-grove-rd-buffalo-grove
+    Sitemaps are read lazily (cached 24 h) and scanning stops at the first
+    candidate the caller accepts; acceptance requires the page to link to the
+    same Grubhub ID.
+    """
+    slug = grubhub_slug.strip("/").lower()
+    checked = 0
+    sitemaps, notes = _restaurant_sitemaps(client, base, cancel, label="AllMenus")
+    for n in notes:
+        yield None, checked, n
+    seen = set()
+    for sm in sitemaps[:MAX_ALLMENUS_SITEMAPS]:
+        f = client.fetch(sm, kind="sitemap", cancel=cancel, ttl=client.cfg.cache_ttl_sitemap_s)
+        if not f.ok:
+            yield None, checked, f"AllMenus sitemap {sm} unavailable ({(f.barrier or {}).get('kind') or f.error})"
+            continue
+        for loc in parse_sitemap(f.body or b"", client.cfg.max_sitemap_bytes)["locs"]:
+            checked += 1
+            m = _ALLMENUS_PATH.match(urlsplit(loc["loc"]).path)
+            if (m and loc["loc"] not in seen and slug.startswith(m["name"] + "-") and slug.endswith("-" + m["city"])
+                    and len(m["name"]) + len(m["city"]) + 2 <= len(slug)):
+                seen.add(loc["loc"])
+                yield loc["loc"], checked, None
+                if len(seen) >= MAX_CANDIDATES:
+                    return
+    if len(sitemaps) > MAX_ALLMENUS_SITEMAPS:
+        yield None, checked, f"Read {MAX_ALLMENUS_SITEMAPS} of {len(sitemaps)} AllMenus restaurant sitemaps."
+    if not seen:
+        yield None, checked, f"This Grubhub restaurant is not listed on AllMenus ({checked:,} AllMenus restaurant pages checked)."

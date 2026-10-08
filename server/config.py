@@ -22,6 +22,9 @@ DEFAULT_PLATFORM_BASES = {
     # Grubhub-owned menu site that publishes Grubhub menus as schema.org
     # JSON-LD (observed live); used only to read the Grubhub-side price.
     "menupages": "https://menupages.com",
+    # Grubhub-owned menu directory; prices only in HTML, cross-checked
+    # against its own JSON-LD item names (observed live). Fallback after MenuPages.
+    "allmenus": "https://www.allmenus.com",
 }
 
 

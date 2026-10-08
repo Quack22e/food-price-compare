@@ -38,7 +38,13 @@ def test_extraction_on_real_capture(html_path):
         addr, why = normalize_us_address(parsed["address_raw"])
         assert addr or why, summary
         priced = [i for i in parsed["items"] if i.get("price_cents") is not None]
-        assert priced, f"menu published without prices: {summary}"
+        if "menuitem" in parsed["jsonld_types"]:
+            assert priced, f"menu published without prices: {summary}"
+        else:
+            # Observed live (run 37826699377): a military-base McDonald's page
+            # publishes Restaurant JSON-LD with no Menu at all. The app records
+            # that store as "no menu data"; nothing is extracted or guessed.
+            assert not parsed["items"], summary
         assert all(i["currency"] in ("USD", None) for i in priced) or not addr, summary
 
 
