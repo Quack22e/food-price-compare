@@ -258,6 +258,51 @@ def explore_menupages_mapping(svc, captures):
     return out
 
 
+def explore_allmenus(svc, captures):
+    """AllMenus (Grubhub-owned): sitemap layout, and the menu JSON-LD on a known
+    page (Lou Malnati's Buffalo Grove, which links to Grubhub ID 517712)."""
+    import copy
+    import re
+    from server.adapters import parse_store_page
+    from server.extract import normalize_us_address
+    from server.http_client import PoliteClient
+    cfg2 = copy.deepcopy(svc.cfg)
+    cfg2.platform_bases = dict(cfg2.platform_bases, allmenus="https://www.allmenus.com")
+    client = PoliteClient(cfg2, svc.cache)
+    out = {}
+
+    def sm(url):
+        f = client.fetch(url, kind="sitemap", ttl=0)
+        parsed = parse_sitemap(f.body or b"", cfg2.max_sitemap_bytes) if f.ok else {"kind": None, "locs": []}
+        locs = [l["loc"] for l in parsed["locs"]]
+        return {"url": url, "status": f.status, "barrier": f.barrier and f.barrier["kind"], "kind": parsed["kind"],
+                "count": len(locs), "sample": locs[:15]}, locs
+
+    out["index"], children = sm("https://www.allmenus.com/sitemap-index.xml")
+    out["index"]["all_children"] = children[:200]
+    picks = [c for c in children if re.search(r"(^|[^a-z])il([^a-z]|$)|illinois", c.lower())][:2] or children[:2]
+    out["children"] = []
+    for c in picks:
+        rec, locs = sm(c)
+        rec["lou_malnatis"] = [u for u in locs if "lou-malnati" in u][:20]
+        rec["path_shapes"] = sorted({re.sub(r"\d+", "N", "/".join(u.split("/")[3:6])) for u in locs[:2000]})[:20]
+        out["children"].append(rec)
+    page = "https://www.allmenus.com/il/buffalo-grove/233783-lou-malnatis-pizzeria/menu/"
+    f = client.fetch(page, kind="inspect", ttl=0)
+    rep = {"url": page, "status": f.status, "barrier": f.barrier and f.barrier["kind"]}
+    if f.ok:
+        parsed = parse_store_page(f.text, f.final_url or page, "")
+        rep.update({"restaurant_found": parsed["restaurant_found"], "name": parsed["name"],
+                    "address_raw": parsed["address_raw"], "address": normalize_us_address(parsed["address_raw"])[0],
+                    "items": len(parsed["items"]), "jsonld_errors": parsed.get("jsonld_errors"),
+                    "sample_items": [{k: it.get(k) for k in ("name", "variant", "price_cents", "currency", "section")} for it in parsed["items"][:12]],
+                    "grubhub_links": sorted({m.group(0) for a in scan_html(f.text, page).anchors
+                                             for m in [re.search(r"grubhub\.com/restaurant/[^/?#]+/\d+", a["href"])] if m})})
+        save_capture_outcome(svc, page, f, Path(captures + "_mirrors"))
+    out["known_page"] = rep
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default="live-verification")
@@ -338,6 +383,10 @@ def main():
         report["menupages_mapping"] = explore_menupages_mapping(svc, args.captures)
     except Exception as exc:
         report["menupages_mapping"] = {"error": repr(exc)}
+    try:
+        report["allmenus"] = explore_allmenus(svc, args.captures)
+    except Exception as exc:
+        report["allmenus"] = {"error": repr(exc)}
     try:
         report["grubhub"] = explore_grubhub(svc)
     except Exception as exc:

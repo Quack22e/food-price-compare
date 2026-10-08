@@ -227,8 +227,15 @@ def parse_jsonld_blocks(raw_blocks: list[str]) -> tuple[list, list[str]]:
         try:
             data = json.loads(text)
         except json.JSONDecodeError as exc:
-            errors.append(f"invalid JSON-LD block ({exc.msg} at char {exc.pos})")
-            continue
+            # Observed live (AllMenus, 2026-10-08): a raw control character
+            # (e.g. a literal tab or newline) inside a JSON string. Allowing
+            # those inside strings changes no value, so retry once that way.
+            try:
+                data = json.loads(text, strict=False)
+            except json.JSONDecodeError:
+                errors.append(f"invalid JSON-LD block ({exc.msg} at char {exc.pos})")
+                continue
+            errors.append(f"JSON-LD block had raw control characters inside strings ({exc.msg} at char {exc.pos}); read leniently")
         objs.extend(_flatten_graph(data))
     return objs, errors
 

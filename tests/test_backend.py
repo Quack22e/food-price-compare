@@ -501,6 +501,13 @@ def test_quirks_observed_on_real_uber_eats_pages():
     assert latte["price_cents"] is None and "0.00" in latte["price_note"]  # $0.00 never treated as a price
     from server.extract import _text
     assert _text("Deep Dish Mike&#39;s Hot Honey\ufffd\ufffd") == "Deep Dish Mike's Hot Honey"  # MenuPages: invalid UTF-8 dropped
+    # AllMenus: raw control characters inside JSON-LD strings are read leniently, and said so.
+    objs, errs = parse_jsonld_blocks(['{"@type":"Restaurant","name":"Lou\tMalnati","hasMenu":{"@type":"Menu","hasMenuItem":'
+                                      '[{"@type":"MenuItem","name":"Small\nCheese","offers":{"@type":"Offer","price":"19.65","priceCurrency":"USD"}}]}}'])
+    r = extract_restaurants(objs)[0]
+    assert r["name"] == "Lou Malnati" and [(i["name"], i["price_cents"]) for i in r["items"]] == [("Small Cheese", 1965)]
+    assert errs and "read leniently" in errs[0]
+    assert parse_jsonld_blocks(['{"@type": "Restaurant", "name": "x",}'])[0] == []  # still rejects malformed JSON
 
 
 def test_redirect_to_bot_challenge_is_a_captcha_barrier(sites, tmp_path):
