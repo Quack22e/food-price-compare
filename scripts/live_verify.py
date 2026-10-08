@@ -309,6 +309,24 @@ def explore_allmenus(svc, captures):
                                if html.count(f'class="{c}"') >= 20}
         save_capture_outcome(svc, page, f, Path(captures + "_mirrors"))
     out["known_page"] = rep
+    # Discovery evidence: the city sitemap, one city page, and the raw shape and
+    # ordering of restaurant sitemap URLs (first/last of three files).
+    rec, cities = sm("https://www.allmenus.com/sitemap-cities.xml.gz")
+    rec["buffalo_grove"] = [u for u in cities if "buffalo-grove" in u][:10]
+    out["cities_sitemap"] = rec
+    city = "https://www.allmenus.com/il/buffalo-grove/"
+    f = client.fetch(city, kind="inspect", ttl=0)
+    crep = {"url": city, "status": f.status, "barrier": f.barrier and f.barrier["kind"], "bytes": len(f.body or b"")}
+    if f.ok:
+        anchors = scan_html(f.text, city).anchors
+        rest = sorted({a["href"] for a in anchors if re.search(r"allmenus\.com/il/buffalo-grove/\d+-", a["href"])})
+        crep.update({"restaurant_links": len(rest), "sample": rest[:15], "lou": [u for u in rest if "lou-malnati" in u],
+                     "next_links": sorted({a["href"] for a in anchors if re.search(r"[?&]page=|/page/\d", a["href"])})[:5]})
+    out["city_page"] = crep
+    out["restaurant_sitemaps_order"] = []
+    for c in [u for u in children if "sitemap-restaurants" in u][:3]:
+        rec, locs = sm(c)
+        out["restaurant_sitemaps_order"].append({"url": c, "count": len(locs), "first": locs[:3], "last": locs[-3:]})
     return out
 
 

@@ -107,13 +107,13 @@ def read_menupages_menu(client: PoliteClient, url: str, grubhub_id: str | None, 
         out["notes"].append("MenuPages page has no schema.org Restaurant data.")
         return out
     address, _why = normalize_us_address(parsed["address_raw"])
-    items = flag_zero_prices(dedupe_items(parsed["items"]))
+    items = [{k: it.get(k) for k in ("name", "variant", "price_cents", "currency", "section", "price_note")}
+             for it in flag_zero_prices(dedupe_items(parsed["items"])) if (it.get("currency") or "USD") == "USD"]
     out.update({
         "ok": bool(items),
         "restaurant_name": parsed["name"],
         "address": address,
-        "items": [{k: it.get(k) for k in ("name", "variant", "price_cents", "currency", "section", "price_note")} for it in items
-                  if (it.get("currency") or "USD") == "USD"],
+        "items": items,
         "source": "MenuPages (Grubhub-owned menu site), schema.org Menu JSON-LD",
         "price_context": "Grubhub menu price as published on MenuPages; options/add-ons and fees not included",
     })

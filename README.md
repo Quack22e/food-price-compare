@@ -4,11 +4,14 @@ Enter a Grubhub item or order. The app looks for the **same item** (same chain, 
 
 * `index.html` is the whole frontend: one file with embedded CSS and vanilla JS, and no build step.
 * `server/` is a small Python companion service that does the scraping. A browser page cannot read these sites cross-origin, and the service keeps request policy and limits server-side.
+* `board/index.html` is a static **price board**: the same engine over real snapshots from the live runs, with no backend. It opens straight from disk and is also published as a private claude.ai artifact. See [The price board](#the-price-board).
 
 > **Live status (verified 2026-10-08 against the real sites, see [Verification results](#verification-results)).**
-> * **Uber Eats** works end to end. Real store pages publish the schema.org menu JSON-LD the extractor reads. Real sitemaps produced branch discovery, and three real US branches were priced. The shipped engine then ranked them, for example "Lowest verified price among 3 checked locations: $6.99, 10 pc. Chicken McNuggets®, Hammond IN".
-> * **DoorDash** branch discovery works. It covers 131 per-state store sitemaps (California alone lists 106,228 store URLs) and chain pages (50 real Chipotle branches). Its store pages answered every request from a datacenter IP with a Cloudflare challenge (HTTP 403), which the app reports and does not bypass. Its `/business/…/menu` pages carry prices, but DoorDash labels them on the page as *"estimated based on your predicted location and may vary across store"*, so they are not branch prices. **No verified DoorDash price was obtained.**
-> * **Grubhub** link extraction ran live on a real listing (Lou Malnati's, Buffalo Grove, ID 517712). The page is a JavaScript shell with no structured data, so the extractor used its designed fallback: restaurant ID and chain from the URL, flagged for confirmation, with the item entered manually.
+> * **Uber Eats** works end to end. Real store pages publish the schema.org menu JSON-LD the extractor reads, and real sitemaps produce branch discovery. The latest snapshot priced 32 real US branches across three chains. Examples: "Lowest verified price among 5 checked locations: $23.94, Small - Deep Dish Margherita, Lou Malnati's (Crown Point, IN)"; "among 7 checked locations: $8.04, Crunchwrap Supreme®, Taco Bell (Staten Island, NY)".
+> * **Menus change by time of day.** At 07:14 UTC, 18 McDonald's branches published breakfast menus with no McNuggets. Each snapshot run is therefore kept separate, never merged.
+> * **DoorDash** branch discovery works. It covers 131 per-state store sitemaps (California alone lists 106,228 store URLs) and chain pages (50 real Chipotle branches). Its store pages answered every request from a datacenter IP with a Cloudflare challenge (HTTP 403; 49 of 49 across ten runs), which the app reports and does not bypass. Its `/business/…/menu` pages carry prices, but DoorDash labels them on the page as *"estimated based on your predicted location and may vary across store"*, so they are not branch prices. **No verified DoorDash price was obtained.**
+> * **Grubhub** restaurant pages are a JavaScript shell with no structured data. Grubhub prices now come from **MenuPages**, a Grubhub-owned menu site that publishes the same restaurants' menus as JSON-LD and links back to each Grubhub listing. Verified live: Lou Malnati's, 6456 S Cicero Ave, Chicago (Grubhub ID 434510), 162 priced listings, e.g. Small - Deep Dish Margherita $21.55. MenuPages covers a subset of Grubhub (28,133 restaurant pages); the Buffalo Grove listing (ID 517712) is not on it and falls back to manual entry.
+> * **End-to-end on real data:** Grubhub (via MenuPages) $21.55 for a Small - Deep Dish Margherita at Lou Malnati's Midway, against a lowest verified Uber Eats price of $23.94 among 5 checked Lou Malnati's branches. Here Grubhub was cheaper by $2.39.
 > * The Claude build sandbox itself cannot reach any of these sites. The live runs used this repository's GitHub Actions workflow.
 
 ---
@@ -47,7 +50,7 @@ python -m pytest -q tests/test_real_captures.py -s
 ## Using it
 
 1. **Enter the order.** Use one of the three tabs:
-   * **Grubhub link:** the backend fetches the page (robots.txt-checked) and reads schema.org data. If that fails, the chain is guessed from the URL slug and labeled as a guess, and you complete the rest by hand.
+   * **Grubhub link:** the backend fetches the page (robots.txt-checked) and reads schema.org data. Real Grubhub pages carry none, so it then looks the restaurant up on **MenuPages** (Grubhub-owned): candidates come from MenuPages' robots-declared restaurant sitemap (exact name-address slug first, then the same address), and a page is used only if it links back to the **same Grubhub restaurant ID**. A menu picker then fills the item name and the Grubhub price × quantity. If no page qualifies, the chain is guessed from the URL slug and labeled as a guess, and you complete the rest by hand.
    * **Paste order / receipt:** parsed in the browser and never sent anywhere. Fee, tax, tip, total, promo and payment lines are ignored.
    * **Manual entry.**
 
@@ -66,6 +69,19 @@ python -m pytest -q tests/test_real_captures.py -s
 
 **Import** (Data sources panel) adds menus you collected yourself (JSON or CSV, schema below). Imported rows are labeled "Imported" and can be excluded with a checkbox. **Demo mode** is opt-in, shows a banner, uses a fictional chain, and switches the whole results view to demo data, which never mixes with real data.
 
+### The price board
+
+`board/index.html` needs no backend. It ranks real snapshot prices from the live runs with the engine copied verbatim from `index.html` (a test fails if they differ). Rebuild it after a live run with `python3 scripts/build_board.py`.
+
+* **Example orders** from the snapshot searches. Ones with a real Grubhub price come first.
+* **Grubhub link lookup and menu picker** for Grubhub menus read through MenuPages. Picking an item fills the chain, item and Grubhub subtotal, which follows the quantity.
+* **One snapshot run at a time** ("Prices from"). Each run is a coherent moment, because menus change through the day. An example order opens on the newest run in which a checked store listed the item, and says so.
+* Location, freshness (24 h / 7 days / 30 days) and platform filters; verified / needs confirmation / not the same item tabs with the engine's reasons; **coverage and blocks** per search.
+* Platform status cards, the alternative-sources table, JSON/CSV import and the capture bookmarklet.
+* It makes no network requests except optional web fonts.
+
+`scripts/snapshot.py` produces the data. It runs in the live workflow with the app's own `Service` and the same robots.txt, rate limits and barrier handling, and writes `live-verification/snapshot.json` in the import schema with coverage counters and barriers. The builder reads that file and its committed history, plus older `report.json` versions.
+
 ## How live data is acquired
 
 Each adapter (`server/adapters.py`) relies only on published standards and on what the page itself publishes:
@@ -75,6 +91,8 @@ Each adapter (`server/adapters.py`) relies only on published standards and on wh
 | Permission | `robots.txt` per RFC 9309 (wildcards, longest match, `Crawl-delay`). If robots.txt is unreachable (401/403/429/5xx or network failure), the site is treated as **disallowed**. A representative store path is tested before any crawl. | Standard |
 | Branch discovery | (a) store or chain URLs you paste as seeds; (b) the **sitemaps the site declares in its own robots.txt**, read as sitemap index → urlsets, with gzip support and DTDs rejected; (c) store links on chain/brand pages, following `rel="next"` pagination. Store URLs are filtered by chain-name tokens in the slug. Seeds come first, then chain pages, then sitemaps. Store-, business- and brand-named sitemaps are read first. Non-US country sections (`/ca/`, `/fr-en/`, `/jp/`…) are recorded at discovery and never fetched. | **Verified live.** Uber Eats robots.txt declares gzipped `sitemap-store-*` files: 2 read, 315 McDonald's URLs found, 226 of them non-US. DoorDash declares store, business, `business_menu` and city sitemap indexes. A real DoorDash `/business/` page yielded 50 Chipotle branch links. |
 | Menu + prices | schema.org **JSON-LD**: `Restaurant`/`FoodEstablishment` → `hasMenu` → `MenuSection` → `MenuItem` → `Offer` (also `priceSpecification`, `AggregateOffer` (a range, so never verified), `menuAddOn`, `availability`), and `PostalAddress` for the US check. Text is HTML-unescaped. Identical listings repeated across sections are collapsed. A published `0.00` is never treated as a price. | **Verified live on 6 real Uber Eats store pages** (167–335 items each): `hasMenu.hasMenuSection[].hasMenuItem[].offers.{price,priceCurrency:"USD"}` plus full `PostalAddress`. Uber Eats publishes no `menuAddOn` and no `availability`. DoorDash store pages could not be read (Cloudflare). |
+| Grubhub prices | **MenuPages** (Grubhub-owned): robots.txt allows restaurant pages and declares `sitemap-index.xml` → `sitemap-restaurants.xml.gz`. A restaurant page has a `Restaurant` JSON-LD block (name, `PostalAddress`) and a separate `Menu` JSON-LD block with USD `Offer` prices, plus a link to `grubhub.com/restaurant/<slug>/<id>`. A page is accepted only if that link carries the same Grubhub ID (`server/grubhub_mirror.py`). | **Verified live** (runs 37741487660 and later): 162 priced listings for Grubhub ID 434510; 28,133 restaurant URLs in the sitemap. |
+| Lenient JSON-LD | A block that fails strict JSON parsing only because of raw control characters inside strings is re-read with `strict=False`, and the page records that it was. Malformed JSON is still rejected. | AllMenus (Grubhub-owned) emits such a block (char 105,771 of 125 KB). |
 | JS-rendered pages | **Auto** mode re-renders a page with Playwright/Chromium only when it answered normally but carried no structured data. A browser is never used to get past a block or challenge. | |
 | URL shapes | DoorDash `/store/<slug>-<id>/` or `/store/<id>/`, chain pages `/business/<slug>-<id>/`. Uber Eats `/store/<slug>/<id>`, `/<cc>[-<lang>]/store/…`, `/brand/…`. Mode parameters: DoorDash `?pickup=false|true`, Uber Eats `?diningMode=DELIVERY|PICKUP`. | **URL shapes verified live** (real sitemaps and chain pages). Uber Eats pages answered normally with `diningMode=DELIVERY`, but whether the parameter changes the published prices is **unverified**. The same goes for DoorDash's `pickup`. Each observation records the mode basis. |
 
@@ -210,9 +228,11 @@ It never stores receipts, Grubhub prices, quantities, delivery addresses or loca
 
 | Suite | Command | Result |
 |---|---|---|
-| Backend (pytest) | `python -m pytest -q` | **24 passed, 1 skipped**. The skipped test is `test_real_captures.py`; real captures exist only on the runner, where it **passed 7/7** in the latest run. |
+| Backend (pytest) | `python -m pytest -q` | **25 passed, 1 skipped**. The skipped test is `test_real_captures.py`; real captures exist only on the runner, where it runs every live run. |
 | Engine (Node, runs the exact `<script id="fpc-engine">` from index.html) | `node --test tests/engine.test.mjs` | **21 passed** |
-| UI end-to-end (Playwright + Chromium, real backend, local fixture sites) | `node --test tests/ui.e2e.mjs` | **18 passed** |
+| Capture bookmarklet | `node --test tests/capture.test.mjs` | **5 passed** |
+| UI end-to-end (Playwright + Chromium, real backend, local fixture sites) | `node --test tests/ui.e2e.mjs` | **19 passed** |
+| Price board (Playwright + Chromium, committed real snapshot) | `node --test tests/board.e2e.mjs` | **8 passed** |
 
 The pipeline tests use **synthetic local fixture servers** (`tests/fake_platform.py`). They exercise the mechanics:
 
@@ -220,7 +240,7 @@ The pipeline tests use **synthetic local fixture servers** (`tests/fake_platform
 * **Retries and barriers:** retry with Retry-After (gap measured ≥ 1 s); over-long Retry-After stops the adapter; CAPTCHA, challenge redirect, login wall, 403, 5xx exhaustion; off-site redirect refused (SSRF).
 * **Fetch modes:** cache reuse with the original timestamp; Playwright rendering of a page whose JSON-LD is injected by JavaScript; pickup vs delivery URLs.
 * **Run control:** per-run limit then resume; cancel mid-run, then resume after a simulated server restart, with nothing refetched and nothing lost; circuit breaker on one platform while the other completes.
-* **Grubhub and the API:** Grubhub extraction and its robots-blocked fallback; HTTP API, CORS and purge.
+* **Grubhub and the API:** Grubhub extraction and its robots-blocked fallback; the MenuPages path (exact slug, the live "-midway" layout with a same-address decoy that links to another Grubhub ID, a wrong-ID page refused, a MenuPages base outside the allowlist refused, a restaurant not listed); HTTP API, CORS and purge.
 * **Real-page quirks:** the regressions for quirks found on real pages (below).
 
 The engine tests cover:
@@ -238,12 +258,13 @@ The UI test clicks through every control and asserts there were no page errors.
 
 ### Live runs against the real sites
 
-The build sandbox's egress policy blocks all three sites; the attempts and alternatives tried are listed below. The live runs therefore use `.github/workflows/fpc-live-verification.yml`. It runs on pushes to this branch that change `scripts/live_verify.py` or the workflow, on a GitHub-hosted runner with ordinary internet access. It runs the unchanged service code with its robots.txt and rate limits (3 s per host).
+The build sandbox's egress policy blocks all three sites; the attempts and alternatives tried are listed below. The live runs therefore use `.github/workflows/fpc-live-verification.yml`. It runs on pushes to this branch that change `scripts/live_verify.py`, `scripts/snapshot.py` or the workflow, on a GitHub-hosted runner with ordinary internet access. It runs the unchanged service code with its robots.txt and rate limits (3 s per host).
 
 Each run's budget is bounded:
 * robots.txt for each site
 * two jobs, each limited to 3 sitemap documents and 3–6 stores
 * up to 7 inspected pages
+* the snapshot: three Uber Eats searches capped at 24, 10 and 12 store pages and 12 sitemap documents each, plus two Grubhub listings looked up on MenuPages
 
 It commits `live-verification/report.json`, which holds observations and structure summaries but no raw HTML, plus the real-capture test output. Raw pages are kept only as a 14-day workflow artifact.
 
@@ -254,6 +275,11 @@ It commits `live-verification/report.json`, which holds observations and structu
 | [37708779121](https://github.com/Quack22e/prediction-market-analytics/actions/runs/37708779121) | Uber Eats: 3 US branches priced, 2 challenged (reported). DoorDash: 3/3 store pages hit Cloudflare 403; the chain page's menu has `storeId: $undefined`, so it isn't used as a branch price. Real-capture test **5 passed**. | — |
 | [37709380287](https://github.com/Quack22e/prediction-market-analytics/actions/runs/37709380287) | DoorDash's robots-declared sitemaps redirect to `cdn.doordash.com/sitemaps/…`, and the host allowlist refused them, so DoorDash sitemap discovery could never have worked. The Grubhub homepage is a 14.6 KB JS shell with no restaurant links, and `/sitemap.xml` is a 404. | `cdn.doordash.com` is allowed for sitemap fetches only. A real Grubhub link is now taken from a Grubhub-powered AllMenus page. |
 | [37709849182](https://github.com/Quack22e/prediction-market-analytics/actions/runs/37709849182) | DoorDash store sitemap index: **131 per-state sitemaps**; the CA file lists **106,228** store URLs. `business_menu` index: 5 files (one lists 6,452 menu pages), but the pages say *"Prices are estimated based on your predicted location and may vary across store"*. Grubhub extractor on the real `…/lou-malnatis-pizzeria-85-s-buffalo-grove-rd-buffalo-grove/517712` (HTTP 200, no structured data): URL-only fields (ID 517712, chain flagged as a guess) plus a manual-entry note. Real-capture test **7 passed**. | A location filter's state now picks which DoorDash per-state store sitemap is read first. |
+| [37713038503](https://github.com/Quack22e/prediction-market-analytics/actions/runs/37713038503) | Grubhub-owned menu sites: AllMenus robots.txt allows restaurant pages; its Lou Malnati's Buffalo Grove page shows prices in HTML and links to Grubhub ID 517712. MenuPages says "powered by Grubhub". An Uber Eats brand-city page answered 200 with one store link. | — |
+| [37713405667](https://github.com/Quack22e/prediction-market-analytics/actions/runs/37713405667) | MenuPages: `sitemap-index.xml` → `sitemap-restaurants.xml.gz` with **28,133** restaurant URLs (9 Lou Malnati's in Chicago). The Midway page has `Restaurant` JSON-LD (6456 S Cicero Ave, Chicago IL 60638) and a separate `Menu` JSON-LD block with 198 USD-priced listings, and links to Grubhub ID 434510. A MenuPages URL derived for Buffalo Grove is a 404. | `server/grubhub_mirror.py`: Grubhub URL → MenuPages candidates → accepted only on a matching Grubhub ID. |
+| [37741487660](https://github.com/Quack22e/prediction-market-analytics/actions/runs/37741487660) | The app's Grubhub extractor on the real `…/lou-malnatis-pizzeria-6456-s-cicero-ave-chicago/434510`: **162 priced Grubhub listings** via MenuPages, chain and address filled. The sitemap lists `lou-malnatis-pizzeria/6456-…` while the page that links to Grubhub is `lou-malnatis-pizzeria-midway/6456-…`. Some MenuPages section names end in invalid UTF-8. | Candidates now include same-address pages; U+FFFD is dropped from text. |
+| [37741924057](https://github.com/Quack22e/prediction-market-analytics/actions/runs/37741924057) | First snapshot (07:14 UTC). Uber Eats: Lou Malnati's 5 branches priced (2 challenged), Taco Bell 7 priced (2 challenged), McDonald's 18 read, but their menus were **breakfast menus with no McNuggets**. Lou Malnati's Uber Eats names match MenuPages' ("Small - Deep Dish Margherita"). | The board keeps snapshot runs separate. |
+| [37743302443](https://github.com/Quack22e/prediction-market-analytics/actions/runs/37743302443) | AllMenus: `sitemap-index.xml` lists 29 files, 21 of them restaurant sitemaps (the first holds 40,000 URLs shaped `<state>/<city>/<id>-<name>/`). The Buffalo Grove page's 125 KB JSON-LD parsed only leniently: **217 item names, but no prices, and a blank name and address**. Prices are only in HTML `item-price` spans. Snapshot: Lou Malnati's 6, Taco Bell 9, McDonald's 17 branches read. | Lenient JSON-LD parsing. AllMenus is not used for prices (see [Alternative data sources](#alternative-data-sources)). |
 
 **Real prices from run 37708779121** (Uber Eats, delivery, anonymous session, no address, observed 2026-10-08 ~00:39 UTC), ranked by the shipped engine with `node scripts/rank_report.mjs live-verification/report.json "McDonald's" "10 pc Chicken McNuggets" 1 8.49`:
 
@@ -267,6 +293,14 @@ It commits `live-verification/report.json`, which holds observations and structu
 * The engine rejected the real look-alikes with reasons: "20/40/4 pc … Piece count differs", "10 pc … Meal: candidate adds 'meal'", and "Happy Meal".
 * With the piece count left out of the order, every candidate became "needs confirmation" and there was no winner.
 * These are three branches in a bounded sample, not a nationwide result.
+
+**Real prices from snapshot run 37741924057** (Uber Eats, delivery, anonymous session, no address, observed 2026-10-08 ~07:15 UTC), ranked by the shipped engine:
+
+| Order | Lowest verified price | Other verified branches |
+|---|---|---|
+| Lou Malnati's Pizzeria, Small - Deep Dish Margherita (Grubhub via MenuPages: **$21.55**, 6456 S Cicero Ave, Chicago) | **$23.94**, Crown Point IN 46307, "among 5 checked locations"; Grubhub is $2.39 cheaper | $24.42 Elgin IL, $24.42 Hoffman Estates IL, $25.86 Northbrook IL, $27.18 Surprise AZ |
+| Taco Bell, Crunchwrap Supreme | **$8.04**, Staten Island NY and Green Brook NJ (tie), "among 7 checked locations" | $8.16 Lawrence NY, $8.53 Lancaster OH, $8.77 Tempe AZ |
+| McDonald's, 10 pc. Chicken McNuggets | none: 18 branches read, all on their breakfast menu | (run 37708779121, 00:39 UTC: $6.99 Hammond IN, $7.59 Stony Brook NY, $8.29 Louisville KY) |
 
 **Attempts from the build sandbox** (all blocked by its egress policy):
 * direct HTTP and real Chromium to all three sites (`egress_denied` / `ERR_TUNNEL_CONNECTION_FAILED`);
@@ -283,27 +317,30 @@ The sandbox also checked npm and PyPI packages for these platforms (read as data
 | Uber Eats store pages publish `Restaurant → hasMenu → MenuSection → MenuItem → Offer{price, priceCurrency}` JSON-LD with `PostalAddress` | 6 real store pages fetched by the live runs | **Verified live** |
 | Uber Eats JSON-LD strings contain HTML entities; listings repeat across sections; some prices are `0.00` because options set the price | Real pages (McDonald's "Columbia &amp; 165th St"; Zucker's "Iced Latte" $0.00) | **Verified live**; handled |
 | Uber Eats bot checks arrive as a 307 to `def.uber.com/…/challenge` | Live runs 2 and 3 | **Verified live**; reported as `captcha` |
-| DoorDash store pages are behind Cloudflare for datacenter IPs | all 24 DoorDash store-page requests across five runs returned 403 "Just a moment…" | **Verified live** (from GitHub runners) |
+| DoorDash store pages are behind Cloudflare for datacenter IPs | all 49 DoorDash store-page requests across ten runs returned 403 "Just a moment…" | **Verified live** (from GitHub runners) |
 | DoorDash `/business/{slug}-{id}/` is not challenged and lists branch links; its menu is chain-level (`storeId: $undefined`, Next.js stream, no JSON-LD) | Live runs | **Verified live**; used for discovery only |
 | DoorDash sitemaps are served from `cdn.doordash.com/sitemaps/`, with one store sitemap per state (`sitemap-doordash-<st>-stores.xml`, 131 in total) | Live run 37709849182 | **Verified live**; per-state files feed the location filter |
 | DoorDash `/business/{slug}-{id}/menu` prices are not branch prices | The page text: "Prices are estimated based on your predicted location and may vary across store" | **Verified live**; not used for pricing |
 | Grubhub restaurant pages are a JavaScript shell with no structured data; Grubhub declares no sitemap, and `/sitemap.xml` is 404 | Live runs 4–5 | **Verified live**; the extractor falls back to URL fields and manual entry |
 | Uber Eats `/store/{slug}/{storeId}`, country sections `/<cc>[-<lang>]/store/` | Real sitemaps | **Verified live** |
+| MenuPages (Grubhub-owned) publishes Grubhub restaurants' menus as JSON-LD with USD prices and links each page to its Grubhub listing | Runs 37713405667, 37741487660 | **Verified live**; used for Grubhub prices, matched by Grubhub ID |
+| Published menus change by time of day | Run 37741924057: 18 McDonald's branches showed breakfast menus at 07:14 UTC; the same branches listed McNuggets at 00:39 UTC | **Verified live**; snapshot runs are kept separate |
+| AllMenus (Grubhub-owned) JSON-LD has item names but no prices, name or address; prices only in HTML | Run 37743302443 | **Verified live**; not used for prices |
 | DoorDash `?pickup=false|true`, Uber Eats `?diningMode=` change the published prices | Pages load with them; no price comparison across modes was made | **Unverified** (recorded in `mode_basis`) |
 | Uber Eats `__REACT_QUERY_STATE__` (2–3 MB, `\u0022`-escaped JSON) holds the app state | Structure probe | Observed; **not parsed** (undocumented) |
 | Uber Eats `/_p/api/*`, DoorDash `graphql/consumer` | Third-party clients using logged-in sessions | **Not used**: private and session-bound |
 
 ## Access limitations and dependencies
 
-1. **Network access.** The service needs outbound HTTPS to `www.doordash.com`, `www.ubereats.com` and, for link extraction, `www.grubhub.com`. The Claude build sandbox is denied all three. A GitHub-hosted runner and ordinary machines are not. Run `python -m server.inspect_page --probe` first.
-2. **DoorDash prices (blocked, verified).** DoorDash store pages served a Cloudflare challenge to every request from GitHub's datacenter IPs (24 of 24 across five runs). The app reports `captcha` barriers and its circuit breaker stops the adapter. It does not try to defeat the challenge. From other networks DoorDash may or may not serve the page; the run log shows which. Without readable store pages there are **no DoorDash branch prices**, and the DoorDash chain-page menu is not branch-specific.
+1. **Network access.** The service needs outbound HTTPS to `www.doordash.com`, `www.ubereats.com` and, for link extraction, `www.grubhub.com` and `menupages.com`. The Claude build sandbox is denied all three. A GitHub-hosted runner and ordinary machines are not. Run `python -m server.inspect_page --probe` first.
+2. **DoorDash prices (blocked, verified).** DoorDash store pages served a Cloudflare challenge to every request from GitHub's datacenter IPs (49 of 49 across ten runs). The app reports `captcha` barriers and its circuit breaker stops the adapter. It does not try to defeat the challenge. From other networks DoorDash may or may not serve the page; the run log shows which. Without readable store pages there are **no DoorDash branch prices**, and the DoorDash chain-page menu is not branch-specific.
 3. **Uber Eats bot checks (intermittent, verified).** Two of five store fetches in run 3, and two of three in run 2, were redirected to Uber's challenge page. These are reported and skipped. Resume tries the remaining queue later.
 4. **What the published data cannot tell you.**
    * Uber Eats JSON-LD has no add-on, option or availability data. An order with modifiers therefore always "needs confirmation", and the availability of live rows is "unknown".
    * `$0.00` listings are unverifiable.
    * No fees, taxes or account-dependent promotions are published, so checkout totals exist only for imported data that includes all destination charges.
 5. **Order mode.** Live prices come from an anonymous storefront with no address. `mode_basis` states how the mode was requested. Whether pickup prices differ on the public page is unverified.
-6. **Grubhub link extraction.** Real Grubhub restaurant pages publish no structured data in their HTML; the content is rendered by JavaScript. The extractor therefore yields the restaurant ID and a chain-name guess from the URL, flags the guess, and asks for manual item entry. The live verification fetched exactly one Grubhub restaurant page, to exercise this feature.
+6. **Grubhub prices.** Real Grubhub restaurant pages publish no structured data in their HTML; the content is rendered by JavaScript. Prices come from MenuPages, which is Grubhub-owned but covers only a subset of Grubhub restaurants (28,133 pages), and only when the page links to the same Grubhub ID. MenuPages prices are menu prices; option charges and fees are not included, and they may differ from what a signed-in Grubhub checkout shows. Otherwise the extractor yields the restaurant ID and a chain-name guess from the URL, flags the guess, and asks for manual item entry.
 7. **Terms of service.** Grubhub's Terms of Use prohibit automated scraping without written authorization. DoorDash's and Uber's terms were not reviewed here. You are responsible for whether and how you run the scrapers. Robots.txt allowing crawling (verified for all three) is not the same as permission. The import path works with data obtained by other permitted means.
 8. **Coverage.** Nationwide coverage is built up across bounded, resumable runs from seeds, chain pages and declared sitemaps. Uber Eats declares hundreds of sitemap files; DoorDash declares 131 per-state store files of up to ~100k URLs each. It is never exhaustive by construction, and the UI never claims "cheapest in the US".
 
@@ -315,6 +352,7 @@ food-price-compare/
 ├── server/
 │   ├── app.py                 # HTTP API + static index.html
 │   ├── adapters.py            # DoorDash / Uber Eats adapters, Grubhub extraction, inspector
+│   ├── grubhub_mirror.py      # Grubhub prices via MenuPages (Grubhub-owned), matched by Grubhub ID
 │   ├── jobs.py                # resumable, checkpointed, cancellable jobs
 │   ├── http_client.py         # robots, rate limit, retry/backoff, cache, barriers, Playwright
 │   ├── robots.py              # RFC 9309 robots.txt
@@ -323,7 +361,10 @@ food-price-compare/
 │   ├── structure_probe.py     # how a real page publishes its data (evidence gathering)
 │   └── config.py
 ├── examples/                  # import format examples (fictional chain)
+├── board/                     # static price board: template.html, sources.json, built index.html
 ├── scripts/live_verify.py     # bounded live run (used by .github/workflows/fpc-live-verification.yml)
+├── scripts/snapshot.py        # bounded live searches → live-verification/snapshot.json (board data)
+├── scripts/build_board.py     # builds board/index.html from the template, engine and snapshots
 ├── scripts/rank_report.mjs    # rank a live report's real observations with the shipped engine
 ├── live-verification/         # latest live report (committed by the workflow)
 ├── tests/                     # pytest, node:test engine + Playwright UI e2e, synthetic fixtures,
