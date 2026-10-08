@@ -8,40 +8,52 @@
 <title>Food Price Compare (US)</title>
 <style>
 :root {
-  --bg: #f6f7f9; --panel: #ffffff; --ink: #1c2330; --muted: #5d6778; --line: #dfe3ea;
-  --accent: #2357d9; --accent-ink: #ffffff; --ok: #12784a; --ok-bg: #e6f5ee; --warn: #8a5a00; --warn-bg: #fff4dc;
-  --bad: #b3261e; --bad-bg: #fdecea; --info-bg: #eef3ff; --demo: #7a2bd1; --demo-bg: #f3eafe; --chip: #eef0f4;
-  --radius: 10px; --shadow: 0 1px 2px rgba(16,24,40,.06), 0 1px 3px rgba(16,24,40,.08);
+  /* Same identity as board/index.html: green-grey paper, ink rules, a shelf-label yellow for the winning price. */
+  --bg: #eef1ee; --panel: #ffffff; --ink: #17201c; --muted: #56625c; --line: #cfd7d1;
+  --accent: #1d5f8a; --accent-ink: #ffffff; --ok: #1d7446; --ok-bg: #dcf0e3; --warn: #8a5800; --warn-bg: #fbecc8;
+  --bad: #a3312a; --bad-bg: #f8dedb; --info-bg: #e2ecf4; --demo: #7a2bd1; --demo-bg: #f3eafe; --chip: #e3e8e4;
+  --tag: #ffd84a; --tag-ink: #1a1a12;
+  --radius: 6px; --shadow: none;
+  --mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #12151b; --panel: #1a1f27; --ink: #e7eaf0; --muted: #9aa4b5; --line: #2c3340;
-    --accent: #6d97ff; --accent-ink: #0b1020; --ok: #5fd39a; --ok-bg: #12301f; --warn: #f0c46a; --warn-bg: #33270e;
-    --bad: #ff8a80; --bad-bg: #3a1714; --info-bg: #18233d; --demo: #c49bff; --demo-bg: #2a1a40; --chip: #252b36;
+    --bg: #111513; --panel: #1a201d; --ink: #e6ece8; --muted: #9aa8a1; --line: #303a35;
+    --accent: #7fb8de; --accent-ink: #0d1a24; --ok: #7fd3a0; --ok-bg: #173325; --warn: #f0c56b; --warn-bg: #3a2d10;
+    --bad: #f1958c; --bad-bg: #3d1d1a; --info-bg: #1b2a36; --demo: #c49bff; --demo-bg: #2a1a40; --chip: #232a26;
+    --tag: #f2cb3a; --tag-ink: #16140a;
     color-scheme: dark;
   }
+}
+:root[data-theme="dark"] {
+  --bg: #111513; --panel: #1a201d; --ink: #e6ece8; --muted: #9aa8a1; --line: #303a35;
+  --accent: #7fb8de; --accent-ink: #0d1a24; --ok: #7fd3a0; --ok-bg: #173325; --warn: #f0c56b; --warn-bg: #3a2d10;
+  --bad: #f1958c; --bad-bg: #3d1d1a; --info-bg: #1b2a36; --demo: #c49bff; --demo-bg: #2a1a40; --chip: #232a26;
+  --tag: #f2cb3a; --tag-ink: #16140a;
+  color-scheme: dark;
 }
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
 body { margin: 0; background: var(--bg); color: var(--ink); font: 14px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
-h1 { font-size: 18px; margin: 0; }
+h1 { font-size: 20px; margin: 0; font-weight: 800; letter-spacing: -.01em; }
 h2 { font-size: 15px; margin: 0 0 10px; }
 h3 { font-size: 13px; margin: 14px 0 6px; font-variant-caps: all-small-caps; letter-spacing: .03em; color: var(--muted); }
 a { color: var(--accent); }
 button, input, select, textarea { font: inherit; color: inherit; }
-input, select, textarea { background: var(--panel); border: 1px solid var(--line); border-radius: 7px; padding: 6px 8px; min-width: 0; }
+input, select, textarea { background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 6px 8px; min-width: 0; }
 textarea { width: 100%; resize: vertical; }
 select { max-width: 100%; }
 .row input, .row select, .item-card input { width: 100%; }
 input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
-button { border: 1px solid var(--line); background: var(--chip); border-radius: 7px; padding: 6px 12px; cursor: pointer; }
+button { border: 1px solid var(--line); background: var(--panel); border-radius: 4px; padding: 6px 12px; cursor: pointer; font-weight: 600; }
+button:hover:not(:disabled) { border-color: var(--ink); }
 button.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
 button.danger { color: var(--bad); }
 button.link { background: none; border: none; color: var(--accent); padding: 2px 4px; text-decoration: underline; }
 button:disabled { opacity: .5; cursor: not-allowed; }
 label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 3px; }
-.topbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; padding: 10px 16px; background: var(--panel); border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 5; }
+.topbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; padding: 10px 16px; background: var(--bg); border-bottom: 2px solid var(--ink); position: sticky; top: 0; z-index: 5; }
 .brand { display: flex; gap: 8px; align-items: baseline; }
 .tag { font-size: 11px; background: var(--chip); padding: 2px 6px; border-radius: 99px; color: var(--muted); }
 .backend { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
@@ -61,7 +73,7 @@ label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 3px
 .row > .shrink { flex: 0 0 auto; }
 .tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); margin-bottom: 10px; flex-wrap: wrap; }
 .tabs button { border: none; border-bottom: 2px solid transparent; border-radius: 0; background: none; padding: 6px 10px; color: var(--muted); }
-.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); font-weight: 600; }
+.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--ink); border-bottom-width: 3px; font-weight: 700; }
 .note { font-size: 12px; color: var(--muted); margin: 6px 0; }
 .msg { font-size: 13px; padding: 8px 10px; border-radius: 7px; margin: 8px 0; background: var(--info-bg); }
 .msg.ok { background: var(--ok-bg); color: var(--ok); }
@@ -88,11 +100,13 @@ details summary { cursor: pointer; color: var(--muted); font-size: 13px; margin:
 .counters { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 4px 10px; margin-top: 6px; font-size: 12px; }
 .counters div b { display: block; font-size: 15px; }
 .bookmarklet { display: inline-block; padding: 6px 12px; border-radius: 7px; border: 1px dashed var(--accent); color: var(--accent); text-decoration: none; font-weight: 600; cursor: grab; }
-.winner { border: 2px solid var(--ok); background: var(--ok-bg); border-radius: var(--radius); padding: 12px 14px; }
-.winner.none { border-color: var(--line); background: var(--chip); }
-.winner .price { font-size: 26px; font-weight: 700; }
-.winner .label { font-size: 13px; font-variant-caps: all-small-caps; letter-spacing: .03em; color: var(--ok); font-weight: 700; }
-.winner.none .label { color: var(--muted); }
+.winner { background: var(--tag); color: var(--tag-ink); border-radius: 3px; padding: 14px 16px; }
+.winner .note, .winner a { color: var(--tag-ink); }
+.winner.none { background: var(--panel); color: var(--ink); border: 2px dashed var(--line); }
+.winner.none .note { color: var(--muted); }
+.winner .price { font-size: 30px; font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
+.winner .label { font-size: 14px; font-variant-caps: all-small-caps; letter-spacing: .06em; font-weight: 700; opacity: .8; }
+.winner.none .label { color: var(--muted); opacity: 1; }
 .flags { display: inline-flex; flex-wrap: wrap; gap: 4px; }
 .flag { font-size: 11px; padding: 1px 6px; border-radius: 99px; background: var(--chip); white-space: nowrap; }
 .flag.warn { background: var(--warn-bg); color: var(--warn); }
@@ -106,6 +120,8 @@ th { background: var(--chip); font-weight: 600; white-space: nowrap; position: s
 th button { all: unset; cursor: pointer; }
 th button:focus-visible { outline: 2px solid var(--accent); }
 td.num, th.num { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+td.num { font-family: var(--mono); font-weight: 600; }
+th { font-variant-caps: all-small-caps; letter-spacing: .05em; font-size: 13px; color: var(--muted); }
 tr.details td { background: var(--bg); }
 .reasons { margin: 0; padding-left: 0; list-style: none; }
 .reasons li { margin: 2px 0; }
