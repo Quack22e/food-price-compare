@@ -156,7 +156,8 @@ def build_observation(adapter: PlatformAdapter, ref: dict, parsed: dict, fetched
     """Return (status, observation|None, detail)."""
     if not parsed["restaurant_found"]:
         types = ", ".join(parsed["jsonld_types"]) or "none"
-        return "no_menu", None, (f"no schema.org Restaurant data on page (JSON-LD types: {types}); "
+        extra = f"; browser render blocked ({parsed['render_barrier']})" if parsed.get("render_barrier") else ""
+        return "no_menu", None, (f"no schema.org Restaurant data on page (JSON-LD types: {types}){extra}; "
                                  "menu not extracted rather than guessed")
     address, why = normalize_us_address(parsed["address_raw"])
     if ref.get("country") and ref["country"] != "us":
@@ -326,7 +327,10 @@ def inspect_url(client: PoliteClient, url: str, use_browser: bool = False) -> di
 
 
 def inspect_fetched(url: str, fetched) -> dict:
+    from .structure_probe import probe_structure
     report = {"url": url, "fetch": fetched.summary()}
+    if fetched.body:
+        report["structure"] = probe_structure(fetched.text)
     if not fetched.ok:
         return report
     html = fetched.text

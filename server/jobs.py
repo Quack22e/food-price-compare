@@ -240,6 +240,12 @@ class Job:
                 if priority < stores[key]["priority"] and stores[key]["status"] == "queued":
                     stores[key]["priority"] = priority
                 return False
+            if ref.get("country") and ref["country"] != "us":
+                # Non-US country section of the site: recorded, never queued
+                # (so it cannot consume the per-run fetch budget).
+                stores[key] = {**ref, "source": source, "priority": priority, "status": "non_us",
+                               "detail": f"URL is in the '/{ref['country']}/' country section; not fetched"}
+                return True
             stores[key] = {**ref, "source": source, "priority": priority, "status": "queued", "detail": ""}
         return True
 
@@ -374,8 +380,10 @@ class Job:
                 if rendered.ok:
                     out, parsed = rendered, parse_store_page(rendered.text, rendered.final_url or url, ref["store_id"])
                 elif rendered.barrier:
-                    out = rendered
-                    parsed = None
+                    # The HTTP page itself was fine; only the render was blocked.
+                    # Keep the store as "no menu data" and report the barrier.
+                    self._record_barrier(platform, dict(rendered.barrier, during="browser render (auto mode)"))
+                    parsed["render_barrier"] = rendered.barrier["kind"]
             if parsed and parsed["restaurant_found"] and not parsed["items"]:
                 for murl in parsed["menu_urls"][:1]:
                     if urlsplit(murl).netloc.lower() == adapter.host:

@@ -6,8 +6,8 @@ from a machine that has internet access - e.g. the GitHub Actions workflow
 contains no raw HTML. Raw pages are saved to tests/captures/ (git-ignored)
 so tests/test_real_captures.py can verify the extractors against them.
 
-Request budget: 3 robots.txt, 4 inspected pages, and two search jobs limited to
-3 stores and 3 sitemap documents each. Grubhub is only probed (robots.txt):
+Request budget: 3 robots.txt, two search jobs limited to 3 stores and 3
+sitemap documents each, then up to 7 inspected pages (4 fixed + 3 discovered). Grubhub is only probed (robots.txt):
 its Terms of Use prohibit automated scraping.
 """
 from __future__ import annotations
@@ -65,26 +65,6 @@ def main():
     except Exception as exc:  # keep going; the report records it
         report["probe_error"] = repr(exc)
 
-    adapters = make_adapters(cfg.platform_bases)
-    for url in INSPECT:
-        entry = {"url": url}
-        try:
-            fetched = svc.client.fetch(url, kind="inspect", ttl=0)
-            entry["http"] = inspect_fetched(url, fetched)
-            store = any(a.parse_store_url(url) for a in adapters.values())
-            if fetched.ok:
-                save_capture_outcome(svc, url, fetched, Path(args.captures))
-            no_data = fetched.ok and not entry["http"].get("restaurants")
-            # Render only when the page answered normally but had no structured data.
-            if browser_ok and no_data:
-                rendered = svc.client.fetch(url, kind="inspect", ttl=0, use_browser=True)
-                entry["browser"] = inspect_fetched(url, rendered)
-                if rendered.ok and store:
-                    save_capture_outcome(svc, url, rendered, Path(args.captures), suffix="_rendered")
-        except Exception as exc:
-            entry["error"] = repr(exc)
-        report["inspections"].append(entry)
-
     for spec in JOBS:
         req = dict(spec, order_mode="delivery", fetch_mode="auto" if browser_ok else "http", max_stores_per_platform=3)
         entry = {"request": req}
@@ -105,6 +85,33 @@ def main():
         except Exception as exc:
             entry["error"] = repr(exc)
         report["jobs"].append(entry)
+
+    # Also inspect a few real US store pages the jobs discovered (structure only).
+    extra = []
+    for j in report["jobs"]:
+        us = [st["canonical"] for st in j.get("stores", []) if st["status"] in ("checked", "no_menu", "blocked", "queued")]
+        extra += us[:2] if "ubereats" in j["request"]["platforms"] else us[:1]
+    adapters = make_adapters(cfg.platform_bases)
+    for url in INSPECT + extra:
+        entry = {"url": url}
+        try:
+            fetched = svc.client.fetch(url, kind="inspect", ttl=0)
+            entry["http"] = inspect_fetched(url, fetched)
+            store = any(a.parse_store_url(url) for a in adapters.values())
+            if fetched.ok:
+                save_capture_outcome(svc, url, fetched, Path(args.captures))
+            elif fetched.body:
+                save_capture_outcome(svc, url, fetched, Path(args.captures + "_barriers"), force=True)
+            no_data = fetched.ok and not entry["http"].get("restaurants")
+            # Render only when the page answered normally but had no structured data.
+            if browser_ok and no_data:
+                rendered = svc.client.fetch(url, kind="inspect", ttl=0, use_browser=True)
+                entry["browser"] = inspect_fetched(url, rendered)
+                if rendered.ok and store:
+                    save_capture_outcome(svc, url, rendered, Path(args.captures), suffix="_rendered")
+        except Exception as exc:
+            entry["error"] = repr(exc)
+        report["inspections"].append(entry)
 
     report["finished_at"] = utcnow_iso()
     (out_dir / "report.json").write_text(json.dumps(report, indent=2, default=str))

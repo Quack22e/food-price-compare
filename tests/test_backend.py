@@ -178,6 +178,8 @@ def test_client_barriers_retry_after_cache_and_allowlist(sites, tmp_path):
     dd.route("/private/x", "secret")
     dd.route("/captcha", "<html><title>Just a moment...</title><div class='cf-chl-widget'></div></html>", status=503)
     dd.route("/forbidden", "<html>nope</html>", status=403)
+    big = "<html><head><title>Store</title><script src='https://challenges.cloudflare.com/turnstile/v0/api.js'></script></head><body>" + "x" * 200_000 + "</body></html>"
+    dd.route("/big-normal", big)
     dd.route("/login-redirect", "", status=302, headers={"Location": "/login?next=/x"})
     dd.route("/login", "<html>log in</html>")
     dd.route("/toolong", "slow down", status=429, headers={"Retry-After": "9999"})
@@ -195,6 +197,8 @@ def test_client_barriers_retry_after_cache_and_allowlist(sites, tmp_path):
     assert client.fetch(dd.base + "/captcha").barrier["kind"] == "captcha"
     assert dd.hits["/captcha"] == 1  # challenge is not retried
     assert client.fetch(dd.base + "/forbidden").barrier["kind"] == "forbidden"
+    big_out = client.fetch(dd.base + "/big-normal")
+    assert big_out.ok and big_out.barrier is None  # vendor script on a normal 200 page is not a challenge
     assert client.fetch(dd.base + "/login-redirect").barrier["kind"] == "login_wall"
     assert dd.hits.get("/login?next=/x") is None  # login page itself never requested
     assert client.fetch(dd.base + "/offsite").barrier["kind"] == "offsite_redirect"  # no SSRF via redirect
@@ -260,6 +264,8 @@ def test_job_end_to_end_discovery_menus_dedupe_and_nonus(sites, tmp_path):
     # Uber Eats: sitemap (us1, ca, nomenu) + brand page (us2, dupe) with rel=next pagination.
     assert uec["discovered"] == 5
     assert uec["non_us"] == 1 and uec["no_menu"] == 1 and uec["duplicate"] == 1 and uec["checked"] == 2
+    ca = job.state["platforms"]["ubereats"]["stores"]["CaNaDa000111"]
+    assert ca["status"] == "non_us" and "checked_at" not in ca  # marked at discovery, never queued
     assert ue.hits.get("/brand/mcdonalds?page=2") == 1
     assert "/ca/store/mcdonalds-toronto/CaNaDa000111" not in ue.hits  # non-US section skipped without a request
     obs = job.state["observations"]

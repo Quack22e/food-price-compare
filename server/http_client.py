@@ -34,6 +34,9 @@ STRONG_CHALLENGE_MARKERS = (
     "access to this page has been denied", "_incapsula_resource", "perimeterx",
 )
 WEAK_CHALLENGE_MARKERS = ("g-recaptcha", "h-captcha", "hcaptcha.com", "recaptcha/api.js")
+CHALLENGE_TITLES = ("<title>just a moment...</title>", "attention required! | cloudflare",
+                    "access to this page has been denied")
+CHALLENGE_MAX_BYTES = 150_000
 LOGIN_PATH_HINTS = ("/login", "/signin", "/sign-in", "/auth", "/consumer/login")
 
 
@@ -101,8 +104,13 @@ def classify_response(url: str, status: int, final_url: str, body: bytes, conten
     final_path = urlsplit(final_url or url).path.lower()
     if final_url and final_url != url and any(h in final_path for h in LOGIN_PATH_HINTS):
         return barrier("login_wall", f"redirected to a login page ({final_url})", url, status)
-    if any(m in head for m in STRONG_CHALLENGE_MARKERS):
-        return barrier("captcha", "bot-challenge / CAPTCHA interstitial returned", url, status)
+    hit = next((m for m in STRONG_CHALLENGE_MARKERS if m in head), None)
+    # Observed live (2026-10-08): a real DoorDash challenge was a 5.7 KB HTTP
+    # 403, while a normal 3 MB Uber Eats store page (HTTP 200) also contains
+    # challenge-vendor strings in its scripts. A 200 therefore only counts as
+    # a challenge when it is small or carries a challenge-page title.
+    if hit and (status != 200 or len(body or b"") < CHALLENGE_MAX_BYTES or any(t in head for t in CHALLENGE_TITLES)):
+        return barrier("captcha", f"bot-challenge / CAPTCHA interstitial returned (marker '{hit}')", url, status)
     if status == 401:
         return barrier("login_wall", "HTTP 401: authentication required", url, status)
     if status == 403:

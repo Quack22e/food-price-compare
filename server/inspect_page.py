@@ -28,8 +28,8 @@ def save_capture(svc: Service, url: str, browser: bool, out_dir: Path) -> None:
     save_capture_outcome(svc, url, out, out_dir)
 
 
-def save_capture_outcome(svc: Service, url: str, out, out_dir: Path, suffix: str = "") -> None:
-    if not out.ok:
+def save_capture_outcome(svc: Service, url: str, out, out_dir: Path, suffix: str = "", force: bool = False) -> None:
+    if not out.ok and not (force and out.body):
         print(f"not saved: {out.barrier or out.error}", file=sys.stderr)
         return
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -37,7 +37,7 @@ def save_capture_outcome(svc: Service, url: str, out, out_dir: Path, suffix: str
     (out_dir / f"{stem}.html").write_bytes(out.body or b"")
     (out_dir / f"{stem}.json").write_text(json.dumps({
         "url": url, "final_url": out.final_url, "status": out.status, "fetched_at": out.fetched_at,
-        "via": out.via, "user_agent": svc.cfg.user_agent}, indent=2))
+        "via": out.via, "user_agent": svc.cfg.user_agent, "barrier": out.barrier}, indent=2))
     print(f"saved {out_dir / (stem + '.html')}", file=sys.stderr)
 
 
