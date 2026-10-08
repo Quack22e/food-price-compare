@@ -1,0 +1,169 @@
+"""Local stand-in HTTP servers for pipeline tests.
+
+SYNTHETIC FIXTURES: every page here was written for the tests. They follow
+the public schema.org / sitemaps.org standards the adapters parse; they are
+NOT copies of real DoorDash / Uber Eats / Grubhub pages and prove nothing
+about the live sites' current markup. They exist to exercise the pipeline
+mechanics (robots, discovery, retries, barriers, cancellation, resume).
+"""
+from __future__ import annotations
+
+import json
+import threading
+import time
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
+
+
+class FakeSite:
+    def __init__(self):
+        self.routes: dict[str, dict] = {}
+        self.hits: dict[str, int] = {}
+        self.hit_times: dict[str, list] = {}
+        self._lock = threading.Lock()
+        site = self
+
+        class H(BaseHTTPRequestHandler):
+            def log_message(self, *a):
+                pass
+
+            def do_GET(self):
+                path = self.path
+                with site._lock:
+                    site.hits[path] = site.hits.get(path, 0) + 1
+                    site.hit_times.setdefault(path, []).append(time.monotonic())
+                    n = site.hits[path]
+                r = site.routes.get(path) or site.routes.get(path.split("?")[0])
+                if r is None:
+                    self.send_response(404)
+                    self.send_header("Content-Length", "0")
+                    self.end_headers()
+                    return
+                if callable(r):
+                    r = r(n)
+                if r.get("delay"):
+                    time.sleep(r["delay"])
+                body = r.get("body", "")
+                body = body.encode() if isinstance(body, str) else body
+                self.send_response(r.get("status", 200))
+                for k, v in (r.get("headers") or {}).items():
+                    self.send_header(k, v)
+                self.send_header("Content-Type", r.get("ctype", "text/html; charset=utf-8"))
+                self.send_header("Content-Length", str(len(body)))
+                self.end_headers()
+                self.wfile.write(body)
+
+        self.httpd = ThreadingHTTPServer(("127.0.0.1", 0), H)
+        self.httpd.daemon_threads = True
+        self.port = self.httpd.server_address[1]
+        self.base = f"http://127.0.0.1:{self.port}"
+        self.thread = threading.Thread(target=self.httpd.serve_forever, daemon=True)
+        self.thread.start()
+
+    def route(self, path, body="", status=200, ctype=None, headers=None, delay=None):
+        self.routes[path] = {"body": body, "status": status, "headers": headers or {}, "delay": delay,
+                             **({"ctype": ctype} if ctype else {})}
+
+    def close(self):
+        self.httpd.shutdown()
+        self.httpd.server_close()
+
+
+def restaurant_page(name, url, street, city, region, zip_code, items, country="US", extra_head=""):
+    """items: list of (section, name, price|None, currency, availability|None, extra_dict)"""
+    sections = {}
+    for sec, iname, price, cur, avail, extra in items:
+        offer = {"@type": "Offer", "priceCurrency": cur}
+        if price is not None:
+            offer["price"] = price
+        if avail:
+            offer["availability"] = f"https://schema.org/{avail}"
+        mi = {"@type": "MenuItem", "name": iname, "offers": offer}
+        mi.update(extra or {})
+        sections.setdefault(sec, []).append(mi)
+    data = {
+        "@context": "https://schema.org", "@type": "Restaurant", "name": name, "url": url,
+        "address": {"@type": "PostalAddress", "streetAddress": street, "addressLocality": city,
+                    "addressRegion": region, "postalCode": zip_code, "addressCountry": country},
+        "hasMenu": {"@type": "Menu", "hasMenuSection": [
+            {"@type": "MenuSection", "name": s, "hasMenuItem": its} for s, its in sections.items()]},
+    }
+    return (f"<!doctype html><html><head><title>{name}</title>{extra_head}"
+            f"<script type=\"application/ld+json\">{json.dumps(data)}</script></head>"
+            f"<body><h1>{name}</h1></body></html>")
+
+
+def sitemap_index(urls):
+    inner = "".join(f"<sitemap><loc>{u}</loc></sitemap>" for u in urls)
+    return f'<?xml version="1.0" encoding="UTF-8"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{inner}</sitemapindex>'
+
+
+def urlset(urls):
+    inner = "".join(f"<url><loc>{u}</loc></url>" for u in urls)
+    return f'<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">{inner}</urlset>'
+
+
+NUGGETS = [
+    ("Chicken", "10 pc. Chicken McNuggets®", "5.49", "USD", "InStock", None),
+    ("Chicken", "20 pc. Chicken McNuggets®", "9.99", "USD", "InStock", None),
+    ("Burgers", "Big Mac®", "6.39", "USD", None, None),
+    ("Sides", "Fries", "3.89", "USD", None, {"offers": [
+        {"@type": "Offer", "name": "Small", "price": "2.79", "priceCurrency": "USD"},
+        {"@type": "Offer", "name": "Large", "price": "4.19", "priceCurrency": "USD"}]}),
+]
+
+
+def build_doordash(site: FakeSite, n_stores=4, blocked=False, slow=None):
+    """A DoorDash-shaped synthetic site: robots -> sitemap index -> urlset -> stores."""
+    b = site.base
+    site.route("/robots.txt", f"User-agent: *\nDisallow: /consumer/\nAllow: /store/\nSitemap: {b}/sitemap_index.xml\n", ctype="text/plain")
+    store_urls = [f"{b}/store/mcdonalds-city{i}-{1000 + i}/" for i in range(n_stores)]
+    other = [f"{b}/store/burger-king-city0-9001/"]
+    site.route("/sitemap_index.xml", sitemap_index([f"{b}/sitemap_misc.xml", f"{b}/sitemap_stores_1.xml"]), ctype="application/xml")
+    site.route("/sitemap_misc.xml", urlset([f"{b}/about"]), ctype="application/xml")
+    site.route("/sitemap_stores_1.xml", urlset(store_urls + other), ctype="application/xml")
+    cities = [("1 Main St", "Springfield", "IL", "62701"), ("2 Oak Ave", "Austin", "TX", "78701"),
+              ("3 Pine Rd", "Portland", "OR", "97201"), ("4 Elm St", "Denver", "CO", "80202"),
+              ("5 Bay St", "Boston", "MA", "02108"), ("6 Lake Dr", "Madison", "WI", "53703")]
+    for i, u in enumerate(store_urls):
+        path = u[len(b):]
+        if blocked:
+            site.route(path, "<html><title>Access denied</title></html>", status=403)
+            continue
+        street, city, st, z = cities[i % len(cities)]
+        items = [(s, n, (f"{float(p) + 0.10 * i:.2f}" if p else p), c, a, e) for s, n, p, c, a, e in NUGGETS]
+        site.route(path, restaurant_page("McDonald's", u, street, city, st, z, items), delay=slow)
+    site.route("/store/burger-king-city0-9001/", restaurant_page("Burger King", other[0], "9 X St", "Springfield", "IL", "62701",
+                                                                [("Chicken", "10 pc. Chicken Nuggets", "4.00", "USD", None, None)]))
+    return store_urls
+
+
+def build_ubereats(site: FakeSite):
+    b = site.base
+    site.route("/robots.txt", f"User-agent: *\nDisallow: /_p/\nCrawl-delay: 0\nSitemap: {b}/sitemap.xml\n", ctype="text/plain")
+    urls = {
+        "us1": f"{b}/store/mcdonalds-main-st/AbCdEfGh1234",
+        "us2": f"{b}/store/mcdonalds-broadway/ZzYyXx987654",
+        "ca": f"{b}/ca/store/mcdonalds-toronto/CaNaDa000111",
+        "nomenu": f"{b}/store/mcdonalds-js-only/NoMenu555555",
+        "dupe": f"{b}/store/mcdonalds-main-street-2/DuPe00000001",
+    }
+    site.route("/sitemap.xml", urlset([urls["us1"], urls["ca"], urls["nomenu"]]), ctype="application/xml")
+    site.route("/brand/mcdonalds", "<html><body>" + "".join(
+        f'<a href="{u}">store</a>' for u in (urls["us2"], urls["dupe"])) + '<a href="/brand/mcdonalds?page=2" rel="next">next</a></body></html>')
+    site.route("/brand/mcdonalds?page=2", "<html><body>no more</body></html>")
+    site.route("/store/mcdonalds-main-st/AbCdEfGh1234", restaurant_page(
+        "McDonald's (Main St)", urls["us1"], "100 Main St", "Columbus", "OH", "43215",
+        [("Chicken", "Chicken McNuggets", "5.29", "USD", "InStock", {"offers": [
+            {"@type": "Offer", "name": "10 pc", "price": "5.29", "priceCurrency": "USD", "availability": "https://schema.org/InStock"},
+            {"@type": "Offer", "name": "20 pc", "price": "9.49", "priceCurrency": "USD"}]})]))
+    site.route("/store/mcdonalds-broadway/ZzYyXx987654", restaurant_page(
+        "McDonald's", urls["us2"], "200 Broadway", "New York", "New York", "10007",
+        [("Chicken", "10 pc Chicken McNuggets", "6.99", "USD", "OutOfStock", None)]))
+    site.route("/store/mcdonalds-main-street-2/DuPe00000001", restaurant_page(
+        "McDonald's", urls["dupe"], "100 Main St", "Columbus", "OH", "43215",
+        [("Chicken", "10 pc Chicken McNuggets", "1.00", "USD", None, None)]))
+    site.route("/ca/store/mcdonalds-toronto/CaNaDa000111", restaurant_page(
+        "McDonald's", urls["ca"], "1 King St", "Toronto", "ON", "M5H 1A1",
+        [("Chicken", "10 pc Chicken McNuggets", "4.00", "CAD", None, None)], country="CA"))
+    site.route("/store/mcdonalds-js-only/NoMenu555555", "<html><head><title>McDonald's</title></head><body><div id=root></div></body></html>")
+    return urls

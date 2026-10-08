@@ -1,0 +1,5 @@
+# Companion service for index.html (Python 3.10+)
+requests>=2.31
+# Optional: enables the "Browser render" and "Auto" fetch methods.
+#   pip install playwright && python -m playwright install chromium
+# playwright>=1.45
