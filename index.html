@@ -87,6 +87,7 @@ details summary { cursor: pointer; color: var(--muted); font-size: 13px; margin:
 .plat header { display: flex; justify-content: space-between; align-items: center; gap: 6px; flex-wrap: wrap; }
 .counters { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 4px 10px; margin-top: 6px; font-size: 12px; }
 .counters div b { display: block; font-size: 15px; }
+.bookmarklet { display: inline-block; padding: 6px 12px; border-radius: 7px; border: 1px dashed var(--accent); color: var(--accent); text-decoration: none; font-weight: 600; cursor: grab; }
 .winner { border: 2px solid var(--ok); background: var(--ok-bg); border-radius: var(--radius); padding: 12px 14px; }
 .winner.none { border-color: var(--line); background: var(--chip); }
 .winner .price { font-size: 26px; font-weight: 700; }
@@ -229,6 +230,11 @@ tr.details td { background: var(--bg); }
       <div class="btnbar"><button id="importBtn" type="button">Validate &amp; import</button><button id="importClear" type="button">Clear imported data</button></div>
       <span class="inline" style="margin-top:8px"><input type="checkbox" id="includeImported" checked><label for="includeImported" style="display:inline;margin:0">Include imported data in rankings (labeled “Imported”)</label></span>
       <div id="importReport"></div>
+      <h3>Capture from your own browser</h3>
+      <p class="note">For pages this tool cannot read from a server (DoorDash store pages answer servers with a bot check), you can read them yourself: open a DoorDash or Uber Eats store page in your browser, set Delivery or Pickup as you would order, then click the bookmark below. It reads only the menu data the page publishes, shows it, and gives you JSON to paste into Import. It sends nothing anywhere.</p>
+      <div class="btnbar"><a id="captureBookmarklet" class="bookmarklet" href="#">Capture menu</a><button id="captureCopy" type="button">Copy bookmarklet code</button></div>
+      <p class="note">Drag “Capture menu” to your bookmarks bar (or copy the code into a new bookmark’s URL). Captured prices are labelled as captured in your session; your login and delivery address may affect them.</p>
+      <div id="captureMsg"></div>
       <h3>Demo data</h3>
       <span class="inline"><input type="checkbox" id="demoToggle"><label for="demoToggle" style="display:inline;margin:0">Demo mode (fictional data, isolated from real results)</label></span>
       <div class="btnbar"><button id="demoOrderBtn" type="button" disabled>Load demo order</button></div>
@@ -259,6 +265,202 @@ tr.details td { background: var(--bg); }
     </section>
   </div>
 </main>
+
+<script type="text/plain" id="fpc-capture">
+/* FPC browser capture. Runs as a bookmarklet on a DoorDash / Uber Eats page
+   the user is viewing in their own browser. Reads only the page's published
+   schema.org JSON-LD (the extraction path verified on real Uber Eats pages);
+   never guesses prices from screen text; sends nothing anywhere. Output is
+   JSON in the app's import schema, labelled as a browser capture. */
+(function () {
+  'use strict';
+  var VERSION = '1';
+  var FOOD = ['restaurant', 'foodestablishment', 'fastfoodrestaurant', 'cafeorcoffeeshop', 'bakery', 'barorpub', 'brewery', 'icecreamshop', 'winery', 'distillery'];
+  function txt(v) {
+    if (v == null) return '';
+    if (Array.isArray(v)) return txt(v[0]);
+    if (typeof v === 'object') return txt(v.name || v['@id'] || '');
+    var t = document.createElement('textarea');
+    t.innerHTML = String(v);
+    return t.value.replace(/\s+/g, ' ').trim();
+  }
+  function types(o) {
+    var t = o && o['@type'];
+    return (Array.isArray(t) ? t : [t]).filter(function (x) { return typeof x === 'string'; })
+      .map(function (x) { return x.split('/').pop().split('#').pop().toLowerCase(); });
+  }
+  function isType(o, list) { return types(o).some(function (t) { return list.indexOf(t) >= 0; }); }
+  function cents(v) {
+    if (v == null || typeof v === 'boolean') return null;
+    var s = String(v).trim().replace(/^\$\s*/, '').replace(/,(?=\d{3}(\D|$))/g, '');
+    var m = /^(\d{1,7})(?:\.(\d{1,2})0*)?$/.exec(s);
+    if (!m) return null;
+    return parseInt(m[1], 10) * 100 + parseInt(((m[2] || '') + '00').slice(0, 2), 10);
+  }
+  function avail(v) {
+    var s = txt(v).split('/').pop().toLowerCase();
+    if (/^(instock|limitedavailability|onlineonly|instoreonly|preorder|presale)$/.test(s)) return 'available';
+    if (/^(outofstock|soldout|discontinued)$/.test(s)) return 'unavailable';
+    return 'unknown';
+  }
+  function list(v) { return v == null ? [] : (Array.isArray(v) ? v : [v]); }
+  function flatten(d, out) {
+    if (Array.isArray(d)) d.forEach(function (x) { flatten(x, out); });
+    else if (d && typeof d === 'object') { if (Array.isArray(d['@graph'])) flatten(d['@graph'], out); else out.push(d); }
+    return out;
+  }
+  function findFood(o, depth, out) {
+    if (depth > 6 || !o || typeof o !== 'object') return;
+    if (Array.isArray(o)) { o.forEach(function (x) { findFood(x, depth + 1, out); }); return; }
+    if (isType(o, FOOD)) { out.push(o); return; }
+    Object.keys(o).forEach(function (k) { if (k !== '@context') findFood(o[k], depth + 1, out); });
+  }
+  function walk(node, section, items, depth) {
+    if (depth > 10 || node == null) return;
+    if (Array.isArray(node)) { node.forEach(function (n) { walk(n, section, items, depth + 1); }); return; }
+    if (typeof node !== 'object') return;
+    if (isType(node, ['menuitem'])) { parseItem(node, section, items); return; }
+    var sec = isType(node, ['menusection']) ? (txt(node.name) || section) : section;
+    walk(node.hasMenuSection, sec, items, depth + 1);
+    walk(node.hasMenuItem, sec, items, depth + 1);
+  }
+  function parseItem(it, section, items) {
+    var name = txt(it.name);
+    if (!name) return;
+    var addons = [];
+    list(it.menuAddOn).forEach(function (sec) {
+      var group = txt(sec && sec.name) || null;
+      list(isType(sec, ['menusection']) ? sec.hasMenuItem : [sec]).forEach(function (a) {
+        var off = list(a && a.offers)[0];
+        addons.push({ name: txt(a && a.name), group: group, price_cents: off ? cents(off.price) : null });
+      });
+    });
+    var offers = list(it.offers);
+    if (!offers.length) offers = [{}];
+    offers.forEach(function (o) {
+      var price = o.price, cur = o.priceCurrency;
+      if (price == null && o.priceSpecification) {
+        var ps = list(o.priceSpecification)[0] || {};
+        price = ps.price; cur = cur || ps.priceCurrency;
+      }
+      var variant = txt(o.name) || null;
+      if (variant && variant.toLowerCase() === name.toLowerCase()) variant = null;
+      var rec = { name: name, variant: variant, section: section || null, price_cents: isType(o, ['aggregateoffer']) ? null : cents(price),
+                  currency: (txt(cur) || '').toUpperCase() || null, availability: avail(o.availability), addons: addons, required_options: 'unknown' };
+      if (rec.price_cents === 0) {
+        // Observed on real Uber Eats pages: 0.00 means the price is set by required options.
+        rec.price_cents = null;
+        rec.price_note = 'published price is $0.00, which on this platform means the price is set by required options (e.g. size); actual price not published';
+        rec.required_options = [{ name: 'price-setting options (not published)', required: true }];
+      }
+      items.push(rec);
+    });
+  }
+  function dedupe(items) {
+    var seen = {}, out = [];
+    items.forEach(function (it) {
+      var k = [it.name, it.variant, it.price_cents, it.currency, it.availability].join('|');
+      if (!seen[k]) { seen[k] = 1; out.push(it); }
+    });
+    return out;
+  }
+
+  function capture() {
+    var loc = new URL(location.href);
+    var host = loc.hostname.toLowerCase();
+    var platform = /(^|\.)doordash\.com$/.test(host) ? 'doordash' : /(^|\.)ubereats\.com$/.test(host) ? 'ubereats' : /(^|\.)grubhub\.com$/.test(host) ? 'grubhub' : null;
+    var res = { ok: false, platform: platform, url: loc.origin + loc.pathname, notes: [], observation: null, version: VERSION };
+    if (!platform) { res.notes.push('This is not a DoorDash, Uber Eats or Grubhub page. Open a store page there and click the bookmark again.'); return res; }
+    if (platform === 'grubhub') { res.notes.push('Grubhub restaurant pages publish no structured menu data (checked on a real page), so nothing can be captured reliably here. Enter the Grubhub item and its subtotal in the app.'); return res; }
+    var m = platform === 'doordash' ? /\/store\/(?:[^/]*?-)?(\d+)\/?$/.exec(loc.pathname) : /\/store\/[^/]+\/([A-Za-z0-9_-]{6,})\/?$/.exec(loc.pathname);
+    if (!m) { res.notes.push('This does not look like a single store page (expected a /store/... address). Open one store and try again.'); return res; }
+    var objs = [];
+    Array.prototype.forEach.call(document.querySelectorAll('script[type*="ld+json"]'), function (s) {
+      try { flatten(JSON.parse(s.textContent), objs); } catch (e) { res.notes.push('One structured-data block could not be read and was skipped.'); }
+    });
+    var foods = [];
+    findFood(objs, 0, foods);
+    var r = foods.filter(function (f) { return f.hasMenu || f.menu; })[0] || foods[0];
+    if (!r) { res.notes.push('This page publishes no schema.org restaurant data, so no prices were captured. Nothing is guessed from the screen.'); return res; }
+    var items = [];
+    walk(r.hasMenu || r.menu, null, items, 0);
+    objs.forEach(function (o) { if (isType(o, ['menu']) && !items.length) walk(o, null, items, 0); });
+    items = dedupe(items);
+    if (!items.length) { res.notes.push('Restaurant data found, but no menu items with prices.'); return res; }
+    var a = list(r.address)[0] || {};
+    var pickup = platform === 'doordash' ? loc.searchParams.get('pickup') === 'true' : /^pickup$/i.test(loc.searchParams.get('diningMode') || '');
+    res.observation = {
+      platform: platform, store_id: m[1], store_name: txt(r.name), store_url: loc.origin + loc.pathname,
+      address: { street: txt(a.streetAddress), city: txt(a.addressLocality), state: txt(a.addressRegion), zip: txt(a.postalCode), country: txt(a.addressCountry) || 'US' },
+      observed_at: new Date().toISOString(), order_mode: pickup ? 'pickup' : 'delivery', currency: 'USD',
+      mode_basis: pickup ? 'page address requested pickup' : 'page address did not request pickup; assumed delivery - switch if the page shows Pickup',
+      price_context: 'captured from the schema.org data of a page open in the user\'s own browser session (their login and delivery address may affect prices)',
+      items: items.map(function (it) {
+        var o = { name: it.name, variant: it.variant, section: it.section, price_cents: it.price_cents, currency: it.currency || 'USD', availability: it.availability, addons: it.addons, required_options: it.required_options };
+        if (it.price_note) o.price_note = it.price_note;
+        return o;
+      })
+    };
+    var nonUsd = items.filter(function (it) { return it.currency && it.currency !== 'USD'; }).length;
+    if (nonUsd) res.notes.push(nonUsd + ' item(s) are not priced in USD; the app will reject them.');
+    res.ok = true;
+    return res;
+  }
+
+  function overlay(res) {
+    var old = document.getElementById('fpc-capture-panel');
+    if (old) old.remove();
+    var box = document.createElement('div');
+    box.id = 'fpc-capture-panel';
+    var st = box.style;
+    st.position = 'fixed'; st.top = '16px'; st.right = '16px'; st.zIndex = '2147483647'; st.width = 'min(420px, calc(100vw - 32px))';
+    st.maxHeight = 'calc(100vh - 32px)'; st.overflow = 'auto'; st.background = '#ffffff'; st.color = '#1c2330'; st.border = '1px solid #c9d1dc';
+    st.borderRadius = '10px'; st.boxShadow = '0 8px 30px rgba(0,0,0,.25)'; st.padding = '14px'; st.font = '14px/1.45 system-ui, sans-serif';
+    function line(t, bold) { var d = document.createElement('div'); d.textContent = t; if (bold) d.style.fontWeight = '700'; d.style.margin = '4px 0'; box.appendChild(d); return d; }
+    line('Food Price Compare - menu capture', true);
+    res.notes.forEach(function (n) { line(n); });
+    var json = '';
+    if (res.ok) {
+      var o = res.observation;
+      line(o.store_name + ' - ' + [o.address.street, o.address.city, o.address.state, o.address.zip].filter(Boolean).join(', '));
+      var priced = o.items.filter(function (i) { return i.price_cents != null; }).length;
+      line(o.items.length + ' menu listings (' + priced + ' with a price). Mode: ' + o.order_mode + '.');
+      var modeRow = document.createElement('div');
+      ['delivery', 'pickup'].forEach(function (md) {
+        var b = document.createElement('button');
+        b.type = 'button'; b.textContent = md === o.order_mode ? md + ' (selected)' : 'Switch to ' + md;
+        b.style.marginRight = '6px';
+        b.onclick = function () { o.order_mode = md; o.mode_basis = 'order mode chosen by the user in the capture panel'; overlay(res); };
+        modeRow.appendChild(b);
+      });
+      box.appendChild(modeRow);
+      json = JSON.stringify({ observations: [o] }, null, 1);
+      var ta = document.createElement('textarea');
+      ta.value = json; ta.readOnly = true; ta.rows = 6; ta.style.width = '100%'; ta.style.marginTop = '8px';
+      box.appendChild(ta);
+      var copy = document.createElement('button');
+      copy.type = 'button'; copy.textContent = 'Copy for import';
+      copy.onclick = function () {
+        var done = function () { copy.textContent = 'Copied - paste it into Import in the app'; };
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(json).then(done, function () { ta.select(); copy.textContent = 'Press Ctrl/Cmd+C to copy'; });
+        else { ta.select(); copy.textContent = 'Press Ctrl/Cmd+C to copy'; }
+      };
+      box.appendChild(copy);
+    }
+    var close = document.createElement('button');
+    close.type = 'button'; close.textContent = 'Close'; close.style.marginLeft = '6px';
+    close.onclick = function () { box.remove(); };
+    box.appendChild(close);
+    document.body.appendChild(box);
+    return json;
+  }
+
+  var res = capture();
+  window.__fpcLastCapture = res;
+  if (!window.__fpcNoOverlay) overlay(res);
+  return res;
+})();
+</script>
 
 <script id="fpc-engine">
 /* FPCEngine: matching, money, parsing and validation. Pure functions, no DOM.
@@ -961,7 +1163,8 @@ tr.details td { background: var(--bg); }
       });
       items.push({ item_id: str(it.item_id, 100) || null, name: name, variant: str(it.variant, 100) || null, section: str(it.section, 100) || null,
                    description: str(it.description, 300) || null, price_cents: p.v, currency: 'USD', availability: av,
-                   addons: addons, required_options: ro, promotions: promos });
+                   addons: addons, required_options: ro, promotions: promos,
+                   price_note: str(it.price_note, 300) || undefined });
     });
     if (!items.length) { err('no valid items'); return null; }
     var f = o.fees || {};
@@ -1778,6 +1981,15 @@ tr.details td { background: var(--bg); }
     });
     $('demoOrderBtn').addEventListener('click', function () { if (S.ui.demoMode) { S.order = E.demoOrder(); S.order.items.forEach(function (i) { i._notes = []; }); renderOrder(); } });
     $('purgeBtn').addEventListener('click', purge);
+    var capSrc = (($('fpc-capture') || {}).textContent || '').replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '').replace(/\n\s+/g, '\n');
+    var bm = 'javascript:' + encodeURIComponent('(function(){' + capSrc + '})();void 0');
+    $('captureBookmarklet').setAttribute('href', bm);
+    $('captureBookmarklet').addEventListener('click', function (e) { e.preventDefault(); setKids($('captureMsg'), msg('', 'Drag “Capture menu” to your bookmarks bar, then click it while viewing a DoorDash or Uber Eats store page.')); });
+    $('captureCopy').addEventListener('click', function () {
+      var ok = function () { setKids($('captureMsg'), msg('ok', 'Bookmarklet code copied. Create a bookmark and paste it as the URL.')); };
+      var fail = function () { setKids($('captureMsg'), msg('warn', 'Copy was blocked by the browser. Drag the “Capture menu” link to your bookmarks bar instead.')); };
+      try { navigator.clipboard.writeText(bm).then(ok, fail); } catch (err) { fail(); }
+    });
     $('exportCsv').addEventListener('click', exportCsv);
     $('exportJson').addEventListener('click', exportJson);
     $('resultTabs').addEventListener('click', function (e) { var b = e.target.closest('button[data-rtab]'); if (!b) return; S.ui.rtab = b.dataset.rtab; renderResults(); });

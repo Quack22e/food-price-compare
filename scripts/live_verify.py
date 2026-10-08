@@ -193,6 +193,57 @@ def explore_public_mirrors(svc, captures):
     return out
 
 
+def explore_menupages_mapping(svc, captures):
+    """Can a Grubhub restaurant URL be mapped to its MenuPages page (Grubhub-owned,
+    JSON-LD menu with prices) and confirmed by the Grubhub link on that page?"""
+    import copy
+    import re
+    from server.adapters import parse_store_page
+    from server.http_client import PoliteClient
+    cfg2 = copy.deepcopy(svc.cfg)
+    cfg2.platform_bases = dict(cfg2.platform_bases, menupages="https://menupages.com")
+    client = PoliteClient(cfg2, svc.cache)
+    out = {}
+
+    def sm(url):
+        f = client.fetch(url, kind="sitemap", ttl=0)
+        parsed = parse_sitemap(f.body or b"", cfg2.max_sitemap_bytes) if f.ok else {"kind": None, "locs": []}
+        locs = [l["loc"] for l in parsed["locs"]]
+        return {"url": url, "status": f.status, "barrier": f.barrier and f.barrier["kind"], "kind": parsed["kind"],
+                "count": len(locs), "sample": locs[:12]}, locs
+
+    out["index"], children = sm("https://menupages.com/sitemap-index.xml")
+    if children:
+        pick = next((c for c in children if re.search(r"(^|[^a-z])(il|chicago|illinois)([^a-z]|$)", c.lower())), children[0])
+        out["child"], locs = sm(pick)
+        out["child"]["lou_malnatis_entries"] = [u for u in locs if "lou-malnati" in u][:10]
+
+    def page(url):
+        f = client.fetch(url, kind="inspect", ttl=0)
+        rep = {"url": url, "status": f.status, "barrier": f.barrier and f.barrier["kind"], "bytes": len(f.body or b"")}
+        if f.ok:
+            parsed = parse_store_page(f.text, f.final_url or url, "")
+            rep["restaurant_found"] = parsed["restaurant_found"]
+            rep["name"] = parsed["name"]
+            from server.extract import normalize_us_address
+            rep["address"] = normalize_us_address(parsed["address_raw"])[0]
+            rep["items"] = len(parsed["items"])
+            rep["sample_items"] = [{k: it.get(k) for k in ("name", "variant", "price_cents", "currency", "section")} for it in parsed["items"][:10]]
+            rep["grubhub_ids"] = sorted({m.group(1) for a in scan_html(f.text, url).anchors
+                                         for m in [re.search(r"grubhub\.com/restaurant/[^/]+/(\d+)", a["href"])] if m})
+            save_capture_outcome(svc, url, f, Path(captures + "_mirrors"))
+        return rep
+
+    out["known_page"] = page("https://menupages.com/lou-malnatis-pizzeria-midway/6456-s-cicero-ave-chicago")
+    # Derive a candidate from a real Grubhub slug (Buffalo Grove listing, Grubhub ID 517712, found on AllMenus).
+    gh_slug = "lou-malnatis-pizzeria-85-s-buffalo-grove-rd-buffalo-grove"
+    words = gh_slug.split("-")
+    k = next(i for i, w in enumerate(words) if w.isdigit())
+    out["derived_candidate"] = page(f"https://menupages.com/{'-'.join(words[:k])}/{'-'.join(words[k:])}")
+    out["derived_candidate"]["expected_grubhub_id"] = "517712"
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default="live-verification")
@@ -269,6 +320,10 @@ def main():
         report["public_mirrors"] = explore_public_mirrors(svc, args.captures)
     except Exception as exc:
         report["public_mirrors"] = {"error": repr(exc)}
+    try:
+        report["menupages_mapping"] = explore_menupages_mapping(svc, args.captures)
+    except Exception as exc:
+        report["menupages_mapping"] = {"error": repr(exc)}
     try:
         report["grubhub"] = explore_grubhub(svc)
     except Exception as exc:
