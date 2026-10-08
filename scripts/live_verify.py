@@ -298,6 +298,15 @@ def explore_allmenus(svc, captures):
                     "sample_items": [{k: it.get(k) for k in ("name", "variant", "price_cents", "currency", "section")} for it in parsed["items"][:12]],
                     "grubhub_links": sorted({m.group(0) for a in scan_html(f.text, page).anchors
                                              for m in [re.search(r"grubhub\.com/restaurant/[^/?#]+/\d+", a["href"])] if m})})
+        # Markup evidence for prices that are only in HTML: the element around
+        # the first few price spans, the address markup, and class counts.
+        html = f.text
+        idx = [m.start() for m in re.finditer(r'class="item-price"', html)][:3]
+        rep["item_html_samples"] = [re.sub(r"\s+", " ", html[max(0, i - 900): i + 250]) for i in idx]
+        rep["address_html_samples"] = [re.sub(r"\s+", " ", html[max(0, m.start() - 400): m.start() + 300])
+                                       for m in list(re.finditer(r"Buffalo Grove Rd", html))[:2]]
+        rep["class_counts"] = {c: html.count(f'class="{c}"') for c in sorted(set(re.findall(r'class="([a-z][a-z0-9_-]{2,40})"', html)))
+                               if html.count(f'class="{c}"') >= 20}
         save_capture_outcome(svc, page, f, Path(captures + "_mirrors"))
     out["known_page"] = rep
     return out
