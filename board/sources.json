@@ -6,7 +6,7 @@
       "tone": "ok",
       "summary": "Public store pages publish the whole menu with USD prices and the branch's street address as schema.org data, so each price is tied to one US branch.",
       "evidence": [
-        "Prices read from real US store pages in every live run since 37708779121 (167 to 335 menu items per page).",
+        "Prices read from real US store pages in every live run since 37708779121 (up to 335 menu items per page); 36 branches in the 18:59 UTC snapshot.",
         "Store links come from robots.txt-declared sitemaps and brand pages. Non-US country sections are skipped without a request.",
         "A few store pages answered with a challenge. Those are counted as blocked and not worked around."
       ]
@@ -25,13 +25,14 @@
     },
     {
       "name": "Grubhub",
-      "status": "Via MenuPages",
+      "status": "Via Grubhub-owned sites",
       "tone": "info",
-      "summary": "Grubhub's restaurant pages are drawn by JavaScript and publish no prices. MenuPages, a Grubhub-owned menu site, publishes the same restaurants' menus with prices and links back to each Grubhub listing.",
+      "summary": "Grubhub's restaurant pages are drawn by JavaScript and publish no prices. Two Grubhub-owned menu sites publish the same restaurants' menus with prices and link back to each Grubhub listing, so a menu is used only when it links to the same Grubhub restaurant ID.",
       "evidence": [
-        "Lou Malnati's Pizzeria, 6456 S Cicero Ave, Chicago (Grubhub ID 434510): 162 priced listings, accepted because the MenuPages page links to that Grubhub ID (run 37741487660).",
-        "MenuPages' restaurant sitemap lists 28,133 pages, a subset of Grubhub. The Buffalo Grove Lou Malnati's (ID 517712) is not listed.",
-        "Grubhub has no /sitemap.xml (404) and its homepage links no restaurants."
+        "MenuPages: Lou Malnati's, 6456 S Cicero Ave, Chicago (Grubhub ID 434510), 162 priced listings from its Menu JSON-LD. Its restaurant sitemap lists 28,133 pages.",
+        "AllMenus: Lou Malnati's, 85 S Buffalo Grove Rd (ID 517712, not on MenuPages), 169 priced listings. Prices are read from the page HTML only because its 217 item names match the page's own JSON-LD names.",
+        "AllMenus has 21 restaurant sitemaps of up to 40,000 pages each, read once a day to find a listing.",
+        "Published menu prices can lag the live Grubhub menu and leave out option charges. Grubhub's terms restrict automated access."
       ]
     }
   ],

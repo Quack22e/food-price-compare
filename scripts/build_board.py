@@ -109,7 +109,7 @@ def collect_runs(max_runs: int) -> list[dict]:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default=str(ROOT / "board" / "index.html"))
-    ap.add_argument("--max-runs", type=int, default=8)
+    ap.add_argument("--max-runs", type=int, default=6)
     ap.add_argument("--fragment", action="store_true",
                     help="write the page without <!doctype>/<head>/<body> (for hosts that add their own skeleton)")
     args = ap.parse_args()
