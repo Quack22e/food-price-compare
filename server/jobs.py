@@ -329,9 +329,15 @@ class Job:
             ok_hosts = {adapter.host, *self.cfg.sitemap_hosts.get(platform, [])}
             children = [l["loc"] for l in parsed["locs"] if urlsplit(l["loc"]).netloc.lower() in ok_hosts]
             # Read store/brand sitemaps first; everything stays queued for resume.
+            # DoorDash publishes one store sitemap per state (observed live:
+            # .../sitemap-doordash-<st>-stores.xml), so a location filter's
+            # state is read first.
+            st = (self.prioritize.get("state") or "").strip().lower()
+
             def rank(u):
                 lu = u.lower()
-                return (0 if any(k in lu for k in ("store", "business", "brand")) else 1, lu)
+                state_first = 0 if st and f"-{st}-stores" in lu else 1
+                return (state_first, 0 if any(k in lu for k in ("store", "business", "brand")) else 1, lu)
             for c in sorted(children, key=rank):
                 if c not in sm["done"] and c not in sm["pending"] and c not in sm["failed"]:
                     sm["pending"].append(c)

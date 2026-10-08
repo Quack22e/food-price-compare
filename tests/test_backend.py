@@ -518,3 +518,19 @@ def test_sitemap_cdn_host_allowed_for_sitemaps_only(tmp_path):
     assert client.check_allowed_url(url, "sitemap") is None          # observed redirect target for sitemaps
     assert client.check_allowed_url(url, "page") is not None          # never for pages
     assert client.check_allowed_url("https://cdn.doordash.com/x", "inspect") is not None
+
+
+def test_state_store_sitemap_read_first_for_location_filter(sites, tmp_path):
+    from fake_platform import sitemap_index, urlset
+    dd, _, _ = sites
+    b = dd.base
+    dd.route("/robots.txt", f"User-agent: *\nSitemap: {b}/sitemap-store-index.xml\n", ctype="text/plain")
+    states = ["ca", "tx", "il"]
+    dd.route("/sitemap-store-index.xml", sitemap_index([f"{b}/sitemap-doordash-{s}-stores.xml" for s in states]), ctype="application/xml")
+    for s_ in states:
+        dd.route(f"/sitemap-doordash-{s_}-stores.xml", urlset([]), ctype="application/xml")
+    cfg = make_cfg(tmp_path, {"doordash": dd.base}, max_sitemaps_per_run=2)
+    job = Service(cfg).jobs.start(dict(ORDER, platforms=["doordash"], prioritize={"state": "TX"}))
+    wait_for(job)
+    done = job.state["platforms"]["doordash"]["sitemaps"]["done"]
+    assert done[1].endswith("sitemap-doordash-tx-stores.xml")  # index first, then the filtered state
