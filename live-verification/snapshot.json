@@ -1,7 +1,7 @@
 {
- "generated_at": "2026-10-08T18:48:25Z",
- "github_run_id": "37826699377",
- "github_sha": "7f5e489e5c3b03738c031bb87873b90ae77347c2",
+ "generated_at": "2026-10-08T18:59:05Z",
+ "github_run_id": "37827940323",
+ "github_sha": "7707e1cc376491549b89a7e5db92b912038e0cb9",
  "user_agent": "FoodPriceCompare/1.0 (personal menu-price comparison; honors robots.txt)",
  "price_basis": "Public menu prices as published on each store page, anonymous session, no delivery address; before tax, fees, tip and promotions.",
  "searches": [
@@ -32,10 +32,10 @@
     "ubereats": {
      "discovered": 305,
      "queued": 77,
-     "checked": 21,
+     "checked": 22,
      "no_menu": 1,
      "non_us": 204,
-     "blocked": 2,
+     "blocked": 1,
      "failed": 0,
      "duplicate": 0,
      "in_progress": 0,
@@ -57,18 +57,10 @@
     {
      "kind": "captcha",
      "detail": "redirected to a bot challenge (def.uber.com/en/challenge); not followed",
-     "url": "https://www.ubereats.com/store/mcdonalds-10267-hwy-36s/-3FZ0ElpRz68wj2PnrZzxg?diningMode=DELIVERY",
-     "host": "www.ubereats.com",
-     "status": 307,
-     "observed_at": "2026-10-08T18:48:27Z"
-    },
-    {
-     "kind": "captcha",
-     "detail": "redirected to a bot challenge (def.uber.com/en/challenge); not followed",
      "url": "https://www.ubereats.com/store/mcdonalds-5701-main-st/-B-HyVy8S0qmsOcJYsBTdg?diningMode=DELIVERY",
      "host": "www.ubereats.com",
      "status": 307,
-     "observed_at": "2026-10-08T18:48:30Z"
+     "observed_at": "2026-10-08T18:59:10Z"
     }
    ],
    "stores": [
@@ -78,7 +70,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "181 menu items published; 15 sent as candidates",
-     "checked_at": "2026-10-08T18:49:17Z"
+     "checked_at": "2026-10-08T18:59:47Z"
     },
     {
      "store_id": "5WQGP8TbQB-zDJi0HoiHOQ",
@@ -86,7 +78,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "169 menu items published; 13 sent as candidates",
-     "checked_at": "2026-10-08T18:48:37Z"
+     "checked_at": "2026-10-08T18:59:14Z"
     },
     {
      "store_id": "AvH4t752Rcu-zhyTS4PC8A",
@@ -94,7 +86,7 @@
      "source": "sitemap",
      "status": "no_menu",
      "detail": "restaurant data published but no menu items/prices",
-     "checked_at": "2026-10-08T18:48:58Z"
+     "checked_at": "2026-10-08T18:59:29Z"
     },
     {
      "store_id": "CS4xWjgrSzi4XRnxpzNQOg",
@@ -102,7 +94,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "172 menu items published; 11 sent as candidates",
-     "checked_at": "2026-10-08T18:49:14Z"
+     "checked_at": "2026-10-08T18:59:47Z"
     },
     {
      "store_id": "36fYliNvSD-mjmlGAC50KA",
@@ -110,7 +102,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "182 menu items published; 14 sent as candidates",
-     "checked_at": "2026-10-08T18:48:30Z"
+     "checked_at": "2026-10-08T18:59:10Z"
     },
     {
      "store_id": "28dVSlN4T4SvUey3v4gC0A",
@@ -118,7 +110,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "183 menu items published; 23 sent as candidates",
-     "checked_at": "2026-10-08T18:48:30Z"
+     "checked_at": "2026-10-08T18:59:10Z"
     },
     {
      "store_id": "Bh5NosWFXISaDOOU2Ap-6g",
@@ -126,7 +118,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "172 menu items published; 13 sent as candidates",
-     "checked_at": "2026-10-08T18:49:08Z"
+     "checked_at": "2026-10-08T18:59:38Z"
     },
     {
      "store_id": "-B-HyVy8S0qmsOcJYsBTdg",
@@ -134,7 +126,7 @@
      "source": "sitemap",
      "status": "blocked",
      "detail": "captcha: redirected to a bot challenge (def.uber.com/en/challenge); not followed",
-     "checked_at": "2026-10-08T18:48:30Z"
+     "checked_at": "2026-10-08T18:59:10Z"
     },
     {
      "store_id": "JAkVemBkQ8GT4CnpsZZYDQ",
@@ -142,7 +134,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "161 menu items published; 11 sent as candidates",
-     "checked_at": "2026-10-08T18:49:32Z"
+     "checked_at": "2026-10-08T19:00:06Z"
     },
     {
      "store_id": "C9_PmBWtTDqCv1zl2KATIQ",
@@ -150,7 +142,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "174 menu items published; 8 sent as candidates",
-     "checked_at": "2026-10-08T18:49:11Z"
+     "checked_at": "2026-10-08T18:59:41Z"
     },
     {
      "store_id": "FbwhnlijRvaJ17TrPSX-xw",
@@ -158,7 +150,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "177 menu items published; 16 sent as candidates",
-     "checked_at": "2026-10-08T18:49:26Z"
+     "checked_at": "2026-10-08T18:59:57Z"
     },
     {
      "store_id": "Grcg5R_oS7WozuILuSdufw",
@@ -166,7 +158,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "164 menu items published; 14 sent as candidates",
-     "checked_at": "2026-10-08T18:49:28Z"
+     "checked_at": "2026-10-08T18:59:59Z"
     },
     {
      "store_id": "BME-yxVISKWlDdnO7t4dYA",
@@ -174,7 +166,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "186 menu items published; 15 sent as candidates",
-     "checked_at": "2026-10-08T18:49:02Z"
+     "checked_at": "2026-10-08T18:59:36Z"
     },
     {
      "store_id": "8jPlg4LCWuaMazQgKQht6A",
@@ -182,7 +174,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "168 menu items published; 16 sent as candidates",
-     "checked_at": "2026-10-08T18:48:53Z"
+     "checked_at": "2026-10-08T18:59:24Z"
     },
     {
      "store_id": "2mGwuXa-SO-fQA92QqmQsA",
@@ -190,7 +182,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "173 menu items published; 14 sent as candidates",
-     "checked_at": "2026-10-08T18:48:30Z"
+     "checked_at": "2026-10-08T18:59:10Z"
     },
     {
      "store_id": "1cLNoxESQO2drik1O_HMTQ",
@@ -198,7 +190,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "176 menu items published; 11 sent as candidates",
-     "checked_at": "2026-10-08T18:48:30Z"
+     "checked_at": "2026-10-08T18:59:10Z"
     },
     {
      "store_id": "6YBtJTc4Q--s9hN5u9aLWQ",
@@ -206,7 +198,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "178 menu items published; 23 sent as candidates",
-     "checked_at": "2026-10-08T18:48:47Z"
+     "checked_at": "2026-10-08T18:59:18Z"
     },
     {
      "store_id": "B1EhqJfnQ1iSlPMDHotzRg",
@@ -214,7 +206,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "179 menu items published; 20 sent as candidates",
-     "checked_at": "2026-10-08T18:49:05Z"
+     "checked_at": "2026-10-08T18:59:33Z"
     },
     {
      "store_id": "EaVRwTE8Q025hbV56k4PMw",
@@ -222,7 +214,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "175 menu items published; 18 sent as candidates",
-     "checked_at": "2026-10-08T18:49:23Z"
+     "checked_at": "2026-10-08T18:59:50Z"
     },
     {
      "store_id": "F1_R5W79Ruy1ruuZKHcvvA",
@@ -230,7 +222,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "172 menu items published; 12 sent as candidates",
-     "checked_at": "2026-10-08T18:49:20Z"
+     "checked_at": "2026-10-08T18:59:53Z"
     },
     {
      "store_id": "A5jhyiXcUnGq65H_mRLYFg",
@@ -238,7 +230,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "167 menu items published; 15 sent as candidates",
-     "checked_at": "2026-10-08T18:48:55Z"
+     "checked_at": "2026-10-08T18:59:27Z"
     },
     {
      "store_id": "ITR6sLsNRV65cwYYbP81Ew",
@@ -246,7 +238,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "175 menu items published; 17 sent as candidates",
-     "checked_at": "2026-10-08T18:49:34Z"
+     "checked_at": "2026-10-08T19:00:02Z"
     },
     {
      "store_id": "7ARoDXgGTFiMDGtizbfbOg",
@@ -254,18 +246,250 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "171 menu items published; 11 sent as candidates",
-     "checked_at": "2026-10-08T18:48:50Z"
+     "checked_at": "2026-10-08T18:59:21Z"
     },
     {
      "store_id": "-3FZ0ElpRz68wj2PnrZzxg",
      "canonical": "https://www.ubereats.com/store/mcdonalds-10267-hwy-36s/-3FZ0ElpRz68wj2PnrZzxg",
      "source": "sitemap",
-     "status": "blocked",
-     "detail": "captcha: redirected to a bot challenge (def.uber.com/en/challenge); not followed",
-     "checked_at": "2026-10-08T18:48:27Z"
+     "status": "checked",
+     "detail": "168 menu items published; 12 sent as candidates",
+     "checked_at": "2026-10-08T18:59:09Z"
     }
    ],
    "observations": [
+    {
+     "platform": "ubereats",
+     "store_id": "-3FZ0ElpRz68wj2PnrZzxg",
+     "store_name": "McDonald's\u00ae (10267 Hwy 36)",
+     "store_url": "https://www.ubereats.com/store/mcdonalds-10267-hwy-36s/-3FZ0ElpRz68wj2PnrZzxg",
+     "fetched_url": "https://www.ubereats.com/store/mcdonalds-10267-hwy-36s/-3FZ0ElpRz68wj2PnrZzxg?diningMode=DELIVERY",
+     "address": {
+      "street": "10267 HIGHWAY 36",
+      "city": "COVINGTON",
+      "state": "GA",
+      "zip": "30014",
+      "country": "US"
+     },
+     "observed_at": "2026-10-08T18:59:09Z",
+     "order_mode": "delivery",
+     "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
+     "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
+     "currency": "USD",
+     "extraction": "schema.org JSON-LD (Restaurant.hasMenu -> MenuItem.offers)",
+     "menu_item_count": 168,
+     "fetch_via": "http",
+     "items": [
+      {
+       "name": "10 pc. Chicken McNuggets\u00ae Meal",
+       "section": "Featured items",
+       "price_cents": 1169,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "10 pc. Chicken McNuggets\u00ae",
+       "section": "Free with $15 purchase",
+       "price_cents": 679,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "20 pc. Chicken McNuggets\u00ae",
+       "section": "Most Popular",
+       "price_cents": 1069,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "40 pc. Chicken McNuggets\u00ae",
+       "section": "Most Popular",
+       "price_cents": 1669,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "6 pc. Chicken McNuggets\u00ae Meal",
+       "section": "Extra Value Meals",
+       "price_cents": 999,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "McChicken\u00ae Meal",
+       "section": "Extra Value Meals",
+       "price_cents": 829,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "4 pc. Chicken McNuggets\u00ae",
+       "section": "Chicken",
+       "price_cents": 369,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "6 pc. Chicken McNuggets\u00ae",
+       "section": "Chicken",
+       "price_cents": 449,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "McChicken\u00ae",
+       "section": "Chicken",
+       "price_cents": 299,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "6 pc. Chicken McNuggets\u00ae Happy Meal\u00ae",
+       "section": "Happy Meal",
+       "price_cents": 779,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "4 pc. Chicken McNugget\u00ae Happy Meal\u00ae",
+       "section": "Happy Meal",
+       "price_cents": 699,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "40 pc. Chicken McNuggets\u00ae & 2 Large Fries",
+       "section": "Shareables",
+       "price_cents": 2379,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      }
+     ]
+    },
+    {
+     "platform": "ubereats",
+     "store_id": "1cLNoxESQO2drik1O_HMTQ",
+     "store_name": "McDonald's\u00ae (Tegler & Town Center)",
+     "store_url": "https://www.ubereats.com/store/mcdonalds-tegler-%26-town-center/1cLNoxESQO2drik1O_HMTQ",
+     "fetched_url": "https://www.ubereats.com/store/mcdonalds-tegler-%26-town-center/1cLNoxESQO2drik1O_HMTQ?diningMode=DELIVERY",
+     "address": {
+      "street": "13255 Tegler Dr",
+      "city": "Noblesville",
+      "state": "IN",
+      "zip": "46060",
+      "country": "US"
+     },
+     "observed_at": "2026-10-08T18:56:29Z",
+     "order_mode": "delivery",
+     "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
+     "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
+     "currency": "USD",
+     "extraction": "schema.org JSON-LD (Restaurant.hasMenu -> MenuItem.offers)",
+     "menu_item_count": 176,
+     "fetch_via": "http",
+     "items": [
+      {
+       "name": "6 pc. Chicken McNuggets\u00ae Happy Meal\u00ae",
+       "section": "Featured items",
+       "price_cents": 759,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "McChicken\u00ae",
+       "section": "Featured items",
+       "price_cents": 299,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "10 pc. Chicken McNuggets\u00ae",
+       "section": "Featured items",
+       "price_cents": 599,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "10 pc. Chicken McNuggets\u00ae Meal",
+       "section": "Most Popular",
+       "price_cents": 1049,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "20 pc. Chicken McNuggets\u00ae",
+       "section": "Most Popular",
+       "price_cents": 1099,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "40 pc. Chicken McNuggets\u00ae",
+       "section": "Most Popular",
+       "price_cents": 2129,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "6 pc. Chicken McNuggets\u00ae Meal",
+       "section": "Extra Value Meals",
+       "price_cents": 769,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "4 pc. Chicken McNuggets\u00ae",
+       "section": "Chicken",
+       "price_cents": 279,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "6 pc. Chicken McNuggets\u00ae",
+       "section": "Chicken",
+       "price_cents": 459,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "4 pc. Chicken McNugget\u00ae Happy Meal\u00ae",
+       "section": "Happy Meal",
+       "price_cents": 679,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "40 pc. Chicken McNuggets\u00ae & 2 Large Fries",
+       "section": "Shareables",
+       "price_cents": 2819,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      }
+     ]
+    },
     {
      "platform": "ubereats",
      "store_id": "28dVSlN4T4SvUey3v4gC0A",
@@ -279,7 +503,7 @@
       "zip": "24210",
       "country": "US"
      },
-     "observed_at": "2026-10-08T18:46:37Z",
+     "observed_at": "2026-10-08T18:56:31Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -289,6 +513,22 @@
      "fetch_via": "http",
      "items": [
       {
+       "name": "40 pc. Chicken McNuggets\u00ae",
+       "section": "Featured items",
+       "price_cents": 1369,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "6 pc. Chicken McNuggets\u00ae Happy Meal\u00ae",
+       "section": "Featured items",
+       "price_cents": 719,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
        "name": "10 pc. Chicken McNuggets\u00ae",
        "section": "Featured items",
        "price_cents": 519,
@@ -297,33 +537,17 @@
        "required_options": "unknown"
       },
       {
-       "name": "20 pc. Chicken McNuggets\u00ae",
-       "section": "Featured items",
-       "price_cents": 839,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "10 pc. Spicy Chicken McNuggets\u00ae Meal",
-       "section": "Featured items",
-       "price_cents": 989,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
        "name": "10 pc. Chicken McNuggets\u00ae Meal",
-       "section": "Most Popular",
+       "section": "Featured items",
        "price_cents": 949,
        "currency": "USD",
        "availability": "unknown",
        "required_options": "unknown"
       },
       {
-       "name": "40 pc. Chicken McNuggets\u00ae",
+       "name": "20 pc. Chicken McNuggets\u00ae",
        "section": "Most Popular",
-       "price_cents": 1369,
+       "price_cents": 839,
        "currency": "USD",
        "availability": "unknown",
        "required_options": "unknown"
@@ -332,6 +556,14 @@
        "name": "10 pc. Spicy Chicken McNuggets\u00ae",
        "section": "Limited Time: Spicy McNuggets\u00ae",
        "price_cents": 579,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "10 pc. Spicy Chicken McNuggets\u00ae Meal",
+       "section": "Limited Time: Spicy McNuggets\u00ae",
+       "price_cents": 989,
        "currency": "USD",
        "availability": "unknown",
        "required_options": "unknown"
@@ -433,14 +665,6 @@
        "required_options": "unknown"
       },
       {
-       "name": "6 pc. Chicken McNuggets\u00ae Happy Meal\u00ae",
-       "section": "Happy Meal",
-       "price_cents": 719,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
        "name": "20 pc. Spicy Chicken McNuggets\u00ae & 2 Medium Fries",
        "section": "Shareables",
        "price_cents": 1549,
@@ -476,118 +700,6 @@
     },
     {
      "platform": "ubereats",
-     "store_id": "1cLNoxESQO2drik1O_HMTQ",
-     "store_name": "McDonald's\u00ae (Tegler & Town Center)",
-     "store_url": "https://www.ubereats.com/store/mcdonalds-tegler-%26-town-center/1cLNoxESQO2drik1O_HMTQ",
-     "fetched_url": "https://www.ubereats.com/store/mcdonalds-tegler-%26-town-center/1cLNoxESQO2drik1O_HMTQ?diningMode=DELIVERY",
-     "address": {
-      "street": "13255 Tegler Dr",
-      "city": "Noblesville",
-      "state": "IN",
-      "zip": "46060",
-      "country": "US"
-     },
-     "observed_at": "2026-10-08T18:46:34Z",
-     "order_mode": "delivery",
-     "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
-     "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
-     "currency": "USD",
-     "extraction": "schema.org JSON-LD (Restaurant.hasMenu -> MenuItem.offers)",
-     "menu_item_count": 176,
-     "fetch_via": "http",
-     "items": [
-      {
-       "name": "6 pc. Chicken McNuggets\u00ae Happy Meal\u00ae",
-       "section": "Featured items",
-       "price_cents": 759,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "McChicken\u00ae",
-       "section": "Featured items",
-       "price_cents": 299,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "10 pc. Chicken McNuggets\u00ae",
-       "section": "Featured items",
-       "price_cents": 599,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "10 pc. Chicken McNuggets\u00ae Meal",
-       "section": "Most Popular",
-       "price_cents": 1049,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "20 pc. Chicken McNuggets\u00ae",
-       "section": "Most Popular",
-       "price_cents": 1099,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "40 pc. Chicken McNuggets\u00ae",
-       "section": "Most Popular",
-       "price_cents": 2129,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "6 pc. Chicken McNuggets\u00ae Meal",
-       "section": "Extra Value Meals",
-       "price_cents": 769,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "4 pc. Chicken McNuggets\u00ae",
-       "section": "Chicken",
-       "price_cents": 279,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "6 pc. Chicken McNuggets\u00ae",
-       "section": "Chicken",
-       "price_cents": 459,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "4 pc. Chicken McNugget\u00ae Happy Meal\u00ae",
-       "section": "Happy Meal",
-       "price_cents": 679,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "40 pc. Chicken McNuggets\u00ae & 2 Large Fries",
-       "section": "Shareables",
-       "price_cents": 2819,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      }
-     ]
-    },
-    {
-     "platform": "ubereats",
      "store_id": "2mGwuXa-SO-fQA92QqmQsA",
      "store_name": "McDonald's\u00ae (197 S BROADWAY)",
      "store_url": "https://www.ubereats.com/store/mcdonalds-197-s-broadways/2mGwuXa-SO-fQA92QqmQsA",
@@ -599,7 +711,7 @@
       "zip": "12866",
       "country": "US"
      },
-     "observed_at": "2026-10-08T18:46:39Z",
+     "observed_at": "2026-10-08T18:56:35Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -735,7 +847,7 @@
       "zip": "95648",
       "country": "US"
      },
-     "observed_at": "2026-10-08T18:46:43Z",
+     "observed_at": "2026-10-08T18:56:38Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -745,16 +857,16 @@
      "fetch_via": "http",
      "items": [
       {
-       "name": "McChicken\u00ae",
+       "name": "6 pc. Chicken McNuggets\u00ae Happy Meal\u00ae",
        "section": "Featured items",
-       "price_cents": 459,
+       "price_cents": 759,
        "currency": "USD",
        "availability": "unknown",
        "required_options": "unknown"
       },
       {
        "name": "10 pc. Chicken McNuggets\u00ae",
-       "section": "Free with $15 purchase",
+       "section": "Featured items",
        "price_cents": 739,
        "currency": "USD",
        "availability": "unknown",
@@ -809,17 +921,17 @@
        "required_options": "unknown"
       },
       {
-       "name": "Hot 'N Spicy McChicken\u00ae",
+       "name": "McChicken\u00ae",
        "section": "Chicken",
-       "price_cents": 489,
+       "price_cents": 459,
        "currency": "USD",
        "availability": "unknown",
        "required_options": "unknown"
       },
       {
-       "name": "6 pc. Chicken McNuggets\u00ae Happy Meal\u00ae",
-       "section": "Happy Meal",
-       "price_cents": 759,
+       "name": "Hot 'N Spicy McChicken\u00ae",
+       "section": "Chicken",
+       "price_cents": 489,
        "currency": "USD",
        "availability": "unknown",
        "required_options": "unknown"
@@ -871,7 +983,7 @@
       "zip": "91740",
       "country": "US"
      },
-     "observed_at": "2026-10-08T18:48:37Z",
+     "observed_at": "2026-10-08T18:59:14Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -881,17 +993,25 @@
      "fetch_via": "http",
      "items": [
       {
-       "name": "10 pc. Chicken McNuggets\u00ae",
-       "section": "Free with $15 purchase",
-       "price_cents": 855,
+       "name": "10 pc. Chicken McNuggets\u00ae Meal",
+       "section": "Featured items",
+       "price_cents": 1447,
        "currency": "USD",
        "availability": "unknown",
        "required_options": "unknown"
       },
       {
-       "name": "10 pc. Chicken McNuggets\u00ae Meal",
-       "section": "Most Popular",
-       "price_cents": 1447,
+       "name": "McChicken\u00ae",
+       "section": "Featured items",
+       "price_cents": 553,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "10 pc. Chicken McNuggets\u00ae",
+       "section": "Free with $15 purchase",
+       "price_cents": 855,
        "currency": "USD",
        "availability": "unknown",
        "required_options": "unknown"
@@ -945,14 +1065,6 @@
        "required_options": "unknown"
       },
       {
-       "name": "McChicken\u00ae",
-       "section": "Chicken",
-       "price_cents": 553,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
        "name": "Hot 'N Spicy McChicken\u00ae",
        "section": "Chicken",
        "price_cents": 565,
@@ -999,7 +1111,7 @@
       "zip": "70433",
       "country": "US"
      },
-     "observed_at": "2026-10-08T18:48:47Z",
+     "observed_at": "2026-10-08T18:59:18Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -1009,33 +1121,17 @@
      "fetch_via": "http",
      "items": [
       {
-       "name": "10 pc. Chicken McNuggets\u00ae Meal",
-       "section": "Featured items",
-       "price_cents": 1259,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
        "name": "10 pc. Chicken McNuggets\u00ae",
-       "section": "Featured items",
+       "section": "Free with $15 purchase",
        "price_cents": 719,
        "currency": "USD",
        "availability": "unknown",
        "required_options": "unknown"
       },
       {
-       "name": "20 pc. Chicken McNuggets\u00ae & Basket of Fries",
-       "section": "Featured items",
-       "price_cents": 1599,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "4 pc. Chicken McNuggets\u00ae",
-       "section": "Featured items",
-       "price_cents": 349,
+       "name": "10 pc. Chicken McNuggets\u00ae Meal",
+       "section": "Most Popular",
+       "price_cents": 1259,
        "currency": "USD",
        "availability": "unknown",
        "required_options": "unknown"
@@ -1129,6 +1225,14 @@
        "required_options": "unknown"
       },
       {
+       "name": "4 pc. Chicken McNuggets\u00ae",
+       "section": "Chicken",
+       "price_cents": 349,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
        "name": "6 pc. Chicken McNuggets\u00ae",
        "section": "Chicken",
        "price_cents": 499,
@@ -1164,6 +1268,14 @@
        "name": "6 pc. Chicken McNuggets\u00ae Happy Meal\u00ae",
        "section": "Happy Meal",
        "price_cents": 849,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "20 pc. Chicken McNuggets\u00ae & Basket of Fries",
+       "section": "Shareables",
+       "price_cents": 1599,
        "currency": "USD",
        "availability": "unknown",
        "required_options": "unknown"
@@ -1207,7 +1319,7 @@
       "zip": "45036",
       "country": "US"
      },
-     "observed_at": "2026-10-08T18:48:50Z",
+     "observed_at": "2026-10-08T18:59:21Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -1218,7 +1330,7 @@
      "items": [
       {
        "name": "10 pc. Chicken McNuggets\u00ae",
-       "section": "Free with $15 purchase",
+       "section": "Featured items",
        "price_cents": 599,
        "currency": "USD",
        "availability": "unknown",
@@ -1226,7 +1338,7 @@
       },
       {
        "name": "10 pc. Chicken McNuggets\u00ae Meal",
-       "section": "Most Popular",
+       "section": "Featured items",
        "price_cents": 1019,
        "currency": "USD",
        "availability": "unknown",
@@ -1234,8 +1346,16 @@
       },
       {
        "name": "20 pc. Chicken McNuggets\u00ae",
-       "section": "Most Popular",
+       "section": "Featured items",
        "price_cents": 959,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "6 pc. Chicken McNuggets\u00ae Happy Meal\u00ae",
+       "section": "Featured items",
+       "price_cents": 729,
        "currency": "USD",
        "availability": "unknown",
        "required_options": "unknown"
@@ -1268,14 +1388,6 @@
        "name": "McChicken\u00ae",
        "section": "Chicken",
        "price_cents": 399,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "6 pc. Chicken McNuggets\u00ae Happy Meal\u00ae",
-       "section": "Happy Meal",
-       "price_cents": 729,
        "currency": "USD",
        "availability": "unknown",
        "required_options": "unknown"
@@ -1319,7 +1431,7 @@
       "zip": "78155",
       "country": "US"
      },
-     "observed_at": "2026-10-08T18:48:53Z",
+     "observed_at": "2026-10-08T18:59:24Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -1329,16 +1441,16 @@
      "fetch_via": "http",
      "items": [
       {
-       "name": "Hot 'N Spicy McChicken\u00ae",
-       "section": "Featured items",
-       "price_cents": 369,
+       "name": "10 pc. Chicken McNuggets\u00ae",
+       "section": "Free with $15 purchase",
+       "price_cents": 620,
        "currency": "USD",
        "availability": "unknown",
        "required_options": "unknown"
       },
       {
        "name": "10 pc. Chicken McNuggets\u00ae Meal",
-       "section": "Featured items",
+       "section": "Most Popular",
        "price_cents": 1006,
        "currency": "USD",
        "availability": "unknown",
@@ -1346,24 +1458,8 @@
       },
       {
        "name": "20 pc. Chicken McNuggets\u00ae",
-       "section": "Featured items",
+       "section": "Most Popular",
        "price_cents": 986,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "4 pc. Chicken McNuggets\u00ae",
-       "section": "Featured items",
-       "price_cents": 299,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "10 pc. Chicken McNuggets\u00ae",
-       "section": "Free with $15 purchase",
-       "price_cents": 620,
        "currency": "USD",
        "availability": "unknown",
        "required_options": "unknown"
@@ -1393,6 +1489,14 @@
        "required_options": "unknown"
       },
       {
+       "name": "4 pc. Chicken McNuggets\u00ae",
+       "section": "Chicken",
+       "price_cents": 299,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
        "name": "6 pc. Chicken McNuggets\u00ae",
        "section": "Chicken",
        "price_cents": 411,
@@ -1404,6 +1508,14 @@
        "name": "McChicken\u00ae",
        "section": "Chicken",
        "price_cents": 329,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "Hot 'N Spicy McChicken\u00ae",
+       "section": "Chicken",
+       "price_cents": 369,
        "currency": "USD",
        "availability": "unknown",
        "required_options": "unknown"
@@ -1471,7 +1583,7 @@
       "zip": "59034",
       "country": "US"
      },
-     "observed_at": "2026-10-08T18:48:55Z",
+     "observed_at": "2026-10-08T18:59:27Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -1604,150 +1716,6 @@
     },
     {
      "platform": "ubereats",
-     "store_id": "BME-yxVISKWlDdnO7t4dYA",
-     "store_name": "McDonald's\u00ae (2312 WESTCHESTER DRIVE)",
-     "store_url": "https://www.ubereats.com/store/mcdonalds-2312-westchester-drives/BME-yxVISKWlDdnO7t4dYA",
-     "fetched_url": "https://www.ubereats.com/store/mcdonalds-2312-westchester-drives/BME-yxVISKWlDdnO7t4dYA?diningMode=DELIVERY",
-     "address": {
-      "street": "2312 WESTCHESTER DRIVE",
-      "city": "HIGH POINT",
-      "state": "NC",
-      "zip": "27262",
-      "country": "US"
-     },
-     "observed_at": "2026-10-08T18:49:02Z",
-     "order_mode": "delivery",
-     "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
-     "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
-     "currency": "USD",
-     "extraction": "schema.org JSON-LD (Restaurant.hasMenu -> MenuItem.offers)",
-     "menu_item_count": 186,
-     "fetch_via": "http",
-     "items": [
-      {
-       "name": "20 pc. Chicken McNuggets\u00ae & 2 Medium Fries",
-       "section": "Featured items",
-       "price_cents": 1059,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Hot 'N Spicy McChicken\u00ae",
-       "section": "Featured items",
-       "price_cents": 376,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "20 pc. Chicken McNuggets\u00ae",
-       "section": "Featured items",
-       "price_cents": 1049,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "6 pc. Chicken McNuggets\u00ae Happy Meal\u00ae",
-       "section": "Featured items",
-       "price_cents": 699,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "10 pc. Chicken McNuggets\u00ae",
-       "section": "Free with $15 purchase",
-       "price_cents": 639,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "10 pc. Chicken McNuggets\u00ae Meal",
-       "section": "Most Popular",
-       "price_cents": 1129,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "40 pc. Chicken McNuggets\u00ae",
-       "section": "Most Popular",
-       "price_cents": 2009,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "6 pc. Chicken McNuggets\u00ae Meal",
-       "section": "Extra Value Meals",
-       "price_cents": 989,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Hot 'N Spicy McChicken\u00ae Meal",
-       "section": "Extra Value Meals",
-       "price_cents": 779,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "4 pc. Chicken McNuggets\u00ae",
-       "section": "Chicken",
-       "price_cents": 319,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "6 pc. Chicken McNuggets\u00ae",
-       "section": "Chicken",
-       "price_cents": 399,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "McChicken\u00ae",
-       "section": "Chicken",
-       "price_cents": 369,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "4 pc. Chicken McNugget\u00ae Happy Meal\u00ae",
-       "section": "Happy Meal",
-       "price_cents": 589,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Chicken Pack",
-       "section": "Shareables",
-       "price_cents": 3369,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "40 pc. Chicken McNuggets\u00ae & 2 Large Fries",
-       "section": "Shareables",
-       "price_cents": 2829,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      }
-     ]
-    },
-    {
-     "platform": "ubereats",
      "store_id": "B1EhqJfnQ1iSlPMDHotzRg",
      "store_name": "McDonald's\u00ae (4300 W Stone Dr)",
      "store_url": "https://www.ubereats.com/store/mcdonalds-4300-w-stone-drs/B1EhqJfnQ1iSlPMDHotzRg",
@@ -1759,7 +1727,7 @@
       "zip": "37660",
       "country": "US"
      },
-     "observed_at": "2026-10-08T18:49:05Z",
+     "observed_at": "2026-10-08T18:59:33Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -1770,8 +1738,24 @@
      "items": [
       {
        "name": "10 pc. Chicken McNuggets\u00ae",
-       "section": "Free with $15 purchase",
+       "section": "Featured items",
        "price_cents": 639,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "McChicken\u00ae",
+       "section": "Featured items",
+       "price_cents": 279,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "20 pc. Chicken McNuggets\u00ae",
+       "section": "Featured items",
+       "price_cents": 859,
        "currency": "USD",
        "availability": "unknown",
        "required_options": "unknown"
@@ -1780,14 +1764,6 @@
        "name": "10 pc. Chicken McNuggets\u00ae Meal",
        "section": "Most Popular",
        "price_cents": 1009,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "20 pc. Chicken McNuggets\u00ae",
-       "section": "Most Popular",
-       "price_cents": 859,
        "currency": "USD",
        "availability": "unknown",
        "required_options": "unknown"
@@ -1865,14 +1841,6 @@
        "required_options": "unknown"
       },
       {
-       "name": "McChicken\u00ae",
-       "section": "Chicken",
-       "price_cents": 279,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
        "name": "Hot 'N Spicy McChicken\u00ae",
        "section": "Chicken",
        "price_cents": 299,
@@ -1932,6 +1900,150 @@
     },
     {
      "platform": "ubereats",
+     "store_id": "BME-yxVISKWlDdnO7t4dYA",
+     "store_name": "McDonald's\u00ae (2312 WESTCHESTER DRIVE)",
+     "store_url": "https://www.ubereats.com/store/mcdonalds-2312-westchester-drives/BME-yxVISKWlDdnO7t4dYA",
+     "fetched_url": "https://www.ubereats.com/store/mcdonalds-2312-westchester-drives/BME-yxVISKWlDdnO7t4dYA?diningMode=DELIVERY",
+     "address": {
+      "street": "2312 WESTCHESTER DRIVE",
+      "city": "HIGH POINT",
+      "state": "NC",
+      "zip": "27262",
+      "country": "US"
+     },
+     "observed_at": "2026-10-08T18:59:36Z",
+     "order_mode": "delivery",
+     "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
+     "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
+     "currency": "USD",
+     "extraction": "schema.org JSON-LD (Restaurant.hasMenu -> MenuItem.offers)",
+     "menu_item_count": 186,
+     "fetch_via": "http",
+     "items": [
+      {
+       "name": "10 pc. Chicken McNuggets\u00ae",
+       "section": "Free with $15 purchase",
+       "price_cents": 639,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "10 pc. Chicken McNuggets\u00ae Meal",
+       "section": "Most Popular",
+       "price_cents": 1129,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "20 pc. Chicken McNuggets\u00ae",
+       "section": "Most Popular",
+       "price_cents": 1049,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "40 pc. Chicken McNuggets\u00ae",
+       "section": "Most Popular",
+       "price_cents": 2009,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "6 pc. Chicken McNuggets\u00ae Meal",
+       "section": "Extra Value Meals",
+       "price_cents": 989,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "Hot 'N Spicy McChicken\u00ae Meal",
+       "section": "Extra Value Meals",
+       "price_cents": 779,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "4 pc. Chicken McNuggets\u00ae",
+       "section": "Chicken",
+       "price_cents": 319,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "6 pc. Chicken McNuggets\u00ae",
+       "section": "Chicken",
+       "price_cents": 399,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "McChicken\u00ae",
+       "section": "Chicken",
+       "price_cents": 369,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "Hot 'N Spicy McChicken\u00ae",
+       "section": "Chicken",
+       "price_cents": 376,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "6 pc. Chicken McNuggets\u00ae Happy Meal\u00ae",
+       "section": "Happy Meal",
+       "price_cents": 699,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "4 pc. Chicken McNugget\u00ae Happy Meal\u00ae",
+       "section": "Happy Meal",
+       "price_cents": 589,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "20 pc. Chicken McNuggets\u00ae & 2 Medium Fries",
+       "section": "Shareables",
+       "price_cents": 1059,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "Chicken Pack",
+       "section": "Shareables",
+       "price_cents": 3369,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "40 pc. Chicken McNuggets\u00ae & 2 Large Fries",
+       "section": "Shareables",
+       "price_cents": 2829,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      }
+     ]
+    },
+    {
+     "platform": "ubereats",
      "store_id": "Bh5NosWFXISaDOOU2Ap-6g",
      "store_name": "McDonald's\u00ae (12817 Telge Rd)",
      "store_url": "https://www.ubereats.com/store/mcdonalds-12817-telge-rds/Bh5NosWFXISaDOOU2Ap-6g",
@@ -1943,7 +2055,7 @@
       "zip": "77429",
       "country": "US"
      },
-     "observed_at": "2026-10-08T18:49:08Z",
+     "observed_at": "2026-10-08T18:59:38Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -2071,7 +2183,7 @@
       "zip": "28054",
       "country": "US"
      },
-     "observed_at": "2026-10-08T18:49:11Z",
+     "observed_at": "2026-10-08T18:59:41Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -2159,7 +2271,7 @@
       "zip": "29615",
       "country": "US"
      },
-     "observed_at": "2026-10-08T18:49:14Z",
+     "observed_at": "2026-10-08T18:59:46Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -2271,7 +2383,7 @@
       "zip": "98294",
       "country": "US"
      },
-     "observed_at": "2026-10-08T18:49:17Z",
+     "observed_at": "2026-10-08T18:59:47Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -2404,126 +2516,6 @@
     },
     {
      "platform": "ubereats",
-     "store_id": "F1_R5W79Ruy1ruuZKHcvvA",
-     "store_name": "McDonald's\u00ae (2730 MINNEHAHA AVE)",
-     "store_url": "https://www.ubereats.com/store/mcdonalds-2730-minnehaha-aves/F1_R5W79Ruy1ruuZKHcvvA",
-     "fetched_url": "https://www.ubereats.com/store/mcdonalds-2730-minnehaha-aves/F1_R5W79Ruy1ruuZKHcvvA?diningMode=DELIVERY",
-     "address": {
-      "street": "2730 MINNEHAHA AVE",
-      "city": "MAPLEWOOD",
-      "state": "MN",
-      "zip": "55119",
-      "country": "US"
-     },
-     "observed_at": "2026-10-08T18:49:20Z",
-     "order_mode": "delivery",
-     "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
-     "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
-     "currency": "USD",
-     "extraction": "schema.org JSON-LD (Restaurant.hasMenu -> MenuItem.offers)",
-     "menu_item_count": 172,
-     "fetch_via": "http",
-     "items": [
-      {
-       "name": "10 pc. Chicken McNuggets\u00ae",
-       "section": "Free with $15 purchase",
-       "price_cents": 534,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "20 pc. Chicken McNuggets\u00ae",
-       "section": "Most Popular",
-       "price_cents": 999,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "10 pc. Chicken McNuggets\u00ae Meal",
-       "section": "Most Popular",
-       "price_cents": 1029,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "40 pc. Chicken McNuggets\u00ae",
-       "section": "Most Popular",
-       "price_cents": 1599,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "6 pc. Chicken McNuggets\u00ae Meal",
-       "section": "Extra Value Meals",
-       "price_cents": 869,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "4 pc. Chicken McNuggets\u00ae",
-       "section": "Chicken",
-       "price_cents": 279,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "6 pc. Chicken McNuggets\u00ae",
-       "section": "Chicken",
-       "price_cents": 421,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "McChicken\u00ae",
-       "section": "Chicken",
-       "price_cents": 409,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "6 pc. Chicken McNuggets\u00ae Happy Meal\u00ae",
-       "section": "Happy Meal",
-       "price_cents": 589,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "4 pc. Chicken McNugget\u00ae Happy Meal\u00ae",
-       "section": "Happy Meal",
-       "price_cents": 529,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Chicken Pack",
-       "section": "Shareables",
-       "price_cents": 2372,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "40 pc. Chicken McNuggets\u00ae & 2 Large Fries",
-       "section": "Shareables",
-       "price_cents": 2299,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      }
-     ]
-    },
-    {
-     "platform": "ubereats",
      "store_id": "EaVRwTE8Q025hbV56k4PMw",
      "store_name": "McDonald's\u00ae (1733 W Oaklawn)",
      "store_url": "https://www.ubereats.com/store/mcdonalds-1733-w-oaklawns/EaVRwTE8Q025hbV56k4PMw",
@@ -2535,7 +2527,7 @@
       "zip": "78064",
       "country": "US"
      },
-     "observed_at": "2026-10-08T18:49:23Z",
+     "observed_at": "2026-10-08T18:59:50Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -2692,6 +2684,126 @@
     },
     {
      "platform": "ubereats",
+     "store_id": "F1_R5W79Ruy1ruuZKHcvvA",
+     "store_name": "McDonald's\u00ae (2730 MINNEHAHA AVE)",
+     "store_url": "https://www.ubereats.com/store/mcdonalds-2730-minnehaha-aves/F1_R5W79Ruy1ruuZKHcvvA",
+     "fetched_url": "https://www.ubereats.com/store/mcdonalds-2730-minnehaha-aves/F1_R5W79Ruy1ruuZKHcvvA?diningMode=DELIVERY",
+     "address": {
+      "street": "2730 MINNEHAHA AVE",
+      "city": "MAPLEWOOD",
+      "state": "MN",
+      "zip": "55119",
+      "country": "US"
+     },
+     "observed_at": "2026-10-08T18:59:53Z",
+     "order_mode": "delivery",
+     "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
+     "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
+     "currency": "USD",
+     "extraction": "schema.org JSON-LD (Restaurant.hasMenu -> MenuItem.offers)",
+     "menu_item_count": 172,
+     "fetch_via": "http",
+     "items": [
+      {
+       "name": "10 pc. Chicken McNuggets\u00ae",
+       "section": "Free with $15 purchase",
+       "price_cents": 534,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "20 pc. Chicken McNuggets\u00ae",
+       "section": "Most Popular",
+       "price_cents": 999,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "10 pc. Chicken McNuggets\u00ae Meal",
+       "section": "Most Popular",
+       "price_cents": 1029,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "40 pc. Chicken McNuggets\u00ae",
+       "section": "Most Popular",
+       "price_cents": 1599,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "6 pc. Chicken McNuggets\u00ae Meal",
+       "section": "Extra Value Meals",
+       "price_cents": 869,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "4 pc. Chicken McNuggets\u00ae",
+       "section": "Chicken",
+       "price_cents": 279,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "6 pc. Chicken McNuggets\u00ae",
+       "section": "Chicken",
+       "price_cents": 421,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "McChicken\u00ae",
+       "section": "Chicken",
+       "price_cents": 409,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "6 pc. Chicken McNuggets\u00ae Happy Meal\u00ae",
+       "section": "Happy Meal",
+       "price_cents": 589,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "4 pc. Chicken McNugget\u00ae Happy Meal\u00ae",
+       "section": "Happy Meal",
+       "price_cents": 529,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "Chicken Pack",
+       "section": "Shareables",
+       "price_cents": 2372,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "40 pc. Chicken McNuggets\u00ae & 2 Large Fries",
+       "section": "Shareables",
+       "price_cents": 2299,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      }
+     ]
+    },
+    {
+     "platform": "ubereats",
      "store_id": "FbwhnlijRvaJ17TrPSX-xw",
      "store_name": "McDonald's\u00ae (3907 RIVER RD)",
      "store_url": "https://www.ubereats.com/store/mcdonalds-3907-river-rds/FbwhnlijRvaJ17TrPSX-xw",
@@ -2703,7 +2815,7 @@
       "zip": "98902",
       "country": "US"
      },
-     "observed_at": "2026-10-08T18:49:26Z",
+     "observed_at": "2026-10-08T18:59:57Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -2714,15 +2826,23 @@
      "items": [
       {
        "name": "10 pc. Chicken McNuggets\u00ae",
-       "section": "Free with $15 purchase",
+       "section": "Featured items",
        "price_cents": 719,
        "currency": "USD",
        "availability": "unknown",
        "required_options": "unknown"
       },
       {
+       "name": "McChicken\u00ae",
+       "section": "Featured items",
+       "price_cents": 419,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
        "name": "10 pc. Chicken McNuggets\u00ae Meal",
-       "section": "Most Popular",
+       "section": "Featured items",
        "price_cents": 1239,
        "currency": "USD",
        "availability": "unknown",
@@ -2772,14 +2892,6 @@
        "name": "6 pc. Chicken McNuggets\u00ae",
        "section": "Chicken",
        "price_cents": 479,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "McChicken\u00ae",
-       "section": "Chicken",
-       "price_cents": 419,
        "currency": "USD",
        "availability": "unknown",
        "required_options": "unknown"
@@ -2855,7 +2967,7 @@
       "zip": "32955",
       "country": "US"
      },
-     "observed_at": "2026-10-08T18:49:28Z",
+     "observed_at": "2026-10-08T18:59:59Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -2865,41 +2977,17 @@
      "fetch_via": "http",
      "items": [
       {
-       "name": "10 pc. Chicken McNuggets\u00ae Meal",
-       "section": "Featured items",
-       "price_cents": 1059,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Hot 'N Spicy McChicken\u00ae",
-       "section": "Featured items",
-       "price_cents": 349,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "6 pc. Chicken McNuggets\u00ae Happy Meal\u00ae",
-       "section": "Featured items",
-       "price_cents": 579,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "4 pc. Chicken McNuggets\u00ae",
-       "section": "Featured items",
-       "price_cents": 289,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
        "name": "10 pc. Chicken McNuggets\u00ae",
        "section": "Free with $15 purchase",
        "price_cents": 609,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "10 pc. Chicken McNuggets\u00ae Meal",
+       "section": "Most Popular",
+       "price_cents": 1059,
        "currency": "USD",
        "availability": "unknown",
        "required_options": "unknown"
@@ -2929,6 +3017,14 @@
        "required_options": "unknown"
       },
       {
+       "name": "4 pc. Chicken McNuggets\u00ae",
+       "section": "Chicken",
+       "price_cents": 289,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
        "name": "6 pc. Chicken McNuggets\u00ae",
        "section": "Chicken",
        "price_cents": 389,
@@ -2940,6 +3036,22 @@
        "name": "McChicken\u00ae",
        "section": "Chicken",
        "price_cents": 349,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "Hot 'N Spicy McChicken\u00ae",
+       "section": "Chicken",
+       "price_cents": 349,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "6 pc. Chicken McNuggets\u00ae Happy Meal\u00ae",
+       "section": "Happy Meal",
+       "price_cents": 579,
        "currency": "USD",
        "availability": "unknown",
        "required_options": "unknown"
@@ -2980,118 +3092,6 @@
     },
     {
      "platform": "ubereats",
-     "store_id": "JAkVemBkQ8GT4CnpsZZYDQ",
-     "store_name": "McDonald's\u00ae (9261 ALL SAINTS ROAD)",
-     "store_url": "https://www.ubereats.com/store/mcdonalds-9261-all-saints-roads/JAkVemBkQ8GT4CnpsZZYDQ",
-     "fetched_url": "https://www.ubereats.com/store/mcdonalds-9261-all-saints-roads/JAkVemBkQ8GT4CnpsZZYDQ?diningMode=DELIVERY",
-     "address": {
-      "street": "9261 ALL SAINTS ROAD",
-      "city": "LAUREL",
-      "state": "MD",
-      "zip": "20723",
-      "country": "US"
-     },
-     "observed_at": "2026-10-08T18:49:31Z",
-     "order_mode": "delivery",
-     "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
-     "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
-     "currency": "USD",
-     "extraction": "schema.org JSON-LD (Restaurant.hasMenu -> MenuItem.offers)",
-     "menu_item_count": 161,
-     "fetch_via": "http",
-     "items": [
-      {
-       "name": "10 pc. Chicken McNuggets\u00ae",
-       "section": "Featured items",
-       "price_cents": 599,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "10 pc. Chicken McNuggets\u00ae Meal",
-       "section": "Featured items",
-       "price_cents": 1019,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "McChicken\u00ae",
-       "section": "Featured items",
-       "price_cents": 419,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "6 pc. Chicken McNuggets\u00ae Happy Meal\u00ae",
-       "section": "Featured items",
-       "price_cents": 689,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "20 pc. Chicken McNuggets\u00ae",
-       "section": "Most Popular",
-       "price_cents": 979,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "40 pc. Chicken McNuggets\u00ae",
-       "section": "Most Popular",
-       "price_cents": 1559,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "6 pc. Chicken McNuggets\u00ae Meal",
-       "section": "Extra Value Meals",
-       "price_cents": 839,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "4 pc. Chicken McNuggets\u00ae",
-       "section": "Chicken",
-       "price_cents": 319,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "6 pc. Chicken McNuggets\u00ae",
-       "section": "Chicken",
-       "price_cents": 379,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Hot 'N Spicy McChicken\u00ae",
-       "section": "Chicken",
-       "price_cents": 419,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "4 pc. Chicken McNugget\u00ae Happy Meal\u00ae",
-       "section": "Happy Meal",
-       "price_cents": 539,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      }
-     ]
-    },
-    {
-     "platform": "ubereats",
      "store_id": "ITR6sLsNRV65cwYYbP81Ew",
      "store_name": "McDonald's\u00ae (11640 Interstate 35 N)",
      "store_url": "https://www.ubereats.com/store/mcdonalds-11640-interstate-35-ns/ITR6sLsNRV65cwYYbP81Ew",
@@ -3103,7 +3103,7 @@
       "zip": "76537",
       "country": "US"
      },
-     "observed_at": "2026-10-08T18:49:34Z",
+     "observed_at": "2026-10-08T19:00:02Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -3114,8 +3114,16 @@
      "items": [
       {
        "name": "10 pc. Chicken McNuggets\u00ae",
-       "section": "Free with $15 purchase",
+       "section": "Featured items",
        "price_cents": 569,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "20 pc. Chicken McNuggets\u00ae & Basket of Fries",
+       "section": "Featured items",
+       "price_cents": 1090,
        "currency": "USD",
        "availability": "unknown",
        "required_options": "unknown"
@@ -3209,14 +3217,6 @@
        "required_options": "unknown"
       },
       {
-       "name": "20 pc. Chicken McNuggets\u00ae & Basket of Fries",
-       "section": "Shareables",
-       "price_cents": 1090,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
        "name": "Hot and Spicy BOF Chicken Pack",
        "section": "Shareables",
        "price_cents": 2029,
@@ -3249,9 +3249,121 @@
        "required_options": "unknown"
       }
      ]
+    },
+    {
+     "platform": "ubereats",
+     "store_id": "JAkVemBkQ8GT4CnpsZZYDQ",
+     "store_name": "McDonald's\u00ae (9261 ALL SAINTS ROAD)",
+     "store_url": "https://www.ubereats.com/store/mcdonalds-9261-all-saints-roads/JAkVemBkQ8GT4CnpsZZYDQ",
+     "fetched_url": "https://www.ubereats.com/store/mcdonalds-9261-all-saints-roads/JAkVemBkQ8GT4CnpsZZYDQ?diningMode=DELIVERY",
+     "address": {
+      "street": "9261 ALL SAINTS ROAD",
+      "city": "LAUREL",
+      "state": "MD",
+      "zip": "20723",
+      "country": "US"
+     },
+     "observed_at": "2026-10-08T19:00:06Z",
+     "order_mode": "delivery",
+     "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
+     "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
+     "currency": "USD",
+     "extraction": "schema.org JSON-LD (Restaurant.hasMenu -> MenuItem.offers)",
+     "menu_item_count": 161,
+     "fetch_via": "http",
+     "items": [
+      {
+       "name": "10 pc. Chicken McNuggets\u00ae",
+       "section": "Free with $15 purchase",
+       "price_cents": 599,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "20 pc. Chicken McNuggets\u00ae",
+       "section": "Most Popular",
+       "price_cents": 979,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "10 pc. Chicken McNuggets\u00ae Meal",
+       "section": "Most Popular",
+       "price_cents": 1019,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "40 pc. Chicken McNuggets\u00ae",
+       "section": "Most Popular",
+       "price_cents": 1559,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "6 pc. Chicken McNuggets\u00ae Meal",
+       "section": "Extra Value Meals",
+       "price_cents": 839,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "4 pc. Chicken McNuggets\u00ae",
+       "section": "Chicken",
+       "price_cents": 319,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "6 pc. Chicken McNuggets\u00ae",
+       "section": "Chicken",
+       "price_cents": 379,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "McChicken\u00ae",
+       "section": "Chicken",
+       "price_cents": 419,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "Hot 'N Spicy McChicken\u00ae",
+       "section": "Chicken",
+       "price_cents": 419,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "6 pc. Chicken McNuggets\u00ae Happy Meal\u00ae",
+       "section": "Happy Meal",
+       "price_cents": 689,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "4 pc. Chicken McNugget\u00ae Happy Meal\u00ae",
+       "section": "Happy Meal",
+       "price_cents": 539,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      }
+     ]
     }
    ],
-   "seconds": 70.0
+   "seconds": 61.1
   },
   {
    "label": "Lou Malnati's Pizzeria (Uber Eats, Chicago first)",
@@ -3308,7 +3420,7 @@
      "url": "https://www.ubereats.com/store/lou-malnatis-pizzeria-ninety-fifth/Dz2J2zv_U9apxEYDzPPGwQ?diningMode=DELIVERY",
      "host": "www.ubereats.com",
      "status": 307,
-     "observed_at": "2026-10-08T18:49:36Z"
+     "observed_at": "2026-10-08T19:00:08Z"
     },
     {
      "kind": "captcha",
@@ -3316,7 +3428,7 @@
      "url": "https://www.ubereats.com/store/lou-malnatis-pizzeria-avon/XNnfH4y8XPy018Yfp3JefA?diningMode=DELIVERY",
      "host": "www.ubereats.com",
      "status": 307,
-     "observed_at": "2026-10-08T18:49:39Z"
+     "observed_at": "2026-10-08T19:00:11Z"
     }
    ],
    "stores": [
@@ -3326,7 +3438,7 @@
      "source": "sitemap",
      "status": "blocked",
      "detail": "captcha: redirected to a bot challenge (def.uber.com/en/challenge); not followed",
-     "checked_at": "2026-10-08T18:49:36Z"
+     "checked_at": "2026-10-08T19:00:08Z"
     },
     {
      "store_id": "XNnfH4y8XPy018Yfp3JefA",
@@ -3334,7 +3446,7 @@
      "source": "sitemap",
      "status": "blocked",
      "detail": "captcha: redirected to a bot challenge (def.uber.com/en/challenge); not followed",
-     "checked_at": "2026-10-08T18:49:39Z"
+     "checked_at": "2026-10-08T19:00:11Z"
     },
     {
      "store_id": "NzCY26bXUK6f0m0qscBwcw",
@@ -3342,7 +3454,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "192 menu items published; 57 sent as candidates",
-     "checked_at": "2026-10-08T18:49:46Z"
+     "checked_at": "2026-10-08T19:00:18Z"
     },
     {
      "store_id": "UsMjFmB2VFCdQbrL3FF5iA",
@@ -3350,7 +3462,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "172 menu items published; 45 sent as candidates",
-     "checked_at": "2026-10-08T18:49:53Z"
+     "checked_at": "2026-10-08T19:00:24Z"
     },
     {
      "store_id": "QMYhAt--WceBv1nUk04VuQ",
@@ -3358,7 +3470,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "169 menu items published; 57 sent as candidates",
-     "checked_at": "2026-10-08T18:50:01Z"
+     "checked_at": "2026-10-08T19:00:32Z"
     },
     {
      "store_id": "M9qm9DelWrCPtcgW0PLePg",
@@ -3366,7 +3478,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "185 menu items published; 49 sent as candidates",
-     "checked_at": "2026-10-08T18:50:07Z"
+     "checked_at": "2026-10-08T19:00:39Z"
     },
     {
      "store_id": "Jv2DFtMsUTS68ZLHX5355Q",
@@ -3374,7 +3486,7 @@
      "source": "sitemap",
      "status": "no_menu",
      "detail": "restaurant data published but no menu items/prices",
-     "checked_at": "2026-10-08T18:50:16Z"
+     "checked_at": "2026-10-08T19:00:47Z"
     },
     {
      "store_id": "ss-4GlNKVXqz9F9TZwC5zg",
@@ -3382,7 +3494,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "195 menu items published; 57 sent as candidates",
-     "checked_at": "2026-10-08T18:50:13Z"
+     "checked_at": "2026-10-08T19:00:45Z"
     }
    ],
    "observations": [
@@ -3399,7 +3511,7 @@
       "zip": "46307",
       "country": "US"
      },
-     "observed_at": "2026-10-08T18:49:46Z",
+     "observed_at": "2026-10-08T19:00:18Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -3879,7 +3991,7 @@
       "zip": "85388",
       "country": "US"
      },
-     "observed_at": "2026-10-08T18:49:53Z",
+     "observed_at": "2026-10-08T19:00:24Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -4263,7 +4375,7 @@
       "zip": "60124",
       "country": "US"
      },
-     "observed_at": "2026-10-08T18:50:01Z",
+     "observed_at": "2026-10-08T19:00:32Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -4743,7 +4855,7 @@
       "zip": "60422",
       "country": "US"
      },
-     "observed_at": "2026-10-08T18:50:07Z",
+     "observed_at": "2026-10-08T19:00:39Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -5159,7 +5271,7 @@
       "zip": "60062",
       "country": "US"
      },
-     "observed_at": "2026-10-08T18:50:13Z",
+     "observed_at": "2026-10-08T19:00:45Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -5627,7 +5739,7 @@
      ]
     }
    ],
-   "seconds": 53.2
+   "seconds": 53.3
   },
   {
    "label": "Taco Bell Crunchwrap Supreme (Uber Eats, nationwide)",
@@ -5653,10 +5765,10 @@
     "ubereats": {
      "discovered": 75,
      "queued": 53,
-     "checked": 10,
+     "checked": 9,
      "no_menu": 1,
      "non_us": 10,
-     "blocked": 1,
+     "blocked": 2,
      "failed": 0,
      "duplicate": 0,
      "in_progress": 0,
@@ -5678,10 +5790,18 @@
     {
      "kind": "captcha",
      "detail": "redirected to a bot challenge (def.uber.com/en/challenge); not followed",
+     "url": "https://www.ubereats.com/store/taco-bell-4-stickley-drive/0urzbtnAXw-EFNiIQC-TGg?diningMode=DELIVERY",
+     "host": "www.ubereats.com",
+     "status": 307,
+     "observed_at": "2026-10-08T19:01:02Z"
+    },
+    {
+     "kind": "captcha",
+     "detail": "redirected to a bot challenge (def.uber.com/en/challenge); not followed",
      "url": "https://www.ubereats.com/store/taco-bell-3301-north-belt-hwy/1em2NY-IVTyzyRvO7AHTEw?diningMode=DELIVERY",
      "host": "www.ubereats.com",
      "status": 307,
-     "observed_at": "2026-10-08T18:50:33Z"
+     "observed_at": "2026-10-08T19:01:05Z"
     }
    ],
    "stores": [
@@ -5691,7 +5811,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "125 menu items published; 18 sent as candidates",
-     "checked_at": "2026-10-08T18:50:37Z"
+     "checked_at": "2026-10-08T19:01:09Z"
     },
     {
      "store_id": "5WNwJabPUSmlJN3Vi9a6XQ",
@@ -5699,7 +5819,7 @@
      "source": "sitemap",
      "status": "no_menu",
      "detail": "restaurant data published but no menu items/prices",
-     "checked_at": "2026-10-08T18:50:49Z"
+     "checked_at": "2026-10-08T19:01:23Z"
     },
     {
      "store_id": "9FbBfyEKQqmHRflkyrdCpw",
@@ -5707,15 +5827,15 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "133 menu items published; 18 sent as candidates",
-     "checked_at": "2026-10-08T18:50:55Z"
+     "checked_at": "2026-10-08T19:01:27Z"
     },
     {
      "store_id": "0urzbtnAXw-EFNiIQC-TGg",
      "canonical": "https://www.ubereats.com/store/taco-bell-4-stickley-drive/0urzbtnAXw-EFNiIQC-TGg",
      "source": "sitemap",
-     "status": "checked",
-     "detail": "127 menu items published; 19 sent as candidates",
-     "checked_at": "2026-10-08T18:50:31Z"
+     "status": "blocked",
+     "detail": "captcha: redirected to a bot challenge (def.uber.com/en/challenge); not followed",
+     "checked_at": "2026-10-08T19:01:02Z"
     },
     {
      "store_id": "EMlJC5yzUD6EKTq0YHsUBw",
@@ -5723,7 +5843,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "135 menu items published; 21 sent as candidates",
-     "checked_at": "2026-10-08T18:51:04Z"
+     "checked_at": "2026-10-08T19:01:33Z"
     },
     {
      "store_id": "DvLHL3rFUCuZ5dY9XkVmqg",
@@ -5731,7 +5851,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "136 menu items published; 19 sent as candidates",
-     "checked_at": "2026-10-08T18:51:02Z"
+     "checked_at": "2026-10-08T19:01:36Z"
     },
     {
      "store_id": "6E0JJRcSUou2c09tp1ZLcQ",
@@ -5739,7 +5859,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "139 menu items published; 19 sent as candidates",
-     "checked_at": "2026-10-08T18:50:52Z"
+     "checked_at": "2026-10-08T19:01:21Z"
     },
     {
      "store_id": "1em2NY-IVTyzyRvO7AHTEw",
@@ -5747,7 +5867,7 @@
      "source": "sitemap",
      "status": "blocked",
      "detail": "captcha: redirected to a bot challenge (def.uber.com/en/challenge); not followed",
-     "checked_at": "2026-10-08T18:50:33Z"
+     "checked_at": "2026-10-08T19:01:05Z"
     },
     {
      "store_id": "2bUkBwxlTH-CVpiJMob_BQ",
@@ -5755,7 +5875,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "114 menu items published; 18 sent as candidates",
-     "checked_at": "2026-10-08T18:50:46Z"
+     "checked_at": "2026-10-08T19:01:18Z"
     },
     {
      "store_id": "2OU2v0qqTHe0L1xCgCQqMA",
@@ -5763,7 +5883,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "136 menu items published; 19 sent as candidates",
-     "checked_at": "2026-10-08T18:50:41Z"
+     "checked_at": "2026-10-08T19:01:11Z"
     },
     {
      "store_id": "2XUaSiybScy6WK4RpHkNVQ",
@@ -5771,7 +5891,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "135 menu items published; 19 sent as candidates",
-     "checked_at": "2026-10-08T18:50:43Z"
+     "checked_at": "2026-10-08T19:01:15Z"
     },
     {
      "store_id": "DXjmU-XVUa-mxTmRUOxaXg",
@@ -5779,186 +5899,10 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "134 menu items published; 19 sent as candidates",
-     "checked_at": "2026-10-08T18:50:59Z"
+     "checked_at": "2026-10-08T19:01:29Z"
     }
    ],
    "observations": [
-    {
-     "platform": "ubereats",
-     "store_id": "0urzbtnAXw-EFNiIQC-TGg",
-     "store_name": "Taco Bell (4 Stickley Drive)",
-     "store_url": "https://www.ubereats.com/store/taco-bell-4-stickley-drive/0urzbtnAXw-EFNiIQC-TGg",
-     "fetched_url": "https://www.ubereats.com/store/taco-bell-4-stickley-drive/0urzbtnAXw-EFNiIQC-TGg?diningMode=DELIVERY",
-     "address": {
-      "street": "4 Stickley Drive",
-      "city": "Manlius",
-      "state": "NY",
-      "zip": "13104",
-      "country": "US"
-     },
-     "observed_at": "2026-10-08T18:50:31Z",
-     "order_mode": "delivery",
-     "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
-     "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
-     "currency": "USD",
-     "extraction": "schema.org JSON-LD (Restaurant.hasMenu -> MenuItem.offers)",
-     "menu_item_count": 127,
-     "fetch_via": "http",
-     "items": [
-      {
-       "name": "Crunchwrap Supreme\u00ae",
-       "section": "Featured items",
-       "price_cents": 853,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Chalupa Supreme",
-       "section": "Featured items",
-       "price_cents": 755,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Supreme Luxe Box\u2122",
-       "section": "Featured items",
-       "price_cents": 854,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Nacho Cheese Doritos\u00ae Locos Tacos Supreme\u00ae",
-       "section": "Featured items",
-       "price_cents": 487,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "2 Chicken Chalupas Supreme Combo",
-       "section": "Featured items",
-       "price_cents": 1707,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Crunchwrap Supreme\u00ae Combo",
-       "section": "Featured items",
-       "price_cents": 1438,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Creamy Chipotle Crispy Chicken Crunchwrap Slider",
-       "section": "Limited Time Offers",
-       "price_cents": 389,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Diablo Ranch Crispy Chicken Crunchwrap Slider",
-       "section": "Limited Time Offers",
-       "price_cents": 389,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "3 Crunchy Tacos Supreme\u00ae Combo",
-       "section": "Combos",
-       "price_cents": 1463,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "3 Doritos\u00ae Locos Tacos Supreme Combo",
-       "section": "Combos",
-       "price_cents": 1585,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Supreme Taco Party Pack",
-       "section": "Perfect for Sharing",
-       "price_cents": 4330,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Supreme Soft Taco Party Pack",
-       "section": "Perfect for Sharing",
-       "price_cents": 4330,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Supreme Variety Taco Party Pack",
-       "section": "Perfect for Sharing",
-       "price_cents": 4635,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Black Bean Chalupa Supreme",
-       "section": "Veggie Cravings",
-       "price_cents": 754,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Black Bean Crunchwrap Supreme\u00ae",
-       "section": "Veggie Cravings",
-       "price_cents": 853,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Soft Taco Supreme\u00ae",
-       "section": "Tacos",
-       "price_cents": 365,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Crunchy Taco Supreme\u00ae",
-       "section": "Tacos",
-       "price_cents": 365,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Burrito Supreme\u00ae",
-       "section": "Burritos",
-       "price_cents": 853,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Chips and Nacho Supreme Dip",
-       "section": "Nachos",
-       "price_cents": 304,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      }
-     ]
-    },
     {
      "platform": "ubereats",
      "store_id": "1gHyz8Z4WN-yqAKeqiXx2A",
@@ -5972,7 +5916,7 @@
       "zip": "38843",
       "country": "US"
      },
-     "observed_at": "2026-10-08T18:50:37Z",
+     "observed_at": "2026-10-08T19:01:09Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -6140,7 +6084,7 @@
       "zip": "30742",
       "country": "US"
      },
-     "observed_at": "2026-10-08T18:50:40Z",
+     "observed_at": "2026-10-08T19:01:11Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -6149,30 +6093,6 @@
      "menu_item_count": 136,
      "fetch_via": "http",
      "items": [
-      {
-       "name": "Supreme Luxe Box\u2122",
-       "section": "Featured items",
-       "price_cents": 854,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Crunchwrap Supreme\u00ae",
-       "section": "Featured items",
-       "price_cents": 731,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Chalupa Supreme",
-       "section": "Featured items",
-       "price_cents": 670,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
       {
        "name": "Creamy Chipotle Crispy Chicken Crunchwrap Slider",
        "section": "Limited Time Offers",
@@ -6222,6 +6142,14 @@
        "required_options": "unknown"
       },
       {
+       "name": "Supreme Luxe Box\u2122",
+       "section": "Combos",
+       "price_cents": 854,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
        "name": "Supreme Variety Taco Party Pack",
        "section": "Perfect for Sharing",
        "price_cents": 3903,
@@ -6241,6 +6169,14 @@
        "name": "Supreme Soft Taco Party Pack",
        "section": "Perfect for Sharing",
        "price_cents": 3537,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "Crunchwrap Supreme\u00ae",
+       "section": "Specialties",
+       "price_cents": 731,
        "currency": "USD",
        "availability": "unknown",
        "required_options": "unknown"
@@ -6273,6 +6209,14 @@
        "name": "Crunchy Taco Supreme\u00ae",
        "section": "Tacos",
        "price_cents": 365,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "Chalupa Supreme",
+       "section": "Tacos",
+       "price_cents": 670,
        "currency": "USD",
        "availability": "unknown",
        "required_options": "unknown"
@@ -6316,7 +6260,7 @@
       "zip": "92557",
       "country": "US"
      },
-     "observed_at": "2026-10-08T18:50:43Z",
+     "observed_at": "2026-10-08T19:01:15Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -6492,7 +6436,7 @@
       "zip": "77433",
       "country": "US"
      },
-     "observed_at": "2026-10-08T18:50:46Z",
+     "observed_at": "2026-10-08T19:01:18Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -6501,46 +6445,6 @@
      "menu_item_count": 114,
      "fetch_via": "http",
      "items": [
-      {
-       "name": "Supreme Luxe Box\u2122",
-       "section": "Featured items",
-       "price_cents": 854,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Crunchwrap Supreme\u00ae",
-       "section": "Featured items",
-       "price_cents": 841,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Chalupa Supreme",
-       "section": "Featured items",
-       "price_cents": 706,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Nacho Cheese Doritos\u00ae Locos Tacos Supreme\u00ae",
-       "section": "Featured items",
-       "price_cents": 487,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Soft Taco Supreme\u00ae",
-       "section": "Featured items",
-       "price_cents": 365,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
       {
        "name": "Chips and Beefy Nacho Supreme Dip",
        "section": "Limited Time Offers",
@@ -6598,6 +6502,14 @@
        "required_options": "unknown"
       },
       {
+       "name": "Supreme Luxe Box\u2122",
+       "section": "Combos",
+       "price_cents": 854,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
        "name": "Supreme Taco Party Pack",
        "section": "Perfect for Sharing",
        "price_cents": 3903,
@@ -6614,6 +6526,14 @@
        "required_options": "unknown"
       },
       {
+       "name": "Crunchwrap Supreme\u00ae",
+       "section": "Specialties",
+       "price_cents": 841,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
        "name": "Black Bean Chalupa Supreme",
        "section": "Veggie Cravings",
        "price_cents": 706,
@@ -6625,6 +6545,30 @@
        "name": "Black Bean Crunchwrap Supreme\u00ae",
        "section": "Veggie Cravings",
        "price_cents": 828,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "Chalupa Supreme",
+       "section": "Tacos",
+       "price_cents": 706,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "Soft Taco Supreme\u00ae",
+       "section": "Tacos",
+       "price_cents": 365,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "Nacho Cheese Doritos\u00ae Locos Tacos Supreme\u00ae",
+       "section": "Tacos",
+       "price_cents": 487,
        "currency": "USD",
        "availability": "unknown",
        "required_options": "unknown"
@@ -6660,7 +6604,7 @@
       "zip": "29579",
       "country": "US"
      },
-     "observed_at": "2026-10-08T18:50:52Z",
+     "observed_at": "2026-10-08T19:01:21Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -6669,54 +6613,6 @@
      "menu_item_count": 139,
      "fetch_via": "http",
      "items": [
-      {
-       "name": "Crunchwrap Supreme\u00ae",
-       "section": "Featured items",
-       "price_cents": 792,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Supreme Luxe Box\u2122",
-       "section": "Featured items",
-       "price_cents": 854,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Chalupa Supreme",
-       "section": "Featured items",
-       "price_cents": 670,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Nacho Cheese Doritos\u00ae Locos Tacos Supreme\u00ae",
-       "section": "Featured items",
-       "price_cents": 511,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Soft Taco Supreme\u00ae",
-       "section": "Featured items",
-       "price_cents": 365,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Burrito Supreme\u00ae",
-       "section": "Featured items",
-       "price_cents": 719,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
       {
        "name": "Creamy Chipotle Crispy Chicken Crunchwrap Slider",
        "section": "Limited Time Offers",
@@ -6766,6 +6662,14 @@
        "required_options": "unknown"
       },
       {
+       "name": "Supreme Luxe Box\u2122",
+       "section": "Combos",
+       "price_cents": 854,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
        "name": "Supreme Variety Taco Party Pack",
        "section": "Perfect for Sharing",
        "price_cents": 3903,
@@ -6790,6 +6694,14 @@
        "required_options": "unknown"
       },
       {
+       "name": "Crunchwrap Supreme\u00ae",
+       "section": "Specialties",
+       "price_cents": 792,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
        "name": "Black Bean Chalupa Supreme",
        "section": "Veggie Cravings",
        "price_cents": 670,
@@ -6806,9 +6718,41 @@
        "required_options": "unknown"
       },
       {
+       "name": "Soft Taco Supreme\u00ae",
+       "section": "Tacos",
+       "price_cents": 365,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "Nacho Cheese Doritos\u00ae Locos Tacos Supreme\u00ae",
+       "section": "Tacos",
+       "price_cents": 511,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
        "name": "Crunchy Taco Supreme\u00ae",
        "section": "Tacos",
        "price_cents": 365,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "Chalupa Supreme",
+       "section": "Tacos",
+       "price_cents": 670,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "Burrito Supreme\u00ae",
+       "section": "Burritos",
+       "price_cents": 719,
        "currency": "USD",
        "availability": "unknown",
        "required_options": "unknown"
@@ -6836,7 +6780,7 @@
       "zip": "11722",
       "country": "US"
      },
-     "observed_at": "2026-10-08T18:50:55Z",
+     "observed_at": "2026-10-08T19:01:27Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -6845,54 +6789,6 @@
      "menu_item_count": 133,
      "fetch_via": "http",
      "items": [
-      {
-       "name": "Supreme Luxe Box\u2122",
-       "section": "Featured items",
-       "price_cents": 854,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Crunchwrap Supreme\u00ae",
-       "section": "Featured items",
-       "price_cents": 816,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Chalupa Supreme",
-       "section": "Featured items",
-       "price_cents": 731,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Nacho Cheese Doritos\u00ae Locos Tacos Supreme\u00ae",
-       "section": "Featured items",
-       "price_cents": 511,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "2 Chicken Chalupas Supreme Combo",
-       "section": "Featured items",
-       "price_cents": 1634,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Crunchy Taco Supreme\u00ae",
-       "section": "Featured items",
-       "price_cents": 389,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
       {
        "name": "Creamy Chipotle Crispy Chicken Crunchwrap Slider",
        "section": "Limited Time Offers",
@@ -6905,6 +6801,14 @@
        "name": "Diablo Ranch Crispy Chicken Crunchwrap Slider",
        "section": "Limited Time Offers",
        "price_cents": 365,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "2 Chicken Chalupas Supreme Combo",
+       "section": "Combos",
+       "price_cents": 1634,
        "currency": "USD",
        "availability": "unknown",
        "required_options": "unknown"
@@ -6934,6 +6838,14 @@
        "required_options": "unknown"
       },
       {
+       "name": "Supreme Luxe Box\u2122",
+       "section": "Combos",
+       "price_cents": 854,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
        "name": "Supreme Taco Party Pack",
        "section": "Perfect for Sharing",
        "price_cents": 3244,
@@ -6958,6 +6870,14 @@
        "required_options": "unknown"
       },
       {
+       "name": "Crunchwrap Supreme\u00ae",
+       "section": "Specialties",
+       "price_cents": 816,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
        "name": "Black Bean Crunchwrap Supreme\u00ae",
        "section": "Veggie Cravings",
        "price_cents": 755,
@@ -6966,7 +6886,31 @@
        "required_options": "unknown"
       },
       {
+       "name": "Chalupa Supreme",
+       "section": "Tacos",
+       "price_cents": 731,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "Nacho Cheese Doritos\u00ae Locos Tacos Supreme\u00ae",
+       "section": "Tacos",
+       "price_cents": 511,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
        "name": "Soft Taco Supreme\u00ae",
+       "section": "Tacos",
+       "price_cents": 389,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "Crunchy Taco Supreme\u00ae",
        "section": "Tacos",
        "price_cents": 389,
        "currency": "USD",
@@ -7004,7 +6948,7 @@
       "zip": "76667",
       "country": "US"
      },
-     "observed_at": "2026-10-08T18:50:59Z",
+     "observed_at": "2026-10-08T19:01:29Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -7169,182 +7113,6 @@
     },
     {
      "platform": "ubereats",
-     "store_id": "DvLHL3rFUCuZ5dY9XkVmqg",
-     "store_name": "Taco Bell (255 Melton Road)",
-     "store_url": "https://www.ubereats.com/store/taco-bell-255-melton-road/DvLHL3rFUCuZ5dY9XkVmqg",
-     "fetched_url": "https://www.ubereats.com/store/taco-bell-255-melton-road/DvLHL3rFUCuZ5dY9XkVmqg?diningMode=DELIVERY",
-     "address": {
-      "street": "255 Melton Road",
-      "city": "Creswell",
-      "state": "OR",
-      "zip": "97426",
-      "country": "US"
-     },
-     "observed_at": "2026-10-08T18:51:02Z",
-     "order_mode": "delivery",
-     "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
-     "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
-     "currency": "USD",
-     "extraction": "schema.org JSON-LD (Restaurant.hasMenu -> MenuItem.offers)",
-     "menu_item_count": 136,
-     "fetch_via": "http",
-     "items": [
-      {
-       "name": "Crunchwrap Supreme\u00ae",
-       "section": "Featured items",
-       "price_cents": 824,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "2 Chicken Chalupas Supreme Combo",
-       "section": "Featured items",
-       "price_cents": 1580,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Chalupa Supreme",
-       "section": "Featured items",
-       "price_cents": 769,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Crunchwrap Supreme\u00ae Combo",
-       "section": "Featured items",
-       "price_cents": 1257,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Crunchy Taco Supreme\u00ae",
-       "section": "Featured items",
-       "price_cents": 366,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Creamy Chipotle Crispy Chicken Crunchwrap Slider",
-       "section": "Limited Time Offers",
-       "price_cents": 360,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Diablo Ranch Crispy Chicken Crunchwrap Slider",
-       "section": "Limited Time Offers",
-       "price_cents": 360,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "3 Crunchy Tacos Supreme\u00ae Combo",
-       "section": "Combos",
-       "price_cents": 1312,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "3 Doritos\u00ae Locos Tacos Supreme Combo",
-       "section": "Combos",
-       "price_cents": 1494,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Supreme Luxe Box\u2122",
-       "section": "Combos",
-       "price_cents": 1214,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Supreme Taco Party Pack",
-       "section": "Perfect for Sharing",
-       "price_cents": 3904,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Supreme Soft Taco Party Pack",
-       "section": "Perfect for Sharing",
-       "price_cents": 3904,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Supreme Variety Taco Party Pack",
-       "section": "Perfect for Sharing",
-       "price_cents": 4148,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Black Bean Chalupa Supreme",
-       "section": "Veggie Cravings",
-       "price_cents": 720,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Black Bean Crunchwrap Supreme\u00ae",
-       "section": "Veggie Cravings",
-       "price_cents": 805,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Soft Taco Supreme\u00ae",
-       "section": "Tacos",
-       "price_cents": 366,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Nacho Cheese Doritos\u00ae Locos Tacos Supreme\u00ae",
-       "section": "Tacos",
-       "price_cents": 488,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Burrito Supreme\u00ae",
-       "section": "Burritos",
-       "price_cents": 750,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Chips and Nacho Supreme Dip",
-       "section": "Nachos",
-       "price_cents": 360,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      }
-     ]
-    },
-    {
-     "platform": "ubereats",
      "store_id": "EMlJC5yzUD6EKTq0YHsUBw",
      "store_name": "Taco Bell (1606 Hammock Ridge Road)",
      "store_url": "https://www.ubereats.com/store/taco-bell-1606-hammock-ridge-road/EMlJC5yzUD6EKTq0YHsUBw",
@@ -7356,7 +7124,7 @@
       "zip": "34711",
       "country": "US"
      },
-     "observed_at": "2026-10-08T18:51:04Z",
+     "observed_at": "2026-10-08T19:01:33Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -7534,6 +7302,182 @@
        "required_options": "unknown"
       }
      ]
+    },
+    {
+     "platform": "ubereats",
+     "store_id": "DvLHL3rFUCuZ5dY9XkVmqg",
+     "store_name": "Taco Bell (255 Melton Road)",
+     "store_url": "https://www.ubereats.com/store/taco-bell-255-melton-road/DvLHL3rFUCuZ5dY9XkVmqg",
+     "fetched_url": "https://www.ubereats.com/store/taco-bell-255-melton-road/DvLHL3rFUCuZ5dY9XkVmqg?diningMode=DELIVERY",
+     "address": {
+      "street": "255 Melton Road",
+      "city": "Creswell",
+      "state": "OR",
+      "zip": "97426",
+      "country": "US"
+     },
+     "observed_at": "2026-10-08T19:01:36Z",
+     "order_mode": "delivery",
+     "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
+     "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
+     "currency": "USD",
+     "extraction": "schema.org JSON-LD (Restaurant.hasMenu -> MenuItem.offers)",
+     "menu_item_count": 136,
+     "fetch_via": "http",
+     "items": [
+      {
+       "name": "Creamy Chipotle Crispy Chicken Crunchwrap Slider",
+       "section": "Limited Time Offers",
+       "price_cents": 360,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "Diablo Ranch Crispy Chicken Crunchwrap Slider",
+       "section": "Limited Time Offers",
+       "price_cents": 360,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "2 Chicken Chalupas Supreme Combo",
+       "section": "Combos",
+       "price_cents": 1580,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "Crunchwrap Supreme\u00ae Combo",
+       "section": "Combos",
+       "price_cents": 1257,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "3 Crunchy Tacos Supreme\u00ae Combo",
+       "section": "Combos",
+       "price_cents": 1312,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "3 Doritos\u00ae Locos Tacos Supreme Combo",
+       "section": "Combos",
+       "price_cents": 1494,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "Supreme Luxe Box\u2122",
+       "section": "Combos",
+       "price_cents": 1214,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "Supreme Taco Party Pack",
+       "section": "Perfect for Sharing",
+       "price_cents": 3904,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "Supreme Soft Taco Party Pack",
+       "section": "Perfect for Sharing",
+       "price_cents": 3904,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "Supreme Variety Taco Party Pack",
+       "section": "Perfect for Sharing",
+       "price_cents": 4148,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "Crunchwrap Supreme\u00ae",
+       "section": "Specialties",
+       "price_cents": 824,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "Black Bean Chalupa Supreme",
+       "section": "Veggie Cravings",
+       "price_cents": 720,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "Black Bean Crunchwrap Supreme\u00ae",
+       "section": "Veggie Cravings",
+       "price_cents": 805,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "Soft Taco Supreme\u00ae",
+       "section": "Tacos",
+       "price_cents": 366,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "Crunchy Taco Supreme\u00ae",
+       "section": "Tacos",
+       "price_cents": 366,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "Nacho Cheese Doritos\u00ae Locos Tacos Supreme\u00ae",
+       "section": "Tacos",
+       "price_cents": 488,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "Chalupa Supreme",
+       "section": "Tacos",
+       "price_cents": 769,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "Burrito Supreme\u00ae",
+       "section": "Burritos",
+       "price_cents": 750,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "Chips and Nacho Supreme Dip",
+       "section": "Nachos",
+       "price_cents": 360,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      }
+     ]
     }
    ],
    "seconds": 37.0
@@ -7557,7 +7501,7 @@
    },
    "notes": [
     "The Grubhub page publishes no structured data (its content is drawn by JavaScript).",
-    "Grubhub menu with 162 priced listings found on MenuPages; pick your item to fill its name and Grubhub price."
+    "Grubhub menu with 160 priced listings found on MenuPages; pick your item to fill its name and Grubhub price."
    ],
    "barriers": [],
    "menu": {
@@ -8868,30 +8812,1430 @@
      }
     ],
     "source_url": "https://menupages.com/lou-malnatis-pizzeria/6456-s-cicero-ave-chicago",
-    "observed_at": "2026-10-08T18:48:25Z",
+    "observed_at": "2026-10-08T18:59:05Z",
     "source": "MenuPages (Grubhub-owned menu site), schema.org Menu JSON-LD",
     "price_context": "Grubhub menu price as published on MenuPages; options/add-ons and fees not included",
     "grubhub_ids_linked": [
      "434510"
-    ]
+    ],
+    "checks": null,
+    "site": "MenuPages"
    }
   },
   {
    "grubhub_url": "https://www.grubhub.com/restaurant/lou-malnatis-pizzeria-85-s-buffalo-grove-rd-buffalo-grove/517712",
-   "ok": false,
+   "ok": true,
    "fields": {
     "grubhub_restaurant_id": "517712",
     "grubhub_menu_item_id": null,
-    "chain": "Lou Malnatis Pizzeria"
+    "chain": "Lou Malnati's Pizzeria",
+    "restaurant_address": {
+     "street": "85 S Buffalo Grove Rd",
+     "city": "Buffalo Grove",
+     "state": "IL",
+     "zip": "60089",
+     "country": "US"
+    }
    },
    "notes": [
     "The Grubhub page publishes no structured data (its content is drawn by JavaScript).",
     "This Grubhub restaurant is not listed on MenuPages (it covers a subset of Grubhub restaurants).",
-    "Complete the item details and the Grubhub item subtotal manually."
+    "Grubhub menu with 169 priced listings found on AllMenus; pick your item to fill its name and Grubhub price."
    ],
    "barriers": [],
-   "menu": null
+   "menu": {
+    "restaurant_name": "Lou Malnati's Pizzeria",
+    "address": {
+     "street": "85 S Buffalo Grove Rd",
+     "city": "Buffalo Grove",
+     "state": "IL",
+     "zip": "60089",
+     "country": "US"
+    },
+    "items": [
+     {
+      "name": "BuffaLou Chicken Deep Dish - GF",
+      "variant": null,
+      "price_cents": 2715,
+      "currency": "USD",
+      "section": "BuffaLou Chicken Pizza",
+      "price_note": null
+     },
+     {
+      "name": "BuffaLou Chicken Thin Crust - GF",
+      "variant": null,
+      "price_cents": 1965,
+      "currency": "USD",
+      "section": "BuffaLou Chicken Pizza",
+      "price_note": null
+     },
+     {
+      "name": "Personal - Deep Dish BuffaLou Chicken",
+      "variant": null,
+      "price_cents": 1585,
+      "currency": "USD",
+      "section": "BuffaLou Chicken - Deep Dish",
+      "price_note": null
+     },
+     {
+      "name": "Small - Deep Dish BuffaLou Chicken",
+      "variant": null,
+      "price_cents": 2415,
+      "currency": "USD",
+      "section": "BuffaLou Chicken - Deep Dish",
+      "price_note": null
+     },
+     {
+      "name": "Medium - Deep Dish BuffaLou Chicken",
+      "variant": null,
+      "price_cents": 3055,
+      "currency": "USD",
+      "section": "BuffaLou Chicken - Deep Dish",
+      "price_note": null
+     },
+     {
+      "name": "Large - Deep Dish BuffaLou Chicken",
+      "variant": null,
+      "price_cents": 3725,
+      "currency": "USD",
+      "section": "BuffaLou Chicken - Deep Dish",
+      "price_note": null
+     },
+     {
+      "name": "Small - Thin Crust BuffaLou Chicken",
+      "variant": null,
+      "price_cents": 1815,
+      "currency": "USD",
+      "section": "BuffaLou Chicken - Thin Crust",
+      "price_note": null
+     },
+     {
+      "name": "Medium - Thin Crust BuffaLou Chicken",
+      "variant": null,
+      "price_cents": 2415,
+      "currency": "USD",
+      "section": "BuffaLou Chicken - Thin Crust",
+      "price_note": null
+     },
+     {
+      "name": "Large - Thin Crust BuffaLou Chicken",
+      "variant": null,
+      "price_cents": 2975,
+      "currency": "USD",
+      "section": "BuffaLou Chicken - Thin Crust",
+      "price_note": null
+     },
+     {
+      "name": "XLarge - Thin Crust BuffaLou Chicken",
+      "variant": null,
+      "price_cents": 3445,
+      "currency": "USD",
+      "section": "BuffaLou Chicken - Thin Crust",
+      "price_note": null
+     },
+     {
+      "name": "Personal - Deep Dish Chicago Classic",
+      "variant": null,
+      "price_cents": 1355,
+      "currency": "USD",
+      "section": "The Malnati Chicago Classic\u2122 - Deep Dish",
+      "price_note": null
+     },
+     {
+      "name": "Small - Deep Dish Chicago Classic",
+      "variant": null,
+      "price_cents": 2085,
+      "currency": "USD",
+      "section": "The Malnati Chicago Classic\u2122 - Deep Dish",
+      "price_note": null
+     },
+     {
+      "name": "Medium - Deep Dish Chicago Classic",
+      "variant": null,
+      "price_cents": 2655,
+      "currency": "USD",
+      "section": "The Malnati Chicago Classic\u2122 - Deep Dish",
+      "price_note": null
+     },
+     {
+      "name": "Large - Deep Dish Chicago Classic",
+      "variant": null,
+      "price_cents": 3265,
+      "currency": "USD",
+      "section": "The Malnati Chicago Classic\u2122 - Deep Dish",
+      "price_note": null
+     },
+     {
+      "name": "Personal - Deep Dish The Lou",
+      "variant": null,
+      "price_cents": 1465,
+      "currency": "USD",
+      "section": "The \"Lou\" - Deep Dish",
+      "price_note": null
+     },
+     {
+      "name": "Small - Deep Dish The Lou",
+      "variant": null,
+      "price_cents": 2285,
+      "currency": "USD",
+      "section": "The \"Lou\" - Deep Dish",
+      "price_note": null
+     },
+     {
+      "name": "Medium - Deep Dish The Lou",
+      "variant": null,
+      "price_cents": 2835,
+      "currency": "USD",
+      "section": "The \"Lou\" - Deep Dish",
+      "price_note": null
+     },
+     {
+      "name": "Large - Deep Dish The Lou",
+      "variant": null,
+      "price_cents": 3495,
+      "currency": "USD",
+      "section": "The \"Lou\" - Deep Dish",
+      "price_note": null
+     },
+     {
+      "name": "Personal - Deep Dish Margherita",
+      "variant": null,
+      "price_cents": 1335,
+      "currency": "USD",
+      "section": "Margherita Pesto - Deep Dish",
+      "price_note": null
+     },
+     {
+      "name": "Small - Deep Dish Margherita",
+      "variant": null,
+      "price_cents": 2035,
+      "currency": "USD",
+      "section": "Margherita Pesto - Deep Dish",
+      "price_note": null
+     },
+     {
+      "name": "Medium - Deep Dish Margherita",
+      "variant": null,
+      "price_cents": 2595,
+      "currency": "USD",
+      "section": "Margherita Pesto - Deep Dish",
+      "price_note": null
+     },
+     {
+      "name": "Large - Deep Dish Margherita",
+      "variant": null,
+      "price_cents": 3195,
+      "currency": "USD",
+      "section": "Margherita Pesto - Deep Dish",
+      "price_note": null
+     },
+     {
+      "name": "Personal - Deep Dish The Hot Honey",
+      "variant": null,
+      "price_cents": 1455,
+      "currency": "USD",
+      "section": "The Hot Honey - Deep Dish",
+      "price_note": null
+     },
+     {
+      "name": "Small - Deep Dish The Hot Honey",
+      "variant": null,
+      "price_cents": 2265,
+      "currency": "USD",
+      "section": "The Hot Honey - Deep Dish",
+      "price_note": null
+     },
+     {
+      "name": "Medium - Deep Dish The Hot Honey",
+      "variant": null,
+      "price_cents": 2825,
+      "currency": "USD",
+      "section": "The Hot Honey - Deep Dish",
+      "price_note": null
+     },
+     {
+      "name": "Large - Deep Dish The Hot Honey",
+      "variant": null,
+      "price_cents": 3485,
+      "currency": "USD",
+      "section": "The Hot Honey - Deep Dish",
+      "price_note": null
+     },
+     {
+      "name": "Personal - Deep Dish Veggie",
+      "variant": null,
+      "price_cents": 1585,
+      "currency": "USD",
+      "section": "Veggie - Deep Dish",
+      "price_note": null
+     },
+     {
+      "name": "Small - Deep Dish Veggie",
+      "variant": null,
+      "price_cents": 2415,
+      "currency": "USD",
+      "section": "Veggie - Deep Dish",
+      "price_note": null
+     },
+     {
+      "name": "Medium - Deep Dish Veggie",
+      "variant": null,
+      "price_cents": 3055,
+      "currency": "USD",
+      "section": "Veggie - Deep Dish",
+      "price_note": null
+     },
+     {
+      "name": "Large - Deep Dish Veggie",
+      "variant": null,
+      "price_cents": 3725,
+      "currency": "USD",
+      "section": "Veggie - Deep Dish",
+      "price_note": null
+     },
+     {
+      "name": "Small - Thin Crust The Lou",
+      "variant": null,
+      "price_cents": 1365,
+      "currency": "USD",
+      "section": "The \"Lou\" - Thin Crust",
+      "price_note": null
+     },
+     {
+      "name": "Medium - Thin Crust The Lou",
+      "variant": null,
+      "price_cents": 2095,
+      "currency": "USD",
+      "section": "The \"Lou\" - Thin Crust",
+      "price_note": null
+     },
+     {
+      "name": "Large - Thin Crust The Lou",
+      "variant": null,
+      "price_cents": 2675,
+      "currency": "USD",
+      "section": "The \"Lou\" - Thin Crust",
+      "price_note": null
+     },
+     {
+      "name": "XLarge - Thin Crust The Lou",
+      "variant": null,
+      "price_cents": 3235,
+      "currency": "USD",
+      "section": "The \"Lou\" - Thin Crust",
+      "price_note": null
+     },
+     {
+      "name": "Small - Thin Crust Margherita",
+      "variant": null,
+      "price_cents": 1315,
+      "currency": "USD",
+      "section": "Margherita Pesto - Thin Crust",
+      "price_note": null
+     },
+     {
+      "name": "Medium - Thin Crust Margherita",
+      "variant": null,
+      "price_cents": 1995,
+      "currency": "USD",
+      "section": "Margherita Pesto - Thin Crust",
+      "price_note": null
+     },
+     {
+      "name": "Large - Thin Crust Margherita",
+      "variant": null,
+      "price_cents": 2435,
+      "currency": "USD",
+      "section": "Margherita Pesto - Thin Crust",
+      "price_note": null
+     },
+     {
+      "name": "XLarge - Thin Crust Margherita",
+      "variant": null,
+      "price_cents": 2935,
+      "currency": "USD",
+      "section": "Margherita Pesto - Thin Crust",
+      "price_note": null
+     },
+     {
+      "name": "Small - Thin Crust The Hot Honey",
+      "variant": null,
+      "price_cents": 1355,
+      "currency": "USD",
+      "section": "The Hot Honey - Thin Crust",
+      "price_note": null
+     },
+     {
+      "name": "Medium - Thin Crust The Hot Honey",
+      "variant": null,
+      "price_cents": 2075,
+      "currency": "USD",
+      "section": "The Hot Honey - Thin Crust",
+      "price_note": null
+     },
+     {
+      "name": "Large - Thin Crust The Hot Honey",
+      "variant": null,
+      "price_cents": 2665,
+      "currency": "USD",
+      "section": "The Hot Honey - Thin Crust",
+      "price_note": null
+     },
+     {
+      "name": "XLarge - Thin Crust The Hot Honey",
+      "variant": null,
+      "price_cents": 3215,
+      "currency": "USD",
+      "section": "The Hot Honey - Thin Crust",
+      "price_note": null
+     },
+     {
+      "name": "Small - Thin Crust Veggie",
+      "variant": null,
+      "price_cents": 1815,
+      "currency": "USD",
+      "section": "Veggie - Thin Crust",
+      "price_note": null
+     },
+     {
+      "name": "Medium - Thin Crust Veggie",
+      "variant": null,
+      "price_cents": 2415,
+      "currency": "USD",
+      "section": "Veggie - Thin Crust",
+      "price_note": null
+     },
+     {
+      "name": "Large - Thin Crust Veggie",
+      "variant": null,
+      "price_cents": 2975,
+      "currency": "USD",
+      "section": "Veggie - Thin Crust",
+      "price_note": null
+     },
+     {
+      "name": "XLarge - Thin Crust Veggie",
+      "variant": null,
+      "price_cents": 3445,
+      "currency": "USD",
+      "section": "Veggie - Thin Crust",
+      "price_note": null
+     },
+     {
+      "name": "Personal - Deep Dish Cheese",
+      "variant": null,
+      "price_cents": 1145,
+      "currency": "USD",
+      "section": "Cheese - Deep Dish",
+      "price_note": null
+     },
+     {
+      "name": "Small - Deep Dish Cheese",
+      "variant": null,
+      "price_cents": 1675,
+      "currency": "USD",
+      "section": "Cheese - Deep Dish",
+      "price_note": null
+     },
+     {
+      "name": "Medium - Deep Dish Cheese",
+      "variant": null,
+      "price_cents": 2195,
+      "currency": "USD",
+      "section": "Cheese - Deep Dish",
+      "price_note": null
+     },
+     {
+      "name": "Large - Deep Dish Cheese",
+      "variant": null,
+      "price_cents": 2735,
+      "currency": "USD",
+      "section": "Cheese - Deep Dish",
+      "price_note": null
+     },
+     {
+      "name": "Personal - Deep Dish Sausage",
+      "variant": null,
+      "price_cents": 1295,
+      "currency": "USD",
+      "section": "Sausage - Deep Dish",
+      "price_note": null
+     },
+     {
+      "name": "Small - Deep Dish Sausage",
+      "variant": null,
+      "price_cents": 1925,
+      "currency": "USD",
+      "section": "Sausage - Deep Dish",
+      "price_note": null
+     },
+     {
+      "name": "Medium - Deep Dish Sausage",
+      "variant": null,
+      "price_cents": 2505,
+      "currency": "USD",
+      "section": "Sausage - Deep Dish",
+      "price_note": null
+     },
+     {
+      "name": "Large - Deep Dish Sausage",
+      "variant": null,
+      "price_cents": 3105,
+      "currency": "USD",
+      "section": "Sausage - Deep Dish",
+      "price_note": null
+     },
+     {
+      "name": "Personal - Deep Dish Pepperoni",
+      "variant": null,
+      "price_cents": 1295,
+      "currency": "USD",
+      "section": "Pepperoni - Deep Dish",
+      "price_note": null
+     },
+     {
+      "name": "Small - Deep Dish Pepperoni",
+      "variant": null,
+      "price_cents": 1925,
+      "currency": "USD",
+      "section": "Pepperoni - Deep Dish",
+      "price_note": null
+     },
+     {
+      "name": "Medium - Deep Dish Pepperoni",
+      "variant": null,
+      "price_cents": 2505,
+      "currency": "USD",
+      "section": "Pepperoni - Deep Dish",
+      "price_note": null
+     },
+     {
+      "name": "Large - Deep Dish Pepperoni",
+      "variant": null,
+      "price_cents": 3105,
+      "currency": "USD",
+      "section": "Pepperoni - Deep Dish",
+      "price_note": null
+     },
+     {
+      "name": "Personal - Deep Dish Spinach",
+      "variant": null,
+      "price_cents": 1295,
+      "currency": "USD",
+      "section": "Spinach - Deep Dish",
+      "price_note": null
+     },
+     {
+      "name": "Small - Deep Dish Spinach",
+      "variant": null,
+      "price_cents": 1925,
+      "currency": "USD",
+      "section": "Spinach - Deep Dish",
+      "price_note": null
+     },
+     {
+      "name": "Medium - Deep Dish Spinach",
+      "variant": null,
+      "price_cents": 2505,
+      "currency": "USD",
+      "section": "Spinach - Deep Dish",
+      "price_note": null
+     },
+     {
+      "name": "Large - Deep Dish Spinach",
+      "variant": null,
+      "price_cents": 3105,
+      "currency": "USD",
+      "section": "Spinach - Deep Dish",
+      "price_note": null
+     },
+     {
+      "name": "Small - Thin Crust Cheese",
+      "variant": null,
+      "price_cents": 1135,
+      "currency": "USD",
+      "section": "Cheese - Thin Crust",
+      "price_note": null
+     },
+     {
+      "name": "Medium - Thin Crust Cheese",
+      "variant": null,
+      "price_cents": 1595,
+      "currency": "USD",
+      "section": "Cheese - Thin Crust",
+      "price_note": null
+     },
+     {
+      "name": "Large - Thin Crust Cheese",
+      "variant": null,
+      "price_cents": 1955,
+      "currency": "USD",
+      "section": "Cheese - Thin Crust",
+      "price_note": null
+     },
+     {
+      "name": "XLarge - Thin Crust Cheese",
+      "variant": null,
+      "price_cents": 2345,
+      "currency": "USD",
+      "section": "Cheese - Thin Crust",
+      "price_note": null
+     },
+     {
+      "name": "Small - Thin Crust Sausage",
+      "variant": null,
+      "price_cents": 1385,
+      "currency": "USD",
+      "section": "Sausage - Thin Crust",
+      "price_note": null
+     },
+     {
+      "name": "Medium - Thin Crust Sausage",
+      "variant": null,
+      "price_cents": 1905,
+      "currency": "USD",
+      "section": "Sausage - Thin Crust",
+      "price_note": null
+     },
+     {
+      "name": "Large - Thin Crust Sausage",
+      "variant": null,
+      "price_cents": 2325,
+      "currency": "USD",
+      "section": "Sausage - Thin Crust",
+      "price_note": null
+     },
+     {
+      "name": "XLarge - Thin Crust Sausage",
+      "variant": null,
+      "price_cents": 2740,
+      "currency": "USD",
+      "section": "Sausage - Thin Crust",
+      "price_note": null
+     },
+     {
+      "name": "Small - Thin Crust Pepperoni",
+      "variant": null,
+      "price_cents": 1385,
+      "currency": "USD",
+      "section": "Pepperoni - Thin Crust",
+      "price_note": null
+     },
+     {
+      "name": "Medium - Thin Crust Pepperoni",
+      "variant": null,
+      "price_cents": 1905,
+      "currency": "USD",
+      "section": "Pepperoni - Thin Crust",
+      "price_note": null
+     },
+     {
+      "name": "Large - Thin Crust Pepperoni",
+      "variant": null,
+      "price_cents": 2325,
+      "currency": "USD",
+      "section": "Pepperoni - Thin Crust",
+      "price_note": null
+     },
+     {
+      "name": "XLarge - Thin Crust Pepperoni",
+      "variant": null,
+      "price_cents": 2740,
+      "currency": "USD",
+      "section": "Pepperoni - Thin Crust",
+      "price_note": null
+     },
+     {
+      "name": "Small - Thin Crust Spinach",
+      "variant": null,
+      "price_cents": 1385,
+      "currency": "USD",
+      "section": "Spinach - Thin Crust",
+      "price_note": null
+     },
+     {
+      "name": "Medium - Thin Crust Spinach",
+      "variant": null,
+      "price_cents": 1905,
+      "currency": "USD",
+      "section": "Spinach - Thin Crust",
+      "price_note": null
+     },
+     {
+      "name": "Large - Thin Crust Spinach",
+      "variant": null,
+      "price_cents": 2325,
+      "currency": "USD",
+      "section": "Spinach - Thin Crust",
+      "price_note": null
+     },
+     {
+      "name": "XLarge - Thin Crust Spinach",
+      "variant": null,
+      "price_cents": 2740,
+      "currency": "USD",
+      "section": "Spinach - Thin Crust",
+      "price_note": null
+     },
+     {
+      "name": "Cheese Deep Dish - GF",
+      "variant": null,
+      "price_cents": 1975,
+      "currency": "USD",
+      "section": "Gluten Free/Crustless Pizza",
+      "price_note": null
+     },
+     {
+      "name": "Cheese Thin Crust - GF",
+      "variant": null,
+      "price_cents": 1285,
+      "currency": "USD",
+      "section": "Gluten Free/Crustless Pizza",
+      "price_note": null
+     },
+     {
+      "name": "The Malnati Chicago Classic\u2122 Deep Dish - GF",
+      "variant": null,
+      "price_cents": 2385,
+      "currency": "USD",
+      "section": "Gluten Free/Crustless Pizza",
+      "price_note": null
+     },
+     {
+      "name": "The \"Lou\" Deep Dish - GF",
+      "variant": null,
+      "price_cents": 2585,
+      "currency": "USD",
+      "section": "Gluten Free/Crustless Pizza",
+      "price_note": null
+     },
+     {
+      "name": "The \"Lou\" Thin Crust - GF",
+      "variant": null,
+      "price_cents": 1515,
+      "currency": "USD",
+      "section": "Gluten Free/Crustless Pizza",
+      "price_note": null
+     },
+     {
+      "name": "The Hot Honey Deep Dish - GF",
+      "variant": null,
+      "price_cents": 2565,
+      "currency": "USD",
+      "section": "Gluten Free/Crustless Pizza",
+      "price_note": null
+     },
+     {
+      "name": "The Hot Honey Thin Crust - GF",
+      "variant": null,
+      "price_cents": 1505,
+      "currency": "USD",
+      "section": "Gluten Free/Crustless Pizza",
+      "price_note": null
+     },
+     {
+      "name": "Margherita Pesto Deep Dish - GF",
+      "variant": null,
+      "price_cents": 2335,
+      "currency": "USD",
+      "section": "Gluten Free/Crustless Pizza",
+      "price_note": null
+     },
+     {
+      "name": "Margherita Pesto Thin Crust - GF",
+      "variant": null,
+      "price_cents": 1465,
+      "currency": "USD",
+      "section": "Gluten Free/Crustless Pizza",
+      "price_note": null
+     },
+     {
+      "name": "Personal - Crustless Cheese",
+      "variant": null,
+      "price_cents": 1345,
+      "currency": "USD",
+      "section": "Crustless",
+      "price_note": null
+     },
+     {
+      "name": "Small - Crustless Cheese",
+      "variant": null,
+      "price_cents": 2125,
+      "currency": "USD",
+      "section": "Crustless",
+      "price_note": null
+     },
+     {
+      "name": "Medium - Crustless Cheese",
+      "variant": null,
+      "price_cents": 2735,
+      "currency": "USD",
+      "section": "Crustless",
+      "price_note": null
+     },
+     {
+      "name": "Large - Crustless Cheese",
+      "variant": null,
+      "price_cents": 3325,
+      "currency": "USD",
+      "section": "Crustless",
+      "price_note": null
+     },
+     {
+      "name": "Medium Traditional Chicken Wings",
+      "variant": null,
+      "price_cents": 1515,
+      "currency": "USD",
+      "section": "Appetizers",
+      "price_note": null
+     },
+     {
+      "name": "Family Traditional Chicken Wings",
+      "variant": null,
+      "price_cents": 1955,
+      "currency": "USD",
+      "section": "Appetizers",
+      "price_note": null
+     },
+     {
+      "name": "Party Traditional Chicken Wings",
+      "variant": null,
+      "price_cents": 3915,
+      "currency": "USD",
+      "section": "Appetizers",
+      "price_note": null
+     },
+     {
+      "name": "Medium Boneless Chicken Wings",
+      "variant": null,
+      "price_cents": 1515,
+      "currency": "USD",
+      "section": "Appetizers",
+      "price_note": null
+     },
+     {
+      "name": "Family Boneless Chicken Wings",
+      "variant": null,
+      "price_cents": 1955,
+      "currency": "USD",
+      "section": "Appetizers",
+      "price_note": null
+     },
+     {
+      "name": "Party Boneless Chicken Wings",
+      "variant": null,
+      "price_cents": 3915,
+      "currency": "USD",
+      "section": "Appetizers",
+      "price_note": null
+     },
+     {
+      "name": "Chicago-Style Meatballs",
+      "variant": null,
+      "price_cents": 1075,
+      "currency": "USD",
+      "section": "Appetizers",
+      "price_note": null
+     },
+     {
+      "name": "Lou's Bruschetta",
+      "variant": null,
+      "price_cents": 1025,
+      "currency": "USD",
+      "section": "Appetizers",
+      "price_note": null
+     },
+     {
+      "name": "Three-Cheese Bread",
+      "variant": null,
+      "price_cents": 995,
+      "currency": "USD",
+      "section": "Appetizers",
+      "price_note": null
+     },
+     {
+      "name": "Garlic Bread",
+      "variant": null,
+      "price_cents": 715,
+      "currency": "USD",
+      "section": "Appetizers",
+      "price_note": null
+     },
+     {
+      "name": "Combination Platter",
+      "variant": null,
+      "price_cents": 1525,
+      "currency": "USD",
+      "section": "Appetizers",
+      "price_note": null
+     },
+     {
+      "name": "Breaded Mushrooms",
+      "variant": null,
+      "price_cents": 1055,
+      "currency": "USD",
+      "section": "Appetizers",
+      "price_note": null
+     },
+     {
+      "name": "Calamari Fritti",
+      "variant": null,
+      "price_cents": 1645,
+      "currency": "USD",
+      "section": "Appetizers",
+      "price_note": null
+     },
+     {
+      "name": "Basket of Fries",
+      "variant": null,
+      "price_cents": 515,
+      "currency": "USD",
+      "section": "Appetizers",
+      "price_note": null
+     },
+     {
+      "name": "Mozzarella Bites",
+      "variant": null,
+      "price_cents": 1055,
+      "currency": "USD",
+      "section": "Appetizers",
+      "price_note": null
+     },
+     {
+      "name": "Italian Beef Bites",
+      "variant": null,
+      "price_cents": 1095,
+      "currency": "USD",
+      "section": "Appetizers",
+      "price_note": null
+     },
+     {
+      "name": "Zucchini Fries",
+      "variant": null,
+      "price_cents": 1095,
+      "currency": "USD",
+      "section": "Appetizers",
+      "price_note": null
+     },
+     {
+      "name": "Bottled Malnati Dressing",
+      "variant": null,
+      "price_cents": 565,
+      "currency": "USD",
+      "section": "Salad",
+      "price_note": null
+     },
+     {
+      "name": "Medium Malnati Salad",
+      "variant": null,
+      "price_cents": 1345,
+      "currency": "USD",
+      "section": "Malnati Salad",
+      "price_note": null
+     },
+     {
+      "name": "Family Malnati Salad",
+      "variant": null,
+      "price_cents": 1955,
+      "currency": "USD",
+      "section": "Malnati Salad",
+      "price_note": null
+     },
+     {
+      "name": "Medium House Salad",
+      "variant": null,
+      "price_cents": 1065,
+      "currency": "USD",
+      "section": "House Salad",
+      "price_note": null
+     },
+     {
+      "name": "Family House Salad",
+      "variant": null,
+      "price_cents": 1655,
+      "currency": "USD",
+      "section": "House Salad",
+      "price_note": null
+     },
+     {
+      "name": "Medium Caesar Salad",
+      "variant": null,
+      "price_cents": 1065,
+      "currency": "USD",
+      "section": "Caesar Salad",
+      "price_note": null
+     },
+     {
+      "name": "Family Caesar Salad",
+      "variant": null,
+      "price_cents": 1655,
+      "currency": "USD",
+      "section": "Caesar Salad",
+      "price_note": null
+     },
+     {
+      "name": "Medium Chicken BBQ Club Salad",
+      "variant": null,
+      "price_cents": 1345,
+      "currency": "USD",
+      "section": "Chicken BBQ Club Salad",
+      "price_note": null
+     },
+     {
+      "name": "Family Chicken BBQ Club Salad",
+      "variant": null,
+      "price_cents": 1955,
+      "currency": "USD",
+      "section": "Chicken BBQ Club Salad",
+      "price_note": null
+     },
+     {
+      "name": "3oz Caesar Dressing",
+      "variant": null,
+      "price_cents": 95,
+      "currency": "USD",
+      "section": "Extra Dressing",
+      "price_note": null
+     },
+     {
+      "name": "Create Your Own Pasta",
+      "variant": null,
+      "price_cents": 1315,
+      "currency": "USD",
+      "section": "Pasta",
+      "price_note": null
+     },
+     {
+      "name": "Mamma Malnati's Bowtie Pasta",
+      "variant": null,
+      "price_cents": 1435,
+      "currency": "USD",
+      "section": "Pasta",
+      "price_note": null
+     },
+     {
+      "name": "Chicken Louie",
+      "variant": null,
+      "price_cents": 1435,
+      "currency": "USD",
+      "section": "Pasta",
+      "price_note": null
+     },
+     {
+      "name": "Penne Ala Malnati",
+      "variant": null,
+      "price_cents": 1495,
+      "currency": "USD",
+      "section": "Pasta",
+      "price_note": null
+     },
+     {
+      "name": "Lasagna",
+      "variant": null,
+      "price_cents": 1465,
+      "currency": "USD",
+      "section": "Pasta",
+      "price_note": null
+     },
+     {
+      "name": "Beef Sandwich",
+      "variant": null,
+      "price_cents": 1425,
+      "currency": "USD",
+      "section": "Sandwiches",
+      "price_note": null
+     },
+     {
+      "name": "Grilled Chicken Sandwich",
+      "variant": null,
+      "price_cents": 1375,
+      "currency": "USD",
+      "section": "Sandwiches",
+      "price_note": null
+     },
+     {
+      "name": "Meatball Sandwich",
+      "variant": null,
+      "price_cents": 1375,
+      "currency": "USD",
+      "section": "Sandwiches",
+      "price_note": null
+     },
+     {
+      "name": "Tiramisu",
+      "variant": null,
+      "price_cents": 955,
+      "currency": "USD",
+      "section": "Desserts",
+      "price_note": null
+     },
+     {
+      "name": "Strawberry Italian Ice",
+      "variant": null,
+      "price_cents": 685,
+      "currency": "USD",
+      "section": "Desserts",
+      "price_note": null
+     },
+     {
+      "name": "Lemon Italian Ice",
+      "variant": null,
+      "price_cents": 685,
+      "currency": "USD",
+      "section": "Desserts",
+      "price_note": null
+     },
+     {
+      "name": "Carol's Cookies 4-pk",
+      "variant": null,
+      "price_cents": 615,
+      "currency": "USD",
+      "section": "Desserts",
+      "price_note": null
+     },
+     {
+      "name": "Chocolate Obsession",
+      "variant": null,
+      "price_cents": 955,
+      "currency": "USD",
+      "section": "Desserts",
+      "price_note": null
+     },
+     {
+      "name": "Choose Your Own 4-Pack",
+      "variant": null,
+      "price_cents": 748,
+      "currency": "USD",
+      "section": "Beverages",
+      "price_note": null
+     },
+     {
+      "name": "Pepsi 20oz Bottle",
+      "variant": null,
+      "price_cents": 325,
+      "currency": "USD",
+      "section": "Beverages",
+      "price_note": null
+     },
+     {
+      "name": "Diet Pepsi 20oz Bottle",
+      "variant": null,
+      "price_cents": 325,
+      "currency": "USD",
+      "section": "Beverages",
+      "price_note": null
+     },
+     {
+      "name": "Pepsi Zero Sugar 20oz Bottle",
+      "variant": null,
+      "price_cents": 325,
+      "currency": "USD",
+      "section": "Beverages",
+      "price_note": null
+     },
+     {
+      "name": "Mug Root Beer 20oz Bottle",
+      "variant": null,
+      "price_cents": 325,
+      "currency": "USD",
+      "section": "Beverages",
+      "price_note": null
+     },
+     {
+      "name": "Starry 20oz Bottle",
+      "variant": null,
+      "price_cents": 325,
+      "currency": "USD",
+      "section": "Beverages",
+      "price_note": null
+     },
+     {
+      "name": "Mtn Dew 20oz Bottle",
+      "variant": null,
+      "price_cents": 325,
+      "currency": "USD",
+      "section": "Beverages",
+      "price_note": null
+     },
+     {
+      "name": "Aquafina 20oz Bottle",
+      "variant": null,
+      "price_cents": 315,
+      "currency": "USD",
+      "section": "Beverages",
+      "price_note": null
+     },
+     {
+      "name": "Crush Orange 20oz Bottle",
+      "variant": null,
+      "price_cents": 325,
+      "currency": "USD",
+      "section": "Beverages",
+      "price_note": null
+     },
+     {
+      "name": "Cherry Pepsi 20oz Bottle",
+      "variant": null,
+      "price_cents": 325,
+      "currency": "USD",
+      "section": "Beverages",
+      "price_note": null
+     },
+     {
+      "name": "Iced Tea - Pure Leaf Unsweetened 20oz Bottle",
+      "variant": null,
+      "price_cents": 325,
+      "currency": "USD",
+      "section": "Beverages",
+      "price_note": null
+     },
+     {
+      "name": "Lemonade 20oz Bottle",
+      "variant": null,
+      "price_cents": 325,
+      "currency": "USD",
+      "section": "Beverages",
+      "price_note": null
+     },
+     {
+      "name": "Disposable cutlery",
+      "variant": null,
+      "price_cents": null,
+      "currency": "USD",
+      "section": "Misc/Sides",
+      "price_note": "published price text '' is not a single USD amount"
+     },
+     {
+      "name": "Spices (Parm, Red Pepper, Oregano)",
+      "variant": null,
+      "price_cents": null,
+      "currency": "USD",
+      "section": "Misc/Sides",
+      "price_note": "published price text '' is not a single USD amount"
+     },
+     {
+      "name": "Small Side of Grilled Chicken",
+      "variant": null,
+      "price_cents": 275,
+      "currency": "USD",
+      "section": "Misc/Sides",
+      "price_note": null
+     },
+     {
+      "name": "Large Side of Grilled Chicken",
+      "variant": null,
+      "price_cents": 455,
+      "currency": "USD",
+      "section": "Misc/Sides",
+      "price_note": null
+     },
+     {
+      "name": "Side of Buffalo Sauce",
+      "variant": null,
+      "price_cents": 115,
+      "currency": "USD",
+      "section": "Misc/Sides",
+      "price_note": null
+     },
+     {
+      "name": "Side of BBQ Sauce",
+      "variant": null,
+      "price_cents": 115,
+      "currency": "USD",
+      "section": "Misc/Sides",
+      "price_note": null
+     },
+     {
+      "name": "Side of Jalapenos",
+      "variant": null,
+      "price_cents": 115,
+      "currency": "USD",
+      "section": "Misc/Sides",
+      "price_note": null
+     },
+     {
+      "name": "Small Side of Hot Giardiniera",
+      "variant": null,
+      "price_cents": 115,
+      "currency": "USD",
+      "section": "Misc/Sides",
+      "price_note": null
+     },
+     {
+      "name": "Large Side of Hot Giardiniera",
+      "variant": null,
+      "price_cents": 215,
+      "currency": "USD",
+      "section": "Misc/Sides",
+      "price_note": null
+     },
+     {
+      "name": "Small Side of Anchovies",
+      "variant": null,
+      "price_cents": 225,
+      "currency": "USD",
+      "section": "Misc/Sides",
+      "price_note": null
+     },
+     {
+      "name": "Large Side of Anchovies",
+      "variant": null,
+      "price_cents": 265,
+      "currency": "USD",
+      "section": "Misc/Sides",
+      "price_note": null
+     },
+     {
+      "name": "Small Side of Deep Tomato",
+      "variant": null,
+      "price_cents": 215,
+      "currency": "USD",
+      "section": "Misc/Sides",
+      "price_note": null
+     },
+     {
+      "name": "Large Side of Deep Tomato",
+      "variant": null,
+      "price_cents": 265,
+      "currency": "USD",
+      "section": "Misc/Sides",
+      "price_note": null
+     },
+     {
+      "name": "Small Side of Thin Tomato",
+      "variant": null,
+      "price_cents": 215,
+      "currency": "USD",
+      "section": "Misc/Sides",
+      "price_note": null
+     },
+     {
+      "name": "Large Side of Thin Tomato",
+      "variant": null,
+      "price_cents": 265,
+      "currency": "USD",
+      "section": "Misc/Sides",
+      "price_note": null
+     },
+     {
+      "name": "Side of Mushroom",
+      "variant": null,
+      "price_cents": 115,
+      "currency": "USD",
+      "section": "Misc/Sides",
+      "price_note": null
+     },
+     {
+      "name": "Side of Gorgonzola",
+      "variant": null,
+      "price_cents": 115,
+      "currency": "USD",
+      "section": "Misc/Sides",
+      "price_note": null
+     },
+     {
+      "name": "Mike's Hot Honey Dip Cup",
+      "variant": null,
+      "price_cents": 99,
+      "currency": "USD",
+      "section": "Misc/Sides",
+      "price_note": null
+     },
+     {
+      "name": "Side of Marinara, Cup",
+      "variant": null,
+      "price_cents": 225,
+      "currency": "USD",
+      "section": "Misc/Sides",
+      "price_note": null
+     },
+     {
+      "name": "Side of Meat Sauce, Cup",
+      "variant": null,
+      "price_cents": 325,
+      "currency": "USD",
+      "section": "Misc/Sides",
+      "price_note": null
+     },
+     {
+      "name": "Side of Meatball",
+      "variant": null,
+      "price_cents": 385,
+      "currency": "USD",
+      "section": "Misc/Sides",
+      "price_note": null
+     },
+     {
+      "name": "Small Frozen Deep Dish Cheese",
+      "variant": null,
+      "price_cents": 1735,
+      "currency": "USD",
+      "section": "Frozen Pizzas",
+      "price_note": null
+     },
+     {
+      "name": "Small Frozen Deep Dish Sausage",
+      "variant": null,
+      "price_cents": 1985,
+      "currency": "USD",
+      "section": "Frozen Pizzas",
+      "price_note": null
+     },
+     {
+      "name": "Small Frozen Deep Dish Pepperoni",
+      "variant": null,
+      "price_cents": 1985,
+      "currency": "USD",
+      "section": "Frozen Pizzas",
+      "price_note": null
+     },
+     {
+      "name": "Small Frozen Deep Dish Spinach",
+      "variant": null,
+      "price_cents": 1985,
+      "currency": "USD",
+      "section": "Frozen Pizzas",
+      "price_note": null
+     },
+     {
+      "name": "Medium Frozen Thin Cheese",
+      "variant": null,
+      "price_cents": 1645,
+      "currency": "USD",
+      "section": "Frozen Pizzas",
+      "price_note": null
+     },
+     {
+      "name": "Medium Frozen Thin Sausage",
+      "variant": null,
+      "price_cents": 1923,
+      "currency": "USD",
+      "section": "Frozen Pizzas",
+      "price_note": null
+     },
+     {
+      "name": "Medium Frozen Thin Pepperoni",
+      "variant": null,
+      "price_cents": 1923,
+      "currency": "USD",
+      "section": "Frozen Pizzas",
+      "price_note": null
+     }
+    ],
+    "source_url": "https://www.allmenus.com/il/buffalo-grove/233783-lou-malnatis-pizzeria/menu/",
+    "observed_at": "2026-10-08T18:59:05Z",
+    "source": "AllMenus (Grubhub-owned menu site): HTML item prices, checked against its schema.org item names",
+    "price_context": "Grubhub menu price as published on AllMenus; options/add-ons and fees not included",
+    "grubhub_ids_linked": [
+     "517712"
+    ],
+    "checks": [
+     "217 HTML items match the page's 217 JSON-LD item names",
+     "title and meta description agree on city, state and ZIP"
+    ],
+    "site": "AllMenus"
+   }
   }
  ],
- "finished_at": "2026-10-08T18:51:06Z"
+ "finished_at": "2026-10-08T19:01:43Z"
 }
