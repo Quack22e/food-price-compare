@@ -4,3 +4,4 @@ __pycache__/
 .pytest_cache/
 tests/captures_barriers/
 live-verification/*.html
+tests/captures_mirrors/

@@ -142,6 +142,57 @@ def explore_grubhub(svc):
     return entry
 
 
+MIRROR_PAGES = {
+    # Grubhub-owned menu sites ("powered by Grubhub"); URLs from public search results.
+    "allmenus": ("https://www.allmenus.com", ["https://www.allmenus.com/il/buffalo-grove/233783-lou-malnatis-pizzeria/menu/"]),
+    "menupages": ("https://menupages.com", ["https://menupages.com/lou-malnatis-pizzeria-midway/6456-s-cicero-ave-chicago"]),
+}
+BRAND_CITY = ["https://www.ubereats.com/brand-city/rockford-il/portillos-hot-dogs"]
+
+
+def explore_public_mirrors(svc, captures):
+    """Probe Grubhub-owned menu mirrors and Uber Eats brand-city pages.
+
+    Each mirror host gets its own client (same robots.txt / rate-limit rules);
+    the app's allowlist is unchanged.
+    """
+    import copy
+    from urllib.parse import urlsplit
+    from server.http_client import PoliteClient
+    out = {}
+    for key, (base, pages) in MIRROR_PAGES.items():
+        cfg2 = copy.deepcopy(svc.cfg)
+        cfg2.platform_bases = dict(cfg2.platform_bases, **{key: base})
+        client = PoliteClient(cfg2, svc.cache)
+        rules, rb = client.robots(base)
+        entry = {"robots": {"status": rules.source_status, "barrier": rb and rb.get("kind"), "allowed_page": None,
+                            "sitemaps": rules.sitemaps[:10], "crawl_delay": rules.crawl_delay,
+                            "rules": [("allow" if a else "disallow", pat) for a, pat, _ in rules.rules][:40]},
+                 "pages": []}
+        for u in pages:
+            entry["robots"]["allowed_page"] = rules.can_fetch(u)
+            fetched = client.fetch(u, kind="inspect", ttl=0)
+            rep = inspect_fetched(u, fetched)
+            if fetched.ok:
+                anchors = scan_html(fetched.text, u).anchors
+                rep["grubhub_links"] = sorted({a["href"].split("?")[0] for a in anchors if "grubhub.com" in urlsplit(a["href"]).netloc})[:5]
+                rep["same_site_link_sample"] = sorted({a["href"] for a in anchors if urlsplit(a["href"]).netloc.endswith(urlsplit(base).netloc.replace("www.", ""))})[:25]
+                save_capture_outcome(svc, u, fetched, Path(captures + "_mirrors"))
+            entry["pages"].append(rep)
+        out[key] = entry
+    out["ubereats_brand_city"] = []
+    for u in BRAND_CITY:
+        fetched = svc.client.fetch(u, kind="inspect", ttl=0)
+        rep = inspect_fetched(u, fetched)
+        if fetched.ok:
+            ue = make_adapters(svc.cfg.platform_bases)["ubereats"]
+            links = {a["href"] for a in scan_html(fetched.text, u).anchors if ue.parse_store_url(a["href"])}
+            rep["store_links"] = sorted(links)[:20]
+            rep["store_link_count"] = len(links)
+        out["ubereats_brand_city"].append(rep)
+    return out
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default="live-verification")
@@ -214,6 +265,10 @@ def main():
         report["doordash_business_menu"] = explore_doordash_menu_sitemap(svc, report, args.captures)
     except Exception as exc:
         report["doordash_business_menu"] = {"error": repr(exc)}
+    try:
+        report["public_mirrors"] = explore_public_mirrors(svc, args.captures)
+    except Exception as exc:
+        report["public_mirrors"] = {"error": repr(exc)}
     try:
         report["grubhub"] = explore_grubhub(svc)
     except Exception as exc:
