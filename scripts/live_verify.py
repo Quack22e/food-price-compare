@@ -7,8 +7,12 @@ contains no raw HTML. Raw pages are saved to tests/captures/ (git-ignored)
 so tests/test_real_captures.py can verify the extractors against them.
 
 Request budget: 3 robots.txt, two search jobs limited to 3 stores and 3
-sitemap documents each (6 stores for the Uber Eats job), then up to 7 inspected pages (4 fixed + 3 discovered). Grubhub is only probed (robots.txt):
-its Terms of Use prohibit automated scraping.
+sitemap documents each (6 stores for the Uber Eats job), up to 7 inspected
+pages (4 fixed + 3 discovered), DoorDash's business_menu sitemap (index + one
+child + 2 pages), and Grubhub: homepage and/or /sitemap.xml to find one real
+restaurant link, then one run of the Grubhub URL extractor. Grubhub's Terms of
+Use prohibit automated scraping; this single fetch exercises the user-requested
+link-extraction feature and nothing more.
 """
 from __future__ import annotations
 
@@ -23,7 +27,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-from server.adapters import inspect_fetched, make_adapters  # noqa: E402
+from server.adapters import GRUBHUB_PATH_RE, extract_grubhub, inspect_fetched, make_adapters  # noqa: E402
+from server.extract import parse_sitemap, scan_html  # noqa: E402
 from server.app import Service  # noqa: E402
 from server.config import Config  # noqa: E402
 from server.http_client import BrowserRenderer, utcnow_iso  # noqa: E402
@@ -43,6 +48,68 @@ JOBS = [
     {"order": {"chain": "Chipotle Mexican Grill", "items": [{"name": "Burrito Bowl"}]}, "platforms": ["doordash"],
      "seed_urls": ["https://www.doordash.com/business/chipotle-mexican-grill-115/"]},
 ]
+
+
+def _sitemap(svc, url):
+    out = svc.client.fetch(url, kind="sitemap", ttl=0)
+    rec = {"url": url, "status": out.status, "barrier": out.barrier and out.barrier["kind"], "error": out.error}
+    parsed = parse_sitemap(out.body or b"", svc.cfg.max_sitemap_bytes) if out.ok else {"kind": None, "locs": []}
+    rec.update({"kind": parsed["kind"], "loc_count": len(parsed["locs"]), "sample": [l["loc"] for l in parsed["locs"][:8]]})
+    return rec, [l["loc"] for l in parsed["locs"]]
+
+
+def explore_doordash_menu_sitemap(svc, report, captures):
+    """DoorDash's robots.txt declares a business_menu sitemap; see what it lists."""
+    declared = (report["probe"].get("doordash") or {}).get("declared_sitemaps") or []
+    idx_url = next((u for u in declared if "business_menu" in u), None)
+    entry = {"declared": idx_url}
+    if not idx_url:
+        return entry
+    entry["index"], children = _sitemap(svc, idx_url)
+    if children:
+        entry["child"], locs = _sitemap(svc, children[0])
+        pick = [u for u in locs if any(k in u.lower() for k in ("mcdonalds", "chipotle"))][:2] or locs[:2]
+        entry["pages"] = []
+        for u in pick:
+            fetched = svc.client.fetch(u, kind="inspect", ttl=0)
+            entry["pages"].append(inspect_fetched(u, fetched))
+            if fetched.ok:
+                save_capture_outcome(svc, u, fetched, Path(captures))
+    return entry
+
+
+def explore_grubhub(svc):
+    """Find one real restaurant link on Grubhub's own pages, then run the app's
+    Grubhub URL extractor on it once (the feature the user asked for)."""
+    entry = {"discovery": []}
+    found = []
+    for page in ("https://www.grubhub.com/", "https://www.grubhub.com/sitemap.xml"):
+        if page.endswith(".xml"):
+            rec, locs = _sitemap(svc, page)
+            if rec["kind"] == "index" and locs:
+                child = next((u for u in locs if "restaurant" in u.lower()), locs[0])
+                rec2, locs = _sitemap(svc, child)
+                rec["child"] = rec2
+            found += [u for u in locs if GRUBHUB_PATH_RE.match(__import__("urllib.parse").parse.urlsplit(u).path)]
+        else:
+            out = svc.client.fetch(page, kind="inspect", ttl=0)
+            rec = {"url": page, "status": out.status, "barrier": out.barrier and out.barrier["kind"], "bytes": len(out.body or b"")}
+            if out.ok:
+                for a in scan_html(out.text, page).anchors:
+                    path = __import__("urllib.parse").parse.urlsplit(a["href"]).path
+                    if GRUBHUB_PATH_RE.match(path):
+                        found.append(a["href"])
+            rec["restaurant_links"] = len(found)
+        entry["discovery"].append(rec)
+        if found:
+            break
+    entry["restaurant_links_found"] = len(found)
+    if found:
+        url = found[0]
+        result = extract_grubhub(svc.client, url, svc.cfg.platform_bases["grubhub"])
+        page = svc.client.fetch(url.split("?")[0], kind="page")  # served from the extractor's cache
+        entry["extract"] = {"url": url, "result": result, "page_structure": inspect_fetched(url, page)}
+    return entry
 
 
 def main():
@@ -112,6 +179,15 @@ def main():
         except Exception as exc:
             entry["error"] = repr(exc)
         report["inspections"].append(entry)
+
+    try:
+        report["doordash_business_menu"] = explore_doordash_menu_sitemap(svc, report, args.captures)
+    except Exception as exc:
+        report["doordash_business_menu"] = {"error": repr(exc)}
+    try:
+        report["grubhub"] = explore_grubhub(svc)
+    except Exception as exc:
+        report["grubhub"] = {"error": repr(exc)}
 
     report["finished_at"] = utcnow_iso()
     (out_dir / "report.json").write_text(json.dumps(report, indent=2, default=str))
