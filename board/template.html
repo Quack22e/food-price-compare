@@ -509,7 +509,11 @@ tr.details td { background: var(--sunken); }
   }
   function markPresets() { Array.prototype.forEach.call(document.querySelectorAll('#presets button'), function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-key') === S.preset)); }); }
 
-  // ------------------------------------------------------------------ Grubhub menus (MenuPages, Grubhub-owned)
+  // ------------------------------------------------------------------ Grubhub menus (MenuPages / AllMenus, Grubhub-owned)
+  function siteName(url) {
+    try { var host = new URL(url).hostname.replace(/^www\./, ''); } catch (e) { return 'a Grubhub-owned site'; }
+    return host === 'allmenus.com' ? 'AllMenus' : host === 'menupages.com' ? 'MenuPages' : host;
+  }
   function renderMenus(onlyIdx) {
     var box = $('ghMenus'); setKids(box);
     MENUS.forEach(function (g, mi) {
@@ -535,14 +539,15 @@ tr.details td { background: var(--sunken); }
       var gid = (/\/(\d+)\/?$/.exec(g.grubhub_url) || [])[1];
       box.appendChild(h('div', { class: 'field' },
         h('p', { class: 'menuhead' }, h('strong', null, m.restaurant_name), ' · ', addrLine(m.address), h('br'),
-          h('span', { class: 'sub' }, 'Grubhub ID ', gid || '?', ' · menu from ', link(m.source_url, 'MenuPages'), ' (Grubhub-owned), which links to this Grubhub listing · ', stamp(m.observed_at))),
+          h('span', { class: 'sub' }, 'Grubhub ID ', gid || '?', ' · menu from ', link(m.source_url, siteName(m.source_url)), ' (Grubhub-owned), which links to this Grubhub listing · ', stamp(m.observed_at)),
+          h('br'), h('span', { class: 'sub' }, 'Published menu prices can lag the live Grubhub menu and leave out option charges. Check them against your Grubhub cart or receipt.')),
         sel));
     });
   }
   function ghUnit(cents, m) {
     return { cents: cents, text: function (q) {
       return 'Grubhub price ' + E.formatCents(cents) + (q > 1 ? ' × ' + q : '') + ' at ' + m.restaurant_name + ', ' + (m.address && m.address.city || '') +
-        ', from MenuPages (Grubhub-owned), observed ' + stamp(m.observed_at) + '.';
+        ', from ' + siteName(m.source_url) + ' (Grubhub-owned), observed ' + stamp(m.observed_at) + '.';
     } };
   }
   function ghLookup() {
@@ -555,7 +560,7 @@ tr.details td { background: var(--sunken); }
       renderMenus(mi);
     } else {
       if (!S.order.chain) { S.order.chain = r.chainGuess; $('chain').value = r.chainGuess; evaluate(); }
-      setKids($('ghResult'), h('p', { class: 'msg' }, 'Grubhub restaurant ' + r.restaurantId + ' is not in this snapshot. Its pages are drawn by JavaScript and publish no prices, so enter the item and your Grubhub subtotal by hand. The full app can look it up on MenuPages for you. ', r.chainGuess ? 'Chain guessed from the link: ' + r.chainGuess + '.' : ''));
+      setKids($('ghResult'), h('p', { class: 'msg' }, 'Grubhub restaurant ' + r.restaurantId + ' is not in this snapshot. Its pages are drawn by JavaScript and publish no prices, so enter the item and your Grubhub subtotal by hand. The full app can look it up on MenuPages and AllMenus for you. ', r.chainGuess ? 'Chain guessed from the link: ' + r.chainGuess + '.' : ''));
       renderMenus();
     }
   }
@@ -698,7 +703,7 @@ tr.details td { background: var(--sunken); }
     setKids(box,
       h('span', { class: 'chip info' }, h('span', { class: 'dot' }), 'Prices from ' + (r.generated_at ? stamp(r.generated_at) : 'no run')),
       h('span', { class: 'chip' }, n + ' store menu' + (n === 1 ? '' : 's') + ' in this run'),
-      h('span', { class: 'chip' }, menus + ' Grubhub menu' + (menus === 1 ? '' : 's') + ' via MenuPages'),
+      h('span', { class: 'chip' }, menus + ' Grubhub menu' + (menus === 1 ? '' : 's') + ' via Grubhub-owned sites'),
       r.github_run_id ? h('span', { class: 'chip' }, 'Run ', h('a', { href: 'https://github.com/Quack22e/prediction-market-analytics/actions/runs/' + encodeURIComponent(r.github_run_id), target: '_blank', rel: 'noopener noreferrer' }, r.github_run_id)) : null);
   }
   function renderPlatforms() {

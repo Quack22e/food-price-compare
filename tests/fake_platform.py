@@ -207,3 +207,38 @@ def build_menupages(mp, gh_id="434510", layout="exact"):
         mp.route("/lou-malnatis-pizzeria-midway/6456-s-cicero-ave-chicago", page(gh_id))
     else:
         mp.route("/lou-malnatis-pizzeria/6456-s-cicero-ave-chicago", page(gh_id))
+
+
+def allmenus_page(gh_id="517712", items=None, ld_items=None, title=None, desc=None):
+    """SYNTHETIC AllMenus-shaped menu page (markup observed on a real AllMenus page, 2026-10-08)."""
+    import json
+    items = items if items is not None else [
+        ("BuffaLou Chicken Pizza", "BuffaLou Chicken Deep Dish - GF", "$27.15"),
+        ("BuffaLou Chicken - Deep Dish", "Personal - Deep Dish BuffaLou Chicken", "$15.85"),
+        ("Deep Dish Margherita", "Small - Deep Dish Margherita", "$21.95"),
+        ("Deep Dish Margherita", "Large - Deep Dish Margherita", "$0.00"),
+        ("Drinks", "Fountain Drink", "Market Price"),
+    ]
+    ld_items = ld_items if ld_items is not None else [n for _, n, _ in items]
+    sections = {}
+    for sec, name, _ in items:
+        sections.setdefault(sec, [])
+    ld = {"@context": "http://schema.org", "@type": "Restaurant",
+          "address": {"@type": "PostalAddress", "addressLocality": "", "addressRegion": "", "postalCode": "", "streetAddress": ""},
+          "name": "", "hasMenu": {"@type": "Menu", "hasMenuSection": [{"@type": "MenuSection", "name": "Menu",
+                                  "hasMenuItem": [{"@type": "MenuItem", "name": n, "description": "Line one\tline two"} for n in ld_items]}]}}
+    ld_text = json.dumps(ld).replace("\\t", "\t")  # raw control character, as observed
+    body = []
+    for sec in dict.fromkeys(s for s, _, _ in items):
+        lis = "".join(f'<ul class="menu-items-list unordered-list"><li class="menu-items"><div class="h6 item-main">'
+                      f'<span class="item-title">{n}</span> <span class="item-price"> {p} </span></div>'
+                      f'<p class="description">About {n}.</p></li></ul>' for s, n, p in items if s == sec)
+        body.append(f'<ul class="unordered-list"><li class="menu-category"><div class="h4 category-name menu-section-title">{sec}</div>'
+                    f'<div class="category-description">Section text.</div>{lis}</li></ul>')
+    title = title or "Lou Malnati&#39;s Pizzeria menu - Buffalo Grove IL 60089 - (847) 215-7100"
+    desc = desc or "Restaurant menu, map for Lou Malnati&#39;s Pizzeria located in 60089, Buffalo Grove IL, 85 S Buffalo Grove Rd."
+    return (f'<!DOCTYPE html><html lang="en"><head><title>{title}</title><meta name="description" content="{desc}" />'
+            f'<script type="application/ld+json">{ld_text}</script></head><body>'
+            f'<div class="menu-container menu-nr1 active">{"".join(body)}</div>'
+            f'<a href="https://www.grubhub.com/restaurant/lou-malnatis-pizzeria-85-s-buffalo-grove-rd-buffalo-grove/{gh_id}?utm_source=allmenus.com">Order online</a>'
+            f'</body></html>')

@@ -40,3 +40,36 @@ def test_extraction_on_real_capture(html_path):
         priced = [i for i in parsed["items"] if i.get("price_cents") is not None]
         assert priced, f"menu published without prices: {summary}"
         assert all(i["currency"] in ("USD", None) for i in priced) or not addr, summary
+
+
+# Grubhub-owned menu sites (MenuPages, AllMenus), saved by scripts/live_verify.py.
+MIRRORS = sorted(Path(__file__).parent.joinpath("captures_mirrors").glob("*.html"))
+
+
+@pytest.mark.skipif(not MIRRORS, reason="no real MenuPages/AllMenus captures available (saved only by the live run)")
+@pytest.mark.parametrize("html_path", MIRRORS, ids=[p.stem for p in MIRRORS])
+def test_grubhub_mirror_reader_on_real_capture(html_path):
+    import re
+    from urllib.parse import urlsplit
+    from server.extract import scan_html
+    from server.grubhub_mirror import GRUBHUB_LINK_RE, parse_allmenus_page
+    meta = json.loads(html_path.with_suffix(".json").read_text())
+    html = html_path.read_text(errors="replace")
+    host = urlsplit(meta["url"]).netloc
+    linked = sorted({m.group(2) for a in scan_html(html, meta["url"]).anchors for m in [GRUBHUB_LINK_RE.search(a["href"])] if m})
+    if host.endswith("allmenus.com") and re.search(r"/\d+-[^/]+/menu/?$", urlsplit(meta["url"]).path):
+        page = parse_allmenus_page(html, meta.get("final_url") or meta["url"])
+        priced = [i for i in page["items"] if i["price_cents"]]
+        print(json.dumps({"url": meta["url"], "problems": page["problems"], "checks": page["checks"], "name": page["name"],
+                          "address": page["address"], "items": len(page["items"]), "priced": len(priced), "grubhub": linked,
+                          "sample": [(i["name"], i["price_cents"]) for i in priced[:5]]}))
+        assert not page["problems"], page["problems"]
+        assert page["address"] and page["address"]["state"] and len(priced) >= 10 and linked
+    elif host.endswith("menupages.com"):
+        parsed = parse_store_page(html, meta.get("final_url") or meta["url"], "")
+        priced = [i for i in parsed["items"] if i.get("price_cents")]
+        print(json.dumps({"url": meta["url"], "name": parsed["name"], "items": len(parsed["items"]), "priced": len(priced),
+                          "grubhub": linked}))
+        assert parsed["restaurant_found"] and priced and linked
+    else:
+        pytest.skip(f"not a restaurant menu page: {meta['url']}")

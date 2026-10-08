@@ -1111,7 +1111,7 @@ tr.details td { background: var(--bg); }
     try {
       var x = new URL(String(u));
       if (x.protocol !== 'https:' || x.username || x.password) return null;
-      var hosts = platform ? PLATFORM_HOSTS[platform] : [].concat(PLATFORM_HOSTS.doordash, PLATFORM_HOSTS.ubereats, ['www.grubhub.com', 'grubhub.com', 'menupages.com', 'www.menupages.com']);
+      var hosts = platform ? PLATFORM_HOSTS[platform] : [].concat(PLATFORM_HOSTS.doordash, PLATFORM_HOSTS.ubereats, ['www.grubhub.com', 'grubhub.com', 'menupages.com', 'www.menupages.com', 'allmenus.com', 'www.allmenus.com']);
       if (!hosts || hosts.indexOf(x.hostname.toLowerCase()) < 0) return null;
       return x.href;
     } catch (e) { return null; }
@@ -1548,8 +1548,14 @@ tr.details td { background: var(--bg); }
       setKids(out, msg('bad', 'Extraction failed (' + e.message + '). Chain guessed from the URL; enter the item manually.'));
     }).then(function () { $('ghExtract').disabled = false; });
   }
+  function mirrorName(url) {
+    var host = '';
+    try { host = new URL(url).hostname.replace(/^www\./, ''); } catch (e) { /* not a URL */ }
+    return host === 'allmenus.com' ? 'AllMenus' : 'MenuPages';
+  }
   function renderGrubhubMenu(menu) {
     var box = $('ghMenu');
+    var site = mirrorName(menu && menu.source_url);
     if (!menu || !menu.items || !menu.items.length) { setKids(box); return; }
     var sel = h('select', { id: 'ghMenuSelect' }, h('option', { value: '' }, 'Choose your item (' + menu.items.length + ' listings)'),
       menu.items.map(function (it, i) {
@@ -1565,20 +1571,20 @@ tr.details td { background: var(--bg); }
       var item = S.order.items[idx] || (S.order.items[idx] = newItem());
       item.name = it.name; item.size = it.variant || '';
       var q = /^\d{1,3}$/.test(String(item.quantity || '').trim()) ? +item.quantity : 1;
-      item._notes = (item._notes || []).filter(function (n) { return n.indexOf('MenuPages') < 0; });
+      item._notes = (item._notes || []).filter(function (n) { return n.indexOf('(Grubhub-owned)') < 0 && n.indexOf('lists this item without a price') < 0; });
       if (Number.isInteger(it.price_cents)) {
         item.ghSubtotal = (E.mulCents(it.price_cents, q) / 100).toFixed(2);
-        item._notes.push('Grubhub price ' + E.formatCents(it.price_cents) + ' × ' + q + ' from MenuPages (Grubhub-owned), observed ' + rel(menu.observed_at) + '. It excludes option charges; add them if you chose options.');
+        item._notes.push('Grubhub price ' + E.formatCents(it.price_cents) + ' × ' + q + ' from ' + site + ' (Grubhub-owned), observed ' + rel(menu.observed_at) + '. It excludes option charges; add them if you chose options. Published menu prices can lag the live Grubhub menu, so check your cart or receipt.');
       } else {
         item.ghSubtotal = '';
-        item._notes.push('MenuPages lists this item without a price (set by options); enter your Grubhub item subtotal.');
+        item._notes.push(site + ' lists this item without a price (set by options); enter your Grubhub item subtotal.');
       }
       renderOrder();
     });
     setKids(box, h('div', { class: 'msg ok' },
       h('label', { for: 'ghMenuSelect' }, 'Grubhub menu for ' + (menu.restaurant_name || 'this restaurant') + (menu.address ? ', ' + [menu.address.street, menu.address.city, menu.address.state].filter(Boolean).join(', ') : '')),
       h('div', { class: 'row' }, h('div', { class: 'grow2' }, sel), h('div', null, target)),
-      h('div', { class: 'note' }, 'Read from MenuPages, a Grubhub-owned site, which links to this exact Grubhub listing. Prices exclude option charges and fees. ', safeLink(menu.source_url, 'Source page'))));
+      h('div', { class: 'note' }, 'Read from ' + site + ', a Grubhub-owned site, which links to this exact Grubhub listing. Prices exclude option charges and fees. ', safeLink(menu.source_url, 'Source page'))));
   }
   function receiptParse() {
     var r = E.parseReceipt($('receiptText').value);

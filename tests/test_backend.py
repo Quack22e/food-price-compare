@@ -598,3 +598,42 @@ def test_grubhub_menu_via_menupages(sites, tmp_path):
         assert r3["fields"]["chain"] == "Lou Malnatis Pizzeria"  # URL guess, flagged
     finally:
         mp.close()
+
+
+def test_allmenus_reader_cross_checks_html_prices(tmp_path):
+    from fake_platform import allmenus_page
+    from server.grubhub_mirror import parse_allmenus_page, read_allmenus_menu
+    page = parse_allmenus_page(allmenus_page(), "https://www.allmenus.com/il/buffalo-grove/233783-lou-malnatis-pizzeria/menu/")
+    assert not page["problems"] and page["name"] == "Lou Malnati's Pizzeria"
+    assert page["address"] == {"street": "85 S Buffalo Grove Rd", "city": "Buffalo Grove", "state": "IL", "zip": "60089", "country": "US"}
+    got = {i["name"]: (i["price_cents"], i["section"], i["price_note"]) for i in page["items"]}
+    assert got["Small - Deep Dish Margherita"] == (2195, "Deep Dish Margherita", None)
+    assert got["BuffaLou Chicken Deep Dish - GF"][0] == 2715
+    assert got["Fountain Drink"][0] is None and "not a single USD amount" in got["Fountain Drink"][2]
+    assert got["Large - Deep Dish Margherita"][0] == 0  # flag_zero_prices turns this into "not a price" in the reader
+    # HTML names that do not match the page's own JSON-LD names: prices not used.
+    bad = parse_allmenus_page(allmenus_page(ld_items=["Something else"]), "https://www.allmenus.com/x/")
+    assert bad["problems"] and "differ from the JSON-LD" in bad["problems"][0] and not bad["items"]
+    # Title and description disagree on the ZIP: not used.
+    bad2 = parse_allmenus_page(allmenus_page(title="Lou Malnati&#39;s Pizzeria menu - Buffalo Grove IL 60090 - (847) 215-7100"), "https://www.allmenus.com/x/")
+    assert any("name/address" in p for p in bad2["problems"])
+
+
+def test_allmenus_reader_requires_the_same_grubhub_id(sites, tmp_path):
+    from fake_platform import allmenus_page
+    from server.grubhub_mirror import read_allmenus_menu
+    am = FakeSite()
+    try:
+        am.route("/robots.txt", "User-agent: *\nDisallow: /goto\n", ctype="text/plain")
+        am.route("/il/buffalo-grove/233783-lou-malnatis-pizzeria/menu/", allmenus_page())
+        am.route("/il/buffalo-grove/1-other/menu/", allmenus_page(gh_id="999"))
+        cfg = make_cfg(tmp_path, {"allmenus": am.base})
+        client = PoliteClient(cfg, DiskCache(cfg.data_dir))
+        r = read_allmenus_menu(client, am.base + "/il/buffalo-grove/233783-lou-malnatis-pizzeria/menu/", "517712")
+        assert r["ok"] and r["restaurant_name"] == "Lou Malnati's Pizzeria" and r["grubhub_ids_linked"] == ["517712"]
+        prices = {i["name"]: i["price_cents"] for i in r["items"]}
+        assert prices["Small - Deep Dish Margherita"] == 2195 and prices["Large - Deep Dish Margherita"] is None
+        r2 = read_allmenus_menu(client, am.base + "/il/buffalo-grove/1-other/menu/", "517712")
+        assert not r2["ok"] and "not 517712" in r2["notes"][0]
+    finally:
+        am.close()
