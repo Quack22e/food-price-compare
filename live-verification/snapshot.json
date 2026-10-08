@@ -1,7 +1,7 @@
 {
- "generated_at": "2026-10-08T07:28:03Z",
- "github_run_id": "37743302443",
- "github_sha": "4c6bcf7cc73324077bebfe442f6f3431bd4bfe64",
+ "generated_at": "2026-10-08T07:40:28Z",
+ "github_run_id": "37744579395",
+ "github_sha": "737ff47f5a32b54648a4dd9a749b9b58add6ed7d",
  "user_agent": "FoodPriceCompare/1.0 (personal menu-price comparison; honors robots.txt)",
  "price_basis": "Public menu prices as published on each store page, anonymous session, no delivery address; before tax, fees, tip and promotions.",
  "searches": [
@@ -32,9 +32,9 @@
     "ubereats": {
      "discovered": 315,
      "queued": 66,
-     "checked": 17,
+     "checked": 18,
      "no_menu": 1,
-     "non_us": 229,
+     "non_us": 228,
      "blocked": 2,
      "failed": 0,
      "duplicate": 0,
@@ -57,18 +57,18 @@
     {
      "kind": "captcha",
      "detail": "redirected to a bot challenge (def.uber.com/en/challenge); not followed",
-     "url": "https://www.ubereats.com/store/mcdonalds-lower-muscatine-%26-malls/1B9hmI9XSROmL0xJlQ02hg?diningMode=DELIVERY",
+     "url": "https://www.ubereats.com/store/mcdonalds-715-bridge-sts/2tAEuBT5Raq9fVWuEfGDhw?diningMode=DELIVERY",
      "host": "www.ubereats.com",
      "status": 307,
-     "observed_at": "2026-10-08T07:28:05Z"
+     "observed_at": "2026-10-08T07:40:29Z"
     },
     {
      "kind": "captcha",
      "detail": "redirected to a bot challenge (def.uber.com/en/challenge); not followed",
-     "url": "https://www.ubereats.com/store/mcdonalds-1620-service-drs/6NHq3uZnUAm0GPt_EgaARQ?diningMode=DELIVERY",
+     "url": "https://www.ubereats.com/store/mcdonalds-lower-muscatine-%26-malls/1B9hmI9XSROmL0xJlQ02hg?diningMode=DELIVERY",
      "host": "www.ubereats.com",
      "status": 307,
-     "observed_at": "2026-10-08T07:28:11Z"
+     "observed_at": "2026-10-08T07:40:32Z"
     }
    ],
    "stores": [
@@ -78,7 +78,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "153 menu items published; 4 sent as candidates",
-     "checked_at": "2026-10-08T07:28:27Z"
+     "checked_at": "2026-10-08T07:40:54Z"
     },
     {
      "store_id": "Dtv-lXbLRZaHKUVswEWEeA",
@@ -86,7 +86,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "160 menu items published; 7 sent as candidates",
-     "checked_at": "2026-10-08T07:28:51Z"
+     "checked_at": "2026-10-08T07:41:18Z"
     },
     {
      "store_id": "AWJfNhruSD24S-04z69TKA",
@@ -94,7 +94,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "161 menu items published; 3 sent as candidates",
-     "checked_at": "2026-10-08T07:28:34Z"
+     "checked_at": "2026-10-08T07:41:00Z"
     },
     {
      "store_id": "FIa71TeYTyeVt_8uqIzctw",
@@ -102,7 +102,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "158 menu items published; 0 sent as candidates",
-     "checked_at": "2026-10-08T07:28:57Z"
+     "checked_at": "2026-10-08T07:41:27Z"
     },
     {
      "store_id": "5YraJorrQYCY0ATqhMm8Sw",
@@ -110,7 +110,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "163 menu items published; 4 sent as candidates",
-     "checked_at": "2026-10-08T07:28:09Z"
+     "checked_at": "2026-10-08T07:40:36Z"
     },
     {
      "store_id": "Ct973ecWVSShMwxNMwXeOQ",
@@ -118,7 +118,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "153 menu items published; 0 sent as candidates",
-     "checked_at": "2026-10-08T07:28:46Z"
+     "checked_at": "2026-10-08T07:41:12Z"
     },
     {
      "store_id": "3z4UJWy4T7u9g087CVzFyA",
@@ -126,7 +126,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "157 menu items published; 4 sent as candidates",
-     "checked_at": "2026-10-08T07:28:05Z"
+     "checked_at": "2026-10-08T07:40:32Z"
     },
     {
      "store_id": "6pzrwVf9SceGcjacdQ2kAA",
@@ -134,7 +134,7 @@
      "source": "sitemap",
      "status": "no_menu",
      "detail": "restaurant data published but no menu items/prices",
-     "checked_at": "2026-10-08T07:28:22Z"
+     "checked_at": "2026-10-08T07:40:47Z"
     },
     {
      "store_id": "F6Sl2mKzR1ubMLSCLti_aw",
@@ -142,7 +142,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "166 menu items published; 0 sent as candidates",
-     "checked_at": "2026-10-08T07:28:54Z"
+     "checked_at": "2026-10-08T07:41:21Z"
     },
     {
      "store_id": "BZyQh-PETO2HAMKserZLTg",
@@ -150,7 +150,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "171 menu items published; 4 sent as candidates",
-     "checked_at": "2026-10-08T07:28:39Z"
+     "checked_at": "2026-10-08T07:41:06Z"
     },
     {
      "store_id": "CKpVlqKvTrK-EadvN12PXQ",
@@ -158,7 +158,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "143 menu items published; 4 sent as candidates",
-     "checked_at": "2026-10-08T07:28:42Z"
+     "checked_at": "2026-10-08T07:41:09Z"
     },
     {
      "store_id": "3qZBHXhqSYSN7Y8IJjQlJg",
@@ -166,7 +166,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "135 menu items published; 6 sent as candidates",
-     "checked_at": "2026-10-08T07:28:05Z"
+     "checked_at": "2026-10-08T07:40:32Z"
     },
     {
      "store_id": "6Q7w0HUqRp6oaIL714sSrA",
@@ -174,7 +174,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "167 menu items published; 7 sent as candidates",
-     "checked_at": "2026-10-08T07:28:15Z"
+     "checked_at": "2026-10-08T07:40:41Z"
     },
     {
      "store_id": "1B9hmI9XSROmL0xJlQ02hg",
@@ -182,7 +182,7 @@
      "source": "sitemap",
      "status": "blocked",
      "detail": "captcha: redirected to a bot challenge (def.uber.com/en/challenge); not followed",
-     "checked_at": "2026-10-08T07:28:05Z"
+     "checked_at": "2026-10-08T07:40:32Z"
     },
     {
      "store_id": "DYYFjdmyT1SzBS22v8T6gg",
@@ -190,7 +190,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "180 menu items published; 9 sent as candidates",
-     "checked_at": "2026-10-08T07:28:48Z"
+     "checked_at": "2026-10-08T07:41:15Z"
     },
     {
      "store_id": "8O6e3J0zTrWkZ5eAAF4Gew",
@@ -198,15 +198,23 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "162 menu items published; 6 sent as candidates",
-     "checked_at": "2026-10-08T07:28:25Z"
+     "checked_at": "2026-10-08T07:40:51Z"
+    },
+    {
+     "store_id": "2tAEuBT5Raq9fVWuEfGDhw",
+     "canonical": "https://www.ubereats.com/store/mcdonalds-715-bridge-sts/2tAEuBT5Raq9fVWuEfGDhw",
+     "source": "sitemap",
+     "status": "blocked",
+     "detail": "captcha: redirected to a bot challenge (def.uber.com/en/challenge); not followed",
+     "checked_at": "2026-10-08T07:40:29Z"
     },
     {
      "store_id": "6NHq3uZnUAm0GPt_EgaARQ",
      "canonical": "https://www.ubereats.com/store/mcdonalds-1620-service-drs/6NHq3uZnUAm0GPt_EgaARQ",
      "source": "sitemap",
-     "status": "blocked",
-     "detail": "captcha: redirected to a bot challenge (def.uber.com/en/challenge); not followed",
-     "checked_at": "2026-10-08T07:28:11Z"
+     "status": "checked",
+     "detail": "147 menu items published; 0 sent as candidates",
+     "checked_at": "2026-10-08T07:40:41Z"
     },
     {
      "store_id": "ADbRRLA0SXONnHt4ICaC-Q",
@@ -214,7 +222,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "157 menu items published; 4 sent as candidates",
-     "checked_at": "2026-10-08T07:28:31Z"
+     "checked_at": "2026-10-08T07:40:57Z"
     },
     {
      "store_id": "BZg25jzNRs2hiYrX6NcS3Q",
@@ -222,7 +230,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "149 menu items published; 2 sent as candidates",
-     "checked_at": "2026-10-08T07:28:36Z"
+     "checked_at": "2026-10-08T07:41:03Z"
     },
     {
      "store_id": "4jznKl4FSdaDOj5Vu7fLsQ",
@@ -230,10 +238,66 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "165 menu items published; 2 sent as candidates",
-     "checked_at": "2026-10-08T07:28:05Z"
+     "checked_at": "2026-10-08T07:40:32Z"
     }
    ],
    "observations": [
+    {
+     "platform": "ubereats",
+     "store_id": "3z4UJWy4T7u9g087CVzFyA",
+     "store_name": "McDonald's\u00ae (2324 NESCONSET)",
+     "store_url": "https://www.ubereats.com/store/mcdonalds-2324-nesconsets/3z4UJWy4T7u9g087CVzFyA",
+     "fetched_url": "https://www.ubereats.com/store/mcdonalds-2324-nesconsets/3z4UJWy4T7u9g087CVzFyA?diningMode=DELIVERY",
+     "address": {
+      "street": "2324 NESCONSET",
+      "city": "STONY BROOK",
+      "state": "NY",
+      "zip": "11790",
+      "country": "US"
+     },
+     "observed_at": "2026-10-08T07:38:55Z",
+     "order_mode": "delivery",
+     "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
+     "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
+     "currency": "USD",
+     "extraction": "schema.org JSON-LD (Restaurant.hasMenu -> MenuItem.offers)",
+     "menu_item_count": 157,
+     "fetch_via": "http",
+     "items": [
+      {
+       "name": "Chicken McGriddles\u00ae Meal",
+       "section": "Extra Value Meals",
+       "price_cents": 869,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "McChicken\u00ae Biscuit Meal",
+       "section": "Extra Value Meals",
+       "price_cents": 859,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "McChicken\u00ae Biscuit",
+       "section": "Sandwiches",
+       "price_cents": 499,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "Chicken McGriddles\u00ae",
+       "section": "Sandwiches",
+       "price_cents": 549,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      }
+     ]
+    },
     {
      "platform": "ubereats",
      "store_id": "3qZBHXhqSYSN7Y8IJjQlJg",
@@ -247,7 +311,7 @@
       "zip": "46320",
       "country": "US"
      },
-     "observed_at": "2026-10-08T07:26:30Z",
+     "observed_at": "2026-10-08T07:38:52Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -308,62 +372,6 @@
     },
     {
      "platform": "ubereats",
-     "store_id": "3z4UJWy4T7u9g087CVzFyA",
-     "store_name": "McDonald's\u00ae (2324 NESCONSET)",
-     "store_url": "https://www.ubereats.com/store/mcdonalds-2324-nesconsets/3z4UJWy4T7u9g087CVzFyA",
-     "fetched_url": "https://www.ubereats.com/store/mcdonalds-2324-nesconsets/3z4UJWy4T7u9g087CVzFyA?diningMode=DELIVERY",
-     "address": {
-      "street": "2324 NESCONSET",
-      "city": "STONY BROOK",
-      "state": "NY",
-      "zip": "11790",
-      "country": "US"
-     },
-     "observed_at": "2026-10-08T07:26:32Z",
-     "order_mode": "delivery",
-     "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
-     "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
-     "currency": "USD",
-     "extraction": "schema.org JSON-LD (Restaurant.hasMenu -> MenuItem.offers)",
-     "menu_item_count": 157,
-     "fetch_via": "http",
-     "items": [
-      {
-       "name": "Chicken McGriddles\u00ae Meal",
-       "section": "Extra Value Meals",
-       "price_cents": 869,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "McChicken\u00ae Biscuit Meal",
-       "section": "Extra Value Meals",
-       "price_cents": 859,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "McChicken\u00ae Biscuit",
-       "section": "Sandwiches",
-       "price_cents": 499,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Chicken McGriddles\u00ae",
-       "section": "Sandwiches",
-       "price_cents": 549,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      }
-     ]
-    },
-    {
-     "platform": "ubereats",
      "store_id": "4jznKl4FSdaDOj5Vu7fLsQ",
      "store_name": "McDonald's\u00ae (Market & Preston)",
      "store_url": "https://www.ubereats.com/store/mcdonalds-market-%26-prestons/4jznKl4FSdaDOj5Vu7fLsQ",
@@ -375,7 +383,7 @@
       "zip": "40202",
       "country": "US"
      },
-     "observed_at": "2026-10-08T07:26:35Z",
+     "observed_at": "2026-10-08T07:38:59Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -415,7 +423,7 @@
       "zip": "22657",
       "country": "US"
      },
-     "observed_at": "2026-10-08T07:28:09Z",
+     "observed_at": "2026-10-08T07:40:36Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -460,6 +468,29 @@
     },
     {
      "platform": "ubereats",
+     "store_id": "6NHq3uZnUAm0GPt_EgaARQ",
+     "store_name": "McDonald's\u00ae (1620 SERVICE DR)",
+     "store_url": "https://www.ubereats.com/store/mcdonalds-1620-service-drs/6NHq3uZnUAm0GPt_EgaARQ",
+     "fetched_url": "https://www.ubereats.com/store/mcdonalds-1620-service-drs/6NHq3uZnUAm0GPt_EgaARQ?diningMode=DELIVERY",
+     "address": {
+      "street": "1620 SERVICE DR",
+      "city": "WINONA",
+      "state": "MN",
+      "zip": "55987",
+      "country": "US"
+     },
+     "observed_at": "2026-10-08T07:40:41Z",
+     "order_mode": "delivery",
+     "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
+     "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
+     "currency": "USD",
+     "extraction": "schema.org JSON-LD (Restaurant.hasMenu -> MenuItem.offers)",
+     "menu_item_count": 147,
+     "fetch_via": "http",
+     "items": []
+    },
+    {
+     "platform": "ubereats",
      "store_id": "6Q7w0HUqRp6oaIL714sSrA",
      "store_name": "McDonald's\u00ae (Rand and Dundee Rd)",
      "store_url": "https://www.ubereats.com/store/mcdonalds-rand-and-dundee-rd/6Q7w0HUqRp6oaIL714sSrA",
@@ -471,7 +502,7 @@
       "zip": "60074",
       "country": "US"
      },
-     "observed_at": "2026-10-08T07:28:15Z",
+     "observed_at": "2026-10-08T07:40:41Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -551,7 +582,7 @@
       "zip": "39401",
       "country": "US"
      },
-     "observed_at": "2026-10-08T07:28:25Z",
+     "observed_at": "2026-10-08T07:40:51Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -623,7 +654,7 @@
       "zip": "72019",
       "country": "US"
      },
-     "observed_at": "2026-10-08T07:28:27Z",
+     "observed_at": "2026-10-08T07:40:54Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -679,7 +710,7 @@
       "zip": "48858",
       "country": "US"
      },
-     "observed_at": "2026-10-08T07:28:31Z",
+     "observed_at": "2026-10-08T07:40:57Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -735,7 +766,7 @@
       "zip": "94601",
       "country": "US"
      },
-     "observed_at": "2026-10-08T07:28:33Z",
+     "observed_at": "2026-10-08T07:41:00Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -783,7 +814,7 @@
       "zip": "98665",
       "country": "US"
      },
-     "observed_at": "2026-10-08T07:28:36Z",
+     "observed_at": "2026-10-08T07:41:03Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -823,7 +854,7 @@
       "zip": "61611",
       "country": "US"
      },
-     "observed_at": "2026-10-08T07:28:39Z",
+     "observed_at": "2026-10-08T07:41:06Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -879,7 +910,7 @@
       "zip": "30268",
       "country": "US"
      },
-     "observed_at": "2026-10-08T07:28:42Z",
+     "observed_at": "2026-10-08T07:41:09Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -935,7 +966,7 @@
       "zip": "50644",
       "country": "US"
      },
-     "observed_at": "2026-10-08T07:28:46Z",
+     "observed_at": "2026-10-08T07:41:12Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -958,7 +989,7 @@
       "zip": "28803",
       "country": "US"
      },
-     "observed_at": "2026-10-08T07:28:48Z",
+     "observed_at": "2026-10-08T07:41:15Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -1054,7 +1085,7 @@
       "zip": "30318",
       "country": "US"
      },
-     "observed_at": "2026-10-08T07:28:51Z",
+     "observed_at": "2026-10-08T07:41:18Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -1134,7 +1165,7 @@
       "zip": "55110",
       "country": "US"
      },
-     "observed_at": "2026-10-08T07:28:54Z",
+     "observed_at": "2026-10-08T07:41:21Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -1157,7 +1188,7 @@
       "zip": "80134",
       "country": "US"
      },
-     "observed_at": "2026-10-08T07:28:57Z",
+     "observed_at": "2026-10-08T07:41:27Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -1168,7 +1199,7 @@
      "items": []
     }
    ],
-   "seconds": 57.0
+   "seconds": 59.0
   },
   {
    "label": "Lou Malnati's Pizzeria (Uber Eats, Chicago first)",
@@ -1197,10 +1228,10 @@
     "ubereats": {
      "discovered": 7,
      "queued": 0,
-     "checked": 6,
+     "checked": 4,
      "no_menu": 1,
      "non_us": 0,
-     "blocked": 0,
+     "blocked": 2,
      "failed": 0,
      "duplicate": 0,
      "in_progress": 0,
@@ -1218,23 +1249,40 @@
      "stop_reason": null
     }
    },
-   "barriers": [],
+   "barriers": [
+    {
+     "kind": "captcha",
+     "detail": "redirected to a bot challenge (def.uber.com/en/challenge); not followed",
+     "url": "https://www.ubereats.com/store/lou-malnatis-pizzeria-scottsdale/71ZcAUquUZCPSkP3QGbWTA?diningMode=DELIVERY",
+     "host": "www.ubereats.com",
+     "status": 307,
+     "observed_at": "2026-10-08T07:41:29Z"
+    },
+    {
+     "kind": "captcha",
+     "detail": "redirected to a bot challenge (def.uber.com/en/challenge); not followed",
+     "url": "https://www.ubereats.com/store/lou-malnatis-pizzeria-western-springs/Bg-Vmn4lWE6RLQpr4Q6Z-A?diningMode=DELIVERY",
+     "host": "www.ubereats.com",
+     "status": 307,
+     "observed_at": "2026-10-08T07:41:32Z"
+    }
+   ],
    "stores": [
     {
      "store_id": "71ZcAUquUZCPSkP3QGbWTA",
      "canonical": "https://www.ubereats.com/store/lou-malnatis-pizzeria-scottsdale/71ZcAUquUZCPSkP3QGbWTA",
      "source": "sitemap",
-     "status": "checked",
-     "detail": "196 menu items published; 57 sent as candidates",
-     "checked_at": "2026-10-08T07:29:03Z"
+     "status": "blocked",
+     "detail": "captcha: redirected to a bot challenge (def.uber.com/en/challenge); not followed",
+     "checked_at": "2026-10-08T07:41:29Z"
     },
     {
      "store_id": "Bg-Vmn4lWE6RLQpr4Q6Z-A",
      "canonical": "https://www.ubereats.com/store/lou-malnatis-pizzeria-western-springs/Bg-Vmn4lWE6RLQpr4Q6Z-A",
      "source": "sitemap",
-     "status": "checked",
-     "detail": "188 menu items published; 57 sent as candidates",
-     "checked_at": "2026-10-08T07:29:06Z"
+     "status": "blocked",
+     "detail": "captcha: redirected to a bot challenge (def.uber.com/en/challenge); not followed",
+     "checked_at": "2026-10-08T07:41:32Z"
     },
     {
      "store_id": "NzCY26bXUK6f0m0qscBwcw",
@@ -1242,7 +1290,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "192 menu items published; 57 sent as candidates",
-     "checked_at": "2026-10-08T07:29:12Z"
+     "checked_at": "2026-10-08T07:41:39Z"
     },
     {
      "store_id": "UsMjFmB2VFCdQbrL3FF5iA",
@@ -1250,7 +1298,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "172 menu items published; 45 sent as candidates",
-     "checked_at": "2026-10-08T07:29:18Z"
+     "checked_at": "2026-10-08T07:41:44Z"
     },
     {
      "store_id": "9Zif-5fwVzmgQoBOLcS3Kw",
@@ -1258,7 +1306,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "193 menu items published; 57 sent as candidates",
-     "checked_at": "2026-10-08T07:29:30Z"
+     "checked_at": "2026-10-08T07:41:57Z"
     },
     {
      "store_id": "Jv2DFtMsUTS68ZLHX5355Q",
@@ -1266,7 +1314,7 @@
      "source": "sitemap",
      "status": "no_menu",
      "detail": "restaurant data published but no menu items/prices",
-     "checked_at": "2026-10-08T07:29:38Z"
+     "checked_at": "2026-10-08T07:42:02Z"
     },
     {
      "store_id": "ss-4GlNKVXqz9F9TZwC5zg",
@@ -1274,970 +1322,10 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "195 menu items published; 57 sent as candidates",
-     "checked_at": "2026-10-08T07:29:36Z"
+     "checked_at": "2026-10-08T07:42:06Z"
     }
    ],
    "observations": [
-    {
-     "platform": "ubereats",
-     "store_id": "71ZcAUquUZCPSkP3QGbWTA",
-     "store_name": "Lou Malnati's Pizzeria (Scottsdale)",
-     "store_url": "https://www.ubereats.com/store/lou-malnatis-pizzeria-scottsdale/71ZcAUquUZCPSkP3QGbWTA",
-     "fetched_url": "https://www.ubereats.com/store/lou-malnatis-pizzeria-scottsdale/71ZcAUquUZCPSkP3QGbWTA?diningMode=DELIVERY",
-     "address": {
-      "street": "17787 North Scottsdale Road",
-      "city": "Scottsdale",
-      "state": "AZ",
-      "zip": "85255",
-      "country": "US"
-     },
-     "observed_at": "2026-10-08T07:29:03Z",
-     "order_mode": "delivery",
-     "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
-     "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
-     "currency": "USD",
-     "extraction": "schema.org JSON-LD (Restaurant.hasMenu -> MenuItem.offers)",
-     "menu_item_count": 196,
-     "fetch_via": "http",
-     "items": [
-      {
-       "name": "Medium - Deep Dish Cheese",
-       "section": "Featured items",
-       "price_cents": 2874,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Medium - Deep Dish Chicago Classic",
-       "section": "Featured items",
-       "price_cents": 3450,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Small - Deep Dish Cheese",
-       "section": "Featured items",
-       "price_cents": 2274,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Large - Deep Dish Chicago Classic",
-       "section": "Featured items",
-       "price_cents": 4194,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Large - Deep Dish Cheese",
-       "section": "Featured items",
-       "price_cents": 3546,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Medium - Deep Dish Pepperoni",
-       "section": "Featured items",
-       "price_cents": 3276,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Personal - Deep Dish Chicago Classic",
-       "section": "Featured items",
-       "price_cents": 1722,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Large - Deep Dish Pepperoni",
-       "section": "Featured items",
-       "price_cents": 4008,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "BuffaLou Chicken Deep Dish - GF",
-       "section": "BuffaLou Chicken Pizza",
-       "price_cents": 3534,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Personal - Deep Dish BuffaLou Chicken",
-       "section": "BuffaLou Chicken - Deep Dish",
-       "price_cents": 2010,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Small - Deep Dish BuffaLou Chicken",
-       "section": "BuffaLou Chicken - Deep Dish",
-       "price_cents": 3174,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Medium - Deep Dish BuffaLou Chicken",
-       "section": "BuffaLou Chicken - Deep Dish",
-       "price_cents": 3918,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Large - Deep Dish BuffaLou Chicken",
-       "section": "BuffaLou Chicken - Deep Dish",
-       "price_cents": 4734,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Small - Deep Dish Chicago Classic",
-       "section": "The Malnati Chicago Classic\u2122 - Deep Dish",
-       "price_cents": 2754,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Personal - Deep Dish The Lou",
-       "section": "The \"Lou\" - Deep Dish",
-       "price_cents": 1842,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Small - Deep Dish The Lou",
-       "section": "The \"Lou\" - Deep Dish",
-       "price_cents": 2802,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Large - Deep Dish The Lou",
-       "section": "The \"Lou\" - Deep Dish",
-       "price_cents": 4398,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Medium - Deep Dish The Lou",
-       "section": "The \"Lou\" - Deep Dish",
-       "price_cents": 3642,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Personal - Deep Dish Margherita",
-       "section": "Margherita Pesto - Deep Dish",
-       "price_cents": 1698,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Small - Deep Dish Margherita",
-       "section": "Margherita Pesto - Deep Dish",
-       "price_cents": 2718,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Medium - Deep Dish Margherita",
-       "section": "Margherita Pesto - Deep Dish",
-       "price_cents": 3390,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Large - Deep Dish Margherita",
-       "section": "Margherita Pesto - Deep Dish",
-       "price_cents": 4110,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Personal - Deep Dish The Hot Honey",
-       "section": "The Hot Honey - Deep Dish",
-       "price_cents": 1830,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Small - Deep Dish The Hot Honey",
-       "section": "The Hot Honey - Deep Dish",
-       "price_cents": 2790,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Medium - Deep Dish The Hot Honey",
-       "section": "The Hot Honey - Deep Dish",
-       "price_cents": 3630,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Large - Deep Dish The Hot Honey",
-       "section": "The Hot Honey - Deep Dish",
-       "price_cents": 4386,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Personal - Deep Dish Veggie",
-       "section": "Veggie - Deep Dish",
-       "price_cents": 2010,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Small - Deep Dish Veggie",
-       "section": "Veggie - Deep Dish",
-       "price_cents": 3174,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Medium - Deep Dish Veggie",
-       "section": "Veggie - Deep Dish",
-       "price_cents": 3918,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Large - Deep Dish Veggie",
-       "section": "Veggie - Deep Dish",
-       "price_cents": 4734,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Small - Thin Crust Margherita",
-       "section": "Margherita Pesto - Thin Crust",
-       "price_cents": 1842,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Medium - Thin Crust Margherita",
-       "section": "Margherita Pesto - Thin Crust",
-       "price_cents": 2874,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Large - Thin Crust Margherita",
-       "section": "Margherita Pesto - Thin Crust",
-       "price_cents": 3282,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "XLarge - Thin Crust Margherita",
-       "section": "Margherita Pesto - Thin Crust",
-       "price_cents": 3834,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Personal - Deep Dish Cheese",
-       "section": "Cheese - Deep Dish",
-       "price_cents": 1434,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Personal - Deep Dish Sausage",
-       "section": "Sausage - Deep Dish",
-       "price_cents": 1656,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Small - Deep Dish Sausage",
-       "section": "Sausage - Deep Dish",
-       "price_cents": 2604,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Medium - Deep Dish Sausage",
-       "section": "Sausage - Deep Dish",
-       "price_cents": 3276,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Large - Deep Dish Sausage",
-       "section": "Sausage - Deep Dish",
-       "price_cents": 4008,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Personal - Deep Dish Pepperoni",
-       "section": "Pepperoni - Deep Dish",
-       "price_cents": 1656,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Small - Deep Dish Pepperoni",
-       "section": "Pepperoni - Deep Dish",
-       "price_cents": 2604,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Personal - Deep Dish Spinach",
-       "section": "Spinach - Deep Dish",
-       "price_cents": 1656,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Small - Deep Dish Spinach",
-       "section": "Spinach - Deep Dish",
-       "price_cents": 2604,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Medium - Deep Dish Spinach",
-       "section": "Spinach - Deep Dish",
-       "price_cents": 3276,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Large - Deep Dish Spinach",
-       "section": "Spinach - Deep Dish",
-       "price_cents": 4008,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Cheese Deep Dish - GF",
-       "section": "Gluten Free/Crustless Pizza",
-       "price_cents": 2634,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "The Malnati Chicago Classic\u2122 Deep Dish - GF",
-       "section": "Gluten Free/Crustless Pizza",
-       "price_cents": 3114,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "The \"Lou\" Deep Dish - GF",
-       "section": "Gluten Free/Crustless Pizza",
-       "price_cents": 3162,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "The Hot Honey Deep Dish - GF",
-       "section": "Gluten Free/Crustless Pizza",
-       "price_cents": 3150,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Margherita Pesto Deep Dish - GF",
-       "section": "Gluten Free/Crustless Pizza",
-       "price_cents": 3078,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Margherita Pesto Thin Crust - GF",
-       "section": "Gluten Free/Crustless Pizza",
-       "price_cents": 2022,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Small Side of Deep Tomato",
-       "section": "Misc/Sides",
-       "price_cents": 258,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Large Side of Deep Tomato",
-       "section": "Misc/Sides",
-       "price_cents": 318,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Small Frozen Deep Dish Cheese",
-       "section": "Frozen Pizzas",
-       "price_cents": 2303,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Small Frozen Deep Dish Sausage",
-       "section": "Frozen Pizzas",
-       "price_cents": 2633,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Small Frozen Deep Dish Pepperoni",
-       "section": "Frozen Pizzas",
-       "price_cents": 2633,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Small Frozen Deep Dish Spinach",
-       "section": "Frozen Pizzas",
-       "price_cents": 2633,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      }
-     ]
-    },
-    {
-     "platform": "ubereats",
-     "store_id": "Bg-Vmn4lWE6RLQpr4Q6Z-A",
-     "store_name": "Lou Malnati's Pizzeria (Western Springs)",
-     "store_url": "https://www.ubereats.com/store/lou-malnatis-pizzeria-western-springs/Bg-Vmn4lWE6RLQpr4Q6Z-A",
-     "fetched_url": "https://www.ubereats.com/store/lou-malnatis-pizzeria-western-springs/Bg-Vmn4lWE6RLQpr4Q6Z-A?diningMode=DELIVERY",
-     "address": {
-      "street": "4700 Gilbert Avenue",
-      "city": "Western Springs",
-      "state": "IL",
-      "zip": "60558",
-      "country": "US"
-     },
-     "observed_at": "2026-10-08T07:29:06Z",
-     "order_mode": "delivery",
-     "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
-     "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
-     "currency": "USD",
-     "extraction": "schema.org JSON-LD (Restaurant.hasMenu -> MenuItem.offers)",
-     "menu_item_count": 188,
-     "fetch_via": "http",
-     "items": [
-      {
-       "name": "Personal - Deep Dish Cheese",
-       "section": "Featured items",
-       "price_cents": 1410,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Medium - Deep Dish Chicago Classic",
-       "section": "Featured items",
-       "price_cents": 3330,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Small - Deep Dish Cheese",
-       "section": "Featured items",
-       "price_cents": 2154,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "The Malnati Chicago Classic\u2122 Deep Dish - GF",
-       "section": "Featured items",
-       "price_cents": 2994,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Small - Deep Dish Chicago Classic",
-       "section": "Featured items",
-       "price_cents": 2634,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Large - Deep Dish Pepperoni",
-       "section": "Featured items",
-       "price_cents": 3810,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "BuffaLou Chicken Deep Dish - GF",
-       "section": "BuffaLou Chicken Pizza",
-       "price_cents": 3414,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Personal - Deep Dish BuffaLou Chicken",
-       "section": "BuffaLou Chicken - Deep Dish",
-       "price_cents": 1974,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Small - Deep Dish BuffaLou Chicken",
-       "section": "BuffaLou Chicken - Deep Dish",
-       "price_cents": 3054,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Medium - Deep Dish BuffaLou Chicken",
-       "section": "BuffaLou Chicken - Deep Dish",
-       "price_cents": 3798,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Large - Deep Dish BuffaLou Chicken",
-       "section": "BuffaLou Chicken - Deep Dish",
-       "price_cents": 4614,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Personal - Deep Dish Chicago Classic",
-       "section": "The Malnati Chicago Classic\u2122 - Deep Dish",
-       "price_cents": 1674,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Large - Deep Dish Chicago Classic",
-       "section": "The Malnati Chicago Classic\u2122 - Deep Dish",
-       "price_cents": 4062,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Personal - Deep Dish The Lou",
-       "section": "The \"Lou\" - Deep Dish",
-       "price_cents": 1842,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Small - Deep Dish The Lou",
-       "section": "The \"Lou\" - Deep Dish",
-       "price_cents": 2802,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Large - Deep Dish The Lou",
-       "section": "The \"Lou\" - Deep Dish",
-       "price_cents": 4314,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Medium - Deep Dish The Lou",
-       "section": "The \"Lou\" - Deep Dish",
-       "price_cents": 3534,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Personal - Deep Dish Margherita",
-       "section": "Margherita Pesto - Deep Dish",
-       "price_cents": 1662,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Small - Deep Dish Margherita",
-       "section": "Margherita Pesto - Deep Dish",
-       "price_cents": 2586,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Medium - Deep Dish Margherita",
-       "section": "Margherita Pesto - Deep Dish",
-       "price_cents": 3270,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Large - Deep Dish Margherita",
-       "section": "Margherita Pesto - Deep Dish",
-       "price_cents": 3990,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Personal - Deep Dish The Hot Honey",
-       "section": "The Hot Honey - Deep Dish",
-       "price_cents": 1830,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Small - Deep Dish The Hot Honey",
-       "section": "The Hot Honey - Deep Dish",
-       "price_cents": 2754,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Medium - Deep Dish The Hot Honey",
-       "section": "The Hot Honey - Deep Dish",
-       "price_cents": 3522,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Large - Deep Dish The Hot Honey",
-       "section": "The Hot Honey - Deep Dish",
-       "price_cents": 4290,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Personal - Deep Dish Veggie",
-       "section": "Veggie - Deep Dish",
-       "price_cents": 1974,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Small - Deep Dish Veggie",
-       "section": "Veggie - Deep Dish",
-       "price_cents": 3054,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Medium - Deep Dish Veggie",
-       "section": "Veggie - Deep Dish",
-       "price_cents": 3798,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Large - Deep Dish Veggie",
-       "section": "Veggie - Deep Dish",
-       "price_cents": 4614,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Small - Thin Crust Margherita",
-       "section": "Margherita Pesto - Thin Crust",
-       "price_cents": 1710,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Medium - Thin Crust Margherita",
-       "section": "Margherita Pesto - Thin Crust",
-       "price_cents": 2658,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Large - Thin Crust Margherita",
-       "section": "Margherita Pesto - Thin Crust",
-       "price_cents": 3102,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "XLarge - Thin Crust Margherita",
-       "section": "Margherita Pesto - Thin Crust",
-       "price_cents": 3666,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Medium - Deep Dish Cheese",
-       "section": "Cheese - Deep Dish",
-       "price_cents": 2754,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Large - Deep Dish Cheese",
-       "section": "Cheese - Deep Dish",
-       "price_cents": 3366,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Personal - Deep Dish Sausage",
-       "section": "Sausage - Deep Dish",
-       "price_cents": 1602,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Small - Deep Dish Sausage",
-       "section": "Sausage - Deep Dish",
-       "price_cents": 2460,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Medium - Deep Dish Sausage",
-       "section": "Sausage - Deep Dish",
-       "price_cents": 3132,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Large - Deep Dish Sausage",
-       "section": "Sausage - Deep Dish",
-       "price_cents": 3810,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Personal - Deep Dish Pepperoni",
-       "section": "Pepperoni - Deep Dish",
-       "price_cents": 1602,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Small - Deep Dish Pepperoni",
-       "section": "Pepperoni - Deep Dish",
-       "price_cents": 2460,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Medium - Deep Dish Pepperoni",
-       "section": "Pepperoni - Deep Dish",
-       "price_cents": 3132,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Personal - Deep Dish Spinach",
-       "section": "Spinach - Deep Dish",
-       "price_cents": 1602,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Small - Deep Dish Spinach",
-       "section": "Spinach - Deep Dish",
-       "price_cents": 2460,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Medium - Deep Dish Spinach",
-       "section": "Spinach - Deep Dish",
-       "price_cents": 3132,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Large - Deep Dish Spinach",
-       "section": "Spinach - Deep Dish",
-       "price_cents": 3810,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Cheese Deep Dish - GF",
-       "section": "Gluten Free/Crustless Pizza",
-       "price_cents": 2514,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "The \"Lou\" Deep Dish - GF",
-       "section": "Gluten Free/Crustless Pizza",
-       "price_cents": 3162,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "The Hot Honey Deep Dish - GF",
-       "section": "Gluten Free/Crustless Pizza",
-       "price_cents": 3114,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Margherita Pesto Deep Dish - GF",
-       "section": "Gluten Free/Crustless Pizza",
-       "price_cents": 2946,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Margherita Pesto Thin Crust - GF",
-       "section": "Gluten Free/Crustless Pizza",
-       "price_cents": 1890,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Small Side of Deep Tomato",
-       "section": "Misc/Sides",
-       "price_cents": 258,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Large Side of Deep Tomato",
-       "section": "Misc/Sides",
-       "price_cents": 318,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Small Frozen Deep Dish Cheese",
-       "section": "Frozen Pizzas",
-       "price_cents": 2196,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Small Frozen Deep Dish Sausage",
-       "section": "Frozen Pizzas",
-       "price_cents": 2526,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Small Frozen Deep Dish Pepperoni",
-       "section": "Frozen Pizzas",
-       "price_cents": 2526,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Small Frozen Deep Dish Spinach",
-       "section": "Frozen Pizzas",
-       "price_cents": 2526,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      }
-     ]
-    },
     {
      "platform": "ubereats",
      "store_id": "NzCY26bXUK6f0m0qscBwcw",
@@ -2251,7 +1339,7 @@
       "zip": "46307",
       "country": "US"
      },
-     "observed_at": "2026-10-08T07:29:12Z",
+     "observed_at": "2026-10-08T07:41:39Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -2261,14 +1349,6 @@
      "fetch_via": "http",
      "items": [
       {
-       "name": "Personal - Deep Dish Cheese",
-       "section": "Featured items",
-       "price_cents": 1302,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
        "name": "Large - Deep Dish Chicago Classic",
        "section": "Featured items",
        "price_cents": 3906,
@@ -2277,9 +1357,9 @@
        "required_options": "unknown"
       },
       {
-       "name": "Large - Deep Dish Cheese",
+       "name": "Personal - Deep Dish Cheese",
        "section": "Featured items",
-       "price_cents": 3270,
+       "price_cents": 1302,
        "currency": "USD",
        "availability": "unknown",
        "required_options": "unknown"
@@ -2293,25 +1373,17 @@
        "required_options": "unknown"
       },
       {
-       "name": "Medium - Deep Dish Cheese",
+       "name": "Large - Deep Dish Cheese",
        "section": "Featured items",
-       "price_cents": 2622,
+       "price_cents": 3270,
        "currency": "USD",
        "availability": "unknown",
        "required_options": "unknown"
       },
       {
-       "name": "Small - Deep Dish Chicago Classic",
+       "name": "Large - Deep Dish Margherita",
        "section": "Featured items",
-       "price_cents": 2442,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Medium - Deep Dish Pepperoni",
-       "section": "Featured items",
-       "price_cents": 2988,
+       "price_cents": 3822,
        "currency": "USD",
        "availability": "unknown",
        "required_options": "unknown"
@@ -2360,6 +1432,14 @@
        "name": "Personal - Deep Dish Chicago Classic",
        "section": "The Malnati Chicago Classic\u2122 - Deep Dish",
        "price_cents": 1554,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "Small - Deep Dish Chicago Classic",
+       "section": "The Malnati Chicago Classic\u2122 - Deep Dish",
+       "price_cents": 2442,
        "currency": "USD",
        "availability": "unknown",
        "required_options": "unknown"
@@ -2416,14 +1496,6 @@
        "name": "Medium - Deep Dish Margherita",
        "section": "Margherita Pesto - Deep Dish",
        "price_cents": 3078,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Large - Deep Dish Margherita",
-       "section": "Margherita Pesto - Deep Dish",
-       "price_cents": 3822,
        "currency": "USD",
        "availability": "unknown",
        "required_options": "unknown"
@@ -2533,6 +1605,14 @@
        "required_options": "unknown"
       },
       {
+       "name": "Medium - Deep Dish Cheese",
+       "section": "Cheese - Deep Dish",
+       "price_cents": 2622,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
        "name": "Personal - Deep Dish Sausage",
        "section": "Sausage - Deep Dish",
        "price_cents": 1476,
@@ -2576,6 +1656,14 @@
        "name": "Small - Deep Dish Pepperoni",
        "section": "Pepperoni - Deep Dish",
        "price_cents": 2256,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "Medium - Deep Dish Pepperoni",
+       "section": "Pepperoni - Deep Dish",
+       "price_cents": 2988,
        "currency": "USD",
        "availability": "unknown",
        "required_options": "unknown"
@@ -2731,7 +1819,7 @@
       "zip": "85388",
       "country": "US"
      },
-     "observed_at": "2026-10-08T07:29:18Z",
+     "observed_at": "2026-10-08T07:41:44Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -3115,7 +2203,7 @@
       "zip": "60192",
       "country": "US"
      },
-     "observed_at": "2026-10-08T07:29:30Z",
+     "observed_at": "2026-10-08T07:41:57Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -3133,14 +2221,6 @@
        "required_options": "unknown"
       },
       {
-       "name": "Large - Deep Dish Cheese",
-       "section": "Featured items",
-       "price_cents": 3282,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
        "name": "Medium - Deep Dish Cheese",
        "section": "Featured items",
        "price_cents": 2634,
@@ -3149,9 +2229,17 @@
        "required_options": "unknown"
       },
       {
-       "name": "Small - Deep Dish Chicago Classic",
+       "name": "Large - Deep Dish Cheese",
        "section": "Featured items",
-       "price_cents": 2502,
+       "price_cents": 3282,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "Large - Deep Dish The Lou",
+       "section": "Featured items",
+       "price_cents": 4194,
        "currency": "USD",
        "availability": "unknown",
        "required_options": "unknown"
@@ -3165,25 +2253,17 @@
        "required_options": "unknown"
       },
       {
-       "name": "Medium - Deep Dish Chicago Classic",
+       "name": "Small - Thin Crust Margherita",
        "section": "Featured items",
-       "price_cents": 3186,
+       "price_cents": 1578,
        "currency": "USD",
        "availability": "unknown",
        "required_options": "unknown"
       },
       {
-       "name": "Personal - Deep Dish Chicago Classic",
+       "name": "XLarge - Thin Crust Margherita",
        "section": "Featured items",
-       "price_cents": 1626,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Large - Deep Dish The Lou",
-       "section": "Featured items",
-       "price_cents": 4194,
+       "price_cents": 3522,
        "currency": "USD",
        "availability": "unknown",
        "required_options": "unknown"
@@ -3224,6 +2304,30 @@
        "name": "Large - Deep Dish BuffaLou Chicken",
        "section": "BuffaLou Chicken - Deep Dish",
        "price_cents": 4470,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "Personal - Deep Dish Chicago Classic",
+       "section": "The Malnati Chicago Classic\u2122 - Deep Dish",
+       "price_cents": 1626,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "Small - Deep Dish Chicago Classic",
+       "section": "The Malnati Chicago Classic\u2122 - Deep Dish",
+       "price_cents": 2502,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "Medium - Deep Dish Chicago Classic",
+       "section": "The Malnati Chicago Classic\u2122 - Deep Dish",
+       "price_cents": 3186,
        "currency": "USD",
        "availability": "unknown",
        "required_options": "unknown"
@@ -3349,14 +2453,6 @@
        "required_options": "unknown"
       },
       {
-       "name": "Small - Thin Crust Margherita",
-       "section": "Margherita Pesto - Thin Crust",
-       "price_cents": 1578,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
        "name": "Medium - Thin Crust Margherita",
        "section": "Margherita Pesto - Thin Crust",
        "price_cents": 2394,
@@ -3368,14 +2464,6 @@
        "name": "Large - Thin Crust Margherita",
        "section": "Margherita Pesto - Thin Crust",
        "price_cents": 2922,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "XLarge - Thin Crust Margherita",
-       "section": "Margherita Pesto - Thin Crust",
-       "price_cents": 3522,
        "currency": "USD",
        "availability": "unknown",
        "required_options": "unknown"
@@ -3595,7 +2683,7 @@
       "zip": "60062",
       "country": "US"
      },
-     "observed_at": "2026-10-08T07:29:36Z",
+     "observed_at": "2026-10-08T07:42:06Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -3605,17 +2693,9 @@
      "fetch_via": "http",
      "items": [
       {
-       "name": "Small - Deep Dish Cheese",
+       "name": "Personal - Deep Dish Cheese",
        "section": "Featured items",
-       "price_cents": 2154,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Medium - Deep Dish Cheese",
-       "section": "Featured items",
-       "price_cents": 2754,
+       "price_cents": 1410,
        "currency": "USD",
        "availability": "unknown",
        "required_options": "unknown"
@@ -3629,41 +2709,17 @@
        "required_options": "unknown"
       },
       {
-       "name": "Medium - Deep Dish Chicago Classic",
+       "name": "Medium - Deep Dish Cheese",
        "section": "Featured items",
-       "price_cents": 3330,
+       "price_cents": 2754,
        "currency": "USD",
        "availability": "unknown",
        "required_options": "unknown"
       },
       {
-       "name": "Large - Deep Dish Chicago Classic",
+       "name": "Small - Deep Dish Cheese",
        "section": "Featured items",
-       "price_cents": 4062,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Small - Deep Dish Chicago Classic",
-       "section": "Featured items",
-       "price_cents": 2634,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Personal - Deep Dish Chicago Classic",
-       "section": "Featured items",
-       "price_cents": 1674,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Cheese Deep Dish - GF",
-       "section": "Featured items",
-       "price_cents": 2514,
+       "price_cents": 2154,
        "currency": "USD",
        "availability": "unknown",
        "required_options": "unknown"
@@ -3677,9 +2733,25 @@
        "required_options": "unknown"
       },
       {
-       "name": "Small - Deep Dish The Lou",
+       "name": "Cheese Deep Dish - GF",
        "section": "Featured items",
-       "price_cents": 2802,
+       "price_cents": 2514,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "Small - Deep Dish The Hot Honey",
+       "section": "Featured items",
+       "price_cents": 2754,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "Personal - Deep Dish Chicago Classic",
+       "section": "Featured items",
+       "price_cents": 1674,
        "currency": "USD",
        "availability": "unknown",
        "required_options": "unknown"
@@ -3725,9 +2797,41 @@
        "required_options": "unknown"
       },
       {
+       "name": "Small - Deep Dish Chicago Classic",
+       "section": "The Malnati Chicago Classic\u2122 - Deep Dish",
+       "price_cents": 2634,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "Medium - Deep Dish Chicago Classic",
+       "section": "The Malnati Chicago Classic\u2122 - Deep Dish",
+       "price_cents": 3330,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "Large - Deep Dish Chicago Classic",
+       "section": "The Malnati Chicago Classic\u2122 - Deep Dish",
+       "price_cents": 4062,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
        "name": "Personal - Deep Dish The Lou",
        "section": "The \"Lou\" - Deep Dish",
        "price_cents": 1842,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "Small - Deep Dish The Lou",
+       "section": "The \"Lou\" - Deep Dish",
+       "price_cents": 2802,
        "currency": "USD",
        "availability": "unknown",
        "required_options": "unknown"
@@ -3784,14 +2888,6 @@
        "name": "Personal - Deep Dish The Hot Honey",
        "section": "The Hot Honey - Deep Dish",
        "price_cents": 1830,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Small - Deep Dish The Hot Honey",
-       "section": "The Hot Honey - Deep Dish",
-       "price_cents": 2754,
        "currency": "USD",
        "availability": "unknown",
        "required_options": "unknown"
@@ -3872,14 +2968,6 @@
        "name": "XLarge - Thin Crust Margherita",
        "section": "Margherita Pesto - Thin Crust",
        "price_cents": 3666,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Personal - Deep Dish Cheese",
-       "section": "Cheese - Deep Dish",
-       "price_cents": 1410,
        "currency": "USD",
        "availability": "unknown",
        "required_options": "unknown"
@@ -4089,10 +3177,10 @@
     "ubereats": {
      "discovered": 86,
      "queued": 65,
-     "checked": 9,
+     "checked": 7,
      "no_menu": 1,
      "non_us": 11,
-     "blocked": 0,
+     "blocked": 2,
      "failed": 0,
      "duplicate": 0,
      "in_progress": 0,
@@ -4110,15 +3198,32 @@
      "stop_reason": null
     }
    },
-   "barriers": [],
+   "barriers": [
+    {
+     "kind": "captcha",
+     "detail": "redirected to a bot challenge (def.uber.com/en/challenge); not followed",
+     "url": "https://www.ubereats.com/store/taco-bell-36-lynn-ave/-BsohOlnRt6Kdb_ZVJT-Ow?diningMode=DELIVERY",
+     "host": "www.ubereats.com",
+     "status": 307,
+     "observed_at": "2026-10-08T07:42:20Z"
+    },
+    {
+     "kind": "captcha",
+     "detail": "redirected to a bot challenge (def.uber.com/en/challenge); not followed",
+     "url": "https://www.ubereats.com/store/taco-bell-20726-harper-aves/-Y1DZ_7dSGWeK-kTLFO8pg?diningMode=DELIVERY",
+     "host": "www.ubereats.com",
+     "status": 307,
+     "observed_at": "2026-10-08T07:42:23Z"
+    }
+   ],
    "stores": [
     {
      "store_id": "-Y1DZ_7dSGWeK-kTLFO8pg",
      "canonical": "https://www.ubereats.com/store/taco-bell-20726-harper-aves/-Y1DZ_7dSGWeK-kTLFO8pg",
      "source": "sitemap",
-     "status": "checked",
-     "detail": "63 menu items published; 4 sent as candidates",
-     "checked_at": "2026-10-08T07:29:57Z"
+     "status": "blocked",
+     "detail": "captcha: redirected to a bot challenge (def.uber.com/en/challenge); not followed",
+     "checked_at": "2026-10-08T07:42:23Z"
     },
     {
      "store_id": "234jzvADQe6QF4IaNK-YJg",
@@ -4126,7 +3231,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "119 menu items published; 19 sent as candidates",
-     "checked_at": "2026-10-08T07:30:09Z"
+     "checked_at": "2026-10-08T07:42:35Z"
     },
     {
      "store_id": "0MBjx_uHRlmziW4NTt0N0Q",
@@ -4134,7 +3239,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "140 menu items published; 19 sent as candidates",
-     "checked_at": "2026-10-08T07:30:03Z"
+     "checked_at": "2026-10-08T07:42:30Z"
     },
     {
      "store_id": "5w8w9FimSJm1xsgOhksNjw",
@@ -4142,7 +3247,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "135 menu items published; 19 sent as candidates",
-     "checked_at": "2026-10-08T07:30:27Z"
+     "checked_at": "2026-10-08T07:42:54Z"
     },
     {
      "store_id": "0vrCA57EV9CwxwE0LSW-9g",
@@ -4150,7 +3255,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "55 menu items published; 4 sent as candidates",
-     "checked_at": "2026-10-08T07:30:06Z"
+     "checked_at": "2026-10-08T07:42:32Z"
     },
     {
      "store_id": "3wmDiWUgQC63_BnH8jHlYA",
@@ -4158,7 +3263,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "64 menu items published; 4 sent as candidates",
-     "checked_at": "2026-10-08T07:30:21Z"
+     "checked_at": "2026-10-08T07:42:47Z"
     },
     {
      "store_id": "2FL_YpI8QfuvtFxF98go4Q",
@@ -4166,15 +3271,15 @@
      "source": "sitemap",
      "status": "no_menu",
      "detail": "restaurant data published but no menu items/prices",
-     "checked_at": "2026-10-08T07:30:12Z"
+     "checked_at": "2026-10-08T07:42:38Z"
     },
     {
      "store_id": "-BsohOlnRt6Kdb_ZVJT-Ow",
      "canonical": "https://www.ubereats.com/store/taco-bell-36-lynn-ave/-BsohOlnRt6Kdb_ZVJT-Ow",
      "source": "sitemap",
-     "status": "checked",
-     "detail": "57 menu items published; 3 sent as candidates",
-     "checked_at": "2026-10-08T07:29:54Z"
+     "status": "blocked",
+     "detail": "captcha: redirected to a bot challenge (def.uber.com/en/challenge); not followed",
+     "checked_at": "2026-10-08T07:42:20Z"
     },
     {
      "store_id": "-y2o4pe9VVCup311kgpbvw",
@@ -4182,7 +3287,7 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "115 menu items published; 18 sent as candidates",
-     "checked_at": "2026-10-08T07:30:00Z"
+     "checked_at": "2026-10-08T07:42:27Z"
     },
     {
      "store_id": "2WCUgSySTmCsfefFxPuLWg",
@@ -4190,114 +3295,10 @@
      "source": "sitemap",
      "status": "checked",
      "detail": "125 menu items published; 19 sent as candidates",
-     "checked_at": "2026-10-08T07:30:16Z"
+     "checked_at": "2026-10-08T07:42:41Z"
     }
    ],
    "observations": [
-    {
-     "platform": "ubereats",
-     "store_id": "-BsohOlnRt6Kdb_ZVJT-Ow",
-     "store_name": "Taco Bell (36 Lynn Ave)",
-     "store_url": "https://www.ubereats.com/store/taco-bell-36-lynn-ave/-BsohOlnRt6Kdb_ZVJT-Ow",
-     "fetched_url": "https://www.ubereats.com/store/taco-bell-36-lynn-ave/-BsohOlnRt6Kdb_ZVJT-Ow?diningMode=DELIVERY",
-     "address": {
-      "street": "36 Lynn Ave",
-      "city": "Oxford",
-      "state": "OH",
-      "zip": "45056",
-      "country": "US"
-     },
-     "observed_at": "2026-10-08T07:29:54Z",
-     "order_mode": "delivery",
-     "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
-     "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
-     "currency": "USD",
-     "extraction": "schema.org JSON-LD (Restaurant.hasMenu -> MenuItem.offers)",
-     "menu_item_count": 57,
-     "fetch_via": "http",
-     "items": [
-      {
-       "name": "Breakfast California Crunchwrap",
-       "section": "Breakfast",
-       "price_cents": 597,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Breakfast Crunchwrap Sausage",
-       "section": "Breakfast",
-       "price_cents": 597,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Breakfast Crunchwrap Bacon",
-       "section": "Breakfast",
-       "price_cents": 597,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      }
-     ]
-    },
-    {
-     "platform": "ubereats",
-     "store_id": "-Y1DZ_7dSGWeK-kTLFO8pg",
-     "store_name": "Taco Bell (20726 Harper Ave.)",
-     "store_url": "https://www.ubereats.com/store/taco-bell-20726-harper-aves/-Y1DZ_7dSGWeK-kTLFO8pg",
-     "fetched_url": "https://www.ubereats.com/store/taco-bell-20726-harper-aves/-Y1DZ_7dSGWeK-kTLFO8pg?diningMode=DELIVERY",
-     "address": {
-      "street": "20726 Harper Ave.",
-      "city": "Harper Woods",
-      "state": "MI",
-      "zip": "48225",
-      "country": "US"
-     },
-     "observed_at": "2026-10-08T07:29:57Z",
-     "order_mode": "delivery",
-     "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
-     "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
-     "currency": "USD",
-     "extraction": "schema.org JSON-LD (Restaurant.hasMenu -> MenuItem.offers)",
-     "menu_item_count": 63,
-     "fetch_via": "http",
-     "items": [
-      {
-       "name": "Breakfast Crunchwrap Sausage",
-       "section": "Breakfast",
-       "price_cents": 609,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Breakfast California Crunchwrap",
-       "section": "Breakfast",
-       "price_cents": 609,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Breakfast Crunchwrap Bacon",
-       "section": "Breakfast",
-       "price_cents": 609,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Breakfast Crunchwrap Combo",
-       "section": "Breakfast",
-       "price_cents": 1048,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      }
-     ]
-    },
     {
      "platform": "ubereats",
      "store_id": "-y2o4pe9VVCup311kgpbvw",
@@ -4311,7 +3312,7 @@
       "zip": "10305",
       "country": "US"
      },
-     "observed_at": "2026-10-08T07:30:00Z",
+     "observed_at": "2026-10-08T07:42:27Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -4320,62 +3321,6 @@
      "menu_item_count": 115,
      "fetch_via": "http",
      "items": [
-      {
-       "name": "Supreme Luxe Box\u2122",
-       "section": "Featured items",
-       "price_cents": 854,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Crunchwrap Supreme\u00ae",
-       "section": "Featured items",
-       "price_cents": 804,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Chalupa Supreme",
-       "section": "Featured items",
-       "price_cents": 694,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Nacho Cheese Doritos\u00ae Locos Tacos Supreme\u00ae",
-       "section": "Featured items",
-       "price_cents": 536,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "3 Crunchy Tacos Supreme\u00ae Combo",
-       "section": "Featured items",
-       "price_cents": 1280,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "Crunchwrap Supreme\u00ae Combo",
-       "section": "Featured items",
-       "price_cents": 1292,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
-      {
-       "name": "2 Chicken Chalupas Supreme Combo",
-       "section": "Featured items",
-       "price_cents": 1585,
-       "currency": "USD",
-       "availability": "unknown",
-       "required_options": "unknown"
-      },
       {
        "name": "Creamy Chipotle Crispy Chicken Crunchwrap Slider",
        "section": "Limited Time Offers",
@@ -4388,6 +3333,38 @@
        "name": "3 Doritos\u00ae Locos Tacos Supreme Combo",
        "section": "Combos",
        "price_cents": 1463,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "2 Chicken Chalupas Supreme Combo",
+       "section": "Combos",
+       "price_cents": 1585,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "Crunchwrap Supreme\u00ae Combo",
+       "section": "Combos",
+       "price_cents": 1292,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "3 Crunchy Tacos Supreme\u00ae Combo",
+       "section": "Combos",
+       "price_cents": 1280,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "Supreme Luxe Box\u2122",
+       "section": "Combos",
+       "price_cents": 854,
        "currency": "USD",
        "availability": "unknown",
        "required_options": "unknown"
@@ -4417,6 +3394,14 @@
        "required_options": "unknown"
       },
       {
+       "name": "Crunchwrap Supreme\u00ae",
+       "section": "Specialties",
+       "price_cents": 804,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
        "name": "Black Bean Crunchwrap Supreme\u00ae",
        "section": "Veggie Cravings",
        "price_cents": 731,
@@ -4428,6 +3413,22 @@
        "name": "Black Bean Chalupa Supreme",
        "section": "Veggie Cravings",
        "price_cents": 670,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "Chalupa Supreme",
+       "section": "Tacos",
+       "price_cents": 694,
+       "currency": "USD",
+       "availability": "unknown",
+       "required_options": "unknown"
+      },
+      {
+       "name": "Nacho Cheese Doritos\u00ae Locos Tacos Supreme\u00ae",
+       "section": "Tacos",
+       "price_cents": 536,
        "currency": "USD",
        "availability": "unknown",
        "required_options": "unknown"
@@ -4479,7 +3480,7 @@
       "zip": "85283",
       "country": "US"
      },
-     "observed_at": "2026-10-08T07:30:03Z",
+     "observed_at": "2026-10-08T07:42:30Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -4655,7 +3656,7 @@
       "zip": "55037",
       "country": "US"
      },
-     "observed_at": "2026-10-08T07:30:06Z",
+     "observed_at": "2026-10-08T07:42:32Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -4711,7 +3712,7 @@
       "zip": "43130",
       "country": "US"
      },
-     "observed_at": "2026-10-08T07:30:09Z",
+     "observed_at": "2026-10-08T07:42:35Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -4887,7 +3888,7 @@
       "zip": "08812",
       "country": "US"
      },
-     "observed_at": "2026-10-08T07:30:16Z",
+     "observed_at": "2026-10-08T07:42:41Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -5063,7 +4064,7 @@
       "zip": "93230",
       "country": "US"
      },
-     "observed_at": "2026-10-08T07:30:21Z",
+     "observed_at": "2026-10-08T07:42:47Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -5119,7 +4120,7 @@
       "zip": "11559",
       "country": "US"
      },
-     "observed_at": "2026-10-08T07:30:27Z",
+     "observed_at": "2026-10-08T07:42:54Z",
      "order_mode": "delivery",
      "mode_basis": "requested with ?diningMode=DELIVERY (parameter reported publicly; its effect on the page's published prices was not verifiable from the build environment)",
      "price_context": "anonymous session (no login, no saved cookies), no delivery address set; menu prices as published on the public store page",
@@ -6615,7 +5616,7 @@
      }
     ],
     "source_url": "https://menupages.com/lou-malnatis-pizzeria/6456-s-cicero-ave-chicago",
-    "observed_at": "2026-10-08T07:28:03Z",
+    "observed_at": "2026-10-08T07:40:28Z",
     "source": "MenuPages (Grubhub-owned menu site), schema.org Menu JSON-LD",
     "price_context": "Grubhub menu price as published on MenuPages; options/add-ons and fees not included",
     "grubhub_ids_linked": [
@@ -6640,5 +5641,5 @@
    "menu": null
   }
  ],
- "finished_at": "2026-10-08T07:30:28Z"
+ "finished_at": "2026-10-08T07:42:54Z"
 }
