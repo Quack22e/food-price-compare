@@ -1,0 +1,3071 @@
+{
+  "started_at": "2026-10-08T00:28:48Z",
+  "runner": {
+    "github_run_id": "37707896611",
+    "github_sha": "2c5641947ec4b7663a1582b22a9dec99fde366c2",
+    "runner_os": "Linux",
+    "python": "3.12.14",
+    "browser_available": true
+  },
+  "user_agent": "FoodPriceCompare/1.0 (personal menu-price comparison; honors robots.txt)",
+  "probe": {
+    "doordash": {
+      "base": "https://www.doordash.com",
+      "reachable": true,
+      "barrier": null,
+      "robots_status": 200,
+      "robots_note": "",
+      "crawling_allowed": true,
+      "declared_sitemaps": [
+        "https://www.doordash.com/sitemap-store-doordash-index.xml",
+        "https://www.doordash.com/sitemap-business-doordash-index.xml",
+        "https://www.doordash.com/sitemap-business_menu-doordash-index.xml",
+        "https://www.doordash.com/sitemap-city-doordash-index.xml",
+        "https://www.doordash.com/sitemap-city_es_US-doordash-index.xml",
+        "https://www.doordash.com/sitemap-city_fr_CA-doordash-index.xml",
+        "https://www.doordash.com/sitemap-city_cuisine-doordash-index.xml",
+        "https://www.doordash.com/sitemap-city_cuisine_es_US-doordash-index.xml",
+        "https://www.doordash.com/sitemap-city_cuisine_fr_CA-doordash-index.xml",
+        "https://www.doordash.com/sitemap-dish-doordash-index.xml",
+        "https://www.doordash.com/sitemap-dynamic-doordash-index.xml",
+        "https://www.doordash.com/sitemap-static-doordash-index.xml",
+        "https://www.doordash.com/sitemap-cuisine-doordash-index.xml",
+        "https://www.doordash.com/sitemap-city_business-doordash-index.xml",
+        "https://www.doordash.com/sitemap-products-doordash-index.xml",
+        "https://www.doordash.com/sitemap-product_categories-doordash-index.xml",
+        "https://www.doordash.com/sitemap-block_party-doordash-index.xml",
+        "https://www.doordash.com/sitemap-nv_categories-doordash-index.xml",
+        "https://www.doordash.com/sitemap-gift_card-doordash-index.xml"
+      ],
+      "crawl_delay": null,
+      "checked_at": "2026-10-08T00:28:48Z"
+    },
+    "ubereats": {
+      "base": "https://www.ubereats.com",
+      "reachable": true,
+      "barrier": null,
+      "robots_status": 200,
+      "robots_note": "",
+      "crawling_allowed": true,
+      "declared_sitemaps": [
+        "https://www.ubereats.com/sitemap-index-771af823.xml.gz",
+        "https://www.ubereats.com/sitemap-store-771af823-025.xml.gz",
+        "https://www.ubereats.com/sitemap-store-771af823-024.xml.gz",
+        "https://www.ubereats.com/sitemap-store-771af823-023.xml.gz",
+        "https://www.ubereats.com/sitemap-store-771af823-022.xml.gz",
+        "https://www.ubereats.com/sitemap-store-771af823-021.xml.gz",
+        "https://www.ubereats.com/sitemap-store-771af823-020.xml.gz",
+        "https://www.ubereats.com/sitemap-store-771af823-019.xml.gz",
+        "https://www.ubereats.com/sitemap-store-771af823-018.xml.gz",
+        "https://www.ubereats.com/sitemap-store-771af823-017.xml.gz",
+        "https://www.ubereats.com/sitemap-store-771af823-016.xml.gz",
+        "https://www.ubereats.com/sitemap-store-771af823-015.xml.gz",
+        "https://www.ubereats.com/sitemap-store-771af823-014.xml.gz",
+        "https://www.ubereats.com/sitemap-store-771af823-013.xml.gz",
+        "https://www.ubereats.com/sitemap-store-771af823-012.xml.gz",
+        "https://www.ubereats.com/sitemap-store-771af823-011.xml.gz",
+        "https://www.ubereats.com/sitemap-store-771af823-010.xml.gz",
+        "https://www.ubereats.com/sitemap-store-771af823-009.xml.gz",
+        "https://www.ubereats.com/sitemap-store-771af823-008.xml.gz",
+        "https://www.ubereats.com/sitemap-store-771af823-007.xml.gz"
+      ],
+      "crawl_delay": null,
+      "checked_at": "2026-10-08T00:28:48Z"
+    },
+    "grubhub": {
+      "base": "https://www.grubhub.com",
+      "reachable": true,
+      "barrier": null,
+      "robots_status": 200,
+      "robots_note": "",
+      "crawling_allowed": true,
+      "declared_sitemaps": [],
+      "crawl_delay": null,
+      "checked_at": "2026-10-08T00:28:48Z"
+    }
+  },
+  "inspections": [
+    {
+      "url": "https://www.ubereats.com/store/zuckers-bagels-fidis/YK9UYIbxTd2Gappp2N4pgQ",
+      "http": {
+        "url": "https://www.ubereats.com/store/zuckers-bagels-fidis/YK9UYIbxTd2Gappp2N4pgQ",
+        "fetch": {
+          "url": "https://www.ubereats.com/store/zuckers-bagels-fidis/YK9UYIbxTd2Gappp2N4pgQ",
+          "ok": false,
+          "status": 200,
+          "final_url": "https://www.ubereats.com/store/zuckers-bagels-fidis/YK9UYIbxTd2Gappp2N4pgQ",
+          "content_type": "text/html; charset=utf-8",
+          "fetched_at": "2026-10-08T00:28:52Z",
+          "from_cache": false,
+          "via": "http",
+          "barrier": {
+            "kind": "captcha",
+            "detail": "bot-challenge / CAPTCHA interstitial returned",
+            "url": "https://www.ubereats.com/store/zuckers-bagels-fidis/YK9UYIbxTd2Gappp2N4pgQ",
+            "host": "www.ubereats.com",
+            "status": 200,
+            "observed_at": "2026-10-08T00:28:52Z"
+          },
+          "error": null,
+          "attempts": 1,
+          "bytes": 3009266
+        }
+      }
+    },
+    {
+      "url": "https://www.ubereats.com/brand/mcdonalds",
+      "http": {
+        "url": "https://www.ubereats.com/brand/mcdonalds",
+        "fetch": {
+          "url": "https://www.ubereats.com/brand/mcdonalds",
+          "ok": true,
+          "status": 200,
+          "final_url": "https://www.ubereats.com/brand/mcdonalds",
+          "content_type": "text/html; charset=utf-8",
+          "fetched_at": "2026-10-08T00:28:54Z",
+          "from_cache": false,
+          "via": "http",
+          "barrier": null,
+          "error": null,
+          "attempts": 1,
+          "bytes": 2620167
+        },
+        "title": "McDonald's Delivery | Find a Location Near Me | Uber EatsArrow launchThree linesThree linesLocation markerChevron down small",
+        "jsonld_block_count": 1,
+        "jsonld_errors": [],
+        "jsonld_types": [
+          "faqpage",
+          "question",
+          "answer"
+        ],
+        "json_scripts": [
+          {
+            "id": "__MARKETING_UCLICK_LINK_CONFIG__",
+            "type": "application/json",
+            "length": 1528
+          },
+          {
+            "id": "__UNIVERSAL_EVENTS_CONFIG__",
+            "type": "application/json",
+            "length": 137
+          },
+          {
+            "id": "__FUSION_UNIVERSAL_VALUES__",
+            "type": "application/json",
+            "length": 10
+          },
+          {
+            "id": "__PWV_DEVICE_INFO__",
+            "type": "application/json",
+            "length": 117
+          },
+          {
+            "id": "__DID__",
+            "type": "application/json",
+            "length": 109
+          },
+          {
+            "id": "__DID_V__",
+            "type": "application/json",
+            "length": 884
+          },
+          {
+            "id": "__EGH__",
+            "type": "application/json",
+            "length": 669
+          },
+          {
+            "id": "__ANALYTICS_PLUGIN_CONFIG__",
+            "type": "application/json",
+            "length": 183
+          },
+          {
+            "id": "__ANALYTICS_CONFIG__",
+            "type": "application/json",
+            "length": 5352
+          },
+          {
+            "id": "__WEB_ANALYTICS_SVC_INFO__",
+            "type": "application/json",
+            "length": 73
+          },
+          {
+            "id": "__ANALYTICS_PLUGIN_CONFIG__",
+            "type": "application/json",
+            "length": 207
+          },
+          {
+            "id": "__USL_GOOGLE_ONE_TAP__",
+            "type": "application/json",
+            "length": 563
+          },
+          {
+            "id": "__TRANSLATIONS__",
+            "type": "application/json",
+            "length": 55046
+          },
+          {
+            "id": "__REACT_QUERY_STATE__",
+            "type": "application/json",
+            "length": 3817
+          },
+          {
+            "id": "__MANAGED_TRANSLATIONS__",
+            "type": "application/json",
+            "length": 310
+          },
+          {
+            "id": "__APM__",
+            "type": "application/json",
+            "length": 115
+          },
+          {
+            "id": "__FILE_UPLOAD__",
+            "type": "application/json",
+            "length": 356
+          },
+          {
+            "id": "__RM__",
+            "type": "application/json",
+            "length": 41
+          },
+          {
+            "id": "__UEAM__",
+            "type": "application/json",
+            "length": 60
+          },
+          {
+            "id": "__PLL__",
+            "type": "application/json",
+            "length": 263
+          },
+          {
+            "id": "__REDUX_STATE__",
+            "type": "application/json",
+            "length": 1502514
+          },
+          {
+            "id": "__FUSION_PLUGIN_PARAMETERS__",
+            "type": "application/json",
+            "length": 39
+          },
+          {
+            "id": "__CONFIG__",
+            "type": "application/json",
+            "length": 135211
+          }
+        ],
+        "has___NEXT_DATA__": false,
+        "og": {
+          "og:url": "https://www.ubereats.com/brand/mcdonalds",
+          "og:image": "https://tb-static.uber.com/prod/web-eats-v2/open-graph/uber-eats.jpg",
+          "og:type": "website",
+          "og:title": "McDonald's Delivery | Find a Location Near Me | Uber Eats",
+          "og:description": "Order McDonald's online. Find nearby locations, browse available items, and enjoy the convenience of contactless delivery."
+        },
+        "restaurants": []
+      },
+      "browser": {
+        "url": "https://www.ubereats.com/brand/mcdonalds",
+        "fetch": {
+          "url": "https://www.ubereats.com/brand/mcdonalds",
+          "ok": false,
+          "status": 403,
+          "final_url": "https://www.ubereats.com/brand/mcdonalds",
+          "content_type": "text/html",
+          "fetched_at": "2026-10-08T00:28:59Z",
+          "from_cache": false,
+          "via": "browser",
+          "barrier": {
+            "kind": "captcha",
+            "detail": "bot-challenge / CAPTCHA interstitial returned",
+            "url": "https://www.ubereats.com/brand/mcdonalds",
+            "host": "www.ubereats.com",
+            "status": 403,
+            "observed_at": "2026-10-08T00:28:59Z"
+          },
+          "error": null,
+          "attempts": 1,
+          "bytes": 28919
+        }
+      }
+    },
+    {
+      "url": "https://www.doordash.com/store/24633898/",
+      "http": {
+        "url": "https://www.doordash.com/store/24633898/",
+        "fetch": {
+          "url": "https://www.doordash.com/store/24633898/",
+          "ok": false,
+          "status": 403,
+          "final_url": "https://www.doordash.com/store/24633898/",
+          "content_type": "text/html; charset=UTF-8",
+          "fetched_at": "2026-10-08T00:28:59Z",
+          "from_cache": false,
+          "via": "http",
+          "barrier": {
+            "kind": "captcha",
+            "detail": "bot-challenge / CAPTCHA interstitial returned",
+            "url": "https://www.doordash.com/store/24633898/",
+            "host": "www.doordash.com",
+            "status": 403,
+            "observed_at": "2026-10-08T00:28:59Z"
+          },
+          "error": null,
+          "attempts": 1,
+          "bytes": 5707
+        }
+      }
+    },
+    {
+      "url": "https://www.doordash.com/business/chipotle-mexican-grill-115/",
+      "http": {
+        "url": "https://www.doordash.com/business/chipotle-mexican-grill-115/",
+        "fetch": {
+          "url": "https://www.doordash.com/business/chipotle-mexican-grill-115/",
+          "ok": true,
+          "status": 200,
+          "final_url": "https://www.doordash.com/business/chipotle-mexican-grill-115/",
+          "content_type": "text/html; charset=utf-8",
+          "fetched_at": "2026-10-08T00:29:03Z",
+          "from_cache": false,
+          "via": "http",
+          "barrier": null,
+          "error": null,
+          "attempts": 1,
+          "bytes": 2277168
+        },
+        "title": "Chipotle Mexican Grill's Delivery & Takeout Near You - DoorDashIcon LoadingIcon LoadingIcon LoadingIcon LoadingIcon LoadingIcon LoadingIcon LoadingIcon LoadingIcon LoadingIcon LoadingIcon LoadingIcon ",
+        "jsonld_block_count": 0,
+        "jsonld_errors": [],
+        "jsonld_types": [],
+        "json_scripts": [
+          {
+            "id": "googleMaps",
+            "type": "",
+            "length": 0
+          }
+        ],
+        "has___NEXT_DATA__": false,
+        "og": {
+          "og:title": "Chipotle Mexican Grill's Delivery & Takeout Near You - DoorDash",
+          "og:description": "Get Chipotle Mexican Grill's delivery & pickup! Order online with DoorDash and get Chipotle Mexican Grill's delivered to your door. No-contact delivery and takeout orders available now.",
+          "og:url": "https://www.doordash.com/business/chipotle-mexican-grill-115/",
+          "og:locale": "en-US"
+        },
+        "restaurants": []
+      },
+      "browser": {
+        "url": "https://www.doordash.com/business/chipotle-mexican-grill-115/",
+        "fetch": {
+          "url": "https://www.doordash.com/business/chipotle-mexican-grill-115/",
+          "ok": false,
+          "status": 403,
+          "final_url": "https://www.doordash.com/business/chipotle-mexican-grill-115/",
+          "content_type": "text/html",
+          "fetched_at": "2026-10-08T00:29:07Z",
+          "from_cache": false,
+          "via": "browser",
+          "barrier": {
+            "kind": "captcha",
+            "detail": "bot-challenge / CAPTCHA interstitial returned",
+            "url": "https://www.doordash.com/business/chipotle-mexican-grill-115/",
+            "host": "www.doordash.com",
+            "status": 403,
+            "observed_at": "2026-10-08T00:29:07Z"
+          },
+          "error": null,
+          "attempts": 1,
+          "bytes": 29038
+        }
+      }
+    }
+  ],
+  "jobs": [
+    {
+      "request": {
+        "order": {
+          "chain": "McDonald's",
+          "items": [
+            {
+              "name": "Big Mac"
+            }
+          ]
+        },
+        "platforms": [
+          "ubereats"
+        ],
+        "seed_urls": [
+          "https://www.ubereats.com/brand/mcdonalds"
+        ],
+        "order_mode": "delivery",
+        "fetch_mode": "auto",
+        "max_stores_per_platform": 3
+      },
+      "summary": {
+        "status": "paused",
+        "platforms": {
+          "ubereats": {
+            "state": "paused_limit",
+            "stop_reason": null,
+            "runs": 1,
+            "counters": {
+              "discovered": 315,
+              "queued": 312,
+              "checked": 0,
+              "no_menu": 0,
+              "non_us": 3,
+              "blocked": 0,
+              "failed": 0,
+              "duplicate": 0,
+              "in_progress": 0,
+              "remaining": 312,
+              "sitemaps_pending": 340,
+              "sitemaps_done": 2,
+              "sitemaps_failed": 0,
+              "chain_pages_pending": 0,
+              "sitemap_enumeration_complete": false
+            }
+          }
+        }
+      },
+      "barriers": [],
+      "stores": [
+        {
+          "store_id": "QrGEyGYvVW6m7mBR1cP4Lw",
+          "canonical": "https://www.ubereats.com/ca/store/mcdonalds-bridgewaters/QrGEyGYvVW6m7mBR1cP4Lw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "c41SfWGrU7uc3lmcdRCDWA",
+          "canonical": "https://www.ubereats.com/fr-en/store/mcdonalds-beaumont-sur-oise/c41SfWGrU7uc3lmcdRCDWA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "eXhJ0UJlU_mYuSYNB4STXg",
+          "canonical": "https://www.ubereats.com/jp-en/store/%E3%83%9E%E3%82%AF%E3%83%88%E3%83%8A%E3%83%AB%E3%83%88-%E6%96%B0%E6%B1%9F%E5%8F%A4%E7%94%B0%E7%9B%AE%E7%99%BD%E9%80%9A%E3%82%8A%E5%BA%97-mcdonalds-shin-egota-mejirodori/eXhJ0UJlU_mYuSYNB4STXg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "D6SG45HDQ6uMgmiZQKdWKQ",
+          "canonical": "https://www.ubereats.com/jp/store/%E3%83%9E%E3%82%AF%E3%83%88%E3%83%8A%E3%83%AB%E3%83%88%E6%9C%AC%E5%B1%B1%E5%8D%97%E5%BA%97-mcdonalds-motoyama-minami/D6SG45HDQ6uMgmiZQKdWKQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "9G_TDOCxTX2Nz-0fR_nMyA",
+          "canonical": "https://www.ubereats.com/gt-en/store/mcdonalds-antigua/9G_TDOCxTX2Nz-0fR_nMyA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "9OfhoYsMTRyMQmihC47pyQ",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-20726-interstate-30s/9OfhoYsMTRyMQmihC47pyQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "dZt7LyEUQU2h3Us2lIneoQ",
+          "canonical": "https://www.ubereats.com/ca/store/mcdonalds-baseline-rds/dZt7LyEUQU2h3Us2lIneoQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "D52eYwErVIu27gNYfWw_ag",
+          "canonical": "https://www.ubereats.com/fr-en/store/mcdonalds-rumilly/D52eYwErVIu27gNYfWw_ag",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "4daszXxyQ6mP7rX_F3Vong",
+          "canonical": "https://www.ubereats.com/cl/store/chickens-de-mcdonalds-republica/4daszXxyQ6mP7rX_F3Vong",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "Dtv-lXbLRZaHKUVswEWEeA",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-atlanta-ga-northside/Dtv-lXbLRZaHKUVswEWEeA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "3K1lURU8XsOnGbBKm4p6yA",
+          "canonical": "https://www.ubereats.com/jp/store/zzz%E3%83%9E%E3%82%AF%E3%83%88%E3%83%8A%E3%83%AB%E3%83%88-%E4%B8%B8%E4%BA%80%E7%AB%B6%E6%8A%80%E5%A0%B4%E5%89%8D%E5%BA%97-mcdonalds-marugamekyogijomaeten/3K1lURU8XsOnGbBKm4p6yA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "SvD0PAUgToKrAvZ8Q4thsQ",
+          "canonical": "https://www.ubereats.com/tw-en/store/%E9%BA%A5%E7%95%B6%E5%8B%9E-%E5%8F%B0%E5%8D%97%E4%BB%81%E5%BE%B7-mcdonalds-s358/SvD0PAUgToKrAvZ8Q4thsQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "59bM9c9cTYyCXLseuFp1gA",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-111-fisherville-rds/59bM9c9cTYyCXLseuFp1gA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "udMmHE9TTdSmpxKi0D83Mg",
+          "canonical": "https://www.ubereats.com/fr/store/mcdonalds-nice-saint-andre/udMmHE9TTdSmpxKi0D83Mg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "8NUj1-TTT9aRcTG25jELzA",
+          "canonical": "https://www.ubereats.com/ch-de/store/mcdonalds-allschwil/8NUj1-TTT9aRcTG25jELzA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "YBNZ1xoaSumELJA1KBcnLA",
+          "canonical": "https://www.ubereats.com/fr-en/store/mcdonalds-pont-a-mousson/YBNZ1xoaSumELJA1KBcnLA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "g3MV_cJqU9eD8KyZuMMPiw",
+          "canonical": "https://www.ubereats.com/ch-it/store/mcdonalds-bremgarten/g3MV_cJqU9eD8KyZuMMPiw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "UpmZEFUiVK62R-BmX6KOFw",
+          "canonical": "https://www.ubereats.com/pt-en/store/new-mcdonalds-marinha-grande/UpmZEFUiVK62R-BmX6KOFw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "sgYRz6MjT0GGAsqV3D0dzQ",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-5120-west-baseline-road/sgYRz6MjT0GGAsqV3D0dzQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "pSESOetuXGOO-zwieEINww",
+          "canonical": "https://www.ubereats.com/ca/store/mcdonalds-wm-sydney/pSESOetuXGOO-zwieEINww",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "AWJfNhruSD24S-04z69TKA",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-e-12th-sts/AWJfNhruSD24S-04z69TKA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "bMbNaisyQ5maChRoZNDdcw",
+          "canonical": "https://www.ubereats.com/gb/store/mcdonalds-butterfly-walks/bMbNaisyQ5maChRoZNDdcw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "FIa71TeYTyeVt_8uqIzctw",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-lincoln-jordans/FIa71TeYTyeVt_8uqIzctw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "CiYfHgs2UMGFnxvRpbgEOw",
+          "canonical": "https://www.ubereats.com/ch-it/store/mcdonalds-schaffhausen/CiYfHgs2UMGFnxvRpbgEOw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "T6ckDmCoQxO9R2Om09hYVw",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-529-southwest-cutoffs/T6ckDmCoQxO9R2Om09hYVw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "BKUoXXtRV6K1l4QZaU9pRw",
+          "canonical": "https://www.ubereats.com/ca/store/mcdonalds-oakbank-co-op/BKUoXXtRV6K1l4QZaU9pRw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "HHa-VfqkVkuxqDl2Tj5gbA",
+          "canonical": "https://www.ubereats.com/ca-fr/store/mcdonalds-bible-hills/HHa-VfqkVkuxqDl2Tj5gbA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "pfkBocqRTlKfYgRxPUMs8g",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-kent-256th-sts/pfkBocqRTlKfYgRxPUMs8g",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "h00GtmtgUZm2TRjotX1FLw",
+          "canonical": "https://www.ubereats.com/ec-en/store/mcdonalds-desayunos-samborondon/h00GtmtgUZm2TRjotX1FLw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "yH527_bDWRGCjXeXJLI9qg",
+          "canonical": "https://www.ubereats.com/jp/store/%E3%83%9E%E3%82%AF%E3%83%88%E3%83%8A%E3%83%AB%E3%83%88309%E5%AF%8C%E7%94%B0%E6%9E%97%E5%BA%97-mcdonalds-route-309-tondabayashi/yH527_bDWRGCjXeXJLI9qg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "E4dg-mshSsugCa30BEzl7A",
+          "canonical": "https://www.ubereats.com/ca/store/mcdonalds-alpine-st-%26-ottawa-rds/E4dg-mshSsugCa30BEzl7A",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "M4buGpaGREaXyHmiOWFBBQ",
+          "canonical": "https://www.ubereats.com/fr-en/store/mcdonalds-montpellier-croix-dargent/M4buGpaGREaXyHmiOWFBBQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "QUu6m8DVTBu_TRlH-dsfqQ",
+          "canonical": "https://www.ubereats.com/tw/store/%E9%BA%A5%E7%95%B6%E5%8B%9E-%E6%96%B0%E7%AB%B9%E4%B8%AD%E6%AD%A3-mcdonalds-s175/QUu6m8DVTBu_TRlH-dsfqQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "FJE1YUaARRy6ufO4I3YLbg",
+          "canonical": "https://www.ubereats.com/mx-en/store/inactiva-mcdonalds-dady-o/FJE1YUaARRy6ufO4I3YLbg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "pTL01ygqT7uabFOKwFvdLg",
+          "canonical": "https://www.ubereats.com/au/store/mcdonalds-carrum-downss/pTL01ygqT7uabFOKwFvdLg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "laGMCPakRgus7Jin92cykw",
+          "canonical": "https://www.ubereats.com/ca/store/mcdonalds-chemongs/laGMCPakRgus7Jin92cykw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "ElwySmsnUfCr1ygBiUeZwA",
+          "canonical": "https://www.ubereats.com/fi/store/mcdonalds-helsinki-jatkasaari/ElwySmsnUfCr1ygBiUeZwA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "KuIYRYpAUceucZERAZQNFg",
+          "canonical": "https://www.ubereats.com/ca/store/mcdonalds-woodstock/KuIYRYpAUceucZERAZQNFg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "z3O4lU4jTuqf-yfiEhBe8A",
+          "canonical": "https://www.ubereats.com/fr/store/deprecated-mcdonalds-deols/z3O4lU4jTuqf-yfiEhBe8A",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "5YraJorrQYCY0ATqhMm8Sw",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-33899-old-valley-pikes/5YraJorrQYCY0ATqhMm8Sw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "VjKOzOu6VRWwjqSRCSC2KQ",
+          "canonical": "https://www.ubereats.com/au/store/mcdonalds-moranbah/VjKOzOu6VRWwjqSRCSC2KQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "bXo_Y35hRz2lfUbAQNgvag",
+          "canonical": "https://www.ubereats.com/ar/store/mcdonalds-pompeya/bXo_Y35hRz2lfUbAQNgvag",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "jKktmcsKRc-X5Vk_Ergfbg",
+          "canonical": "https://www.ubereats.com/tw-en/store/%E9%BA%A5%E7%95%B6%E5%8B%9E-%E5%8F%B0%E5%8D%97%E6%9D%B1%E9%96%80-mcdonalds-s178/jKktmcsKRc-X5Vk_Ergfbg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "OfgNhwwKRN2zsuR6Qu-jhA",
+          "canonical": "https://www.ubereats.com/jp-en/store/%E3%83%9E%E3%82%AF%E3%83%88%E3%83%8A%E3%83%AB%E3%83%88-%E8%A5%BF%E5%85%AB%E7%8E%8B%E5%AD%90%E5%BA%97-mcdonalds-nishi-hachioji/OfgNhwwKRN2zsuR6Qu-jhA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "Y9OHbJuRRTqOjxDiIkPBjQ",
+          "canonical": "https://www.ubereats.com/se/store/mcdonalds-sundbyberg/Y9OHbJuRRTqOjxDiIkPBjQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "GF8tTMMTUOGJvr3AJ0l8TA",
+          "canonical": "https://www.ubereats.com/fi-en/store/mcdonalds-oulu-limingantulli/GF8tTMMTUOGJvr3AJ0l8TA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "pmYL05GFQXK8muxJwCmOXQ",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-37217-47th-st-es/pmYL05GFQXK8muxJwCmOXQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "hbSDv-bKUYK8F6kTufxf7g",
+          "canonical": "https://www.ubereats.com/jp/store/%E3%83%9E%E3%82%AF%E3%83%88%E3%83%8A%E3%83%AB%E3%83%88%E4%B8%89-%E9%B7%B9-%E5%BA%97-mcdonalds-mitaka/hbSDv-bKUYK8F6kTufxf7g",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "YYEdlVXqTpGZ0CbJOVfrMw",
+          "canonical": "https://www.ubereats.com/gb/store/mcdonalds-st-pauls-road/YYEdlVXqTpGZ0CbJOVfrMw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "zfRiWSyRSZqjkZk_EX3IPg",
+          "canonical": "https://www.ubereats.com/jp-en/store/%E3%83%9E%E3%82%AF%E3%83%88%E3%83%8A%E3%83%AB%E3%83%88-%E8%8D%89%E5%8A%A0%E5%BA%97-mcdonalds-soka/zfRiWSyRSZqjkZk_EX3IPg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "aC1WQfEpSb6vf5157glW2A",
+          "canonical": "https://www.ubereats.com/nl/store/mcdonalds-almere-buiten/aC1WQfEpSb6vf5157glW2A",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "CTt_m3kWWuqMtSJG-UIvGg",
+          "canonical": "https://www.ubereats.com/au/store/mcdonalds-devonport/CTt_m3kWWuqMtSJG-UIvGg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "TMhgCesaQPO_sBGnIWNWMw",
+          "canonical": "https://www.ubereats.com/fr/store/mcdonalds-clermont-le-brezet-churn/TMhgCesaQPO_sBGnIWNWMw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "gaSEhocyS62IBnu1CjVERQ",
+          "canonical": "https://www.ubereats.com/ch-de/store/mcdonalds-solothurn/gaSEhocyS62IBnu1CjVERQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "hX7coAjtQxitODM_rRXxBQ",
+          "canonical": "https://www.ubereats.com/ca/store/mcdonalds-hutchison/hX7coAjtQxitODM_rRXxBQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "WsHf_BNLSCWxE7Xwb9w7cg",
+          "canonical": "https://www.ubereats.com/gb/store/mcdonalds-the-peel-centres/WsHf_BNLSCWxE7Xwb9w7cg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "LvvwE68WQEiNhYv471Tr8w",
+          "canonical": "https://www.ubereats.com/cl/store/chickens-de-mcdonalds-antofagasta-centro/LvvwE68WQEiNhYv471Tr8w",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "pql_xKV9XlWoTrztKwt1gQ",
+          "canonical": "https://www.ubereats.com/au/store/mcdonalds-prospect-vale/pql_xKV9XlWoTrztKwt1gQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "3X3kicMqXHyp2tXKmjnz2A",
+          "canonical": "https://www.ubereats.com/jp/store/%E3%83%9E%E3%82%AF%E3%83%88%E3%83%8A%E3%83%AB%E3%83%88-%E7%83%8F%E4%B8%B8%E4%BA%94%E6%9D%A1%E5%BA%97-mcdonalds-karasuma-gojos/3X3kicMqXHyp2tXKmjnz2A",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "K7W3PCfvSaKxrZQ1578uSw",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-2057-tiger-town-pkwys/K7W3PCfvSaKxrZQ1578uSw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "mnt_hzMDTam5XOQ0XLKzGQ",
+          "canonical": "https://www.ubereats.com/fr/store/mcdonalds-genas/mnt_hzMDTam5XOQ0XLKzGQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "lw7xfdLHXReDFdDAKM6fAA",
+          "canonical": "https://www.ubereats.com/se/store/mcdonalds-gotland-visby-centrum/lw7xfdLHXReDFdDAKM6fAA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "Ct973ecWVSShMwxNMwXeOQ",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-2339-jamestown-aves/Ct973ecWVSShMwxNMwXeOQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "zbTdviiTXP-Uj16U4oQZcg",
+          "canonical": "https://www.ubereats.com/mx-en/store/postres-x-mcdonalds-chilpanchingo-centro/zbTdviiTXP-Uj16U4oQZcg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "5fx87zO5XSamm9ifpLiRQQ",
+          "canonical": "https://www.ubereats.com/jp/store/%E3%83%9E%E3%82%AF%E3%83%88%E3%83%8A%E3%83%AB%E3%83%88-%E3%82%A4%E3%83%BC%E3%82%A2%E3%82%B9%E3%81%A4%E3%81%8F%E3%81%AF%E5%BA%97-mcdonalds-iias-tsukuba/5fx87zO5XSamm9ifpLiRQQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "Ygd1GlCHSZW0_4_CuShMfg",
+          "canonical": "https://www.ubereats.com/gb/store/mcdonalds-market-street/Ygd1GlCHSZW0_4_CuShMfg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "qoymHUAiU6CIad2nadRsCw",
+          "canonical": "https://www.ubereats.com/ch-fr/store/mcdonalds-nidaugasse/qoymHUAiU6CIad2nadRsCw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "wwUdyGISXq2bBbCFRo-4Eg",
+          "canonical": "https://www.ubereats.com/mx/store/pollos-de-mcdonalds-parque-delta/wwUdyGISXq2bBbCFRo-4Eg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "UrruYOqQWL-tKRQDXTq5_A",
+          "canonical": "https://www.ubereats.com/lu/store/lost-mcdonalds-utopolis/UrruYOqQWL-tKRQDXTq5_A",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "JW4ZoBMZQuqGoSD-wOMI1w",
+          "canonical": "https://www.ubereats.com/pt/store/mcdonalds-portimao-drive/JW4ZoBMZQuqGoSD-wOMI1w",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "t3YgZrP8W1-0ug3372kb7Q",
+          "canonical": "https://www.ubereats.com/mx/store/despierta-con-mcdonalds-americas-xalapa/t3YgZrP8W1-0ug3372kb7Q",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "LtpUwdSEQNmq5_HVEpox0Q",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-northridge-%26-forrest-hillss/LtpUwdSEQNmq5_HVEpox0Q",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "ZjomhVg3Qkmh21Zar7f7BQ",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-299-e-mains/ZjomhVg3Qkmh21Zar7f7BQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "NeKWpFErRoqbUtzDojcxWA",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-3120-niagara-falls-blvds/NeKWpFErRoqbUtzDojcxWA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "Oi1rB7OtQumIxP_dzLuYQw",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-2053-hwy-41-n/Oi1rB7OtQumIxP_dzLuYQw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "yAg-oQbxWh6K7xK4WlyDAA",
+          "canonical": "https://www.ubereats.com/pa-en/store/chickens-de-mcdonalds-ondgo/yAg-oQbxWh6K7xK4WlyDAA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "5CMxj4Y6RledXOHyQUshfA",
+          "canonical": "https://www.ubereats.com/au/store/mcdonalds-wollert-north-vics/5CMxj4Y6RledXOHyQUshfA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "HbwRj_xMU9WN7pPxL3AsFw",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-1030-industrial-pkwy/HbwRj_xMU9WN7pPxL3AsFw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "tr5-wv9QQ-qrZt89qMXUlQ",
+          "canonical": "https://www.ubereats.com/mx/store/mcdonalds-puerta-la-victoria/tr5-wv9QQ-qrZt89qMXUlQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "nwFpgCkHR66n65POyuuh3w",
+          "canonical": "https://www.ubereats.com/za/store/mcdonalds-blue-hills/nwFpgCkHR66n65POyuuh3w",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "85c8zRW4THGxyPZTAG5YQw",
+          "canonical": "https://www.ubereats.com/pt/store/mcdonalds-albufeira/85c8zRW4THGxyPZTAG5YQw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "0UHJ__ERR_eKenJquAKGqA",
+          "canonical": "https://www.ubereats.com/ie/store/mcdonalds-the-park/0UHJ__ERR_eKenJquAKGqA",
+          "source": "sitemap",
+          "status": "non_us",
+          "detail": "URL is in the '/ie/' country section; not fetched"
+        },
+        {
+          "store_id": "3z4UJWy4T7u9g087CVzFyA",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-2324-nesconsets/3z4UJWy4T7u9g087CVzFyA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "_FrGnSsMQ9mM-apC9ApcZw",
+          "canonical": "https://www.ubereats.com/ca-fr/store/mcdonalds-st-deniss/_FrGnSsMQ9mM-apC9ApcZw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "eepNSEUKUsSL6X4cZ-5B4Q",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-6231-m-115s/eepNSEUKUsSL6X4cZ-5B4Q",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "iDiDXJrOT9K7-97G1jH3Aw",
+          "canonical": "https://www.ubereats.com/fr-en/store/mcdonalds-lens-stade-bollaert/iDiDXJrOT9K7-97G1jH3Aw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "2K7EMnxWQqeetJi42sj5Zg",
+          "canonical": "https://www.ubereats.com/jp-en/store/%E3%83%9E%E3%82%AF%E3%83%88%E3%83%8A%E3%83%AB%E3%83%88-176%E5%8C%97%E8%B1%8A%E4%B8%AD%E5%BA%97-mcdonalds-route-176-kita-toyonaka/2K7EMnxWQqeetJi42sj5Zg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "y73BKZh4T8KjNtGcY7Vlaw",
+          "canonical": "https://www.ubereats.com/pl-en/store/mcdonalds-wybickiego/y73BKZh4T8KjNtGcY7Vlaw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "6pzrwVf9SceGcjacdQ2kAA",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-101-w-patapsco-ave/6pzrwVf9SceGcjacdQ2kAA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "pAZsz_zwSG6q5vofKH1Deg",
+          "canonical": "https://www.ubereats.com/tw/store/%E9%BA%A5%E7%95%B6%E5%8B%9E-%E6%B0%B8%E5%92%8C%E4%B8%AD%E5%B1%B1-mcdonalds-s257/pAZsz_zwSG6q5vofKH1Deg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "yGkRntRBWYCCor_OYVijog",
+          "canonical": "https://www.ubereats.com/es-en/store/mcdonalds-torrejon/yGkRntRBWYCCor_OYVijog",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "UzjSRzH5VMWgB4iZHO-OqQ",
+          "canonical": "https://www.ubereats.com/mx/store/pollos-de-mcdonalds-san-javier/UzjSRzH5VMWgB4iZHO-OqQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "kghWp9gaR-27L2wnBjPWrw",
+          "canonical": "https://www.ubereats.com/ca-fr/store/mcdonalds-suite-100-11-westwind-drives/kghWp9gaR-27L2wnBjPWrw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "CL3BB2ckRIasD44-aXkDpw",
+          "canonical": "https://www.ubereats.com/ca/store/mcdonalds-250-boulevard-brisebois/CL3BB2ckRIasD44-aXkDpw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "RFByvD1lVwGrwxjVkb1kTw",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-16670-sr-64-e/RFByvD1lVwGrwxjVkb1kTw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "hfg0nPKcTlu9pCj2RNKTRQ",
+          "canonical": "https://www.ubereats.com/jp-en/store/%E3%83%9E%E3%82%AF%E3%83%88%E3%83%8A%E3%83%AB%E3%83%88-%E7%B7%B4%E9%A6%AC%E7%94%B0%E6%9F%84%E5%BA%97-mcdonalds-nerima-tagara/hfg0nPKcTlu9pCj2RNKTRQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "R6b9penhU6W9wG1q2fRdVQ",
+          "canonical": "https://www.ubereats.com/store/dupe-mcdonalds-us-464-south-blvd/R6b9penhU6W9wG1q2fRdVQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "gqEowUi_UIiUQbgo16gCRg",
+          "canonical": "https://www.ubereats.com/ca-fr/store/mcdonalds-gare-centrales/gqEowUi_UIiUQbgo16gCRg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "JCPT9qJBRC6mF0pkNWkoQg",
+          "canonical": "https://www.ubereats.com/es-en/store/mcdonalds-denia/JCPT9qJBRC6mF0pkNWkoQg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "7NIrY6PkSBWBiGj8H5diuQ",
+          "canonical": "https://www.ubereats.com/fr-en/store/mcdonalds-orleans-centre-ville/7NIrY6PkSBWBiGj8H5diuQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "S88_LZ_lSXifeY3PqA42kg",
+          "canonical": "https://www.ubereats.com/ch-de/store/mcdonalds-barfusserplatz/S88_LZ_lSXifeY3PqA42kg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "PyjsEiyeTXe2FMjN_obSLA",
+          "canonical": "https://www.ubereats.com/mx/store/despierta-con-mcdonalds-carranza/PyjsEiyeTXe2FMjN_obSLA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "F6Sl2mKzR1ubMLSCLti_aw",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-4950-hwy-61s/F6Sl2mKzR1ubMLSCLti_aw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "h2_RdlU-TFaaSs0bNbdhUQ",
+          "canonical": "https://www.ubereats.com/fr/store/mcdonalds-bourg-en-bresse-parc-des-expositions/h2_RdlU-TFaaSs0bNbdhUQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "Ai2A0Qo1Vyq2s4CS4sRCbA",
+          "canonical": "https://www.ubereats.com/jp-en/store/%E3%83%9E%E3%82%AF%E3%83%88%E3%83%8A%E3%83%AB%E3%83%88%E5%B7%9D%E8%A5%BF%E5%8A%A0%E8%8C%82%E5%BA%97-mcdonalds-kawanishikamo/Ai2A0Qo1Vyq2s4CS4sRCbA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "jghM5f-BS1qVo081fyFKPw",
+          "canonical": "https://www.ubereats.com/ca-fr/store/mcdonalds-provosts/jghM5f-BS1qVo081fyFKPw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "cpCHPWcfRLSnh_71kq0w5w",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-1308-junction-hwys/cpCHPWcfRLSnh_71kq0w5w",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "QwsRNnRmWqOPWhRZKP_WXQ",
+          "canonical": "https://www.ubereats.com/nz/store/mcdonalds-kaitaia/QwsRNnRmWqOPWhRZKP_WXQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "WKWSBgl5RaqWvA4NyQCQ5w",
+          "canonical": "https://www.ubereats.com/gb/store/mcdonalds-unit-110-dalton-park-seaham/WKWSBgl5RaqWvA4NyQCQ5w",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "7lHzagGzW-OBl79TbwqwOQ",
+          "canonical": "https://www.ubereats.com/de-en/store/lost-mcdonalds-winsener-strasse/7lHzagGzW-OBl79TbwqwOQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "GHsG3-LgSiGTwNSHwEsOSQ",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-1208-6th-ave-se/GHsG3-LgSiGTwNSHwEsOSQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "xU5uzPD1W4qrxP8Mg_JsDg",
+          "canonical": "https://www.ubereats.com/au/store/mcdonalds-mount-barkers/xU5uzPD1W4qrxP8Mg_JsDg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "u-tkAD8fS_mYZQAMMrxcxA",
+          "canonical": "https://www.ubereats.com/fr-en/store/mcdonalds-libourne-nord/u-tkAD8fS_mYZQAMMrxcxA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "BZyQh-PETO2HAMKserZLTg",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-spinder-%26-washingtons/BZyQh-PETO2HAMKserZLTg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "MhQFWtbNX2WMsYRWSvSiCw",
+          "canonical": "https://www.ubereats.com/au/store/mcdonalds-north-haven/MhQFWtbNX2WMsYRWSvSiCw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "zhppX69uRne_zgk_Yx_PBA",
+          "canonical": "https://www.ubereats.com/jp-en/store/%E3%83%9E%E3%82%AF%E3%83%88%E3%83%8A%E3%83%AB%E3%83%88-%E6%B5%A6%E5%AE%89%E5%AF%8C%E5%A3%AB%E8%A6%8B%E5%BA%97-mcdonalds-urayasu-fujimi/zhppX69uRne_zgk_Yx_PBA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "CKpVlqKvTrK-EadvN12PXQ",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-9140-hwy-29s/CKpVlqKvTrK-EadvN12PXQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "_1iFhlBMSFuJ_Br7uOSP8w",
+          "canonical": "https://www.ubereats.com/za/store/mcdonalds-riversands/_1iFhlBMSFuJ_Br7uOSP8w",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "VJwSWpt7TH2pQ29mEo9eLg",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-4711-14th-st-ws/VJwSWpt7TH2pQ29mEo9eLg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "vVAojK_1RGeNc-NOxPoTwQ",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-200-e-grand-avenues/vVAojK_1RGeNc-NOxPoTwQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "2UapjVcsXxiSoF1geHzPgQ",
+          "canonical": "https://www.ubereats.com/za/store/mcdonalds-bridgeview-drive-thru/2UapjVcsXxiSoF1geHzPgQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "tbYMHG_OQsK2tR8ph4Y4rA",
+          "canonical": "https://www.ubereats.com/jp-en/store/%E3%83%9E%E3%82%AF%E3%83%88%E3%83%8A%E3%83%AB%E3%83%88-%E6%9D%B1%E9%99%BD%E7%94%BA%E9%A7%85%E5%89%8D%E5%BA%97-mcdonalds-toyo-cho-eki-mae/tbYMHG_OQsK2tR8ph4Y4rA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "I3CuWCRxQomv4HdN-Jw7wQ",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-98th-st-%26-central-aves/I3CuWCRxQomv4HdN-Jw7wQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "udJnunz3Q0eeR3mitJNgxg",
+          "canonical": "https://www.ubereats.com/fr/store/mcdonalds-beaumont-churn/udJnunz3Q0eeR3mitJNgxg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "CQQanVp8QGCcZLI7-HafTA",
+          "canonical": "https://www.ubereats.com/jp-en/store/%E3%83%9E%E3%82%AF%E3%83%88%E3%83%8A%E3%83%AB%E3%83%88%E5%B0%8F%E7%94%B0%E6%80%A5%E7%A7%A6%E9%87%8E%E9%A7%85%E5%BA%97-mcdonalds-odakyuhadano-station/CQQanVp8QGCcZLI7-HafTA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "7EIquhc-Sj-tlGMTAwDhJA",
+          "canonical": "https://www.ubereats.com/tw/store/lost%E9%BA%A5%E7%95%B6%E5%8B%9E-%E5%B1%8F%E6%9D%B1%E6%9D%B1%E6%B8%AF-mcdonalds-s226/7EIquhc-Sj-tlGMTAwDhJA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "dNbYLFpEQQmGW7sk_Qnosw",
+          "canonical": "https://www.ubereats.com/tw/store/%E9%BA%A5%E7%95%B6%E5%8B%9E-%E9%AB%98%E9%9B%84%E9%B3%B3%E6%9E%97-mcdonalds-s283/dNbYLFpEQQmGW7sk_Qnosw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "PrWAGQfiVnyxuJPRAqZlGg",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-480-e-morgan-ave/PrWAGQfiVnyxuJPRAqZlGg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "KGs5hU5EWIaLs7d2ET6HAA",
+          "canonical": "https://www.ubereats.com/de-en/store/mcdonalds-am-muhlburger-bahnhof/KGs5hU5EWIaLs7d2ET6HAA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "6a_LtXGyQhCi9m2fodL2og",
+          "canonical": "https://www.ubereats.com/fr-en/store/mcdonalds-bouffere/6a_LtXGyQhCi9m2fodL2og",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "9l1MN-orQt29rWVa0NX-FQ",
+          "canonical": "https://www.ubereats.com/au/store/mcdonalds-calder-highway-northbounds/9l1MN-orQt29rWVa0NX-FQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "uHw2KSpKU-2uKuzPuIUirg",
+          "canonical": "https://www.ubereats.com/de-en/store/mcdonalds-marzellenstrasse/uHw2KSpKU-2uKuzPuIUirg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "3qZBHXhqSYSN7Y8IJjQlJg",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-columbia-%26-165th-sts/3qZBHXhqSYSN7Y8IJjQlJg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "HzYg1hgWTnmMlgIKklQ9MA",
+          "canonical": "https://www.ubereats.com/fr/store/mcdonalds-vedene/HzYg1hgWTnmMlgIKklQ9MA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "AIp0znfwS2mhOlMyqVmb6w",
+          "canonical": "https://www.ubereats.com/ca/store/mcdonalds-atwater/AIp0znfwS2mhOlMyqVmb6w",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "aEzWQ8bUWUekBNoMFhjH4g",
+          "canonical": "https://www.ubereats.com/mx-en/store/pollos-de-mcdonalds-americas/aEzWQ8bUWUekBNoMFhjH4g",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "6Q7w0HUqRp6oaIL714sSrA",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-rand-and-dundee-rd/6Q7w0HUqRp6oaIL714sSrA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "GPy4so0ZR3WYN9L9KGTvSw",
+          "canonical": "https://www.ubereats.com/cl-en/store/mcdonalds-general-velasquez/GPy4so0ZR3WYN9L9KGTvSw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "Tvo1jUZoS4-XRxFli_OcLA",
+          "canonical": "https://www.ubereats.com/fr-en/store/mcdonalds-pantin-hoche/Tvo1jUZoS4-XRxFli_OcLA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "rKG8H1aRTBuB_j8_FX7nyg",
+          "canonical": "https://www.ubereats.com/jp-en/store/%E3%83%9E%E3%82%AF%E3%83%88%E3%83%8A%E3%83%AB%E3%83%88-%E4%BA%94%E5%8F%8D%E9%87%8E%E9%A7%85%E5%89%8D%E5%BA%97-mcdonalds-gotanno-eki-mae/rKG8H1aRTBuB_j8_FX7nyg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "8otswLf-VZiRgXvyJnWRWA",
+          "canonical": "https://www.ubereats.com/jp-en/store/%E3%83%9E%E3%82%AF%E3%83%88%E3%83%8A%E3%83%AB%E3%83%88-%E9%87%8E%E6%AF%94%E3%82%B7%E3%83%86%E3%82%A3%E3%82%AA%E5%BA%97-mcdonalds-nobi-sitio/8otswLf-VZiRgXvyJnWRWA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "hkCbOvMlR7Wgc7_1N-pR5A",
+          "canonical": "https://www.ubereats.com/ca-fr/store/mcdonalds-iroquois-shores/hkCbOvMlR7Wgc7_1N-pR5A",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "zux_0ylfS36Da8sg6zFu-w",
+          "canonical": "https://www.ubereats.com/ie/store/mcdonalds-bray-town-hall/zux_0ylfS36Da8sg6zFu-w",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "lQsZ5HKYQyiRXwD_8vtfgA",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-4436-n-division-sts/lQsZ5HKYQyiRXwD_8vtfgA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "s_YXhFjyRiiveSD819UjxA",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-boyer-billy-grahams/s_YXhFjyRiiveSD819UjxA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "JhehMfbGQVyyuMBFlsgufA",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-612-e-redlands-blvds/JhehMfbGQVyyuMBFlsgufA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "t_o35wpHWv-bV6LKRSACRA",
+          "canonical": "https://www.ubereats.com/jp-en/store/%E3%83%9E%E3%82%AF%E3%83%88%E3%83%8A%E3%83%AB%E3%83%88%E5%A7%AB%E8%B7%AF%E5%A4%A2%E5%89%8D%E6%A9%8B%E5%BA%97-mcdonalds-himejiyumesakibashi/t_o35wpHWv-bV6LKRSACRA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "1B9hmI9XSROmL0xJlQ02hg",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-lower-muscatine-%26-malls/1B9hmI9XSROmL0xJlQ02hg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "kEau_0sbTICpYawmfhd8_Q",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-423-jefferson-st/kEau_0sbTICpYawmfhd8_Q",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "xCruFkoUQY22IYe_Oscsbg",
+          "canonical": "https://www.ubereats.com/jp-en/store/%E3%83%9E%E3%82%AF%E3%83%88%E3%83%8A%E3%83%AB%E3%83%88%E3%82%A4%E3%82%AA%E3%83%B3%E3%83%A2%E3%83%BC%E3%83%AB%E6%9F%8F%E5%BA%97-mcdonalds-aeon-mall-kashiwa/xCruFkoUQY22IYe_Oscsbg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "lqTX_XYuVO-FaWgbv3w8QQ",
+          "canonical": "https://www.ubereats.com/se/store/mcdonalds-karlskoga/lqTX_XYuVO-FaWgbv3w8QQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "HW70maklUcOr0Eytt0NdEQ",
+          "canonical": "https://www.ubereats.com/de-en/store/mcdonalds-allee-center/HW70maklUcOr0Eytt0NdEQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "O5QLdYdCTBiqNcztro3Qfg",
+          "canonical": "https://www.ubereats.com/gb/store/mcdonalds-edmontons/O5QLdYdCTBiqNcztro3Qfg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "jPwwqQGhUiK8Dcb-PxFx6w",
+          "canonical": "https://www.ubereats.com/mx-en/store/pollos-de-mcdonalds-lopez-portillo/jPwwqQGhUiK8Dcb-PxFx6w",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "dirDaaL2T8WHkopc-7kLsA",
+          "canonical": "https://www.ubereats.com/ca-fr/store/mcdonalds-forest-lawns/dirDaaL2T8WHkopc-7kLsA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "1xx0EeEFQ4eNJra4W2zTvw",
+          "canonical": "https://www.ubereats.com/tw-en/store/%E9%BA%A5%E7%95%B6%E5%8B%9E-%E5%8F%B0%E5%8C%97%E5%A4%A7%E6%A5%AD-mcdonalds-s180/1xx0EeEFQ4eNJra4W2zTvw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "KhV26CNtU4Oi2-M_mVMGuA",
+          "canonical": "https://www.ubereats.com/mx/store/postres-x-mcdonalds-los-atrios-cuautla/KhV26CNtU4Oi2-M_mVMGuA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "2udfJWwCSxyPENvF2gSx3A",
+          "canonical": "https://www.ubereats.com/fr/store/mcdonalds-paris-italie-2/2udfJWwCSxyPENvF2gSx3A",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "fdjoBdveV5yHunL8if5Tkg",
+          "canonical": "https://www.ubereats.com/ch-fr/store/mcdonalds-wt-gruzemarkt/fdjoBdveV5yHunL8if5Tkg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "6hx8LGTGSH2kwVDk362PJg",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-35-morris-county-malls/6hx8LGTGSH2kwVDk362PJg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "4s13vhbNXp-bSVcJh76aeA",
+          "canonical": "https://www.ubereats.com/de-en/store/mcdonalds-dorstener-str/4s13vhbNXp-bSVcJh76aeA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "a75bOj_HRumfOk-hA-ZTqw",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-1721-sand-bar-ferry-rd/a75bOj_HRumfOk-hA-ZTqw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "DYYFjdmyT1SzBS22v8T6gg",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-800-fairview-rds/DYYFjdmyT1SzBS22v8T6gg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "whID7UyYSeGLuhm_9chZJA",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-roanoke-tx-hwy-377-hwy-114s/whID7UyYSeGLuhm_9chZJA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "RpCxe4-RQDSBhm1Xrymhdw",
+          "canonical": "https://www.ubereats.com/es-en/store/mcdonalds-bravo-murillo/RpCxe4-RQDSBhm1Xrymhdw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "rgPyq4S8ScKK313H2sqoRQ",
+          "canonical": "https://www.ubereats.com/ca-fr/store/mcdonalds-2190-rymal-road/rgPyq4S8ScKK313H2sqoRQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "0TqcSjEcTECXGMsXJpNy6w",
+          "canonical": "https://www.ubereats.com/fr-en/store/mcdonalds-montauban-aussonne/0TqcSjEcTECXGMsXJpNy6w",
+          "source": "sitemap",
+          "status": "non_us",
+          "detail": "URL is in the '/fr/' country section; not fetched"
+        },
+        {
+          "store_id": "8O6e3J0zTrWkZ5eAAF4Gew",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-6579-us-hwy-49-ns/8O6e3J0zTrWkZ5eAAF4Gew",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "N8BbUwybU5CON6eX61A-bw",
+          "canonical": "https://www.ubereats.com/do/store/mcdonalds-megacentro/N8BbUwybU5CON6eX61A-bw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "JgDQ5juxSUC3HQsVAx6ucw",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-1056-kings-hwys/JgDQ5juxSUC3HQsVAx6ucw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "UoqAMD6SXv6qrjCpm4oFSA",
+          "canonical": "https://www.ubereats.com/ch/store/mcdonalds-arbon/UoqAMD6SXv6qrjCpm4oFSA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "VpgyS1VxThG9lKcAUyEdGQ",
+          "canonical": "https://www.ubereats.com/jp-en/store/%E3%83%9E%E3%82%AF%E3%83%88%E3%83%8A%E3%83%AB%E3%83%88%E5%90%89%E7%A5%A5%E5%AF%BA%E5%BA%97-mcdonalds-kichijoji/VpgyS1VxThG9lKcAUyEdGQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "O0B5HHZ2QgqDoScs0u3VkA",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-404-w-mains/O0B5HHZ2QgqDoScs0u3VkA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "w77TRhpWSMyEklzR7Kpr0w",
+          "canonical": "https://www.ubereats.com/fr/store/mcdonalds-bourgoin-jallieu/w77TRhpWSMyEklzR7Kpr0w",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "MYbG0SckUZys-3plxEaGEQ",
+          "canonical": "https://www.ubereats.com/ca/store/mcdonalds-saskatoon-hampton-heights/MYbG0SckUZys-3plxEaGEQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "o9I3sCm9VOuoii3IlHlQlg",
+          "canonical": "https://www.ubereats.com/de/store/mcdonalds-spitaler-strasse/o9I3sCm9VOuoii3IlHlQlg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "5DsmuDPmQ1WpCzp6he_J4w",
+          "canonical": "https://www.ubereats.com/fr-en/store/lost-mcdonalds-shopping-promenade/5DsmuDPmQ1WpCzp6he_J4w",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "z8ldmdkWRdShhtjmZTvmhw",
+          "canonical": "https://www.ubereats.com/pl/store/mcdonalds-obroncow-wybrzeza-ch%C5%82opska/z8ldmdkWRdShhtjmZTvmhw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "TXPvkfWCS1eu6JabZCBRSQ",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-908-s-padre-blvds/TXPvkfWCS1eu6JabZCBRSQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "MbBwh5RhWSC-8vix3cOBgw",
+          "canonical": "https://www.ubereats.com/es-en/store/mcdonalds-barcelona-tajo/MbBwh5RhWSC-8vix3cOBgw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "jzFp5EitTAmMI6f78TUtPw",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-1708-cotton-grove-rds/jzFp5EitTAmMI6f78TUtPw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "sJkmpK8RSJS-k52hktpDpg",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-brookville-%26-hubers/sJkmpK8RSJS-k52hktpDpg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "Tu3IkzyeQ9mkl5RAmi_aOw",
+          "canonical": "https://www.ubereats.com/be-nl/store/mcdonalds-marc-olivier-hq/Tu3IkzyeQ9mkl5RAmi_aOw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "dps7eLQ3RVmEzePslvKA1Q",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-524-hwy-24-es/dps7eLQ3RVmEzePslvKA1Q",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "13d706xXScWoynTPF6XgxA",
+          "canonical": "https://www.ubereats.com/mx/store/despierta-con-mcdonalds-alamedas/13d706xXScWoynTPF6XgxA",
+          "source": "sitemap",
+          "status": "non_us",
+          "detail": "URL is in the '/mx/' country section; not fetched"
+        },
+        {
+          "store_id": "Mu_Yx_jaSGOltMt8mBN3qQ",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-2017-gunbarrel-rds/Mu_Yx_jaSGOltMt8mBN3qQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "igPbRVaGVHm4YdR86b0oXA",
+          "canonical": "https://www.ubereats.com/jp/store/%E3%83%9E%E3%82%AF%E3%83%88%E3%83%8A%E3%83%AB%E3%83%881%E5%8F%B7%E7%B7%9A%E8%B1%8A%E6%98%8E%E5%BA%97-mcdonalds-route-1-toyoakes/igPbRVaGVHm4YdR86b0oXA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "Hx10HqCxThGuvekTJxHKAw",
+          "canonical": "https://www.ubereats.com/ca-fr/store/mcdonalds-bank-%26-queens/Hx10HqCxThGuvekTJxHKAw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "AoZBdaOTRmaQBBVzvu9Riw",
+          "canonical": "https://www.ubereats.com/ca-fr/store/mcdonalds-fleetwoods/AoZBdaOTRmaQBBVzvu9Riw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "qRxvlH2kX9WA8cB8TzOETw",
+          "canonical": "https://www.ubereats.com/pl-en/store/mcdonalds-galeria-bia%C5%82a/qRxvlH2kX9WA8cB8TzOETw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "jMfWyvUyUDKk4D7Q0R3RNw",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-2012-new-castle-roads/jMfWyvUyUDKk4D7Q0R3RNw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "FyDtX7WwQg64Eprjd1cRzw",
+          "canonical": "https://www.ubereats.com/fr-en/store/mcdonalds-marseille-bonneveine/FyDtX7WwQg64Eprjd1cRzw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "wxOSYoV2WkyH0VzhngHbUA",
+          "canonical": "https://www.ubereats.com/es/store/mcdonalds-cullera/wxOSYoV2WkyH0VzhngHbUA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "rzCuEynhQqC9FD0Ua3PZfw",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-san-dimas-villags/rzCuEynhQqC9FD0Ua3PZfw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "999JXI09XYKNi-rLCzC37A",
+          "canonical": "https://www.ubereats.com/ec/store/mcdonalds-helados-cc-el-recreo/999JXI09XYKNi-rLCzC37A",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "EHO4dhC7SGC1lhctRRKjng",
+          "canonical": "https://www.ubereats.com/ca-fr/store/mcdonalds-glebe/EHO4dhC7SGC1lhctRRKjng",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "r9kNku0PTc-YtV4ic2TLqA",
+          "canonical": "https://www.ubereats.com/mx-en/store/despierta-con-mcdonalds-san-juan-del-rio-ii/r9kNku0PTc-YtV4ic2TLqA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "ts9V41ZURMuLRBtbaSnTZA",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-4735-e-palmetto-streets/ts9V41ZURMuLRBtbaSnTZA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "RFEVWKeUVtSFHyAPCtHw8w",
+          "canonical": "https://www.ubereats.com/es/store/mcdonalds-toledo-norte/RFEVWKeUVtSFHyAPCtHw8w",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "5FcXEjodRMSiONos0pqBbQ",
+          "canonical": "https://www.ubereats.com/fr-en/store/lost-mcdonalds-la-ferte-bernard/5FcXEjodRMSiONos0pqBbQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "_ZSGiLNzTI63egkz-mMxIg",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-lake-mead-%26-valle-verdes/_ZSGiLNzTI63egkz-mMxIg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "X7GadsVuTDyLrZKKb1QOBw",
+          "canonical": "https://www.ubereats.com/jp-en/store/%E3%83%9E%E3%82%AF%E3%83%88%E3%83%8A%E3%83%AB%E3%83%88%E9%9D%99%E5%B2%A1%E5%AE%89%E5%80%8D%E8%A1%97%E9%81%93%E5%BA%97-mcdonalds-shizuoka-abe-kaidos/X7GadsVuTDyLrZKKb1QOBw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "2tAEuBT5Raq9fVWuEfGDhw",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-715-bridge-sts/2tAEuBT5Raq9fVWuEfGDhw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "jMCVl8ZGRNqhXMpjvciuLA",
+          "canonical": "https://www.ubereats.com/cr/store/pollos-de-mcdonalds-higuerones/jMCVl8ZGRNqhXMpjvciuLA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "hTZ4e3feT4iw3rug76medw",
+          "canonical": "https://www.ubereats.com/ca-fr/store/mcdonalds-clarksons/hTZ4e3feT4iw3rug76medw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "UpUd2q6WSZeDguO1zefJ_w",
+          "canonical": "https://www.ubereats.com/jp/store/%E3%83%9E%E3%82%AF%E3%83%88%E3%83%8A%E3%83%AB%E3%83%88-23%E5%8F%B7%E6%B5%9C%E7%94%B0%E7%94%BA%E5%BA%97-mcdonalds-route23-hamadachos/UpUd2q6WSZeDguO1zefJ_w",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "FBiPNcQgTFuBkJJXE9Gp4Q",
+          "canonical": "https://www.ubereats.com/ca-fr/store/mcdonalds-capitol-hill/FBiPNcQgTFuBkJJXE9Gp4Q",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "re-M-p6yQz-2W_Y5qeYJlg",
+          "canonical": "https://www.ubereats.com/es/store/mcdonalds-los-arcos/re-M-p6yQz-2W_Y5qeYJlg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "6NHq3uZnUAm0GPt_EgaARQ",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-1620-service-drs/6NHq3uZnUAm0GPt_EgaARQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "x3ijhv0zQIOfSMedJvF9IA",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-route-130-north-jackson-sts/x3ijhv0zQIOfSMedJvF9IA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "Fs2myEFTX12EGMgHadC5jQ",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-19700-us-hwy-41-ns/Fs2myEFTX12EGMgHadC5jQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "e2GCvOCGRCG6ZQxGHBpuXA",
+          "canonical": "https://www.ubereats.com/es/store/mcdonalds-adeje/e2GCvOCGRCG6ZQxGHBpuXA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "JaX8oiqXRd2MxyX7Ll6YtQ",
+          "canonical": "https://www.ubereats.com/ca/store/mcdonalds-gardiners-rd-%26-golden-miles/JaX8oiqXRd2MxyX7Ll6YtQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "VedlVKytQN6QxC4uEEVTrw",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-7611-augusta-rd/VedlVKytQN6QxC4uEEVTrw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "euCtXsIpXPqtoQNkiaz-Tw",
+          "canonical": "https://www.ubereats.com/fi-en/store/mcdonalds-rovaniemi-lampela/euCtXsIpXPqtoQNkiaz-Tw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "brVt4RECR_yCSfK5zuu-Zw",
+          "canonical": "https://www.ubereats.com/fr-en/store/l-mcdonalds-rambouillet-ccial-bel-air/brVt4RECR_yCSfK5zuu-Zw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "EYuTopAiRnexPbfcquYKFQ",
+          "canonical": "https://www.ubereats.com/ca-fr/store/z-mcdonalds-7445-boul-langelier/EYuTopAiRnexPbfcquYKFQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "mnhKoKsERoWWJgwHRbL7Yg",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-251-lowell-rds/mnhKoKsERoWWJgwHRbL7Yg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "JExijNEaQW2168iy0p11gQ",
+          "canonical": "https://www.ubereats.com/ca-fr/store/mcdonalds-highland/JExijNEaQW2168iy0p11gQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "Y3LY_gWTU0maElFCrgDp2w",
+          "canonical": "https://www.ubereats.com/ca/store/mcdonalds-vernon-relos/Y3LY_gWTU0maElFCrgDp2w",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "YkcplAnOSO-RsujoieqBcQ",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-409-paradise-roads/YkcplAnOSO-RsujoieqBcQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "kgBnIHmAR4m89ahoh1TI0A",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-3005-n-water-sts/kgBnIHmAR4m89ahoh1TI0A",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "1lqRbGzEQHuNRUDUPjdmVQ",
+          "canonical": "https://www.ubereats.com/gb/store/mcdonalds-daw-end-lane/1lqRbGzEQHuNRUDUPjdmVQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "T__HubcmSceopEO9-DgAvg",
+          "canonical": "https://www.ubereats.com/ie/store/mcdonalds-westside-shopping-centre/T__HubcmSceopEO9-DgAvg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "nB_A0BzzQFu_O8VIWTw1yQ",
+          "canonical": "https://www.ubereats.com/ar/store/mcdonalds-av-de-mayo-650/nB_A0BzzQFu_O8VIWTw1yQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "pVyL9jv5XqCoy4yRCNV35w",
+          "canonical": "https://www.ubereats.com/mx-en/store/mcdonalds-areno/pVyL9jv5XqCoy4yRCNV35w",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "KWDusQMrS5yC5LIulA2aIg",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-kennesaw-ga-jiles-rd-%40-baker/KWDusQMrS5yC5LIulA2aIg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "qUApNb18TxqM9NTPzu_pMQ",
+          "canonical": "https://www.ubereats.com/ca-fr/store/mcdonalds-russ-baker-ways/qUApNb18TxqM9NTPzu_pMQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "prpSMh_ZVSmpY_m5AJSgSg",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-750-derrick-avenues/prpSMh_ZVSmpY_m5AJSgSg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "cGBZKjRnQzyp4Ao2_vwSmQ",
+          "canonical": "https://www.ubereats.com/gb/store/mcdonalds-salterhebble-hill/cGBZKjRnQzyp4Ao2_vwSmQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "dnJgWtRfWZ-AA6nEexTx_w",
+          "canonical": "https://www.ubereats.com/jp-en/store/%E3%83%9E%E3%82%AF%E3%83%88%E3%83%8A%E3%83%AB%E3%83%88%E4%BC%8A%E5%8B%A2%E5%B4%8E%E5%AE%AE%E5%AD%90%E7%94%BA%E5%BA%97-mcdonalds-isesakimiyakomachi/dnJgWtRfWZ-AA6nEexTx_w",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "UrLjLev6T6GTZt6wMKIrBg",
+          "canonical": "https://www.ubereats.com/ca/store/mcdonalds-200-bloor-st-w/UrLjLev6T6GTZt6wMKIrBg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "3bhcM8OlX9-ymzVnPRuDeg",
+          "canonical": "https://www.ubereats.com/au/store/mcdonalds-cessnock-south/3bhcM8OlX9-ymzVnPRuDeg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "LjTQ3oqnRu-d8Giey0AJGw",
+          "canonical": "https://www.ubereats.com/au/store/mcdonalds-caringbah/LjTQ3oqnRu-d8Giey0AJGw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "czNvMp0cUXaMYsdAElV2dA",
+          "canonical": "https://www.ubereats.com/se-en/store/mcdonalds-falkenberg/czNvMp0cUXaMYsdAElV2dA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "YwKfga-hXAeY28oPILwjZQ",
+          "canonical": "https://www.ubereats.com/ch-de/store/mcdonalds-hendschiken/YwKfga-hXAeY28oPILwjZQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "WD8dmMfcQoCbgUBN3g7MAQ",
+          "canonical": "https://www.ubereats.com/jp/store/%E3%83%9E%E3%82%AF%E3%83%88%E3%83%8A%E3%83%AB%E3%83%8816%E5%8F%B7%E6%9F%8F%E5%BA%97-mcdonalds-route-16-kashiwa/WD8dmMfcQoCbgUBN3g7MAQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "_1KlTeTrX7-SBdiEo3Bt5g",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-us-221-pearl-sts/_1KlTeTrX7-SBdiEo3Bt5g",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "Pcoa5gHOS1apidgXPstKcg",
+          "canonical": "https://www.ubereats.com/jp-en/store/%E3%83%9E%E3%82%AF%E3%83%88%E3%83%8A%E3%83%AB%E3%83%88-%E6%96%B0%E6%A8%AA%E6%B5%9C%E9%A7%85%E5%89%8D%E5%BA%97-mcdonalds-shin-yokohama-eki-mae/Pcoa5gHOS1apidgXPstKcg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "JxAN4PwqUf20HErwDYF1Og",
+          "canonical": "https://www.ubereats.com/mx/store/postres-x-mcdonalds-nichupte/JxAN4PwqUf20HErwDYF1Og",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "TkL1XINJTkuHQrWpplsGRA",
+          "canonical": "https://www.ubereats.com/cl-en/store/mcdonalds-antofagasta-5/TkL1XINJTkuHQrWpplsGRA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "eomnFCgUSOuOyfEmGYLyJA",
+          "canonical": "https://www.ubereats.com/jp/store/%E3%83%9E%E3%82%AF%E3%83%88%E3%83%8A%E3%83%AB%E3%83%88-%E6%96%B0%E6%89%80%E6%B2%A2%E5%BA%97-mcdonalds-shin-tokorozawa/eomnFCgUSOuOyfEmGYLyJA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "r3PcA8zSRbiF-_yQRGTZBQ",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-8148-e-southport-roads/r3PcA8zSRbiF-_yQRGTZBQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "nVNWcriQWX2Omgo7vU36OQ",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-49-n-main-sts/nVNWcriQWX2Omgo7vU36OQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "VnE6aOeSTCm8IDaySLaO1Q",
+          "canonical": "https://www.ubereats.com/cl-en/store/chickens-de-mcdonalds-los-angeles/VnE6aOeSTCm8IDaySLaO1Q",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "cBYg3KqIQFC7Yc7Sh8jjMg",
+          "canonical": "https://www.ubereats.com/cl-en/store/chickens-de-mcdonalds-pajaritos/cBYg3KqIQFC7Yc7Sh8jjMg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "eOygoDNdWCuOxob4gkDZnw",
+          "canonical": "https://www.ubereats.com/fr-en/store/mcdonalds-thouars/eOygoDNdWCuOxob4gkDZnw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "JrD36PdgRC2ENzfRF81nBA",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-572-main-sts/JrD36PdgRC2ENzfRF81nBA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "uxuWHM9iTGyxEGfsWIxI_w",
+          "canonical": "https://www.ubereats.com/jp-en/store/%E3%83%9E%E3%82%AF%E3%83%88%E3%83%8A%E3%83%AB%E3%83%88-%E5%A1%9A%E6%9C%AC%E5%BA%97-mcdonalds-tsukamoto/uxuWHM9iTGyxEGfsWIxI_w",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "zsSl6mqOQkyhwWgIIb2E5Q",
+          "canonical": "https://www.ubereats.com/es/store/fake-do-not-use-mcdonalds-benidorm-puchades/zsSl6mqOQkyhwWgIIb2E5Q",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "ICWKI_14TcGc95C7R7IP_A",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-30580-rancho-california-rds/ICWKI_14TcGc95C7R7IP_A",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "kom1LTrtVaWHTAvMvw76-A",
+          "canonical": "https://www.ubereats.com/es-en/store/mcdonalds-soria-duplicate/kom1LTrtVaWHTAvMvw76-A",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "lSmoUYHLUvOU38UH1HRvIg",
+          "canonical": "https://www.ubereats.com/se/store/mcdonalds-koping/lSmoUYHLUvOU38UH1HRvIg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "Z9vD8HCtSn25qRjVUTBPAw",
+          "canonical": "https://www.ubereats.com/gb/store/mcdonalds-all-saints-way/Z9vD8HCtSn25qRjVUTBPAw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "zj5DAG78QgyMPqbhHjF27Q",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-212-n-camellia-blvds/zj5DAG78QgyMPqbhHjF27Q",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "vqFyRzPUSkGnugGcQCIuSg",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-301-w-main-sts/vqFyRzPUSkGnugGcQCIuSg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "BV5z66K3RSG2tSHdzwpZBg",
+          "canonical": "https://www.ubereats.com/nl/store/mcdonalds-tilburg-centrum/BV5z66K3RSG2tSHdzwpZBg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "M1RAhoYeUQavU3Txj0ZEmQ",
+          "canonical": "https://www.ubereats.com/mx-en/store/pollos-de-mcdonalds-tampico-heb/M1RAhoYeUQavU3Txj0ZEmQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "k8LowHOPTsmxAy-dwfjvdg",
+          "canonical": "https://www.ubereats.com/jp-en/store/%E3%83%9E%E3%82%AF%E3%83%88%E3%83%8A%E3%83%AB%E3%83%88%E3%82%A4%E3%82%AA%E3%83%B3%E5%8D%8A%E7%94%B0%E5%BA%97-mcdonalds-aeon-handa/k8LowHOPTsmxAy-dwfjvdg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "xjZak95TSG2FFGRi2n0Gkg",
+          "canonical": "https://www.ubereats.com/fr-en/store/mcdonalds-orgeval/xjZak95TSG2FFGRi2n0Gkg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "mFp7WsOoXSiZsZrrB5fIFQ",
+          "canonical": "https://www.ubereats.com/ec-en/store/mcdonalds-desayunos-san-francisco/mFp7WsOoXSiZsZrrB5fIFQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "T-z_SZmkS2O_ZYK1zbmxPw",
+          "canonical": "https://www.ubereats.com/ca-fr/store/mcdonalds-lynn-valleys/T-z_SZmkS2O_ZYK1zbmxPw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "MtSQxkqNTxGQwvQmGF9CSQ",
+          "canonical": "https://www.ubereats.com/fr-en/store/mcdonalds-pau-nobel/MtSQxkqNTxGQwvQmGF9CSQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "Ffgguq5iU1eEBZvAIEBu_g",
+          "canonical": "https://www.ubereats.com/mx/store/pollos-de-mcdonalds-zamora/Ffgguq5iU1eEBZvAIEBu_g",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "muU_4__ZTzO11caLhNYDfQ",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-101-pakaula-st/muU_4__ZTzO11caLhNYDfQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "i4iUR1-QTOG9E2WMTLlGFA",
+          "canonical": "https://www.ubereats.com/au/store/mcdonalds-green-fields/i4iUR1-QTOG9E2WMTLlGFA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "vwAHMK5nQf-yZi_ObdK3mQ",
+          "canonical": "https://www.ubereats.com/ca/store/mcdonalds-unity-square/vwAHMK5nQf-yZi_ObdK3mQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "SprVFYouUfe06HkfIzPkbg",
+          "canonical": "https://www.ubereats.com/es/store/mcdonalds-santiago-costavella/SprVFYouUfe06HkfIzPkbg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "wbpfoyqITYel2iHipxBlWg",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-1195-n-main-sts/wbpfoyqITYel2iHipxBlWg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "s3Otx6g7TI2HJcezCtOY7g",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-325-commercial-cts/s3Otx6g7TI2HJcezCtOY7g",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "KejiE7aoTBudmWge7uOf8A",
+          "canonical": "https://www.ubereats.com/nl-en/store/mcdonalds-delivery/KejiE7aoTBudmWge7uOf8A",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "u8yof86EQdC9uTtBtY8s_A",
+          "canonical": "https://www.ubereats.com/au/store/mcdonalds-upper-coomera/u8yof86EQdC9uTtBtY8s_A",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "dIrNBzIeVE-16r6utmg3Vw",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-1051-elida-ave/dIrNBzIeVE-16r6utmg3Vw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "_v1OI13BSU6UiBDlysogDQ",
+          "canonical": "https://www.ubereats.com/gb/store/mcdonalds-the-boulevard-merry-hills/_v1OI13BSU6UiBDlysogDQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "3kiC7cMlRu2gSWdowv-vFA",
+          "canonical": "https://www.ubereats.com/fr/store/mcdonalds-dreux-ouest/3kiC7cMlRu2gSWdowv-vFA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "XZrccMl5QJyeJEFVfYkgdw",
+          "canonical": "https://www.ubereats.com/ca-fr/store/mcdonalds-foothillss/XZrccMl5QJyeJEFVfYkgdw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "cGk2PF5gWfSHwBBbXGh0-g",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-805-e-jefferson-sts/cGk2PF5gWfSHwBBbXGh0-g",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "aRic10JUQQ6xQjBe-5Bx-A",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-182-south-main-sts/aRic10JUQQ6xQjBe-5Bx-A",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "FFAfMtqrRJytBxn1VmQU_w",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-catano/FFAfMtqrRJytBxn1VmQU_w",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "KFDa4erwR3KG8Z6Wbmfl8Q",
+          "canonical": "https://www.ubereats.com/ca/store/mcdonalds-274-millennium-parkway/KFDa4erwR3KG8Z6Wbmfl8Q",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "ZnJoOOXaVyuFjGOWG5mmng",
+          "canonical": "https://www.ubereats.com/cl/store/mcdonalds-san-fernando/ZnJoOOXaVyuFjGOWG5mmng",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "wtlSauLCSbyU0jAUBw6o6w",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-1414-s-santa-fe-aves/wtlSauLCSbyU0jAUBw6o6w",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "IwVBqAeVSC2TeUj4y49ymg",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-2601-airport-rds/IwVBqAeVSC2TeUj4y49ymg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "iIi6RBBrRg6pwARYrGx9BA",
+          "canonical": "https://www.ubereats.com/ec/store/mcdonalds-orellana-desayunos/iIi6RBBrRg6pwARYrGx9BA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "zzxk__0BQGK2kRY7EGAJSw",
+          "canonical": "https://www.ubereats.com/au/store/mcdonalds-australia-fair-fc/zzxk__0BQGK2kRY7EGAJSw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "fY5u3-CdTimRvAVU_ydRjQ",
+          "canonical": "https://www.ubereats.com/tw-en/store/%E9%BA%A5%E7%95%B6%E5%8B%9E-%E5%8F%B0%E5%8C%97%E6%B0%91%E7%94%9F%E4%BA%8C-mcdonalds-s150/fY5u3-CdTimRvAVU_ydRjQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "fkaPoAbIXHeEvxZjCLAHEg",
+          "canonical": "https://www.ubereats.com/de-en/store/mcdonalds-rheinallee/fkaPoAbIXHeEvxZjCLAHEg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "gdZ7hEk0TL-3fdo96TT0mw",
+          "canonical": "https://www.ubereats.com/jp/store/%E3%83%9E%E3%82%AF%E3%83%88%E3%83%8A%E3%83%AB%E3%83%88-%E4%B8%89%E9%83%B7%E4%B8%AD%E5%A4%AE%E5%BA%97-mcdonalds-misato-chuo/gdZ7hEk0TL-3fdo96TT0mw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "3N8X_3m7QaGWHOBiZGzWQA",
+          "canonical": "https://www.ubereats.com/au/store/mcdonalds-pacific-fair/3N8X_3m7QaGWHOBiZGzWQA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "d8Vfvl9ZSSeOacG-WGAqBw",
+          "canonical": "https://www.ubereats.com/ar/store/mcdonalds-boulevard-san-martin-3099/d8Vfvl9ZSSeOacG-WGAqBw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "uBQZZRSlSQ-wD92MQ7E3Eg",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-3120-s-dixie-blvds/uBQZZRSlSQ-wD92MQ7E3Eg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "Ioarw4cHQpinZsW-VHPkbw",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-newark-772-broad/Ioarw4cHQpinZsW-VHPkbw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "GbkQxe2PTLmHRhtg-tdppA",
+          "canonical": "https://www.ubereats.com/gb/store/mcdonalds-st-martins-lane/GbkQxe2PTLmHRhtg-tdppA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "GuUQw2ImSWm-CjOmRLqLcQ",
+          "canonical": "https://www.ubereats.com/es/store/mcdonalds-torrejon-ii/GuUQw2ImSWm-CjOmRLqLcQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "ADbRRLA0SXONnHt4ICaC-Q",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-1804-s-missions/ADbRRLA0SXONnHt4ICaC-Q",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "Qihp1MLTVoCuKLnwRBke8w",
+          "canonical": "https://www.ubereats.com/es/store/mcdonalds-pamplona-san-ignacio/Qihp1MLTVoCuKLnwRBke8w",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "GCTD2ILUQ8KP51C_LGX6ow",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-225-w-valley-blvd/GCTD2ILUQ8KP51C_LGX6ow",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "BZg25jzNRs2hiYrX6NcS3Q",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-7010-hwy-99s/BZg25jzNRs2hiYrX6NcS3Q",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "iuroL4HKWvSAXfZzYLdyAw",
+          "canonical": "https://www.ubereats.com/pa-en/store/chickens-de-mcdonalds-la-dona/iuroL4HKWvSAXfZzYLdyAw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "MtLuXtlITM61jdWSmIm8vA",
+          "canonical": "https://www.ubereats.com/do-en/store/mcdonalds-luperon/MtLuXtlITM61jdWSmIm8vA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "4wqVakfUQRC-G9MADbqYRA",
+          "canonical": "https://www.ubereats.com/jp-en/store/%E3%83%9E%E3%82%AF%E3%83%88%E3%83%8A%E3%83%AB%E3%83%88-%E7%9B%AE%E9%BB%92%E9%A7%85%E5%89%8D%E5%BA%97-mcdonalds-meguro/4wqVakfUQRC-G9MADbqYRA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "AfkS_ykQX0W2dhxEvvWFpA",
+          "canonical": "https://www.ubereats.com/jp-en/store/%E3%83%9E%E3%82%AF%E3%83%88%E3%83%8A%E3%83%AB%E3%83%88-294%E4%B8%8B%E9%A4%A8%E4%B8%80%E6%9C%AC%E6%9D%BE%E5%BA%97-mcdonalds-r294-shimodate-ipponmatsu/AfkS_ykQX0W2dhxEvvWFpA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "LkmMIRPvWxO6XKAmJB-ilA",
+          "canonical": "https://www.ubereats.com/fr/store/mcdonalds-ferrieres-en-bray/LkmMIRPvWxO6XKAmJB-ilA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "3oWof-ZgVJiDwoViQL9B-Q",
+          "canonical": "https://www.ubereats.com/de/store/duplicate-mcdonalds-stuttgart-muhlhausen/3oWof-ZgVJiDwoViQL9B-Q",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "xrXiec9RWCaMndQqrpyB4Q",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-201-w-locust-sts/xrXiec9RWCaMndQqrpyB4Q",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "rwm_ndCBRjOR-k9uO2i4CA",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-2211-s-9ths/rwm_ndCBRjOR-k9uO2i4CA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "ZZoYU9jAR_iMK8tTFE3ylA",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-4319-peach-sts/ZZoYU9jAR_iMK8tTFE3ylA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "SzGFwC3CX4SNC5NwzOOqDw",
+          "canonical": "https://www.ubereats.com/de-en/store/mcdonalds-augustenstr/SzGFwC3CX4SNC5NwzOOqDw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "M5_BRhRuXj2G55JS1dg8sg",
+          "canonical": "https://www.ubereats.com/za/store/mcdonalds-athlone/M5_BRhRuXj2G55JS1dg8sg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "pSPdLuiWS_-qTxGPraizXw",
+          "canonical": "https://www.ubereats.com/cl/store/chickens-de-mcdonalds-lider-gran-avenida/pSPdLuiWS_-qTxGPraizXw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "HRi60aakVgqocjwQbo6Qrw",
+          "canonical": "https://www.ubereats.com/be/store/mcdonalds-binche/HRi60aakVgqocjwQbo6Qrw",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "JzUpXctmTdS59pIwHDTfag",
+          "canonical": "https://www.ubereats.com/fr/store/deprecated-mcdonalds-belfort-andelnans/JzUpXctmTdS59pIwHDTfag",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "4jznKl4FSdaDOj5Vu7fLsQ",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-market-%26-prestons/4jznKl4FSdaDOj5Vu7fLsQ",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "Na35T5rSSzWWSGF6j1LSBA",
+          "canonical": "https://www.ubereats.com/store/mcdonalds-4220-clubhouse-rds/Na35T5rSSzWWSGF6j1LSBA",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "4la6MA4NXI-Vt1VIAfNXAg",
+          "canonical": "https://www.ubereats.com/ca-fr/store/mcdonalds-brandon-richmonds/4la6MA4NXI-Vt1VIAfNXAg",
+          "source": "sitemap",
+          "status": "queued",
+          "detail": ""
+        }
+      ],
+      "observations": []
+    },
+    {
+      "request": {
+        "order": {
+          "chain": "Chipotle Mexican Grill",
+          "items": [
+            {
+              "name": "Burrito Bowl"
+            }
+          ]
+        },
+        "platforms": [
+          "doordash"
+        ],
+        "seed_urls": [
+          "https://www.doordash.com/business/chipotle-mexican-grill-115/"
+        ],
+        "order_mode": "delivery",
+        "fetch_mode": "auto",
+        "max_stores_per_platform": 3
+      },
+      "summary": {
+        "status": "paused",
+        "platforms": {
+          "doordash": {
+            "state": "paused_limit",
+            "stop_reason": null,
+            "runs": 1,
+            "counters": {
+              "discovered": 50,
+              "queued": 47,
+              "checked": 0,
+              "no_menu": 0,
+              "non_us": 0,
+              "blocked": 3,
+              "failed": 0,
+              "duplicate": 0,
+              "in_progress": 0,
+              "remaining": 47,
+              "sitemaps_pending": 19,
+              "sitemaps_done": 0,
+              "sitemaps_failed": 0,
+              "chain_pages_pending": 0,
+              "sitemap_enumeration_complete": false
+            }
+          }
+        }
+      },
+      "barriers": [
+        {
+          "kind": "captcha",
+          "detail": "bot-challenge / CAPTCHA interstitial returned",
+          "url": "https://www.doordash.com/store/chipotle-mexican-grill-gaithersburg-269552/?pickup=false",
+          "host": "www.doordash.com",
+          "status": 403,
+          "observed_at": "2026-10-08T00:29:18Z"
+        },
+        {
+          "kind": "captcha",
+          "detail": "bot-challenge / CAPTCHA interstitial returned",
+          "url": "https://www.doordash.com/store/chipotle-mexican-grill-bethesda-269760/?pickup=false",
+          "host": "www.doordash.com",
+          "status": 403,
+          "observed_at": "2026-10-08T00:29:21Z"
+        },
+        {
+          "kind": "captcha",
+          "detail": "bot-challenge / CAPTCHA interstitial returned",
+          "url": "https://www.doordash.com/store/chipotle-mexican-grill-falls-church-269764/?pickup=false",
+          "host": "www.doordash.com",
+          "status": 403,
+          "observed_at": "2026-10-08T00:29:24Z"
+        }
+      ],
+      "stores": [
+        {
+          "store_id": "270846",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-sterling-270846/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "693992",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-sterling-693992/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "270476",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-sterling-270476/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "269991",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-ashburn-269991/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "270558",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-ashburn-270558/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "269989",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-herndon-269989/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "269901",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-reston-269901/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "270767",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-reston-270767/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "42113295",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-ashburn-42113295/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "270863",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-reston-270863/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "391407",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-leesburg-391407/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "2837515",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-leesburg-2837515/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "269965",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-herndon-269965/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "31218669",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-sterling-31218669/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "439084",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-chantilly-439084/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "270036",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-potomac-270036/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "543467",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-chantilly-543467/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "269884",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-gaithersburg-269884/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "270959",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-tysons-270959/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "270497",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-vienna-270497/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "270076",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-oakton-270076/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "270686",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-fairfax-270686/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "269854",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-rockville-269854/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "269799",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-fairfax-269799/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "269552",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-gaithersburg-269552/",
+          "source": "chain_page",
+          "status": "blocked",
+          "detail": "captcha: bot-challenge / CAPTCHA interstitial returned"
+        },
+        {
+          "store_id": "270102",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-germantown-270102/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "270887",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-mclean-270887/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "270570",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-gaithersburg-270570/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "269926",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-fairfax-269926/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "270547",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-bethesda-270547/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "270432",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-centreville-270432/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "350555",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-germantown-350555/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "271000",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-mclean-271000/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "271022",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-rockville-271022/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "269764",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-falls-church-269764/",
+          "source": "chain_page",
+          "status": "blocked",
+          "detail": "captcha: bot-challenge / CAPTCHA interstitial returned"
+        },
+        {
+          "store_id": "270940",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-fairfax-270940/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "270978",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-fairfax-270978/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "269760",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-bethesda-269760/",
+          "source": "chain_page",
+          "status": "blocked",
+          "detail": "captcha: bot-challenge / CAPTCHA interstitial returned"
+        },
+        {
+          "store_id": "271010",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-north-bethesda-271010/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "543527",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-purcellville-543527/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "270281",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-falls-church-270281/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "29831263",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-rockville-29831263/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "270963",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-burke-270963/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "270787",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-manassas-270787/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "269937",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-bethesda-269937/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "269950",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-kensington-269950/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "439191",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-aspen-hill-439191/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "270136",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-falls-church-270136/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "269970",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-chevy-chase-269970/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "270051",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-arlington-270051/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        }
+      ],
+      "observations": []
+    }
+  ],
+  "finished_at": "2026-10-08T00:29:25Z"
+}

@@ -1,0 +1,4 @@
+{"url": "https://www.doordash.com/business/chipotle-mexican-grill-115/", "fetched_at": "2026-10-08T00:29:03Z", "jsonld_types": [], "restaurant_found": false, "items": 0, "json_script_ids": ["googleMaps"]}
+.{"url": "https://www.ubereats.com/brand/mcdonalds", "fetched_at": "2026-10-08T00:28:54Z", "jsonld_types": ["faqpage", "question", "answer"], "restaurant_found": false, "items": 0, "json_script_ids": ["__MARKETING_UCLICK_LINK_CONFIG__", "__UNIVERSAL_EVENTS_CONFIG__", "__FUSION_UNIVERSAL_VALUES__", "__PWV_DEVICE_INFO__", "__DID__", "__DID_V__", "__EGH__", "__ANALYTICS_PLUGIN_CONFIG__", "__ANALYTICS_CONFIG__", "__WEB_ANALYTICS_SVC_INFO__", "__ANALYTICS_PLUGIN_CONFIG__", "__USL_GOOGLE_ONE_TAP__", "__TRANSLATIONS__", "__REACT_QUERY_STATE__", "__MANAGED_TRANSLATIONS__", "__APM__", "__FILE_UPLOAD__", "__RM__", "__UEAM__", "__PLL__"]}
+.
+2 passed in 0.48s
