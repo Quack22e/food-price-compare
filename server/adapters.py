@@ -20,7 +20,7 @@ import re
 from urllib.parse import parse_qs, urlencode, urlsplit, urlunsplit
 
 from .extract import (
-    contains_sequence, extract_menu_objects, extract_restaurants, jsonld_type_summary,
+    contains_sequence, dedupe_items, flag_zero_prices, extract_menu_objects, extract_restaurants, jsonld_type_summary,
     normalize_us_address, parse_jsonld_blocks, prefilter_tokens, loose_norm, scan_html,
     slug_tokens, same_site,
 )
@@ -164,7 +164,7 @@ def build_observation(adapter: PlatformAdapter, ref: dict, parsed: dict, fetched
         return "non_us", None, f"store URL is in country section '/{ref['country']}/'"
     if address is None:
         return "non_us", None, f"excluded: {why}"
-    items = parsed["items"]
+    items = flag_zero_prices(dedupe_items(parsed["items"]))
     if not items:
         return "no_menu", None, "restaurant data published but no menu items/prices"
     kept = []

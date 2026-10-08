@@ -7,7 +7,7 @@ contains no raw HTML. Raw pages are saved to tests/captures/ (git-ignored)
 so tests/test_real_captures.py can verify the extractors against them.
 
 Request budget: 3 robots.txt, two search jobs limited to 3 stores and 3
-sitemap documents each, then up to 7 inspected pages (4 fixed + 3 discovered). Grubhub is only probed (robots.txt):
+sitemap documents each (6 stores for the Uber Eats job), then up to 7 inspected pages (4 fixed + 3 discovered). Grubhub is only probed (robots.txt):
 its Terms of Use prohibit automated scraping.
 """
 from __future__ import annotations
@@ -38,8 +38,8 @@ INSPECT = [
     "https://www.doordash.com/business/chipotle-mexican-grill-115/",
 ]
 JOBS = [
-    {"order": {"chain": "McDonald's", "items": [{"name": "Big Mac"}]}, "platforms": ["ubereats"],
-     "seed_urls": ["https://www.ubereats.com/brand/mcdonalds"]},
+    {"order": {"chain": "McDonald's", "items": [{"name": "10 pc. Chicken McNuggets"}]}, "platforms": ["ubereats"],
+     "seed_urls": ["https://www.ubereats.com/brand/mcdonalds"], "max_stores_per_platform": 6},
     {"order": {"chain": "Chipotle Mexican Grill", "items": [{"name": "Burrito Bowl"}]}, "platforms": ["doordash"],
      "seed_urls": ["https://www.doordash.com/business/chipotle-mexican-grill-115/"]},
 ]
@@ -66,7 +66,7 @@ def main():
         report["probe_error"] = repr(exc)
 
     for spec in JOBS:
-        req = dict(spec, order_mode="delivery", fetch_mode="auto" if browser_ok else "http", max_stores_per_platform=3)
+        req = dict({"max_stores_per_platform": 3}, **spec, order_mode="delivery", fetch_mode="auto" if browser_ok else "http")
         entry = {"request": req}
         try:
             job = svc.jobs.start(req)

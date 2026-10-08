@@ -588,7 +588,7 @@ tr.details td { background: var(--bg); }
     else add('info', 'Source does not say whether mandatory paid options exist; the listed price assumes none');
 
     if (!Number.isInteger(cand.price_cents)) {
-      warn(cand.price_range_cents ? 'Only a price range is published, not a configured price' : 'No price published for this item');
+      warn(cand.price_note ? 'Price not verifiable: ' + cand.price_note : (cand.price_range_cents ? 'Only a price range is published, not a configured price' : 'No price published for this item'));
     } else {
       result.baseCents = cand.price_cents;
     }

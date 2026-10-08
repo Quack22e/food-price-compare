@@ -345,3 +345,10 @@ test('shipped example import files validate against the documented schema', () =
   assert.equal(ev.winner.row.lineCents, 2 * (899 + 0 + 75));
   assert.equal(ev.winner.row.checkoutTotalCents, 1948 + 299 + 180 + 0 + 102, 'all destination charges known → checkout total');
 });
+
+test('a $0.00 listing flagged by the backend is never a verified price', () => {
+  const r = match1({ name: 'Iced Latte' }, item('Iced Latte', null, { price_note: 'published price is $0.00, which on this platform means the price is set by required options', required_options: [{ name: 'price-setting options (not published)', required: true }] }));
+  assert.equal(r.status, 'uncertain');
+  assert.equal(r.lineCents, null);
+  assert.ok(r.reasons.some(x => /Price not verifiable: published price is \$0\.00/.test(x.text)));
+});

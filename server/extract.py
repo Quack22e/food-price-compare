@@ -13,6 +13,7 @@ outcome instead of guessed values.
 from __future__ import annotations
 
 import gzip
+import html as html_lib
 import json
 import re
 from decimal import Decimal, InvalidOperation
@@ -99,7 +100,9 @@ def _text(v) -> str:
         return _text(v.get("name") or v.get("@id") or "")
     if isinstance(v, list):
         return _text(v[0]) if v else ""
-    return re.sub(r"\s+", " ", str(v)).strip()
+    # Observed live (Uber Eats, 2026-10-08): JSON-LD strings carry HTML
+    # entities, e.g. "McDonald's® (Columbia &amp; 165th St)".
+    return re.sub(r"\s+", " ", html_lib.unescape(str(v))).strip()
 
 
 def normalize_state(value: str) -> str | None:
@@ -397,6 +400,45 @@ def walk_menu(node, section: str | None, items: list, menu_urls: list, depth: in
     sec = name if "menusection" in t else section
     walk_menu(node.get("hasMenuSection"), sec, items, menu_urls, depth + 1)
     walk_menu(node.get("hasMenuItem"), sec, items, menu_urls, depth + 1)
+
+
+def dedupe_items(items: list[dict]) -> list[dict]:
+    """Collapse identical listings repeated across menu sections.
+
+    Observed live: Uber Eats repeats an item under "Featured items", "Most
+    Popular", promotion sections, etc. with the same name and price. Listings
+    that differ in price or variant are kept separately.
+    """
+    out, index = [], {}
+    for it in items:
+        key = (it.get("name"), it.get("variant"), it.get("price_cents"), it.get("currency"), it.get("availability"))
+        if key in index:
+            sec = it.get("section")
+            if sec and sec not in index[key]["sections"]:
+                index[key]["sections"].append(sec)
+            continue
+        rec = dict(it)
+        rec["sections"] = [it["section"]] if it.get("section") else []
+        index[key] = rec
+        out.append(rec)
+    return out
+
+
+def flag_zero_prices(items: list[dict]) -> list[dict]:
+    """A published price of exactly 0.00 is not treated as a real price.
+
+    Observed live (Uber Eats, Zucker's Bagels, 2026-10-08): "Iced Latte",
+    "Coffee", "Plain Cream Cheese (Lb)" are published at 0.00 because the
+    price is set by required options (size/weight). Such listings can never
+    be verified; they surface as "needs confirmation".
+    """
+    for it in items:
+        if it.get("price_cents") == 0:
+            it["price_cents"] = None
+            it["price_note"] = ("published price is $0.00, which on this platform means the price is set by "
+                                "required options (e.g. size); actual price not published")
+            it["required_options"] = [{"name": "price-setting options (not published)", "required": True}]
+    return items
 
 
 def extract_restaurants(objs: list) -> list[dict]:

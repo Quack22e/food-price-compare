@@ -122,6 +122,8 @@ def probe_structure(html: str) -> dict:
             continue
         data, how = _try_parse(s["text"])
         entry = {"id": s["id"], "type": s["type"], "bytes": len(s["text"]), "parsed": how}
+        if data is None:
+            entry["head"] = re.sub(r"\s+", " ", s["text"][:160])
         if data is not None and len(s["text"]) > 200:
             entry["skeleton"] = _skeleton(data)
             entry["price_paths"] = _key_paths(data, PRICE_KEY_RE)[:15]
@@ -132,7 +134,14 @@ def probe_structure(html: str) -> dict:
     for pat in (r'\\?"(?:displayPrice|price|unitPrice|priceTagline)\\?"\s*:', r"\$\d+\.\d{2}"):
         for m in list(re.finditer(pat, html))[:3]:
             price_ctx.append({"pattern": pat, "context": _snip(html, m.start(), 110)})
+    key_ctx = {}
+    for key in ("storeId", "storeUuid", "store_id", "menuId", "hasCustomizations", "customizationIds", "isAvailable",
+                "isSoldOut", "soldOut", "itemPrice", "priceTagline", "currencyCode", "address", "streetAddress", "displayPrice"):
+        hits = [m.start() for m in re.finditer(r'\\?"' + key + r'\\?"\s*:', html)][:2]
+        if hits:
+            key_ctx[key] = [_snip(html, i, 100) for i in hits]
     return {
+        "key_contexts": key_ctx,
         "bytes": len(html),
         "challenge_markers": markers[:10],
         "embedded_json_scripts": embedded[:30],

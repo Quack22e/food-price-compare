@@ -14,6 +14,7 @@ import json
 import os
 import queue
 import random
+import re
 import threading
 import time
 from dataclasses import dataclass, asdict
@@ -448,6 +449,11 @@ class PoliteClient:
             if any(h in urlsplit(nxt).path.lower() for h in LOGIN_PATH_HINTS):
                 return None, nxt, barrier("login_wall", f"redirected to a login page ({nxt})", url, resp.status_code)
             bad = self.check_allowed_url(nxt)
+            if bad and re.search(r"challenge|captcha|bot[-_]?check|verify", urlsplit(nxt).path + "?" + urlsplit(nxt).query, re.I):
+                # Observed live (Uber Eats, 2026-10-08): bot checks arrive as a
+                # 307 to https://def.uber.com/en/challenge?... - reported, not followed.
+                return None, nxt, barrier("captcha", f"redirected to a bot challenge ({urlsplit(nxt).netloc}{urlsplit(nxt).path}); not followed",
+                                          url, resp.status_code)
             if bad:
                 return None, nxt, barrier("offsite_redirect", f"redirect to {nxt} not followed: {bad}", url, resp.status_code)
             parts = urlsplit(nxt)

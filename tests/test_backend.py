@@ -478,3 +478,33 @@ def test_http_api(sites, tmp_path):
         assert st == 404
     finally:
         httpd.shutdown()
+
+
+# ---------------------------------------------------------------- quirks observed on real pages (2026-10-08 live runs)
+
+def test_quirks_observed_on_real_uber_eats_pages():
+    from server.extract import dedupe_items, flag_zero_prices
+    objs, _ = parse_jsonld_blocks(['{"@context":"https://schema.org","@type":"Restaurant","name":"McDonald\'s® (Columbia &amp; 165th St)",'
+                                   '"address":{"@type":"PostalAddress","addressRegion":"IN","postalCode":"46320","addressCountry":"US"},'
+                                   '"hasMenu":{"@type":"Menu","hasMenuSection":['
+                                   '{"@type":"MenuSection","name":"Featured items","hasMenuItem":[{"@type":"MenuItem","name":"Big Mac®","offers":{"@type":"Offer","price":"7.59","priceCurrency":"USD"}},'
+                                   '{"@type":"MenuItem","name":"Iced Latte","offers":{"@type":"Offer","price":"0.00","priceCurrency":"USD"}}]},'
+                                   '{"@type":"MenuSection","name":"Most Popular","hasMenuItem":[{"@type":"MenuItem","name":"Big Mac®","offers":{"@type":"Offer","price":"7.59","priceCurrency":"USD"}}]}]}}'])
+    r = extract_restaurants(objs)[0]
+    assert r["name"] == "McDonald's® (Columbia & 165th St)"          # HTML entities in JSON-LD strings
+    items = flag_zero_prices(dedupe_items(r["items"]))
+    assert len(items) == 2                                              # repeated listing collapsed
+    big = next(i for i in items if i["name"] == "Big Mac®")
+    assert big["sections"] == ["Featured items", "Most Popular"] and big["price_cents"] == 759
+    latte = next(i for i in items if i["name"] == "Iced Latte")
+    assert latte["price_cents"] is None and "0.00" in latte["price_note"]  # $0.00 never treated as a price
+
+
+def test_redirect_to_bot_challenge_is_a_captcha_barrier(sites, tmp_path):
+    dd, _, _ = sites
+    dd.route("/robots.txt", "User-agent: *\nAllow: /\n", ctype="text/plain")
+    dd.route("/store/x/AbCdEf123456", "", status=307,
+             headers={"Location": "https://def.example-challenge.test/en/challenge?from_service=x"})
+    cfg = make_cfg(tmp_path, {"doordash": dd.base})
+    out = PoliteClient(cfg, DiskCache(cfg.data_dir)).fetch(dd.base + "/store/x/AbCdEf123456")
+    assert out.barrier["kind"] == "captcha" and "not followed" in out.barrier["detail"]
