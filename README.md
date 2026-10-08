@@ -34,6 +34,10 @@ Before relying on results, check that your machine can reach the platforms:
 python -m server.inspect_page --probe            # robots.txt reachability + declared sitemaps
 python -m server.inspect_page https://www.doordash.com/store/<slug>-<id>/   # what structured data a page publishes
 python -m server.inspect_page --browser https://www.ubereats.com/store/<slug>/<id>
+
+# Capture real pages, then let the test-suite verify the extractors against them
+python -m server.inspect_page --save tests/captures https://www.doordash.com/store/<slug>-<id>/
+python -m pytest -q tests/test_real_captures.py -s
 ```
 
 ## Using it
@@ -68,7 +72,7 @@ Each adapter (`server/adapters.py`) relies only on published standards and on wh
 | Branch discovery | (a) store or chain URLs you paste as seeds; (b) the **sitemaps the site declares in its own robots.txt**, read as sitemap index → urlsets, with gzip support and DTDs rejected; (c) store links on chain/brand pages, following `rel="next"` pagination. Store URLs are filtered by chain-name tokens in the slug. Seeds come first, then chain pages, then sitemaps. Store-, business- and brand-named sitemaps are read first. | Sitemaps.org protocol; HTML anchors |
 | Menu + prices | schema.org **JSON-LD**: `Restaurant`/`FoodEstablishment` → `hasMenu` → `MenuSection` → `MenuItem` → `Offer` (also `priceSpecification`, `AggregateOffer` (a range, so never verified), `menuAddOn`, `availability`), and `PostalAddress` for the US check | schema.org standard. Third-party write-ups report this markup on DoorDash and Uber Eats store pages, but it was **not observed directly** (see limitations). |
 | JS-rendered pages | **Auto** mode re-renders a page with Playwright/Chromium only when it answered normally but carried no structured data. A browser is never used to get past a block or challenge. | |
-| URL shapes | DoorDash `/store/<slug>-<id>/`, `/business/…`. Uber Eats `/store/<slug>/<id>`, `/<cc>/store/…` (non-US country sections are skipped without a request), `/brand/…`. Mode parameters: DoorDash `?pickup=true`, Uber Eats `?diningMode=DELIVERY|PICKUP`. | From public third-party descriptions; **unverified live**. Each observation records the mode basis. |
+| URL shapes | DoorDash `/store/<slug>-<id>/` or `/store/<id>/`, chain pages `/business/<slug>-<id>/`. Uber Eats `/store/<slug>/<id>`, `/<cc>/store/…` (non-US country sections are skipped without a request), `/brand/…`. Mode parameters: DoorDash `?pickup=false|true`, Uber Eats `?diningMode=DELIVERY|PICKUP`. | Corroborated by 2026 third-party tool code and docs (see [Evidence log](#evidence-log)), except `diningMode`. **Not observed live from here.** Each observation records the mode basis. |
 
 Pages without the standard markup produce an explicit **"no menu data"** outcome. The adapters do not guess selectors or call private endpoints.
 
@@ -200,7 +204,7 @@ All of these were run in the build environment on 2026-10-08:
 
 | Suite | Command | Result |
 |---|---|---|
-| Backend (pytest) | `python -m pytest -q` | **20 passed** |
+| Backend (pytest) | `python -m pytest -q` | **20 passed, 1 skipped**. The skipped test is `test_real_captures.py`: there are no real page captures because the platforms were unreachable. |
 | Engine (Node, runs the exact `<script id="fpc-engine">` from index.html) | `node --test tests/engine.test.mjs` | **20 passed** |
 | UI end-to-end (Playwright + Chromium, real backend, local fixture sites) | `node --test tests/ui.e2e.mjs` | **18 passed** |
 
@@ -235,7 +239,29 @@ The UI test clicks through every control: receipt paste, Grubhub extract, search
 | Chromium (Playwright) navigation to all three homepages | **Blocked**: `net::ERR_TUNNEL_CONNECTION_FAILED` |
 | Server-side web fetch tool on the three robots.txt files, and on third-party scraper write-ups | **Blocked** by the same egress policy |
 
-So **no request to DoorDash, Uber Eats or Grubhub succeeded from the build environment.** Live extraction has not been verified against real pages, and no live price was collected.
+Other ways of seeing a real page were also tried:
+
+| Channel | Result |
+|---|---|
+| Common Crawl (archive of pages crawled under robots.txt) | `index.commoncrawl.org` and `data.commoncrawl.org` are blocked by egress. `commoncrawl.s3.amazonaws.com` is reachable but returns `AccessDenied` to anonymous requests. The only AWS credentials in the environment are 14-character placeholders, which were not used. |
+| Internet Archive (Wayback Machine) | blocked by egress |
+| npm and PyPI packages for these platforms (11 npm tarballs, 2 PyPI packages; read as data, never executed) | No captured store pages in any of them. Their code and docs did corroborate URL shapes and parameters (see the evidence log). |
+| Web search for public repositories with saved store-page HTML | none found |
+
+So **no request to DoorDash, Uber Eats or Grubhub succeeded from the build environment, and no real page was observed by any route.** Live extraction is not verified against real pages, and no live price was collected. `tests/test_real_captures.py` closes that gap once someone with access saves real pages with `inspect_page --save`.
+
+### Evidence log
+
+What each claim the adapters rely on rests on. All of it is secondary unless stated otherwise.
+
+| Claim | Evidence | Strength |
+|---|---|---|
+| Store pages carry schema.org `Restaurant` → `hasMenu` → `MenuSection` → `MenuItem` → `Offer` JSON-LD | Browserless DoorDash skill write-up; Firecrawl DoorDash example code; Apify Uber Eats actor docs (it reads JSON-LD, plus `__REACT_QUERY_STATE__`) | Third-party, unverified here |
+| Uber Eats store URL is `/store/{slug}/{storeId}` | `n8n-nodes-ubereats-menu` (June 2026) input spec, with a real-looking example ID | Third-party tool code |
+| DoorDash store URL `/store/{id}/`, mode parameter `?pickup=false|true` | `doordash-cli` (April 2026) test fixture that mirrors DoorDash feed data: `store/24633898/?pickup=false` | Third-party fixture |
+| DoorDash chain pages are `/business/{slug}-{businessId}/`; Cloudflare covers `/store/` but not `/business/` | `n8n-nodes-doordash-scraper` (June 2026): "These pages are CF-free and return full menu data" | Vendor claim. Chain-level menus are not branch prices, so the adapter uses them only to discover branches. |
+| Uber Eats `?diningMode=` | General familiarity only; no source found | **Unverified.** The mode basis says so. |
+| Uber Eats `/_p/api/*`, DoorDash `graphql/consumer` | Found in third-party clients that use logged-in sessions | **Not used**: private, undocumented, and session-bound |
 
 ## Access limitations and dependencies
 
@@ -261,9 +287,10 @@ food-price-compare/
 │   ├── http_client.py         # robots, rate limit, retry/backoff, cache, barriers, Playwright
 │   ├── robots.py              # RFC 9309 robots.txt
 │   ├── extract.py             # schema.org JSON-LD, addresses, prices, sitemaps
-│   ├── inspect_page.py        # evidence harness CLI
+│   ├── inspect_page.py        # evidence harness CLI (--probe, --browser, --save)
 │   └── config.py
 ├── examples/                  # import format examples (fictional chain)
-├── tests/                     # pytest, node:test engine + Playwright UI e2e, synthetic fixtures
+├── tests/                     # pytest, node:test engine + Playwright UI e2e, synthetic fixtures,
+│                              # test_real_captures.py + captures/ (real pages, empty here)
 └── requirements.txt
 ```

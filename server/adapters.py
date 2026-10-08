@@ -79,11 +79,12 @@ class DoorDashAdapter(PlatformAdapter):
     chain_path_re = re.compile(r"^/(?:[a-z]{2}(?:-[a-z]{2})?/)?business/(?P<slug>[^/]+?)(?:-\d+)?/?$", re.I)
 
     def mode_url(self, canonical: str, mode: str) -> tuple[str, str]:
-        if mode == "pickup":
-            return canonical + "?" + urlencode({"pickup": "true"}), (
-                "pickup requested with ?pickup=true (parameter reported publicly; its effect on the "
-                "page's published prices was not verifiable from the build environment)")
-        return canonical, "store page default mode (DoorDash store pages open in delivery mode)"
+        # DoorDash's own store links carry ?pickup=false / ?pickup=true (seen in
+        # a 2026 DoorDash CLI test fixture mirroring DoorDash feed data).
+        value = "true" if mode == "pickup" else "false"
+        return canonical + "?" + urlencode({"pickup": value}), (
+            f"{mode} requested with ?pickup={value}, the parameter DoorDash's own store links use; whether the "
+            "page's published JSON-LD prices change with it was not verifiable from the build environment")
 
     def sample_store_url(self) -> str:
         return self.base + "/store/example-store-1/"

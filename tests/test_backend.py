@@ -296,7 +296,7 @@ def test_job_run_limit_then_resume(sites, tmp_path):
     c = job.summary()["platforms"]["doordash"]["counters"]
     assert c["checked"] == 5 and c["remaining"] == 0
     for i in range(5):
-        assert dd.hits[f"/store/mcdonalds-city{i}-{1000 + i}/"] == 1  # nothing fetched twice
+        assert dd.hits[f"/store/mcdonalds-city{i}-{1000 + i}/?pickup=false"] == 1  # nothing fetched twice
 
 
 def test_job_cancel_and_resume_after_restart(sites, tmp_path):
@@ -320,7 +320,7 @@ def test_job_cancel_and_resume_after_restart(sites, tmp_path):
     assert wait_for(job2) == "completed"
     assert job2.summary()["platforms"]["doordash"]["counters"]["checked"] == 6
     assert len(job2.state["observations"]) == 6
-    assert max(dd.hits[f"/store/mcdonalds-city{i}-{1000 + i}/"] for i in range(6)) == 1
+    assert max(dd.hits[f"/store/mcdonalds-city{i}-{1000 + i}/?pickup=false"] for i in range(6)) == 1
 
 
 def test_job_circuit_breaker_and_partial_failure(sites, tmp_path):
@@ -368,6 +368,7 @@ def test_pickup_mode_uses_mode_parameter(sites, tmp_path):
     assert wait_for(job) == "completed"
     o = job.state["observations"][0]
     assert o["order_mode"] == "pickup" and o["fetched_url"].endswith("?pickup=true")
+    assert "pickup=true" in o["mode_basis"]
 
 
 # ---------------------------------------------------------------- browser rendering path
