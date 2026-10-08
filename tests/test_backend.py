@@ -499,6 +499,8 @@ def test_quirks_observed_on_real_uber_eats_pages():
     assert big["sections"] == ["Featured items", "Most Popular"] and big["price_cents"] == 759
     latte = next(i for i in items if i["name"] == "Iced Latte")
     assert latte["price_cents"] is None and "0.00" in latte["price_note"]  # $0.00 never treated as a price
+    from server.extract import _text
+    assert _text("Deep Dish Mike&#39;s Hot Honey\ufffd\ufffd") == "Deep Dish Mike's Hot Honey"  # MenuPages: invalid UTF-8 dropped
 
 
 def test_redirect_to_bot_challenge_is_a_captcha_barrier(sites, tmp_path):

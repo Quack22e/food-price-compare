@@ -102,7 +102,10 @@ def _text(v) -> str:
         return _text(v[0]) if v else ""
     # Observed live (Uber Eats, 2026-10-08): JSON-LD strings carry HTML
     # entities, e.g. "McDonald's® (Columbia &amp; 165th St)".
-    return re.sub(r"\s+", " ", html_lib.unescape(str(v))).strip()
+    # Observed live (MenuPages, 2026-10-08): some section names end in bytes
+    # that are not valid UTF-8 ("Deep Dish Mike's Hot Honey\ufffd\ufffd"); the
+    # replacement characters carry no information, so they are dropped.
+    return re.sub(r"\s+", " ", html_lib.unescape(str(v)).replace("\ufffd", "")).strip()
 
 
 def normalize_state(value: str) -> str | None:
