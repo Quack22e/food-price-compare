@@ -5,7 +5,11 @@ Enter a Grubhub item or order. The app looks for the **same item** (same chain, 
 * `index.html` is the whole frontend: one file with embedded CSS and vanilla JS, and no build step.
 * `server/` is a small Python companion service that does the scraping. A browser page cannot read these sites cross-origin, and the service keeps request policy and limits server-side.
 
-> **Status of live scraping, in short.** The scrapers are implemented and tested end to end over HTTP against local fixtures. A live run from the build environment was attempted, but its network egress policy denies `www.doordash.com`, `www.ubereats.com` and `www.grubhub.com`. Both plain HTTP and real Chromium were refused, so no real page from these sites was observed during the build. See [Verification results](#verification-results) and [Access limitations](#access-limitations-and-dependencies). Nothing in this repository contains real or invented prices.
+> **Live status (verified 2026-10-08 against the real sites, see [Verification results](#verification-results)).**
+> * **Uber Eats** works end to end. Real store pages publish the schema.org menu JSON-LD the extractor reads. Real sitemaps produced branch discovery, and three real US branches were priced. The shipped engine then ranked them, for example "Lowest verified price among 3 checked locations: $6.99, 10 pc. Chicken McNuggets®, Hammond IN".
+> * **DoorDash** branch discovery works: 50 real branch links came from a chain page. Its store pages answered every request from a datacenter IP (14 of 14) with a Cloudflare challenge (HTTP 403), which the app reports and does not bypass. **No DoorDash price was obtained.**
+> * **Grubhub:** robots.txt was reachable. Page extraction was not exercised live, because Grubhub's terms forbid automated scraping.
+> * The Claude build sandbox itself cannot reach any of these sites. The live runs used this repository's GitHub Actions workflow.
 
 ---
 
@@ -69,10 +73,10 @@ Each adapter (`server/adapters.py`) relies only on published standards and on wh
 | Step | Method | Evidence basis |
 |---|---|---|
 | Permission | `robots.txt` per RFC 9309 (wildcards, longest match, `Crawl-delay`). If robots.txt is unreachable (401/403/429/5xx or network failure), the site is treated as **disallowed**. A representative store path is tested before any crawl. | Standard |
-| Branch discovery | (a) store or chain URLs you paste as seeds; (b) the **sitemaps the site declares in its own robots.txt**, read as sitemap index → urlsets, with gzip support and DTDs rejected; (c) store links on chain/brand pages, following `rel="next"` pagination. Store URLs are filtered by chain-name tokens in the slug. Seeds come first, then chain pages, then sitemaps. Store-, business- and brand-named sitemaps are read first. | Sitemaps.org protocol; HTML anchors |
-| Menu + prices | schema.org **JSON-LD**: `Restaurant`/`FoodEstablishment` → `hasMenu` → `MenuSection` → `MenuItem` → `Offer` (also `priceSpecification`, `AggregateOffer` (a range, so never verified), `menuAddOn`, `availability`), and `PostalAddress` for the US check | schema.org standard. Third-party write-ups report this markup on DoorDash and Uber Eats store pages, but it was **not observed directly** (see limitations). |
+| Branch discovery | (a) store or chain URLs you paste as seeds; (b) the **sitemaps the site declares in its own robots.txt**, read as sitemap index → urlsets, with gzip support and DTDs rejected; (c) store links on chain/brand pages, following `rel="next"` pagination. Store URLs are filtered by chain-name tokens in the slug. Seeds come first, then chain pages, then sitemaps. Store-, business- and brand-named sitemaps are read first. Non-US country sections (`/ca/`, `/fr-en/`, `/jp/`…) are recorded at discovery and never fetched. | **Verified live.** Uber Eats robots.txt declares gzipped `sitemap-store-*` files: 2 read, 315 McDonald's URLs found, 226 of them non-US. DoorDash declares store, business, `business_menu` and city sitemap indexes. A real DoorDash `/business/` page yielded 50 Chipotle branch links. |
+| Menu + prices | schema.org **JSON-LD**: `Restaurant`/`FoodEstablishment` → `hasMenu` → `MenuSection` → `MenuItem` → `Offer` (also `priceSpecification`, `AggregateOffer` (a range, so never verified), `menuAddOn`, `availability`), and `PostalAddress` for the US check. Text is HTML-unescaped. Identical listings repeated across sections are collapsed. A published `0.00` is never treated as a price. | **Verified live on 6 real Uber Eats store pages** (167–335 items each): `hasMenu.hasMenuSection[].hasMenuItem[].offers.{price,priceCurrency:"USD"}` plus full `PostalAddress`. Uber Eats publishes no `menuAddOn` and no `availability`. DoorDash store pages could not be read (Cloudflare). |
 | JS-rendered pages | **Auto** mode re-renders a page with Playwright/Chromium only when it answered normally but carried no structured data. A browser is never used to get past a block or challenge. | |
-| URL shapes | DoorDash `/store/<slug>-<id>/` or `/store/<id>/`, chain pages `/business/<slug>-<id>/`. Uber Eats `/store/<slug>/<id>`, `/<cc>/store/…` (non-US country sections are skipped without a request), `/brand/…`. Mode parameters: DoorDash `?pickup=false|true`, Uber Eats `?diningMode=DELIVERY|PICKUP`. | Corroborated by 2026 third-party tool code and docs (see [Evidence log](#evidence-log)), except `diningMode`. **Not observed live from here.** Each observation records the mode basis. |
+| URL shapes | DoorDash `/store/<slug>-<id>/` or `/store/<id>/`, chain pages `/business/<slug>-<id>/`. Uber Eats `/store/<slug>/<id>`, `/<cc>[-<lang>]/store/…`, `/brand/…`. Mode parameters: DoorDash `?pickup=false|true`, Uber Eats `?diningMode=DELIVERY|PICKUP`. | **URL shapes verified live** (real sitemaps and chain pages). Uber Eats pages answered normally with `diningMode=DELIVERY`, but whether the parameter changes the published prices is **unverified**. The same goes for DoorDash's `pickup`. Each observation records the mode basis. |
 
 Pages without the standard markup produce an explicit **"no menu data"** outcome. The adapters do not guess selectors or call private endpoints.
 
@@ -80,7 +84,9 @@ Pages without the standard markup produce an explicit **"no menu data"** outcome
 
 * Each platform has a bounded worker pool (default 2), and each host has a minimum interval between requests (default 3 s; a larger `Crawl-delay` wins).
 * Network errors, 429 and 5xx get up to 3 retries with exponential backoff and jitter. `Retry-After` is honored, in seconds or as an HTTP date. If it exceeds 300 s, the adapter stops instead of waiting.
-* Barriers are classified and reported, never bypassed: `egress_denied`, `robots_disallow`, `captcha` (recognized challenge interstitials), `login_wall`, `forbidden`, `rate_limited`, `offsite_redirect`, `network`.
+* Barriers are classified and reported, never bypassed: `egress_denied`, `robots_disallow`, `captcha`, `login_wall`, `forbidden`, `rate_limited`, `offsite_redirect`, `network`.
+  * `captcha` covers challenge interstitials and redirects to a challenge, e.g. Uber's 307 to `def.uber.com/…/challenge`, observed live.
+  * A large, normal HTTP 200 page that merely references a challenge vendor is **not** a barrier. Real Uber Eats store pages do contain such references.
 * Redirects are followed manually, and every hop must stay on an allowed platform host and pass robots.txt. A redirect to any other host is refused, so the service cannot be used for server-side request forgery.
 * A circuit breaker stops an adapter after 4 consecutive blocked or failed stores. The other platform keeps going.
 * Pages are cached on disk (6 h; sitemaps and robots.txt 24 h). A cached result keeps its **original** observation time, so staleness is computed correctly.
@@ -200,80 +206,100 @@ It never stores receipts, Grubhub prices, quantities, delivery addresses or loca
 
 ## Verification results
 
-All of these were run in the build environment on 2026-10-08:
+### Local test suites (build sandbox, 2026-10-08)
 
 | Suite | Command | Result |
 |---|---|---|
-| Backend (pytest) | `python -m pytest -q` | **20 passed, 1 skipped**. The skipped test is `test_real_captures.py`: there are no real page captures because the platforms were unreachable. |
-| Engine (Node, runs the exact `<script id="fpc-engine">` from index.html) | `node --test tests/engine.test.mjs` | **20 passed** |
+| Backend (pytest) | `python -m pytest -q` | **22 passed, 1 skipped**. The skipped test is `test_real_captures.py`; real captures exist only on the runner, where it **passed 5/5**. |
+| Engine (Node, runs the exact `<script id="fpc-engine">` from index.html) | `node --test tests/engine.test.mjs` | **21 passed** |
 | UI end-to-end (Playwright + Chromium, real backend, local fixture sites) | `node --test tests/ui.e2e.mjs` | **18 passed** |
 
-The pipeline tests use **synthetic local fixture servers** (`tests/fake_platform.py`). Those pages were written for the tests to the schema.org and sitemaps standards. They exercise the mechanics and prove nothing about the live sites' current markup. What they cover:
+The pipeline tests use **synthetic local fixture servers** (`tests/fake_platform.py`). They exercise the mechanics:
 
-* **Discovery and dedup:** robots.txt gating (including `Disallow: /`) and Crawl-delay spacing; sitemap index → urlset discovery with chain filtering; chain pages with `rel=next` pagination; non-US country sections skipped; no-menu pages; duplicate addresses.
-* **Retries and barriers:** retry with Retry-After (gap measured ≥ 1 s); over-long Retry-After stops the adapter; CAPTCHA, login wall, 403, 5xx exhaustion; off-site redirect refused (SSRF).
+* **Discovery and dedup:** robots.txt gating (including `Disallow: /`) and Crawl-delay spacing; sitemap index → urlset discovery with chain filtering; chain pages with `rel=next` pagination; non-US country sections never queued; no-menu pages; duplicate addresses.
+* **Retries and barriers:** retry with Retry-After (gap measured ≥ 1 s); over-long Retry-After stops the adapter; CAPTCHA, challenge redirect, login wall, 403, 5xx exhaustion; off-site redirect refused (SSRF).
 * **Fetch modes:** cache reuse with the original timestamp; Playwright rendering of a page whose JSON-LD is injected by JavaScript; pickup vs delivery URLs.
 * **Run control:** per-run limit then resume; cancel mid-run, then resume after a simulated server restart, with nothing refetched and nothing lost; circuit breaker on one platform while the other completes.
 * **Grubhub and the API:** Grubhub extraction and its robots-blocked fallback; HTTP API, CORS and purge.
+* **Real-page quirks:** the regressions for quirks found on real pages (below).
 
 The engine tests cover:
 
 * integer-cent parsing that rejects float noise, comma decimals and more than two decimals
 * size, piece-count and flavor matches and mismatches
-* add-ons, removals and mandatory options; quantity × configured price; missing charges
+* add-ons, removals and mandatory options; quantity × configured price; missing charges; `$0.00` listings
 * the USD-only rule; pickup/delivery separation
 * stale data, unavailable items, non-US and other-chain exclusion; the location filter
 * duplicate handling; same-branch baskets (never combined)
-* checkout totals with unknown fees; import validation (JSON/CSV, including injection attempts); CSV formula-injection guarding
+* checkout totals with unknown fees; import validation; CSV formula-injection guarding
 * receipt parsing; Grubhub URL parsing; the example files
 
-The UI test clicks through every control: receipt paste, Grubhub extract, search, sort, Why?, tabs, cancel and resume, both exports, import (including markup in store names rendered as inert text), pickup/delivery, location filter, checkout ranking, multi-item baskets, adding and removing modifiers and items, demo isolation, probe, checkpoint delete, purge, and a disconnected backend. It also asserts there were no page errors.
+The UI test clicks through every control and asserts there were no page errors.
 
-**Live retrieval attempts** were made against the real sites through the real service, not test mode:
+### Live runs against the real sites
 
-| Request | Result |
-|---|---|
-| `GET https://www.doordash.com/robots.txt` (job + probe) | **Blocked**: `egress_denied`, the build environment's proxy refused CONNECT (HTTP 403) |
-| `GET https://www.ubereats.com/robots.txt` (job + probe) | **Blocked**: `egress_denied` (same) |
-| Grubhub extract for `https://www.grubhub.com/restaurant/…?menuItemId=…` | **Blocked**: `egress_denied`; UI fell back to URL-derived chain guess + manual entry |
-| Chromium (Playwright) navigation to all three homepages | **Blocked**: `net::ERR_TUNNEL_CONNECTION_FAILED` |
-| Server-side web fetch tool on the three robots.txt files, and on third-party scraper write-ups | **Blocked** by the same egress policy |
+The build sandbox's egress policy blocks all three sites; the attempts and alternatives tried are listed below. The live runs therefore use `.github/workflows/fpc-live-verification.yml`. It runs on pushes to this branch that change `scripts/live_verify.py` or the workflow, on a GitHub-hosted runner with ordinary internet access. It runs the unchanged service code with its robots.txt and rate limits (3 s per host).
 
-Other ways of seeing a real page were also tried:
+Each run's budget is bounded:
+* robots.txt for each site
+* two jobs, each limited to 3 sitemap documents and 3–6 stores
+* up to 7 inspected pages
 
-| Channel | Result |
-|---|---|
-| Common Crawl (archive of pages crawled under robots.txt) | `index.commoncrawl.org` and `data.commoncrawl.org` are blocked by egress. `commoncrawl.s3.amazonaws.com` is reachable but returns `AccessDenied` to anonymous requests. The only AWS credentials in the environment are 14-character placeholders, which were not used. |
-| Internet Archive (Wayback Machine) | blocked by egress |
-| npm and PyPI packages for these platforms (11 npm tarballs, 2 PyPI packages; read as data, never executed) | No captured store pages in any of them. Their code and docs did corroborate URL shapes and parameters (see the evidence log). |
-| Web search for public repositories with saved store-page HTML | none found |
+It commits `live-verification/report.json`, which holds observations and structure summaries but no raw HTML, plus the real-capture test output. Raw pages are kept only as a 14-day workflow artifact.
 
-So **no request to DoorDash, Uber Eats or Grubhub succeeded from the build environment, and no real page was observed by any route.** Live extraction is not verified against real pages, and no live price was collected. `tests/test_real_captures.py` closes that gap once someone with access saves real pages with `inspect_page --save`.
+| Run | What happened | Fixes made from it |
+|---|---|---|
+| [37707896611](https://github.com/Quack22e/prediction-market-analytics/actions/runs/37707896611) | robots.txt 200 on all three sites. Uber Eats sitemaps gave 315 McDonald's URLs. A DoorDash `/business/` page gave 50 real Chipotle branches. DoorDash store pages returned 403 (Cloudflare "Just a moment…"). **0 prices**: the Uber Eats budget was spent on non-US URLs, and a real 3 MB Uber Eats store page was misread as a CAPTCHA. | Non-US URLs are no longer queued. The challenge classifier is now size- and title-aware. A structure probe was added. |
+| [37708363041](https://github.com/Quack22e/prediction-market-analytics/actions/runs/37708363041) | Real Uber Eats store pages parsed: **243 / 259 / 331 menu items**; real-capture test **5 passed**. First real price: Big Mac® $7.59, Hammond IN. Two stores hit a 307 to Uber's challenge host. | HTML entities in JSON-LD are unescaped. Repeated listings are collapsed. `$0.00` listings (Zucker's "Iced Latte", "Coffee") are never treated as prices. The challenge redirect is reported as `captcha`. |
+| [37708779121](https://github.com/Quack22e/prediction-market-analytics/actions/runs/37708779121) | Uber Eats: 3 US branches priced, 2 challenged (reported). DoorDash: 3/3 store pages hit Cloudflare 403; the chain page's menu has `storeId: $undefined`, so it isn't used as a branch price. Real-capture test **5 passed**. | — |
+
+**Real prices from run 37708779121** (Uber Eats, delivery, anonymous session, no address, observed 2026-10-08 ~00:39 UTC), ranked by the shipped engine with `node scripts/rank_report.mjs live-verification/report.json "McDonald's" "10 pc Chicken McNuggets" 1 8.49`:
+
+| Rank | Listing | Branch | Item subtotal |
+|---|---|---|---|
+| 1 | 10 pc. Chicken McNuggets® | McDonald's® (Columbia & 165th St), 6437 Columbia Ave, Hammond IN 46320 | **$6.99** |
+| 2 | 10 pc. Chicken McNuggets® | McDonald's® (2324 Nesconset), Stony Brook NY 11790 | $7.59 |
+| 3 | 10 pc. Chicken McNuggets® | McDonald's® (Market & Preston), Louisville KY 40202 | $8.29 |
+
+* Winner label: **"Lowest verified price among 3 checked locations"**. Against a sample Grubhub subtotal of $8.49, the savings are $1.50.
+* The engine rejected the real look-alikes with reasons: "20/40/4 pc … Piece count differs", "10 pc … Meal: candidate adds 'meal'", and "Happy Meal".
+* With the piece count left out of the order, every candidate became "needs confirmation" and there was no winner.
+* These are three branches in a bounded sample, not a nationwide result.
+
+**Attempts from the build sandbox** (all blocked by its egress policy):
+* direct HTTP and real Chromium to all three sites (`egress_denied` / `ERR_TUNNEL_CONNECTION_FAILED`);
+* the server-side web fetch tool;
+* Common Crawl: index and data hosts blocked, and S3 `AccessDenied` for anonymous reads (the environment's AWS variables are placeholders and were not used);
+* the Wayback Machine.
+
+The sandbox also checked npm and PyPI packages for these platforms (read as data, never executed). They held no saved pages, but their docs corroborated the URL shapes.
 
 ### Evidence log
 
-What each claim the adapters rely on rests on. All of it is secondary unless stated otherwise.
-
-| Claim | Evidence | Strength |
+| Claim | Evidence | Status |
 |---|---|---|
-| Store pages carry schema.org `Restaurant` → `hasMenu` → `MenuSection` → `MenuItem` → `Offer` JSON-LD | Browserless DoorDash skill write-up; Firecrawl DoorDash example code; Apify Uber Eats actor docs (it reads JSON-LD, plus `__REACT_QUERY_STATE__`) | Third-party, unverified here |
-| Uber Eats store URL is `/store/{slug}/{storeId}` | `n8n-nodes-ubereats-menu` (June 2026) input spec, with a real-looking example ID | Third-party tool code |
-| DoorDash store URL `/store/{id}/`, mode parameter `?pickup=false|true` | `doordash-cli` (April 2026) test fixture that mirrors DoorDash feed data: `store/24633898/?pickup=false` | Third-party fixture |
-| DoorDash chain pages are `/business/{slug}-{businessId}/`; Cloudflare covers `/store/` but not `/business/` | `n8n-nodes-doordash-scraper` (June 2026): "These pages are CF-free and return full menu data" | Vendor claim. Chain-level menus are not branch prices, so the adapter uses them only to discover branches. |
-| Uber Eats `?diningMode=` | General familiarity only; no source found | **Unverified.** The mode basis says so. |
-| Uber Eats `/_p/api/*`, DoorDash `graphql/consumer` | Found in third-party clients that use logged-in sessions | **Not used**: private, undocumented, and session-bound |
+| Uber Eats store pages publish `Restaurant → hasMenu → MenuSection → MenuItem → Offer{price, priceCurrency}` JSON-LD with `PostalAddress` | 6 real store pages fetched by the live runs | **Verified live** |
+| Uber Eats JSON-LD strings contain HTML entities; listings repeat across sections; some prices are `0.00` because options set the price | Real pages (McDonald's "Columbia &amp; 165th St"; Zucker's "Iced Latte" $0.00) | **Verified live**; handled |
+| Uber Eats bot checks arrive as a 307 to `def.uber.com/…/challenge` | Live runs 2 and 3 | **Verified live**; reported as `captcha` |
+| DoorDash store pages are behind Cloudflare for datacenter IPs | all 14 DoorDash store-page requests across the three runs returned 403 "Just a moment…" | **Verified live** (from GitHub runners) |
+| DoorDash `/business/{slug}-{id}/` is not challenged and lists branch links; its menu is chain-level (`storeId: $undefined`, Next.js stream, no JSON-LD) | Live runs | **Verified live**; used for discovery only |
+| Uber Eats `/store/{slug}/{storeId}`, country sections `/<cc>[-<lang>]/store/` | Real sitemaps | **Verified live** |
+| DoorDash `?pickup=false|true`, Uber Eats `?diningMode=` change the published prices | Pages load with them; no price comparison across modes was made | **Unverified** (recorded in `mode_basis`) |
+| Uber Eats `__REACT_QUERY_STATE__` (2–3 MB, `\u0022`-escaped JSON) holds the app state | Structure probe | Observed; **not parsed** (undocumented) |
+| Uber Eats `/_p/api/*`, DoorDash `graphql/consumer` | Third-party clients using logged-in sessions | **Not used**: private and session-bound |
 
 ## Access limitations and dependencies
 
-1. **Network access (verified blocker in the build environment).** The service needs outbound HTTPS to `www.doordash.com`, `www.ubereats.com` and, for link extraction, `www.grubhub.com`. On a normal machine or server this is ordinary internet access. Run `python -m server.inspect_page --probe` first.
-2. **Bot protection (reported, unverified).** Public scraper write-ups report that DoorDash store pages sit behind Cloudflare and block datacenter IPs. If that happens, the app reports `captcha` or `forbidden` barriers and stops the adapter. It will not try to defeat them. A residential connection may behave differently. That is outside this tool's control and is not assumed.
-3. **Markup assumptions (unverified live).** Menu extraction depends on the stores publishing schema.org `Restaurant`/`Menu` JSON-LD. One vendor reports this is missing on a sizable share of DoorDash stores. Such stores show as "no menu data" rather than being guessed.
-   * The URL patterns and the `pickup` / `diningMode` parameters come from third-party descriptions. Use `server.inspect_page` on real pages to confirm them before trusting results. If they differ, adjust the regexes in `server/adapters.py`.
-   * Embedded app state (for example `__NEXT_DATA__`) is reported by the inspector but deliberately **not parsed**, because its schema could not be observed.
-4. **What JSON-LD cannot tell you.** It does not say whether mandatory option groups exist, gives no fees or taxes, and has no account-dependent promotions. Live rows therefore carry the "mandatory paid options unknown" caveat, and checkout totals are only available for imported data that includes all destination charges.
-5. **Order mode.** Live prices are fetched from an anonymous storefront with no address. The recorded `mode_basis` states how the mode was requested. Whether a platform shows different menu prices for pickup on its public page was not verifiable.
-6. **Terms of service.** Grubhub's Terms of Use prohibit automated scraping without written authorization. DoorDash's and Uber's terms were not reviewed here. You are responsible for whether and how you run the scrapers. Robots.txt compliance is necessary, but it does not grant permission. The import path works with data obtained by other permitted means.
-7. **Coverage.** Nationwide coverage is built up across bounded, resumable runs from seeds, chain pages and declared sitemaps. It is never exhaustive by construction, and the UI never claims "cheapest in the US".
+1. **Network access.** The service needs outbound HTTPS to `www.doordash.com`, `www.ubereats.com` and, for link extraction, `www.grubhub.com`. The Claude build sandbox is denied all three. A GitHub-hosted runner and ordinary machines are not. Run `python -m server.inspect_page --probe` first.
+2. **DoorDash prices (blocked, verified).** DoorDash store pages served a Cloudflare challenge to every request from GitHub's datacenter IPs. The app reports `captcha` barriers and its circuit breaker stops the adapter. It does not try to defeat the challenge. From other networks DoorDash may or may not serve the page; the run log shows which. Without readable store pages there are **no DoorDash branch prices**, and the DoorDash chain-page menu is not branch-specific.
+3. **Uber Eats bot checks (intermittent, verified).** Two of five store fetches in run 3, and two of three in run 2, were redirected to Uber's challenge page. These are reported and skipped. Resume tries the remaining queue later.
+4. **What the published data cannot tell you.**
+   * Uber Eats JSON-LD has no add-on, option or availability data. An order with modifiers therefore always "needs confirmation", and the availability of live rows is "unknown".
+   * `$0.00` listings are unverifiable.
+   * No fees, taxes or account-dependent promotions are published, so checkout totals exist only for imported data that includes all destination charges.
+5. **Order mode.** Live prices come from an anonymous storefront with no address. `mode_basis` states how the mode was requested. Whether pickup prices differ on the public page is unverified.
+6. **Terms of service.** Grubhub's Terms of Use prohibit automated scraping without written authorization. DoorDash's and Uber's terms were not reviewed here. You are responsible for whether and how you run the scrapers. Robots.txt allowing crawling (verified for all three) is not the same as permission. The import path works with data obtained by other permitted means.
+7. **Coverage.** Nationwide coverage is built up across bounded, resumable runs from seeds, chain pages and declared sitemaps. Uber Eats declares hundreds of sitemap files. It is never exhaustive by construction, and the UI never claims "cheapest in the US".
 
 ## Files
 
@@ -288,9 +314,13 @@ food-price-compare/
 │   ├── robots.py              # RFC 9309 robots.txt
 │   ├── extract.py             # schema.org JSON-LD, addresses, prices, sitemaps
 │   ├── inspect_page.py        # evidence harness CLI (--probe, --browser, --save)
+│   ├── structure_probe.py     # how a real page publishes its data (evidence gathering)
 │   └── config.py
 ├── examples/                  # import format examples (fictional chain)
+├── scripts/live_verify.py     # bounded live run (used by .github/workflows/fpc-live-verification.yml)
+├── scripts/rank_report.mjs    # rank a live report's real observations with the shipped engine
+├── live-verification/         # latest live report (committed by the workflow)
 ├── tests/                     # pytest, node:test engine + Playwright UI e2e, synthetic fixtures,
-│                              # test_real_captures.py + captures/ (real pages, empty here)
+│                              # test_real_captures.py + captures/ (real pages; git-ignored)
 └── requirements.txt
 ```
