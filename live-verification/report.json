@@ -1,8 +1,8 @@
 {
-  "started_at": "2026-10-08T01:28:42Z",
+  "started_at": "2026-10-08T01:33:14Z",
   "runner": {
-    "github_run_id": "37713038503",
-    "github_sha": "654dc6c20a758f04a2cbc5bbc1c536b1697ca0cd",
+    "github_run_id": "37713405667",
+    "github_sha": "c688d9262378d77f5f96f2bbad909d0c84805840",
     "runner_os": "Linux",
     "python": "3.12.15",
     "browser_available": true
@@ -38,7 +38,7 @@
         "https://www.doordash.com/sitemap-gift_card-doordash-index.xml"
       ],
       "crawl_delay": null,
-      "checked_at": "2026-10-08T01:28:43Z"
+      "checked_at": "2026-10-08T01:33:14Z"
     },
     "ubereats": {
       "base": "https://www.ubereats.com",
@@ -70,7 +70,7 @@
         "https://www.ubereats.com/sitemap-store-771af823-007.xml.gz"
       ],
       "crawl_delay": null,
-      "checked_at": "2026-10-08T01:28:43Z"
+      "checked_at": "2026-10-08T01:33:14Z"
     },
     "grubhub": {
       "base": "https://www.grubhub.com",
@@ -81,7 +81,7 @@
       "crawling_allowed": true,
       "declared_sitemaps": [],
       "crawl_delay": null,
-      "checked_at": "2026-10-08T01:28:43Z"
+      "checked_at": "2026-10-08T01:33:14Z"
     }
   },
   "inspections": [
@@ -95,13 +95,13 @@
           "status": 200,
           "final_url": "https://www.ubereats.com/store/zuckers-bagels-fidis/YK9UYIbxTd2Gappp2N4pgQ",
           "content_type": "text/html; charset=utf-8",
-          "fetched_at": "2026-10-08T01:29:24Z",
+          "fetched_at": "2026-10-08T01:33:55Z",
           "from_cache": false,
           "via": "http",
           "barrier": null,
           "error": null,
           "attempts": 1,
-          "bytes": 3005856
+          "bytes": 3022297
         },
         "structure": {
           "phrases": {
@@ -116,7 +116,7 @@
               "dress\",\"addressLocality\":\"New York\",\"addressRegion\":\"NY\",\"postalCode\":\"10038\",\"addressCountry\":\"US\",\"streetAddress\":\"125 Fulton Street\"},\"geo\":{\"@type\":\"GeoCoordinates\",\"latitude\":40.7101533,\"longitud"
             ]
           },
-          "bytes": 3002412,
+          "bytes": 3018857,
           "challenge_markers": [
             {
               "marker": "challenges.cloudflare.com",
@@ -163,7 +163,7 @@
             {
               "id": "",
               "type": "application/ld+json",
-              "bytes": 54436,
+              "bytes": 55107,
               "parsed": "json",
               "skeleton": {
                 "@context": "str",
@@ -581,7 +581,7 @@
             {
               "id": "__REACT_QUERY_STATE__",
               "type": "application/json",
-              "bytes": 2409267,
+              "bytes": 2417252,
               "parsed": null,
               "head": " {\\u0022mutations\\u0022:[],\\u0022queries\\u0022:[{\\u0022state\\u0022:{\\u0022data\\u0022:{\\u0022title\\u0022:\\u0022Zucker's Bagels - Fidi\\u0022,\\u0022uuid\\"
             },
@@ -866,10 +866,28 @@
             {
               "id": "__FUSION_PLUGIN_PARAMETERS__",
               "type": "application/json",
-              "bytes": 109958,
+              "bytes": 109944,
               "parsed": "unicode-unescaped",
               "skeleton": {
                 "parameters": {
+                  "web-eats.feature.reorder_button_enabled": {
+                    "namespace": "str",
+                    "key": "str",
+                    "value": "bool",
+                    "valueType": "str"
+                  },
+                  "eats_web_eater_home_parameters.web_feed_pagination_surface_name": {
+                    "namespace": "str",
+                    "key": "str",
+                    "value": "bool",
+                    "valueType": "str"
+                  },
+                  "eats_web_post_order_parameters.enable_use_location_info_checkout_presentation": {
+                    "namespace": "str",
+                    "key": "str",
+                    "value": "bool",
+                    "valueType": "str"
+                  },
                   "web-eats.web_risk_denial": {
                     "namespace": "str",
                     "key": "str",
@@ -877,19 +895,73 @@
                     "valueType": "str",
                     "token": "str"
                   },
-                  "eats_web_platform_parameters.seo_core_store_page_split": {
+                  "eats_web_gr_shopping_store_parameters.store_gr_l1_pagination_enabled": {
                     "namespace": "str",
                     "key": "str",
-                    "value": "str",
+                    "value": "bool",
                     "valueType": "str"
                   },
-                  "web-eats.feature.checkout_backgrounded_place_order_recovery": {
+                  "web-eats.guest_checkout_v2": {
+                    "namespace": "str",
+                    "key": "str",
+                    "value": "bool",
+                    "valueType": "str"
+                  },
+                  "web-payments-experience.features.checkout_actions.eats_ewf.ios_force_popup": {
+                    "namespace": "str",
+                    "key": "str",
+                    "value": "bool",
+                    "valueType": "str"
+                  },
+                  "eats_web_growth.eats_web_snap_schedule_orders": {
                     "namespace": "str",
                     "key": "str",
                     "value": "bool",
                     "valueType": "str"
                   },
                   "eats_web_growth.xlb.friction_batch_2_homefeed": {
+                    "namespace": "str",
+                    "key": "str",
+                    "value": "bool",
+                    "valueType": "str"
+                  },
+                  "web-eats.feedmaker_use_virtualise": {
+                    "namespace": "str",
+                    "key": "str",
+                    "value": "bool",
+                    "valueType": "str"
+                  },
+                  "web-eats.desktop.home_feed_performance_enhancements": {
+                    "namespace": "str",
+                    "key": "str",
+                    "value": "bool",
+                    "valueType": "str"
+                  },
+                  "web-eats.storefront_opens_in_new_tab": {
+                    "namespace": "str",
+                    "key": "str",
+                    "value": "bool",
+                    "valueType": "str"
+                  },
+                  "web-eats.pdp.customization_footer_price_fix": {
+                    "namespace": "str",
+                    "key": "str",
+                    "value": "bool",
+                    "valueType": "str"
+                  },
+                  "eats_web_shopping_store_parameters.store_item_page_cross_sell": {
+                    "namespace": "str",
+                    "key": "str",
+                    "value": "bool",
+                    "valueType": "str"
+                  },
+                  "order-gateway.membership_cart_banner": {
+                    "namespace": "str",
+                    "key": "str",
+                    "value": "bool",
+                    "valueType": "str"
+                  },
+                  "eats_web_shopping_store_parameters.store_add_to_cart_button_revamp": {
                     "namespace": "str",
                     "key": "str",
                     "value": "bool",
@@ -902,121 +974,49 @@
                     "valueType": "str",
                     "token": "str"
                   },
-                  "web-eats.multicart_draft_order_uuid_param": {
-                    "namespace": "str",
-                    "key": "str",
-                    "value": "bool",
-                    "valueType": "str"
-                  },
-                  "eats_web_platform_parameters.speculative_bundle_loader": {
-                    "namespace": "str",
-                    "key": "str",
-                    "value": "str",
-                    "valueType": "str"
-                  },
-                  "eats_web_growth.eats_web_closed_store_handling": {
-                    "namespace": "str",
-                    "key": "str",
-                    "value": "bool",
-                    "valueType": "str"
-                  },
-                  "web-eats.feature.eats_web_shell_error_trace_enabled": {
-                    "namespace": "str",
-                    "key": "str",
-                    "value": "bool",
-                    "valueType": "str"
-                  },
-                  "eats_web_post_order_parameters.enable_neutral_zone": {
+                  "eats_web_platform_parameters.infinite_rpc_guard_threshold": {
                     "namespace": "str",
                     "key": "str",
                     "value": "int",
                     "valueType": "str"
                   },
-                  "web-eats.matchbox.skip_query_param_if_bundle": {
+                  "eats_web_gr_shopping_store_parameters.color_images_enabled": {
                     "namespace": "str",
                     "key": "str",
                     "value": "bool",
                     "valueType": "str"
                   },
-                  "eats_web_membership_parameters.membership_cancellation_flow": {
+                  "eats_web_growth.eats_web_address_precise_location_xp": {
+                    "namespace": "str",
+                    "key": "str",
+                    "value": "str",
+                    "valueType": "str"
+                  },
+                  "web-payments-experience.features.checkout_actions.membership_hub_purchase.enabled": {
                     "namespace": "str",
                     "key": "str",
                     "value": "bool",
                     "valueType": "str"
                   },
-                  "eats_ads_platform_web.ads_off_platform_skip_click_id_check": {
+                  "eats_web_gr_shopping_store_parameters.loyalty_xlb_webview_close_button_enabled": {
                     "namespace": "str",
                     "key": "str",
                     "value": "bool",
                     "valueType": "str"
                   },
-                  "web-eats.feature.cart.unified_cmp_payloads_enabled": {
+                  "web-payments-experience.features.payment_selection.static_message_allowed_token_types": {
+                    "namespace": "str",
+                    "key": "str",
+                    "value": "str",
+                    "valueType": "str"
+                  },
+                  "eats_web_shopping_store_parameters.enable_dynamic_badge_truncation": {
                     "namespace": "str",
                     "key": "str",
                     "value": "bool",
                     "valueType": "str"
                   },
-                  "web-eats.feature.retro.proxy_storefront.gr.enabled": {
-                    "namespace": "str",
-                    "key": "str",
-                    "value": "bool",
-                    "valueType": "str"
-                  },
-                  "web-eats.server.cspEnableHtmlMeta": {
-                    "namespace": "str",
-                    "key": "str",
-                    "value": "bool",
-                    "valueType": "str"
-                  },
-                  "eats_web_post_order_parameters.enable_terminated_order_auto_appeasement": {
-                    "namespace": "str",
-                    "key": "str",
-                    "value": "bool",
-                    "valueType": "str"
-                  },
-                  "order-gateway.order-gateway.web.lad_photo_termination_screen.enabled": {
-                    "namespace": "str",
-                    "key": "str",
-                    "value": "bool",
-                    "valueType": "str"
-                  },
-                  "eats-web-cdex-parameters.cmp_pass_workflow_uuid_when_ordered": {
-                    "namespace": "str",
-                    "key": "str",
-                    "value": "bool",
-                    "valueType": "str"
-                  },
-                  "eatsfeed-citrus.ranking.disclaimer.enabled": {
-                    "namespace": "str",
-                    "key": "str",
-                    "value": "bool",
-                    "valueType": "str"
-                  },
-                  "eats-web-cdex-parameters.enable_replacements_overhaul_m2": {
-                    "namespace": "str",
-                    "key": "str",
-                    "value": "bool",
-                    "valueType": "str"
-                  },
-                  "eats_web_shopping_mechanics_parameters.deprecate_shopping_cart_currency_code": {
-                    "namespace": "str",
-                    "key": "str",
-                    "value": "bool",
-                    "valueType": "str"
-                  },
-                  "eats_web_eater_home_parameters.web_feed_carousel_feed_force_scroll_top_logging": {
-                    "namespace": "str",
-                    "key": "str",
-                    "value": "bool",
-                    "valueType": "str"
-                  },
-                  "web-eats.feature.store.performance_enhancements": {
-                    "namespace": "str",
-                    "key": "str",
-                    "value": "bool",
-                    "valueType": "str"
-                  },
-                  "eats_web_shopping_store_parameters.store_scheduled_order_navigation_enhancements_enabled": {
+                  "eats_web_gr_shopping_store_parameters.store_gr_left_navbar_ads_enabled": {
                     "namespace": "str",
                     "key": "str",
                     "value": "bool",
@@ -1029,34 +1029,34 @@
               },
               "price_paths": [
                 {
-                  "path": ".parameters.ordering-presentation.eats_web.nudges.strikethrough_total_price",
-                  "sample": "{\"namespace\": \"ordering-presentation\", \"key\": \"eats_web.nudges.strikethrough_total_price\", \"value\": false, \"valueType\": \"VALUE_TYPE_BOOL\"}"
+                  "path": ".parameters.web-eats.pdp.customization_footer_price_fix",
+                  "sample": "{\"namespace\": \"web-eats\", \"key\": \"pdp.customization_footer_price_fix\", \"value\": true, \"valueType\": \"VALUE_TYPE_BOOL\"}"
                 },
                 {
                   "path": ".parameters.web-eats.feature.total_price_cart_pill",
                   "sample": "{\"namespace\": \"web-eats\", \"key\": \"feature.total_price_cart_pill\", \"value\": false, \"valueType\": \"VALUE_TYPE_BOOL\"}"
                 },
                 {
-                  "path": ".parameters.web-eats.pdp.customization_footer_price_fix",
-                  "sample": "{\"namespace\": \"web-eats\", \"key\": \"pdp.customization_footer_price_fix\", \"value\": true, \"valueType\": \"VALUE_TYPE_BOOL\"}"
+                  "path": ".parameters.ordering-presentation.eats_web.nudges.strikethrough_total_price",
+                  "sample": "{\"namespace\": \"ordering-presentation\", \"key\": \"eats_web.nudges.strikethrough_total_price\", \"value\": false, \"valueType\": \"VALUE_TYPE_BOOL\"}"
                 }
               ],
               "menu_paths": [
-                ".parameters.eats-api.eatsapi.web.quick_add_items_carousel_feed_item_adapter.enabled",
-                ".parameters.eats_web_gr_shopping_store_parameters.fix_max_item_cap_callout_and_quantity_selector",
-                ".parameters.eats_web_post_order_parameters.enable_restricted_items_pin_hiding_for_alcohol_gifting",
+                ".parameters.eats_web_shopping_store_parameters.store_item_page_cross_sell",
+                ".parameters.restricted-items.web_eats.provide_date_of_birth.order_identifiers",
+                ".parameters.eats_web_shopping_mechanics_parameters.eats_web_cart_edit_item_quick_view",
+                ".parameters.eats_web_cro_parameters.rename_reviews_section",
                 ".parameters.restricted-items.wpe.uber_cash_eligibility.enabled",
                 ".parameters.eats-web-cdex-parameters.should_hide_add_items_in_checkout_for_gr_scheduled",
                 ".parameters.eats_web_shopping_store_parameters.store_catalog_section_raw_title_text_enabled",
-                ".parameters.eats-web-cdex-parameters.enable_replacement_error_screen_not_found_item",
+                ".parameters.eats_web_gr_shopping_store_parameters.fix_max_item_cap_callout_and_quantity_selector",
                 ".parameters.restricted-items.feature.loe_x_ri_web_providers.enabled",
-                ".parameters.eats-web-cdex-parameters.enable_custom_items_consumer_web",
-                ".parameters.eats_web_shopping_store_parameters.eta_section_info_max_lines",
-                ".parameters.eats_web_shopping_store_parameters.store_item_page_cross_sell",
+                ".parameters.restricted-items.web_eats.uber_cash_eligibility.uber_balances_pp.enabled",
+                ".parameters.eats-web-cdex-parameters.enable_replacement_error_screen_not_found_item",
                 ".parameters.eats_web_platform_parameters.eats_web_admin_menu",
-                ".parameters.eats-web-cdex-parameters.enable_item_availability_experiment",
-                ".parameters.web-eats.feature.buy_an_item_enabled",
-                ".parameters.web-eats.marketing.boga_catalog_section_uuid"
+                ".parameters.eats_web_cro_parameters.menu_item_rating",
+                ".parameters.restricted-items.feature.loe_x_ri_web.enabled",
+                ".parameters.web-eats.feature.buy_an_item_enabled"
               ]
             },
             {
@@ -1261,15 +1261,15 @@
             ]
           },
           "counts": {
-            "\"price\"": 331,
+            "\"price\"": 335,
             "\\\"price\\\"": 0,
             "displayPrice": 0,
             "__next_f": 0,
             "__APOLLO_STATE__": 0,
             "__REACT_QUERY_STATE__": 1,
             "application/ld+json": 3,
-            "MenuItem": 702,
-            "storeUuid": 12
+            "MenuItem": 710,
+            "storeUuid": 16
           },
           "price_contexts": [
             {
@@ -1278,11 +1278,11 @@
             },
             {
               "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
-              "context": "\"Two Eggs on a Bagel\",\"description\":\"Two eggs scrambled on a bagel of your choice.\",\"offers\":{\"@type\":\"Offer\",\"price\":\"6.88\",\"priceCurrency\":\"USD\"}},{\"@type\":\"MenuItem\",\"name\":\"Iced Latte\",\"description\":\"\",\"offers\":{\"@ty"
+              "context": "\"Two Eggs on a Bagel\",\"description\":\"Two eggs scrambled on a bagel of your choice.\",\"offers\":{\"@type\":\"Offer\",\"price\":\"6.88\",\"priceCurrency\":\"USD\"}},{\"@type\":\"MenuItem\",\"name\":\"Plain Cream Cheese Sandwich\",\"description\":"
             },
             {
               "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
-              "context": "8\",\"priceCurrency\":\"USD\"}},{\"@type\":\"MenuItem\",\"name\":\"Iced Latte\",\"description\":\"\",\"offers\":{\"@type\":\"Offer\",\"price\":\"0.00\",\"priceCurrency\":\"USD\"}},{\"@type\":\"MenuItem\",\"name\":\"Iced Coffee\",\"description\":\"\",\"offers\":{\"@t"
+              "context": "\":\"USD\"}},{\"@type\":\"MenuItem\",\"name\":\"Plain Cream Cheese Sandwich\",\"description\":\"\",\"offers\":{\"@type\":\"Offer\",\"price\":\"6.10\",\"priceCurrency\":\"USD\"}},{\"@type\":\"MenuItem\",\"name\":\"Iced Latte\",\"description\":\"\",\"offers\":{\"@ty"
             },
             {
               "pattern": "\\$\\d+\\.\\d{2}",
@@ -1294,7 +1294,7 @@
             },
             {
               "pattern": "\\$\\d+\\.\\d{2}",
-              "context": "lass=\"_mf\"><div class=\"_jz _k0 _mg _bn\"><span data-testid=\"rich-text\" class=\"_fh _fa _fi _be _bf _fj _dj _b1\">$17.86</span></div></div></div></div></div></a></div></li></ul></ul><ul class=\"_e1 _iq _ch _ck _l2 _l3 _l4 _ed"
+              "context": "lass=\"_mf\"><div class=\"_jz _k0 _mg _bn\"><span data-testid=\"rich-text\" class=\"_fh _fa _fi _be _bf _fj _dj _b1\">$6.10</span></div></div></div></div></div></a></div></li><li class=\"_i0 _lc _ld _ak _le\"><div><a tabindex=\"0\" "
             }
           ]
         },
@@ -1387,7 +1387,7 @@
           {
             "id": "__REACT_QUERY_STATE__",
             "type": "application/json",
-            "length": 2409267
+            "length": 2417252
           },
           {
             "id": "__MANAGED_TRANSLATIONS__",
@@ -1427,7 +1427,7 @@
           {
             "id": "__FUSION_PLUGIN_PARAMETERS__",
             "type": "application/json",
-            "length": 109958
+            "length": 109944
           },
           {
             "id": "__CONFIG__",
@@ -1459,7 +1459,7 @@
               },
               null
             ],
-            "menu_item_count": 331,
+            "menu_item_count": 335,
             "menu_urls": [],
             "sample_items": [
               {
@@ -1479,6 +1479,14 @@
                 "section": "Featured items"
               },
               {
+                "name": "Plain Cream Cheese Sandwich",
+                "variant": null,
+                "price_cents": 610,
+                "currency": "USD",
+                "availability": "unknown",
+                "section": "Featured items"
+              },
+              {
                 "name": "Iced Latte",
                 "variant": null,
                 "price_cents": 0,
@@ -1487,41 +1495,33 @@
                 "section": "Featured items"
               },
               {
+                "name": "Scallion Cream Cheese Sandwich",
+                "variant": null,
+                "price_cents": 700,
+                "currency": "USD",
+                "availability": "unknown",
+                "section": "Featured items"
+              },
+              {
+                "name": "The Traditional",
+                "variant": null,
+                "price_cents": 1932,
+                "currency": "USD",
+                "availability": "unknown",
+                "section": "Featured items"
+              },
+              {
+                "name": "Large Fresh OJ 16 Oz",
+                "variant": null,
+                "price_cents": 572,
+                "currency": "USD",
+                "availability": "unknown",
+                "section": "Featured items"
+              },
+              {
                 "name": "Iced Coffee",
                 "variant": null,
                 "price_cents": 0,
-                "currency": "USD",
-                "availability": "unknown",
-                "section": "Featured items"
-              },
-              {
-                "name": "Plain Cream Cheese (Lb)",
-                "variant": null,
-                "price_cents": 0,
-                "currency": "USD",
-                "availability": "unknown",
-                "section": "Featured items"
-              },
-              {
-                "name": "Iced Cappuccino",
-                "variant": null,
-                "price_cents": 0,
-                "currency": "USD",
-                "availability": "unknown",
-                "section": "Featured items"
-              },
-              {
-                "name": "Coffee",
-                "variant": null,
-                "price_cents": 0,
-                "currency": "USD",
-                "availability": "unknown",
-                "section": "Featured items"
-              },
-              {
-                "name": "Everything Salmon Sandwich",
-                "variant": null,
-                "price_cents": 1786,
                 "currency": "USD",
                 "availability": "unknown",
                 "section": "Featured items"
@@ -1541,20 +1541,20 @@
           "status": 200,
           "final_url": "https://www.ubereats.com/brand/mcdonalds",
           "content_type": "text/html; charset=utf-8",
-          "fetched_at": "2026-10-08T01:29:25Z",
+          "fetched_at": "2026-10-08T01:33:57Z",
           "from_cache": false,
           "via": "http",
           "barrier": null,
           "error": null,
           "attempts": 1,
-          "bytes": 2619570
+          "bytes": 2615126
         },
         "structure": {
           "phrases": {
             "may vary": " I order from McDonald&#x27;s on Uber Eats?</h3></div><div class=\"_bo _bp _bq _br _b1\"><p class=\"\">Selections may vary by location. Browse your local McDonald&#x27;s storefront on Uber Eats to see currently available ite"
           },
           "key_contexts": {},
-          "bytes": 2619441,
+          "bytes": 2614997,
           "challenge_markers": [],
           "embedded_json_scripts": [
             {
@@ -1615,7 +1615,7 @@
             {
               "id": "__PWV_DEVICE_INFO__",
               "type": "application/json",
-              "bytes": 117,
+              "bytes": 186,
               "parsed": "unicode-unescaped"
             },
             {
@@ -1660,7 +1660,7 @@
             {
               "id": "__EGH__",
               "type": "application/json",
-              "bytes": 309,
+              "bytes": 312,
               "parsed": "json",
               "skeleton": {
                 "x-uber-origin": "str",
@@ -1980,7 +1980,7 @@
             {
               "id": "__REDUX_STATE__",
               "type": "application/json",
-              "bytes": 1501980,
+              "bytes": 1502511,
               "parsed": null,
               "head": " {\\u0022activeOrders\\u0022:{\\u0022hasLoaded\\u0022:false,\\u0022isLoading\\u0022:false,\\u0022data\\u0022:null,\\u0022error\\u0022:null},\\u0022assets\\u0022"
             },
@@ -2231,7 +2231,7 @@
           {
             "id": "__PWV_DEVICE_INFO__",
             "type": "application/json",
-            "length": 117
+            "length": 186
           },
           {
             "id": "__DID__",
@@ -2246,7 +2246,7 @@
           {
             "id": "__EGH__",
             "type": "application/json",
-            "length": 309
+            "length": 312
           },
           {
             "id": "__ANALYTICS_PLUGIN_CONFIG__",
@@ -2316,7 +2316,7 @@
           {
             "id": "__REDUX_STATE__",
             "type": "application/json",
-            "length": 1501980
+            "length": 1502511
           },
           {
             "id": "__FUSION_PLUGIN_PARAMETERS__",
@@ -2347,7 +2347,7 @@
           "status": 403,
           "final_url": "https://www.ubereats.com/brand/mcdonalds",
           "content_type": "text/html",
-          "fetched_at": "2026-10-08T01:29:30Z",
+          "fetched_at": "2026-10-08T01:34:02Z",
           "from_cache": false,
           "via": "browser",
           "barrier": {
@@ -2356,7 +2356,7 @@
             "url": "https://www.ubereats.com/brand/mcdonalds",
             "host": "www.ubereats.com",
             "status": 403,
-            "observed_at": "2026-10-08T01:29:30Z"
+            "observed_at": "2026-10-08T01:34:02Z"
           },
           "error": null,
           "attempts": 1,
@@ -2370,12 +2370,12 @@
             {
               "marker": "cf-chl-",
               "offset": 23952,
-              "context": "<div><div></div><input type=\"hidden\" name=\"cf-turnstile-response\" id=\"cf-chl-widget-flac1_response\"></div></div></div><div id=\"gGiQ5\" style="
+              "context": "<div><div></div><input type=\"hidden\" name=\"cf-turnstile-response\" id=\"cf-chl-widget-bwwlw_response\"></div></div></div><div id=\"gGiQ5\" style="
             },
             {
               "marker": "challenges.cloudflare.com",
               "offset": 451,
-              "context": "one'; script-src 'nonce-xYWpEb8w9B1NGoUcMgdjTg' 'unsafe-eval' https://challenges.cloudflare.com; script-src-attr 'none'; style-src 'unsafe-i"
+              "context": "one'; script-src 'nonce-4OTFnDTcpgHTvAOEo62dYX' 'unsafe-eval' https://challenges.cloudflare.com; script-src-attr 'none'; style-src 'unsafe-i"
             },
             {
               "marker": "<title>just a moment...</title>",
@@ -2390,7 +2390,7 @@
             "largest_anonymous": [
               {
                 "bytes": 3778,
-                "head": "(function(){window._cf_chl_opt = {cFPWv: 'g',cH: 'zKOGOKsowQtCLI.Dj_xADj3nTPyp.ji1unohkjvdEL8-1791422969-1.2.1.1-8jS_Yg."
+                "head": "(function(){window._cf_chl_opt = {cFPWv: 'g',cH: 'EPl6KpT3kI2v4J1lF9eQVdiIyfUzT88UQV8saFnBq98-1791423240-1.2.1.1-09EEgKo"
               }
             ]
           },
@@ -2419,7 +2419,7 @@
           "status": 403,
           "final_url": "https://www.doordash.com/store/24633898/",
           "content_type": "text/html; charset=UTF-8",
-          "fetched_at": "2026-10-08T01:29:30Z",
+          "fetched_at": "2026-10-08T01:34:02Z",
           "from_cache": false,
           "via": "http",
           "barrier": {
@@ -2428,7 +2428,7 @@
             "url": "https://www.doordash.com/store/24633898/",
             "host": "www.doordash.com",
             "status": 403,
-            "observed_at": "2026-10-08T01:29:30Z"
+            "observed_at": "2026-10-08T01:34:02Z"
           },
           "error": null,
           "attempts": 1,
@@ -2442,7 +2442,7 @@
             {
               "marker": "challenges.cloudflare.com",
               "offset": 465,
-              "context": " &#39;nonce-upRMpZrqJUkt1TVJU65c72&#39; &#39;unsafe-eval&#39; https://challenges.cloudflare.com; script-src-attr &#39;none&#39;; style-src &"
+              "context": " &#39;nonce-NSB1vZAesyWXy1EaeAGGOo&#39; &#39;unsafe-eval&#39; https://challenges.cloudflare.com; script-src-attr &#39;none&#39;; style-src &"
             },
             {
               "marker": "<title>just a moment...</title>",
@@ -2457,7 +2457,7 @@
             "largest_anonymous": [
               {
                 "bytes": 3300,
-                "head": "(function(){window._cf_chl_opt = {cFPWv: 'g',cH: 'xwUUW8f_2GoFG7cBNMx9h4CA2XjlSsl2zl6yUOzGLSA-1791422970-1.2.1.1-e4qAXB4"
+                "head": "(function(){window._cf_chl_opt = {cFPWv: 'g',cH: 'wcezp8YOl.xywkbg6whl68awW26PF.9k.6NCWugV3KQ-1791423242-1.2.1.1-J0HVlFp"
               }
             ]
           },
@@ -2486,13 +2486,13 @@
           "status": 200,
           "final_url": "https://www.doordash.com/business/chipotle-mexican-grill-115/",
           "content_type": "text/html; charset=utf-8",
-          "fetched_at": "2026-10-08T01:29:35Z",
+          "fetched_at": "2026-10-08T01:34:06Z",
           "from_cache": false,
           "via": "http",
           "barrier": null,
           "error": null,
           "attempts": 1,
-          "bytes": 2266877
+          "bytes": 2272537
         },
         "structure": {
           "phrases": {
@@ -2507,43 +2507,43 @@
           "key_contexts": {
             "storeId": [
               "itForStoreId\\\":false,\\\"aggregateStoreIds\\\":\\\"$undefined\\\",\\\"multiStoreShoppingAttr\\\":\\\"$undefined\\\",\\\"storeId\\\":\\\"$undefined\\\"},\\\"children\\\":\\\"$L3f\\\"}]}]}]\\n\"])</script><script>self.__next_f.push([1,\"",
-              "\\\"},\\\"arguments\\\":[],\\\"directives\\\":[]}]}}]}}]}}],\\\"loc\\\":{\\\"start\\\":0,\\\"end\\\":871}},\\\"variables\\\":{\\\"storeId\\\":\\\"269749\\\",\\\"locale\\\":\\\"en-US\\\"},\\\"data\\\":{\\\"consumerAllCmsDetails\\\":[]}}],\\\"unifiedTele"
+              "itForStoreId\\\":false,\\\"aggregateStoreIds\\\":\\\"$undefined\\\",\\\"multiStoreShoppingAttr\\\":\\\"$undefined\\\",\\\"storeId\\\":\\\"$undefined\\\"}}}]\\n\"])</script><script>self.__next_f.push([1,\"53:I[344119,[\\\"28316\\\",\\\""
             ]
           },
-          "bytes": 2265575,
+          "bytes": 2271216,
           "challenge_markers": [],
           "embedded_json_scripts": [],
           "inline_scripts": {
-            "count": 62,
-            "anonymous_count": 62,
+            "count": 60,
+            "anonymous_count": 60,
             "largest_anonymous": [
               {
-                "bytes": 769439,
+                "bytes": 769387,
                 "head": "self.__next_f.push([1,\"f:[\\\"$\\\",\\\"html\\\",null,{\\\"lang\\\":\\\"en-US\\\",\\\"children\\\":[null,[\\\"$\\\",\\\"body\\\",null,{\\\"children\\\":"
               },
               {
-                "bytes": 552839,
-                "head": "self.__next_f.push([1,\"{\\\"evaluateCallCache\\\":{\\\"timestamp\\\":1791422974229,\\\"context\\\":{\\\"app_version\\\":\\\"2.17700.0\\\",\\\""
+                "bytes": 552040,
+                "head": "self.__next_f.push([1,\"{\\\"evaluateCallCache\\\":{\\\"timestamp\\\":1791423245859,\\\"context\\\":{\\\"app_version\\\":\\\"2.17700.0\\\",\\\""
               },
               {
-                "bytes": 195919,
-                "head": "self.__next_f.push([1,\"3f:[\\\"$\\\",\\\"$L49\\\",null,{\\\"platformProps\\\":{\\\"initialReactQueryState\\\":{\\\"mutations\\\":[],\\\"querie"
+                "bytes": 206510,
+                "head": "self.__next_f.push([1,\"3f:[\\\"$\\\",\\\"$L53\\\",null,{\\\"platformProps\\\":{\\\"initialReactQueryState\\\":{\\\"mutations\\\":[],\\\"querie"
               },
               {
-                "bytes": 50061,
-                "head": "self.__next_f.push([1,\"44:[\\\"$\\\",\\\"$L8a\\\",null,{\\\"apolloCacheData\\\":[{\\\"data\\\":{\\\"consumerOrderCart\\\":null},\\\"query\\\":{\\"
+                "bytes": 54258,
+                "head": "self.__next_f.push([1,\"44:[\\\"$\\\",\\\"$L45\\\",null,{\\\"apolloCacheData\\\":[{\\\"data\\\":{\\\"consumerOrderCart\\\":null},\\\"query\\\":{\\"
               },
               {
                 "bytes": 26851,
-                "head": "self.__next_f.push([1,\"28:[\\\"$\\\",\\\"$L40\\\",null,{\\\"dvsEvaluationCache\\\":\\\"$41\\\",\\\"dvsHash\\\":\\\"c1e9a423e26e3e8e84d7346697e"
+                "head": "self.__next_f.push([1,\"28:[\\\"$\\\",\\\"$L40\\\",null,{\\\"dvsEvaluationCache\\\":\\\"$41\\\",\\\"dvsHash\\\":\\\"851fcb14adabb1d7d256e75cbea"
               }
             ]
           },
           "counts": {
             "\"price\"": 0,
-            "\\\"price\\\"": 315,
+            "\\\"price\\\"": 357,
             "displayPrice": 0,
-            "__next_f": 62,
+            "__next_f": 60,
             "__APOLLO_STATE__": 0,
             "__REACT_QUERY_STATE__": 0,
             "application/ld+json": 0,
@@ -2553,15 +2553,15 @@
           "price_contexts": [
             {
               "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
-              "context": "tilla with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\\\",\\\"price\\\":1365,\\\"calories\\\":0,\\\"id\\\":\\\"1213345000\\\"}\\n51:{\\\"name\\\":\\\"Burrito Bowl\\\",\\\"imageUrl\\\":\\\"https://cdn"
+              "context": "tilla with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\\\",\\\"price\\\":1365,\\\"calories\\\":0,\\\"id\\\":\\\"1213345000\\\"}\\n5b:{\\\"name\\\":\\\"Burrito Bowl\\\",\\\"imageUrl\\\":\\\"https://cdn"
             },
             {
               "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
-              "context": " bowl with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\\\",\\\"price\\\":1365,\\\"calories\\\":0,\\\"id\\\":\\\"1213345001\\\"}\\n52:{\\\"name\\\":\\\"Three Tacos\\\",\\\"imageUrl\\\":\\\"https://cdn."
+              "context": " bowl with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\\\",\\\"price\\\":1365,\\\"calories\\\":0,\\\"id\\\":\\\"1213345001\\\"}\\n5c:{\\\"name\\\":\\\"Three Tacos\\\",\\\"imageUrl\\\":\\\"https://cdn."
             },
             {
               "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
-              "context": "shly grilled meat, sofritas, or guacamole, and up to five toppings served in a soft or hard-shell tortilla.\\\",\\\"price\\\":1365,\\\"calories\\\":0,\\\"id\\\":\\\"5521162512\\\"}\\n53:{\\\"name\\\":\\\"Quesadilla\\\",\\\"imageUrl\\\":\\\"https://cdn.d"
+              "context": "shly grilled meat, sofritas, or guacamole, and up to five toppings served in a soft or hard-shell tortilla.\\\",\\\"price\\\":1365,\\\"calories\\\":0,\\\"id\\\":\\\"5521162512\\\"}\\n5d:{\\\"name\\\":\\\"Quesadilla\\\",\\\"imageUrl\\\":\\\"https://cdn.d"
             },
             {
               "pattern": "\\$\\d+\\.\\d{2}",
@@ -2605,7 +2605,7 @@
           "status": 403,
           "final_url": "https://www.doordash.com/business/chipotle-mexican-grill-115/",
           "content_type": "text/html",
-          "fetched_at": "2026-10-08T01:29:38Z",
+          "fetched_at": "2026-10-08T01:34:09Z",
           "from_cache": false,
           "via": "browser",
           "barrier": {
@@ -2614,7 +2614,7 @@
             "url": "https://www.doordash.com/business/chipotle-mexican-grill-115/",
             "host": "www.doordash.com",
             "status": 403,
-            "observed_at": "2026-10-08T01:29:38Z"
+            "observed_at": "2026-10-08T01:34:09Z"
           },
           "error": null,
           "attempts": 1,
@@ -2628,12 +2628,12 @@
             {
               "marker": "cf-chl-",
               "offset": 23975,
-              "context": "<div><div></div><input type=\"hidden\" name=\"cf-turnstile-response\" id=\"cf-chl-widget-mezkr_response\"></div></div></div><div id=\"gGiQ5\" style="
+              "context": "<div><div></div><input type=\"hidden\" name=\"cf-turnstile-response\" id=\"cf-chl-widget-00bma_response\"></div></div></div><div id=\"gGiQ5\" style="
             },
             {
               "marker": "challenges.cloudflare.com",
               "offset": 451,
-              "context": "one'; script-src 'nonce-EFeieIubu5b33wqjN5gJqW' 'unsafe-eval' https://challenges.cloudflare.com; script-src-attr 'none'; style-src 'unsafe-i"
+              "context": "one'; script-src 'nonce-eLqfi1SmN6pGrkJBwCLgK9' 'unsafe-eval' https://challenges.cloudflare.com; script-src-attr 'none'; style-src 'unsafe-i"
             },
             {
               "marker": "<title>just a moment...</title>",
@@ -2648,7 +2648,7 @@
             "largest_anonymous": [
               {
                 "bytes": 3854,
-                "head": "(function(){window._cf_chl_opt = {cFPWv: 'g',cH: '5WjsyrS41wPTK2J_9reThkgzJHMigB9zOFYmBFqhxhE-1791422977-1.2.1.1-zYLK6YB"
+                "head": "(function(){window._cf_chl_opt = {cFPWv: 'g',cH: 'x4zf8Myf.jcJE8LnSjh03maU1xiPc9rjgW0BeDvS3eA-1791423248-1.2.1.1-tVKgxW7"
               }
             ]
           },
@@ -2677,17 +2677,17 @@
           "status": 200,
           "final_url": "https://www.ubereats.com/store/mcdonalds-20726-interstate-30s/9OfhoYsMTRyMQmihC47pyQ",
           "content_type": "text/html; charset=utf-8",
-          "fetched_at": "2026-10-08T01:29:40Z",
+          "fetched_at": "2026-10-08T01:34:11Z",
           "from_cache": false,
           "via": "http",
           "barrier": null,
           "error": null,
           "attempts": 1,
-          "bytes": 3350653
+          "bytes": 3351316
         },
         "structure": {
           "phrases": {
-            "menu prices": "e _di _fj _gg _b1\"><h3 class=\"_be _di _bg _dj\">Where can I find McDonald&#x27;s\u00ae (20726 INTERSTATE 30) online menu prices?</h3></div><div class=\"_od _oe _ed _iu\"><svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none",
+            "menu prices": "e _di _fj _gg _b1\"><h3 class=\"_be _di _bg _dj\">Where can I find McDonald&#x27;s\u00ae (20726 INTERSTATE 30) online menu prices?</h3></div><div class=\"_oa _ob _ed _iu\"><svg width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none",
             "service fee": "ies based on factors such as the merchant, your location, demand, and availability of nearby couriers.%5Cn%5CnService Fee: This fee varies based on factors like basket size and helps cover order-related costs. $0.10 goes"
           },
           "key_contexts": {
@@ -2698,7 +2698,7 @@
               "Address\",\"addressLocality\":\"BENTON\",\"addressRegion\":\"AR\",\"postalCode\":\"72019\",\"addressCountry\":\"US\",\"streetAddress\":\"20726 INTERSTATE 30\"},\"geo\":{\"@type\":\"GeoCoordinates\",\"latitude\":34.6068855,\"longit"
             ]
           },
-          "bytes": 3340453,
+          "bytes": 3341106,
           "challenge_markers": [
             {
               "marker": "challenges.cloudflare.com",
@@ -2745,7 +2745,7 @@
             {
               "id": "",
               "type": "application/ld+json",
-              "bytes": 37747,
+              "bytes": 37894,
               "parsed": "json",
               "skeleton": {
                 "@context": "str",
@@ -2817,7 +2817,7 @@
                 },
                 {
                   "path": ".hasMenu.hasMenuSection[].hasMenuItem[].offers.price",
-                  "sample": "3.89"
+                  "sample": "9.89"
                 },
                 {
                   "path": ".hasMenu.hasMenuSection[].hasMenuItem[].offers.priceCurrency",
@@ -3163,7 +3163,7 @@
             {
               "id": "__REACT_QUERY_STATE__",
               "type": "application/json",
-              "bytes": 2773899,
+              "bytes": 2773248,
               "parsed": null,
               "head": " {\\u0022mutations\\u0022:[],\\u0022queries\\u0022:[{\\u0022state\\u0022:{\\u0022data\\u0022:{\\u0022title\\u0022:\\u0022McDonald's\u00ae (20726 INTERSTATE 30)\\u0022,"
             },
@@ -3448,156 +3448,156 @@
             {
               "id": "__FUSION_PLUGIN_PARAMETERS__",
               "type": "application/json",
-              "bytes": 109958,
+              "bytes": 109944,
               "parsed": "unicode-unescaped",
               "skeleton": {
                 "parameters": {
-                  "eats-web-cdex-parameters.enable_replacements_overhaul_m2": {
+                  "eats_web_eater_home_parameters.address_click_history_pop": {
                     "namespace": "str",
                     "key": "str",
                     "value": "bool",
                     "valueType": "str"
                   },
-                  "web-eats.carousel_navigation_back_to_feed_button": {
+                  "eats_web_post_order_parameters.enable_dropoff_option_education": {
                     "namespace": "str",
                     "key": "str",
                     "value": "bool",
                     "valueType": "str"
                   },
-                  "eats-web-cdex-parameters.enable_item_availability_experiment": {
+                  "web-eats.order_tracking.map.enhancements": {
                     "namespace": "str",
                     "key": "str",
                     "value": "bool",
                     "valueType": "str"
                   },
-                  "web-eats.enable_unified_checkout_post_order_tipping": {
+                  "web-eats.eats_use_last_selected_profile": {
                     "namespace": "str",
                     "key": "str",
                     "value": "bool",
                     "valueType": "str"
                   },
-                  "web-eats.point_estimate_tooltip_cutoff_date": {
-                    "namespace": "str",
-                    "key": "str",
-                    "value": "int",
-                    "valueType": "str"
-                  },
-                  "web-eats.pdp.customization_footer_price_fix": {
+                  "eats_web_eater_home_parameters.web_feed_carousel_feed_force_scroll_top": {
                     "namespace": "str",
                     "key": "str",
                     "value": "bool",
                     "valueType": "str"
                   },
-                  "eats_web_eater_home_parameters.web_feed_refresh_style": {
+                  "web-eats.feature.eats_web_shell_see_all_translate_disabled": {
                     "namespace": "str",
                     "key": "str",
                     "value": "bool",
                     "valueType": "str"
                   },
-                  "web-eats.feature.eats_web_shell_csr.enabled": {
+                  "eats_web_gr_shopping_store_parameters.store_gr_l1_pagination_enabled": {
                     "namespace": "str",
                     "key": "str",
                     "value": "bool",
                     "valueType": "str"
                   },
-                  "web-eats.feature.eats_web_shell_feed.enabled": {
+                  "web-eats.xlb.typeahead_ensure_full_width_input": {
                     "namespace": "str",
                     "key": "str",
                     "value": "bool",
                     "valueType": "str"
                   },
-                  "eats_ads_platform_web.ads_third_party_tracker_pco_enabled": {
+                  "eats_web_growth.xlb.friction_batch_2_store": {
                     "namespace": "str",
                     "key": "str",
                     "value": "bool",
                     "valueType": "str"
                   },
-                  "web-eats.feature.google_one_tap.other_pages.desktop": {
-                    "namespace": "str",
-                    "key": "str",
-                    "value": "str",
-                    "valueType": "str"
-                  },
-                  "web-eats.feature.retro.proxy_home_page.enabled": {
+                  "eats_web_growth.xlb.friction_batch_2_sticky_header": {
                     "namespace": "str",
                     "key": "str",
                     "value": "bool",
                     "valueType": "str"
                   },
-                  "eats_ads_platform_web.ads_third_party_tracker_retry_delay_ms": {
-                    "namespace": "str",
-                    "key": "str",
-                    "value": "int",
-                    "valueType": "str"
-                  },
-                  "web-eats.validate_draft_order_access": {
+                  "eats_web_seo.guest_checkout.chat.enabled": {
                     "namespace": "str",
                     "key": "str",
                     "value": "bool",
                     "valueType": "str"
                   },
-                  "web-eats.feature.eats_web_shell_interactive_metric_enabled": {
+                  "eats_web_growth.gr_basket_dependent_fees": {
                     "namespace": "str",
                     "key": "str",
                     "value": "bool",
                     "valueType": "str"
                   },
-                  "eats_web_growth.2fa_redirect_ramen": {
+                  "eats_web_gr_shopping_store_parameters.color_images_enabled": {
                     "namespace": "str",
                     "key": "str",
                     "value": "bool",
                     "valueType": "str"
                   },
-                  "web-eats.xlb_launch_deeplink_bridge_event_enabled": {
-                    "namespace": "str",
-                    "key": "str",
-                    "value": "bool",
-                    "valueType": "str"
-                  },
-                  "eats_web_seo.guest.checkout.enabled": {
-                    "namespace": "str",
-                    "key": "str",
-                    "value": "bool",
-                    "valueType": "str"
-                  },
-                  "eats-web-cdex-parameters.cmp_pass_workflow_uuid_when_ordered": {
-                    "namespace": "str",
-                    "key": "str",
-                    "value": "bool",
-                    "valueType": "str"
-                  },
-                  "web-eats.xp.location_system_dialogue_for_home": {
+                  "web-eats.web_risk_denial": {
                     "namespace": "str",
                     "key": "str",
                     "value": "str",
                     "valueType": "str",
                     "token": "str"
                   },
-                  "web-eats.nro_phone_collection": {
-                    "namespace": "str",
-                    "key": "str",
-                    "value": "str",
-                    "valueType": "str"
-                  },
-                  "web-eats.guest_checkout.enable_tips": {
+                  "eater-messaging.orchid_content_suppression_enabled": {
                     "namespace": "str",
                     "key": "str",
                     "value": "bool",
                     "valueType": "str"
                   },
-                  "web-eats.theme.override": {
-                    "namespace": "str",
-                    "key": "str",
-                    "value": "str",
-                    "valueType": "str"
-                  },
-                  "web-eats.feature.eats_web_shell_cookies_change_reload": {
+                  "web-eats.orders.schedule.order.cancel.back": {
                     "namespace": "str",
                     "key": "str",
                     "value": "bool",
                     "valueType": "str"
                   },
-                  "web-eats.eats_web.membership_hero_disable_preview_ramen": {
+                  "web-eats.web_eats_enable_guest_rating": {
+                    "namespace": "str",
+                    "key": "str",
+                    "value": "bool",
+                    "valueType": "str"
+                  },
+                  "eats_web_shopping_store_parameters.enable_dynamic_badge_truncation": {
+                    "namespace": "str",
+                    "key": "str",
+                    "value": "bool",
+                    "valueType": "str"
+                  },
+                  "eats_web_post_order_parameters.enable_default_hotel_interaction_type_override": {
+                    "namespace": "str",
+                    "key": "str",
+                    "value": "bool",
+                    "valueType": "str"
+                  },
+                  "eats_web_shopping_store_parameters.store_deprecate_fallback_headers": {
+                    "namespace": "str",
+                    "key": "str",
+                    "value": "bool",
+                    "valueType": "str"
+                  },
+                  "eats_web_shopping_store_parameters.store_precheckout_bundling": {
+                    "namespace": "str",
+                    "key": "str",
+                    "value": "bool",
+                    "valueType": "str"
+                  },
+                  "eats_pickup_mobile.use_priority_service_label_for_premium_delivery": {
+                    "namespace": "str",
+                    "key": "str",
+                    "value": "bool",
+                    "valueType": "str"
+                  },
+                  "web-eats.feature.google_one_tap.home_page": {
+                    "namespace": "str",
+                    "key": "str",
+                    "value": "bool",
+                    "valueType": "str"
+                  },
+                  "order-gateway.membership_cart_banner": {
+                    "namespace": "str",
+                    "key": "str",
+                    "value": "bool",
+                    "valueType": "str"
+                  },
+                  "web-eats.membership_preview_enabled": {
                     "namespace": "str",
                     "key": "str",
                     "value": "bool",
@@ -3610,12 +3610,12 @@
               },
               "price_paths": [
                 {
-                  "path": ".parameters.web-eats.pdp.customization_footer_price_fix",
-                  "sample": "{\"namespace\": \"web-eats\", \"key\": \"pdp.customization_footer_price_fix\", \"value\": true, \"valueType\": \"VALUE_TYPE_BOOL\"}"
-                },
-                {
                   "path": ".parameters.ordering-presentation.eats_web.nudges.strikethrough_total_price",
                   "sample": "{\"namespace\": \"ordering-presentation\", \"key\": \"eats_web.nudges.strikethrough_total_price\", \"value\": false, \"valueType\": \"VALUE_TYPE_BOOL\"}"
+                },
+                {
+                  "path": ".parameters.web-eats.pdp.customization_footer_price_fix",
+                  "sample": "{\"namespace\": \"web-eats\", \"key\": \"pdp.customization_footer_price_fix\", \"value\": true, \"valueType\": \"VALUE_TYPE_BOOL\"}"
                 },
                 {
                   "path": ".parameters.web-eats.feature.total_price_cart_pill",
@@ -3623,21 +3623,21 @@
                 }
               ],
               "menu_paths": [
-                ".parameters.eats-web-cdex-parameters.enable_item_availability_experiment",
-                ".parameters.restricted-items.feature.loe_x_ri_web_providers.enabled",
-                ".parameters.eats_web_shopping_store_parameters.eta_section_info_max_lines",
-                ".parameters.eats-web-cdex-parameters.should_hide_add_items_in_checkout_for_gr_scheduled",
-                ".parameters.eats-api.eatsapi.web.quick_add_items_carousel_feed_item_adapter.enabled",
-                ".parameters.eats_web_shopping_store_parameters.store_catalog_section_raw_title_text_enabled",
-                ".parameters.web-eats.feature.buy_an_item_enabled",
                 ".parameters.eats_web_shopping_store_parameters.store_item_page_cross_sell",
+                ".parameters.restricted-items.feature.loe_x_ri_web_providers.enabled",
+                ".parameters.eats_web_post_order_parameters.enable_restricted_items_pin_hiding_for_alcohol_gifting",
+                ".parameters.restricted-items.feature.loe_x_ri_web.enabled",
+                ".parameters.web-eats.marketing.boga_catalog_section_uuid",
+                ".parameters.eats-api.eatsapi.web.quick_add_items_carousel_feed_item_adapter.enabled",
+                ".parameters.restricted-items.wpe.uber_cash_eligibility.enabled",
+                ".parameters.eats_web_shopping_store_parameters.eta_section_info_max_lines",
+                ".parameters.eats-web-cdex-parameters.enable_item_availability_experiment",
+                ".parameters.eats-web-cdex-parameters.should_hide_add_items_in_checkout_for_gr_scheduled",
+                ".parameters.eats_web_gr_shopping_store_parameters.fix_max_item_cap_callout_and_quantity_selector",
                 ".parameters.eats_web_cro_parameters.rename_reviews_section",
                 ".parameters.restricted-items.web_eats.uber_cash_eligibility.uber_balances_pp.enabled",
-                ".parameters.restricted-items.feature.loe_x_ri_web.enabled",
-                ".parameters.eats_web_post_order_parameters.enable_restricted_items_pin_hiding_for_alcohol_gifting",
-                ".parameters.restricted-items.crf.substitution_picker_empty_screen.enabled",
-                ".parameters.eats_web_gr_shopping_store_parameters.fix_max_item_cap_callout_and_quantity_selector",
-                ".parameters.restricted-items.web_eats.provide_date_of_birth.order_identifiers"
+                ".parameters.eats_web_cro_parameters.menu_item_rating",
+                ".parameters.eats_web_shopping_mechanics_parameters.eats_web_cart_edit_item_quick_view"
               ]
             },
             {
@@ -3842,40 +3842,40 @@
             ]
           },
           "counts": {
-            "\"price\"": 243,
+            "\"price\"": 244,
             "\\\"price\\\"": 0,
             "displayPrice": 0,
             "__next_f": 0,
             "__APOLLO_STATE__": 0,
             "__REACT_QUERY_STATE__": 1,
             "application/ld+json": 3,
-            "MenuItem": 520,
-            "storeUuid": 9
+            "MenuItem": 522,
+            "storeUuid": 10
           },
           "price_contexts": [
             {
               "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
-              "context": "ed items\",\"hasMenuItem\":[{\"@type\":\"MenuItem\",\"name\":\"French Fries\",\"description\":\"\",\"offers\":{\"@type\":\"Offer\",\"price\":\"3.89\",\"priceCurrency\":\"USD\"}},{\"@type\":\"MenuItem\",\"name\":\"10 pc. Chicken McNuggets\u00ae\",\"description\":\"\""
+              "context": "Item\":[{\"@type\":\"MenuItem\",\"name\":\"10 pc. Chicken McNuggets\u00ae Meal\",\"description\":\"\",\"offers\":{\"@type\":\"Offer\",\"price\":\"9.89\",\"priceCurrency\":\"USD\"}},{\"@type\":\"MenuItem\",\"name\":\"20 pc. Chicken McNuggets\u00ae\",\"description\":\"\""
             },
             {
               "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
-              "context": "cy\":\"USD\"}},{\"@type\":\"MenuItem\",\"name\":\"10 pc. Chicken McNuggets\u00ae\",\"description\":\"\",\"offers\":{\"@type\":\"Offer\",\"price\":\"5.79\",\"priceCurrency\":\"USD\"}},{\"@type\":\"MenuItem\",\"name\":\"Double Cheeseburger\",\"description\":\"\",\"offe"
+              "context": "cy\":\"USD\"}},{\"@type\":\"MenuItem\",\"name\":\"20 pc. Chicken McNuggets\u00ae\",\"description\":\"\",\"offers\":{\"@type\":\"Offer\",\"price\":\"9.29\",\"priceCurrency\":\"USD\"}},{\"@type\":\"MenuItem\",\"name\":\"2 Cheeseburger Meal\",\"description\":\"\",\"offe"
             },
             {
               "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
-              "context": "Currency\":\"USD\"}},{\"@type\":\"MenuItem\",\"name\":\"Double Cheeseburger\",\"description\":\"\",\"offers\":{\"@type\":\"Offer\",\"price\":\"3.59\",\"priceCurrency\":\"USD\"}},{\"@type\":\"MenuItem\",\"name\":\"6 pc. Chicken McNuggets\u00ae Happy Meal\u00ae\",\"desc"
+              "context": "Currency\":\"USD\"}},{\"@type\":\"MenuItem\",\"name\":\"2 Cheeseburger Meal\",\"description\":\"\",\"offers\":{\"@type\":\"Offer\",\"price\":\"9.89\",\"priceCurrency\":\"USD\"}},{\"@type\":\"MenuItem\",\"name\":\"Big Mac\u00ae\",\"description\":\"\",\"offers\":{\"@type"
             },
             {
               "pattern": "\\$\\d+\\.\\d{2}",
-              "context": "lass=\"_mj\"><div class=\"_k3 _k4 _mk _bn\"><span data-testid=\"rich-text\" class=\"_fh _fa _fi _be _bf _fj _dj _b1\">$3.89</span><span data-testid=\"rich-text\" class=\"_fh _fa _fi _be _bf _fj _dj _fl\"> \u2022 </span><span data-testid="
+              "context": "lass=\"_mj\"><div class=\"_k3 _k4 _mk _bn\"><span data-testid=\"rich-text\" class=\"_fh _fa _fi _be _bf _fj _dj _b1\">$9.89</span><span data-testid=\"rich-text\" class=\"_fh _fa _fi _be _bf _fj _dj _fl\"> \u2022 </span><span data-testid="
             },
             {
               "pattern": "\\$\\d+\\.\\d{2}",
-              "context": "lass=\"_mj\"><div class=\"_k3 _k4 _mk _bn\"><span data-testid=\"rich-text\" class=\"_fh _fa _fi _be _bf _fj _dj _b1\">$5.79</span><span data-testid=\"rich-text\" class=\"_fh _fa _fi _be _bf _fj _dj _fl\"> \u2022 </span><span data-testid="
+              "context": "lass=\"_mj\"><div class=\"_k3 _k4 _mk _bn\"><span data-testid=\"rich-text\" class=\"_fh _fa _fi _be _bf _fj _dj _b1\">$9.29</span><span data-testid=\"rich-text\" class=\"_fh _fa _fi _be _bf _fj _dj _fl\"> \u2022 </span><span data-testid="
             },
             {
               "pattern": "\\$\\d+\\.\\d{2}",
-              "context": "lass=\"_mj\"><div class=\"_k3 _k4 _mk _bn\"><span data-testid=\"rich-text\" class=\"_fh _fa _fi _be _bf _fj _dj _b1\">$3.59</span><span data-testid=\"rich-text\" class=\"_fh _fa _fi _be _bf _fj _dj _fl\"> \u2022 </span><span data-testid="
+              "context": "lass=\"_mj\"><div class=\"_k3 _k4 _mk _bn\"><span data-testid=\"rich-text\" class=\"_fh _fa _fi _be _bf _fj _dj _b1\">$9.89</span><span data-testid=\"rich-text\" class=\"_fh _fa _fi _be _bf _fj _dj _fl\"> \u2022 </span><span data-testid="
             }
           ]
         },
@@ -3968,7 +3968,7 @@
           {
             "id": "__REACT_QUERY_STATE__",
             "type": "application/json",
-            "length": 2773899
+            "length": 2773248
           },
           {
             "id": "__MANAGED_TRANSLATIONS__",
@@ -4008,7 +4008,7 @@
           {
             "id": "__FUSION_PLUGIN_PARAMETERS__",
             "type": "application/json",
-            "length": 109958
+            "length": 109944
           },
           {
             "id": "__CONFIG__",
@@ -4040,45 +4040,37 @@
               },
               null
             ],
-            "menu_item_count": 243,
+            "menu_item_count": 244,
             "menu_urls": [],
             "sample_items": [
               {
-                "name": "French Fries",
+                "name": "10 pc. Chicken McNuggets\u00ae Meal",
                 "variant": null,
-                "price_cents": 389,
+                "price_cents": 989,
                 "currency": "USD",
                 "availability": "unknown",
                 "section": "Featured items"
               },
               {
-                "name": "10 pc. Chicken McNuggets\u00ae",
+                "name": "20 pc. Chicken McNuggets\u00ae",
                 "variant": null,
-                "price_cents": 579,
+                "price_cents": 929,
                 "currency": "USD",
                 "availability": "unknown",
                 "section": "Featured items"
               },
               {
-                "name": "Double Cheeseburger",
+                "name": "2 Cheeseburger Meal",
                 "variant": null,
-                "price_cents": 359,
+                "price_cents": 989,
                 "currency": "USD",
                 "availability": "unknown",
                 "section": "Featured items"
               },
               {
-                "name": "6 pc. Chicken McNuggets\u00ae Happy Meal\u00ae",
+                "name": "Big Mac\u00ae",
                 "variant": null,
-                "price_cents": 639,
-                "currency": "USD",
-                "availability": "unknown",
-                "section": "Featured items"
-              },
-              {
-                "name": "Caramel Frapp\u00e9",
-                "variant": null,
-                "price_cents": 569,
+                "price_cents": 679,
                 "currency": "USD",
                 "availability": "unknown",
                 "section": "Featured items"
@@ -4092,20 +4084,28 @@
                 "section": "Featured items"
               },
               {
+                "name": "Bacon Quarter Pounder\u00ae with Cheese Meal",
+                "variant": null,
+                "price_cents": 1079,
+                "currency": "USD",
+                "availability": "unknown",
+                "section": "Featured items"
+              },
+              {
+                "name": "Triple Cheeseburger",
+                "variant": null,
+                "price_cents": 579,
+                "currency": "USD",
+                "availability": "unknown",
+                "section": "Featured items"
+              },
+              {
                 "name": "10 pc. Chicken McNuggets\u00ae",
                 "variant": null,
                 "price_cents": 579,
                 "currency": "USD",
                 "availability": "unknown",
                 "section": "Free with $15 purchase"
-              },
-              {
-                "name": "10 pc. Chicken McNuggets\u00ae Meal",
-                "variant": null,
-                "price_cents": 989,
-                "currency": "USD",
-                "availability": "unknown",
-                "section": "Most Popular"
               }
             ]
           }
@@ -4122,13 +4122,13 @@
           "status": 200,
           "final_url": "https://www.ubereats.com/store/mcdonalds-atlanta-ga-northside/Dtv-lXbLRZaHKUVswEWEeA",
           "content_type": "text/html; charset=utf-8",
-          "fetched_at": "2026-10-08T01:29:43Z",
+          "fetched_at": "2026-10-08T01:34:14Z",
           "from_cache": false,
           "via": "http",
           "barrier": null,
           "error": null,
           "attempts": 1,
-          "bytes": 3602091
+          "bytes": 3610758
         },
         "structure": {
           "phrases": {
@@ -4143,7 +4143,7 @@
               "ddress\",\"addressLocality\":\"ATLANTA\",\"addressRegion\":\"GA\",\"postalCode\":\"30318\",\"addressCountry\":\"US\",\"streetAddress\":\"1105 NORTHSIDE DR\"},\"geo\":{\"@type\":\"GeoCoordinates\",\"latitude\":33.7848837,\"longitud"
             ]
           },
-          "bytes": 3591223,
+          "bytes": 3599891,
           "challenge_markers": [
             {
               "marker": "challenges.cloudflare.com",
@@ -4190,7 +4190,7 @@
             {
               "id": "",
               "type": "application/ld+json",
-              "bytes": 39244,
+              "bytes": 39624,
               "parsed": "json",
               "skeleton": {
                 "@context": "str",
@@ -4608,7 +4608,7 @@
             {
               "id": "__REACT_QUERY_STATE__",
               "type": "application/json",
-              "bytes": 2955403,
+              "bytes": 2958794,
               "parsed": null,
               "head": " {\\u0022mutations\\u0022:[],\\u0022queries\\u0022:[{\\u0022state\\u0022:{\\u0022data\\u0022:{\\u0022title\\u0022:\\u0022McDonald's\u00ae (Atlanta, Ga - Northside)\\u0"
             },
@@ -4893,83 +4893,95 @@
             {
               "id": "__FUSION_PLUGIN_PARAMETERS__",
               "type": "application/json",
-              "bytes": 109958,
+              "bytes": 109944,
               "parsed": "unicode-unescaped",
               "skeleton": {
                 "parameters": {
-                  "eats_web_platform_parameters.eats_web_admin_menu": {
+                  "web-eats.eats_web.membership_hero_disable_preview_ramen": {
+                    "namespace": "str",
+                    "key": "str",
+                    "value": "bool",
+                    "valueType": "str"
+                  },
+                  "eats_web_checkout_experience.delete_do_redux": {
+                    "namespace": "str",
+                    "key": "str",
+                    "value": "bool",
+                    "valueType": "str"
+                  },
+                  "web-eats.feature.store.performance_enhancements": {
+                    "namespace": "str",
+                    "key": "str",
+                    "value": "bool",
+                    "valueType": "str"
+                  },
+                  "eats_web_platform_parameters.infinite_rpc_guard_threshold": {
+                    "namespace": "str",
+                    "key": "str",
+                    "value": "int",
+                    "valueType": "str"
+                  },
+                  "web-payments-experience.features.checkout_actions.action_results_fallback.enabled": {
+                    "namespace": "str",
+                    "key": "str",
+                    "value": "bool",
+                    "valueType": "str"
+                  },
+                  "eats_shopping_mechanics_mobile.eats_checkout_cart_step_button_cta_text": {
                     "namespace": "str",
                     "key": "str",
                     "value": "str",
                     "valueType": "str"
                   },
-                  "eats_web_shopping_store_parameters.product_details_page_ssr": {
+                  "eats_web_post_order_parameters.enable_hide_chat_action_for_gift_order": {
                     "namespace": "str",
                     "key": "str",
                     "value": "bool",
                     "valueType": "str"
                   },
-                  "eats_web_post_order_parameters.order_history_self_tab_opening": {
+                  "u4b_web.post_purchase_profile_reinforcement": {
                     "namespace": "str",
                     "key": "str",
                     "value": "bool",
                     "valueType": "str"
                   },
-                  "web-eats.lgx.delivery_option_tooltip_max_impression_count": {
+                  "eatsfeed-citrus.ranking.disclaimer.action_url": {
                     "namespace": "str",
                     "key": "str",
-                    "value": "int",
+                    "value": "str",
                     "valueType": "str"
                   },
-                  "eats_web_shopping_store_parameters.store_precheckout_bundling": {
-                    "namespace": "str",
-                    "key": "str",
-                    "value": "bool",
-                    "valueType": "str"
-                  },
-                  "eats_web_growth.enable_active_order_live_activities": {
+                  "u4b_web.enable_repeat_group_order_creation": {
                     "namespace": "str",
                     "key": "str",
                     "value": "bool",
                     "valueType": "str"
                   },
-                  "eats_ads_platform_web.ad_cx_tier_2_swipe_events_enabled": {
+                  "eats_web_eater_home_parameters.web_feed_carousel_feed_force_scroll_top_logging": {
                     "namespace": "str",
                     "key": "str",
                     "value": "bool",
                     "valueType": "str"
                   },
-                  "eats_web_post_order_parameters.enable_neutral_zone": {
-                    "namespace": "str",
-                    "key": "str",
-                    "value": "int",
-                    "valueType": "str"
-                  },
-                  "web-eats.feature.store.preload_store_hero_image": {
+                  "web-eats.feature.cart.unified_cmp_payloads_enabled": {
                     "namespace": "str",
                     "key": "str",
                     "value": "bool",
                     "valueType": "str"
                   },
-                  "web-eats.feature.eats_web_shell_see_all_translate_disabled": {
+                  "eats_web_shopping_store_parameters.eats_web_store_shopping_list": {
                     "namespace": "str",
                     "key": "str",
                     "value": "bool",
                     "valueType": "str"
                   },
-                  "web-payments-experience.features.checkout_actions.eats_ewf.ios_force_popup": {
+                  "web-eats.pdp.customization_footer_price_fix": {
                     "namespace": "str",
                     "key": "str",
                     "value": "bool",
                     "valueType": "str"
                   },
-                  "web-eats.lgx.should_sync_checkout_presentation_to_user_state": {
-                    "namespace": "str",
-                    "key": "str",
-                    "value": "bool",
-                    "valueType": "str"
-                  },
-                  "eats_web_gr_shopping_store_parameters.store_gr_left_navbar_pdp_enabled": {
+                  "eats_web_gr_shopping_store_parameters.store_gr_left_navbar_ads_enabled": {
                     "namespace": "str",
                     "key": "str",
                     "value": "bool",
@@ -4981,70 +4993,58 @@
                     "value": "bool",
                     "valueType": "str"
                   },
-                  "eats_web_post_order_parameters.enable_dropoff_option_education": {
+                  "web-eats.membership_preview_enabled": {
                     "namespace": "str",
                     "key": "str",
                     "value": "bool",
                     "valueType": "str"
                   },
-                  "eats_web_eater_home_parameters.web_feed_pagination_lazyload": {
+                  "eats_web_gr_shopping_store_parameters.store_gr_desktop_virtualization_v2_enabled": {
                     "namespace": "str",
                     "key": "str",
                     "value": "bool",
                     "valueType": "str"
                   },
-                  "eats_web_shopping_store_parameters.store_scheduled_order_navigation_enhancements_enabled": {
+                  "web-eats.feature.product_details.semantic_urls.enabled": {
                     "namespace": "str",
                     "key": "str",
                     "value": "bool",
                     "valueType": "str"
                   },
-                  "eats-web-cdex-parameters.enable_replacements_overhaul_m2": {
+                  "web-eats.feature.retro.proxy_storefront.enabled": {
                     "namespace": "str",
                     "key": "str",
                     "value": "bool",
                     "valueType": "str"
                   },
-                  "eats_web_eater_home_parameters.web_feed_carousel_feed_force_scroll_top": {
+                  "membership.uber_one.ftux.m2.enabled": {
                     "namespace": "str",
                     "key": "str",
                     "value": "bool",
                     "valueType": "str"
                   },
-                  "web-eats.eats_web.membership_hero_client_modals_delay_time": {
-                    "namespace": "str",
-                    "key": "str",
-                    "value": "int",
-                    "valueType": "str"
-                  },
-                  "eats_web_shopping_store_parameters.store_info_phone_number": {
+                  "web-eats.feature.enable_cart_abstraction_refactor": {
                     "namespace": "str",
                     "key": "str",
                     "value": "bool",
                     "valueType": "str"
                   },
-                  "web-eats.feature.google_one_tap.other_pages.desktop": {
-                    "namespace": "str",
-                    "key": "str",
-                    "value": "str",
-                    "valueType": "str"
-                  },
-                  "eats_ads_platform_web.ads_third_party_tracker_retry_delay_ms": {
-                    "namespace": "str",
-                    "key": "str",
-                    "value": "int",
-                    "valueType": "str"
-                  },
-                  "web-eats.config.bot-defense.devices.challenge.enabled": {
+                  "eats_ads_platform_web.ads_third_party_tracker_enabled": {
                     "namespace": "str",
                     "key": "str",
                     "value": "bool",
                     "valueType": "str"
                   },
-                  "web-payments-experience.features.payment_selection.static_message_allowed_token_types": {
+                  "eats_web_growth.banner.membership.upsell.enabled": {
                     "namespace": "str",
                     "key": "str",
-                    "value": "str",
+                    "value": "bool",
+                    "valueType": "str"
+                  },
+                  "eats_ads_platform_web.ad_cx_tier_2_events_enabled": {
+                    "namespace": "str",
+                    "key": "str",
+                    "value": "bool",
                     "valueType": "str"
                   }
                 },
@@ -5054,34 +5054,34 @@
               },
               "price_paths": [
                 {
-                  "path": ".parameters.web-eats.feature.total_price_cart_pill",
-                  "sample": "{\"namespace\": \"web-eats\", \"key\": \"feature.total_price_cart_pill\", \"value\": false, \"valueType\": \"VALUE_TYPE_BOOL\"}"
-                },
-                {
                   "path": ".parameters.web-eats.pdp.customization_footer_price_fix",
                   "sample": "{\"namespace\": \"web-eats\", \"key\": \"pdp.customization_footer_price_fix\", \"value\": true, \"valueType\": \"VALUE_TYPE_BOOL\"}"
                 },
                 {
                   "path": ".parameters.ordering-presentation.eats_web.nudges.strikethrough_total_price",
                   "sample": "{\"namespace\": \"ordering-presentation\", \"key\": \"eats_web.nudges.strikethrough_total_price\", \"value\": false, \"valueType\": \"VALUE_TYPE_BOOL\"}"
+                },
+                {
+                  "path": ".parameters.web-eats.feature.total_price_cart_pill",
+                  "sample": "{\"namespace\": \"web-eats\", \"key\": \"feature.total_price_cart_pill\", \"value\": false, \"valueType\": \"VALUE_TYPE_BOOL\"}"
                 }
               ],
               "menu_paths": [
-                ".parameters.eats_web_platform_parameters.eats_web_admin_menu",
-                ".parameters.eats_web_shopping_store_parameters.eta_section_info_max_lines",
-                ".parameters.eats-web-cdex-parameters.should_hide_add_items_in_checkout_for_gr_scheduled",
                 ".parameters.eats-api.eatsapi.web.quick_add_items_carousel_feed_item_adapter.enabled",
-                ".parameters.restricted-items.wpe.uber_cash_eligibility.enabled",
-                ".parameters.web-eats.feature.buy_an_item_enabled",
-                ".parameters.restricted-items.web_eats.provide_date_of_birth.order_identifiers",
+                ".parameters.eats_web_platform_parameters.eats_web_admin_menu",
+                ".parameters.eats_web_shopping_store_parameters.store_catalog_section_raw_title_text_enabled",
+                ".parameters.eats_web_gr_shopping_store_parameters.fix_max_item_cap_callout_and_quantity_selector",
+                ".parameters.eats_web_cro_parameters.menu_item_rating",
+                ".parameters.eats-web-cdex-parameters.should_hide_add_items_in_checkout_for_gr_scheduled",
                 ".parameters.restricted-items.feature.loe_x_ri_web_providers.enabled",
                 ".parameters.eats-web-cdex-parameters.enable_custom_items_consumer_web",
-                ".parameters.web-eats.marketing.boga_catalog_section_uuid",
-                ".parameters.restricted-items.crf.substitution_picker_empty_screen.enabled",
-                ".parameters.eats_web_cro_parameters.rename_reviews_section",
-                ".parameters.eats_web_shopping_store_parameters.store_catalog_section_raw_title_text_enabled",
+                ".parameters.eats_web_post_order_parameters.enable_restricted_items_pin_hiding_for_alcohol_gifting",
                 ".parameters.eats-web-cdex-parameters.enable_item_availability_experiment",
-                ".parameters.eats_web_cro_parameters.menu_item_rating"
+                ".parameters.restricted-items.crf.substitution_picker_empty_screen.enabled",
+                ".parameters.restricted-items.feature.loe_x_ri_web.enabled",
+                ".parameters.eats_web_shopping_mechanics_parameters.eats_web_cart_edit_item_quick_view",
+                ".parameters.restricted-items.web_eats.uber_cash_eligibility.uber_balances_pp.enabled",
+                ".parameters.restricted-items.web_eats.provide_date_of_birth.order_identifiers"
               ]
             },
             {
@@ -5286,28 +5286,28 @@
             ]
           },
           "counts": {
-            "\"price\"": 259,
+            "\"price\"": 262,
             "\\\"price\\\"": 0,
             "displayPrice": 0,
             "__next_f": 0,
             "__APOLLO_STATE__": 0,
             "__REACT_QUERY_STATE__": 1,
             "application/ld+json": 3,
-            "MenuItem": 552,
-            "storeUuid": 11
+            "MenuItem": 558,
+            "storeUuid": 14
           },
           "price_contexts": [
             {
               "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
-              "context": "sMenuItem\":[{\"@type\":\"MenuItem\",\"name\":\"10 pc. Chicken McNuggets\u00ae\",\"description\":\"\",\"offers\":{\"@type\":\"Offer\",\"price\":\"7.29\",\"priceCurrency\":\"USD\"}},{\"@type\":\"MenuItem\",\"name\":\"French Fries\",\"description\":\"\",\"offers\":{\"@"
+              "context": "sMenuItem\":[{\"@type\":\"MenuItem\",\"name\":\"10 pc. Chicken McNuggets\u00ae\",\"description\":\"\",\"offers\":{\"@type\":\"Offer\",\"price\":\"7.29\",\"priceCurrency\":\"USD\"}},{\"@type\":\"MenuItem\",\"name\":\"2 Cheeseburger Meal\",\"description\":\"\",\"offe"
             },
             {
               "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
-              "context": ",\"priceCurrency\":\"USD\"}},{\"@type\":\"MenuItem\",\"name\":\"French Fries\",\"description\":\"\",\"offers\":{\"@type\":\"Offer\",\"price\":\"4.79\",\"priceCurrency\":\"USD\"}},{\"@type\":\"MenuItem\",\"name\":\"2 Filet-O-Fish\u00ae Meal\",\"description\":\"\",\"off"
+              "context": "Currency\":\"USD\"}},{\"@type\":\"MenuItem\",\"name\":\"2 Cheeseburger Meal\",\"description\":\"\",\"offers\":{\"@type\":\"Offer\",\"price\":\"12.99\",\"priceCurrency\":\"USD\"}},{\"@type\":\"MenuItem\",\"name\":\"McChicken\u00ae\",\"description\":\"\",\"offers\":{\"@t"
             },
             {
               "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
-              "context": "urrency\":\"USD\"}},{\"@type\":\"MenuItem\",\"name\":\"2 Filet-O-Fish\u00ae Meal\",\"description\":\"\",\"offers\":{\"@type\":\"Offer\",\"price\":\"15.00\",\"priceCurrency\":\"USD\"}},{\"@type\":\"MenuItem\",\"name\":\"Big Mac\u00ae\",\"description\":\"\",\"offers\":{\"@typ"
+              "context": "9\",\"priceCurrency\":\"USD\"}},{\"@type\":\"MenuItem\",\"name\":\"McChicken\u00ae\",\"description\":\"\",\"offers\":{\"@type\":\"Offer\",\"price\":\"4.39\",\"priceCurrency\":\"USD\"}},{\"@type\":\"MenuItem\",\"name\":\"Double Cheeseburger\",\"description\":\"\",\"offe"
             },
             {
               "pattern": "\\$\\d+\\.\\d{2}",
@@ -5315,11 +5315,11 @@
             },
             {
               "pattern": "\\$\\d+\\.\\d{2}",
-              "context": "lass=\"_mj\"><div class=\"_k3 _k4 _mk _bn\"><span data-testid=\"rich-text\" class=\"_fh _fa _fi _be _bf _fj _dj _b1\">$4.79</span><span data-testid=\"rich-text\" class=\"_fh _fa _fi _be _bf _fj _dj _fl\"> \u2022 </span><span data-testid="
+              "context": "lass=\"_mj\"><div class=\"_k3 _k4 _mk _bn\"><span data-testid=\"rich-text\" class=\"_fh _fa _fi _be _bf _fj _dj _b1\">$12.99</span><span data-testid=\"rich-text\" class=\"_fh _fa _fi _be _bf _fj _dj _fl\"> \u2022 </span><span data-testid"
             },
             {
               "pattern": "\\$\\d+\\.\\d{2}",
-              "context": "lass=\"_mj\"><div class=\"_k3 _k4 _mk _bn\"><span data-testid=\"rich-text\" class=\"_fh _fa _fi _be _bf _fj _dj _b1\">$15.00</span><span data-testid=\"rich-text\" class=\"_fh _fa _fi _be _bf _fj _dj _fl\"> \u2022 </span><span data-testid"
+              "context": "lass=\"_mj\"><div class=\"_k3 _k4 _mk _bn\"><span data-testid=\"rich-text\" class=\"_fh _fa _fi _be _bf _fj _dj _b1\">$4.39</span><span data-testid=\"rich-text\" class=\"_fh _fa _fi _be _bf _fj _dj _fl\"> \u2022 </span><span data-testid="
             }
           ]
         },
@@ -5412,7 +5412,7 @@
           {
             "id": "__REACT_QUERY_STATE__",
             "type": "application/json",
-            "length": 2955403
+            "length": 2958794
           },
           {
             "id": "__MANAGED_TRANSLATIONS__",
@@ -5452,7 +5452,7 @@
           {
             "id": "__FUSION_PLUGIN_PARAMETERS__",
             "type": "application/json",
-            "length": 109958
+            "length": 109944
           },
           {
             "id": "__CONFIG__",
@@ -5484,7 +5484,7 @@
               },
               null
             ],
-            "menu_item_count": 259,
+            "menu_item_count": 262,
             "menu_urls": [],
             "sample_items": [
               {
@@ -5496,49 +5496,9 @@
                 "section": "Featured items"
               },
               {
-                "name": "French Fries",
+                "name": "2 Cheeseburger Meal",
                 "variant": null,
-                "price_cents": 479,
-                "currency": "USD",
-                "availability": "unknown",
-                "section": "Featured items"
-              },
-              {
-                "name": "2 Filet-O-Fish\u00ae Meal",
-                "variant": null,
-                "price_cents": 1500,
-                "currency": "USD",
-                "availability": "unknown",
-                "section": "Featured items"
-              },
-              {
-                "name": "Big Mac\u00ae",
-                "variant": null,
-                "price_cents": 779,
-                "currency": "USD",
-                "availability": "unknown",
-                "section": "Featured items"
-              },
-              {
-                "name": "6 pc. Chicken McNuggets\u00ae Happy Meal\u00ae",
-                "variant": null,
-                "price_cents": 839,
-                "currency": "USD",
-                "availability": "unknown",
-                "section": "Featured items"
-              },
-              {
-                "name": "McChicken\u00ae Meal",
-                "variant": null,
-                "price_cents": 899,
-                "currency": "USD",
-                "availability": "unknown",
-                "section": "Featured items"
-              },
-              {
-                "name": "Double Cheeseburger Meal",
-                "variant": null,
-                "price_cents": 1089,
+                "price_cents": 1299,
                 "currency": "USD",
                 "availability": "unknown",
                 "section": "Featured items"
@@ -5550,6 +5510,46 @@
                 "currency": "USD",
                 "availability": "unknown",
                 "section": "Featured items"
+              },
+              {
+                "name": "Double Cheeseburger",
+                "variant": null,
+                "price_cents": 549,
+                "currency": "USD",
+                "availability": "unknown",
+                "section": "Featured items"
+              },
+              {
+                "name": "Big Mac\u00ae Meal",
+                "variant": null,
+                "price_cents": 1269,
+                "currency": "USD",
+                "availability": "unknown",
+                "section": "Featured items"
+              },
+              {
+                "name": "Cheeseburger",
+                "variant": null,
+                "price_cents": 369,
+                "currency": "USD",
+                "availability": "unknown",
+                "section": "Featured items"
+              },
+              {
+                "name": "20 pc. Chicken McNuggets\u00ae",
+                "variant": null,
+                "price_cents": 1179,
+                "currency": "USD",
+                "availability": "unknown",
+                "section": "Featured items"
+              },
+              {
+                "name": "6 pc. Chicken McNuggets\u00ae",
+                "variant": null,
+                "price_cents": 449,
+                "currency": "USD",
+                "availability": "unknown",
+                "section": "Featured items"
               }
             ]
           }
@@ -5557,25 +5557,25 @@
       }
     },
     {
-      "url": "https://www.doordash.com/store/chipotle-mexican-grill-san-jose-269749/",
+      "url": "https://www.doordash.com/store/chipotle-mexican-grill-sterling-270846/",
       "http": {
-        "url": "https://www.doordash.com/store/chipotle-mexican-grill-san-jose-269749/",
+        "url": "https://www.doordash.com/store/chipotle-mexican-grill-sterling-270846/",
         "fetch": {
-          "url": "https://www.doordash.com/store/chipotle-mexican-grill-san-jose-269749/",
+          "url": "https://www.doordash.com/store/chipotle-mexican-grill-sterling-270846/",
           "ok": false,
           "status": 403,
-          "final_url": "https://www.doordash.com/store/chipotle-mexican-grill-san-jose-269749/",
+          "final_url": "https://www.doordash.com/store/chipotle-mexican-grill-sterling-270846/",
           "content_type": "text/html; charset=UTF-8",
-          "fetched_at": "2026-10-08T01:29:44Z",
+          "fetched_at": "2026-10-08T01:34:15Z",
           "from_cache": false,
           "via": "http",
           "barrier": {
             "kind": "captcha",
             "detail": "bot-challenge / CAPTCHA interstitial returned (marker 'challenges.cloudflare.com')",
-            "url": "https://www.doordash.com/store/chipotle-mexican-grill-san-jose-269749/",
+            "url": "https://www.doordash.com/store/chipotle-mexican-grill-sterling-270846/",
             "host": "www.doordash.com",
             "status": 403,
-            "observed_at": "2026-10-08T01:29:44Z"
+            "observed_at": "2026-10-08T01:34:15Z"
           },
           "error": null,
           "attempts": 1,
@@ -5589,7 +5589,7 @@
             {
               "marker": "challenges.cloudflare.com",
               "offset": 465,
-              "context": " &#39;nonce-JzopjlBJdlp0aiquZUFuzy&#39; &#39;unsafe-eval&#39; https://challenges.cloudflare.com; script-src-attr &#39;none&#39;; style-src &"
+              "context": " &#39;nonce-Huw1GDRYhVoaWmu51mJ3Bo&#39; &#39;unsafe-eval&#39; https://challenges.cloudflare.com; script-src-attr &#39;none&#39;; style-src &"
             },
             {
               "marker": "<title>just a moment...</title>",
@@ -5604,7 +5604,7 @@
             "largest_anonymous": [
               {
                 "bytes": 3433,
-                "head": "(function(){window._cf_chl_opt = {cFPWv: 'g',cH: 'P1OQlGFCcC8D3hrG86p2IyI079GYWPWGEioi7.06qmo-1791422984-1.2.1.1-_DEduLy"
+                "head": "(function(){window._cf_chl_opt = {cFPWv: 'g',cH: 'Wq.iBi.OHVUsXRLzw47CfnwBNz5ssNO7D3B0vEU4Pl8-1791423255-1.2.1.1-7iYJvH7"
               }
             ]
           },
@@ -5679,7 +5679,7 @@
           "url": "https://www.ubereats.com/store/mcdonalds-lower-muscatine-%26-malls/1B9hmI9XSROmL0xJlQ02hg?diningMode=DELIVERY",
           "host": "www.ubereats.com",
           "status": 307,
-          "observed_at": "2026-10-08T01:28:55Z"
+          "observed_at": "2026-10-08T01:33:26Z"
         },
         {
           "kind": "captcha",
@@ -5687,7 +5687,7 @@
           "url": "https://www.ubereats.com/store/mcdonalds-715-bridge-sts/2tAEuBT5Raq9fVWuEfGDhw?diningMode=DELIVERY",
           "host": "www.ubereats.com",
           "status": 307,
-          "observed_at": "2026-10-08T01:28:58Z"
+          "observed_at": "2026-10-08T01:33:31Z"
         }
       ],
       "stores": [
@@ -7914,7 +7914,7 @@
           },
           "lat": 41.5962324,
           "lng": -87.4997683,
-          "observed_at": "2026-10-08T01:29:02Z",
+          "observed_at": "2026-10-08T01:33:33Z",
           "from_cache": false,
           "fetch_via": "http",
           "order_mode": "delivery",
@@ -7926,9 +7926,26 @@
           "items": [
             {
               "item_id": null,
+              "name": "McChicken\u00ae",
+              "description": null,
+              "section": "Featured items",
+              "addons": [],
+              "required_options": "unknown",
+              "price_cents": 259,
+              "price_raw": "2.59",
+              "currency": "USD",
+              "variant": null,
+              "availability": "unknown",
+              "sections": [
+                "Featured items",
+                "Chicken"
+              ]
+            },
+            {
+              "item_id": null,
               "name": "10 pc. Chicken McNuggets\u00ae",
               "description": null,
-              "section": "Free with $15 purchase",
+              "section": "Featured items",
               "addons": [],
               "required_options": "unknown",
               "price_cents": 699,
@@ -7937,10 +7954,28 @@
               "variant": null,
               "availability": "unknown",
               "sections": [
+                "Featured items",
                 "Free with $15 purchase",
                 "Chicken",
                 "Protein Picks",
                 "Individual Items"
+              ]
+            },
+            {
+              "item_id": null,
+              "name": "6 pc. Chicken McNuggets\u00ae Happy Meal\u00ae",
+              "description": null,
+              "section": "Featured items",
+              "addons": [],
+              "required_options": "unknown",
+              "price_cents": 699,
+              "price_raw": "6.99",
+              "currency": "USD",
+              "variant": null,
+              "availability": "unknown",
+              "sections": [
+                "Featured items",
+                "Happy Meal"
               ]
             },
             {
@@ -8049,22 +8084,6 @@
             },
             {
               "item_id": null,
-              "name": "McChicken\u00ae",
-              "description": null,
-              "section": "Chicken",
-              "addons": [],
-              "required_options": "unknown",
-              "price_cents": 259,
-              "price_raw": "2.59",
-              "currency": "USD",
-              "variant": null,
-              "availability": "unknown",
-              "sections": [
-                "Chicken"
-              ]
-            },
-            {
-              "item_id": null,
               "name": "Hot 'N Spicy McChicken\u00ae",
               "description": null,
               "section": "Chicken",
@@ -8078,22 +8097,6 @@
               "sections": [
                 "Chicken",
                 "Individual Items"
-              ]
-            },
-            {
-              "item_id": null,
-              "name": "6 pc. Chicken McNuggets\u00ae Happy Meal\u00ae",
-              "description": null,
-              "section": "Happy Meal",
-              "addons": [],
-              "required_options": "unknown",
-              "price_cents": 699,
-              "price_raw": "6.99",
-              "currency": "USD",
-              "variant": null,
-              "availability": "unknown",
-              "sections": [
-                "Happy Meal"
               ]
             },
             {
@@ -8153,7 +8156,7 @@
           },
           "lat": 40.875357,
           "lng": -73.1208012,
-          "observed_at": "2026-10-08T01:29:05Z",
+          "observed_at": "2026-10-08T01:33:36Z",
           "from_cache": false,
           "fetch_via": "http",
           "order_mode": "delivery",
@@ -8167,7 +8170,7 @@
               "item_id": null,
               "name": "10 pc. Chicken McNuggets\u00ae",
               "description": null,
-              "section": "Featured items",
+              "section": "Free with $15 purchase",
               "addons": [],
               "required_options": "unknown",
               "price_cents": 759,
@@ -8176,45 +8179,10 @@
               "variant": null,
               "availability": "unknown",
               "sections": [
-                "Featured items",
                 "Free with $15 purchase",
                 "Chicken",
                 "Protein Picks",
                 "Individual Items"
-              ]
-            },
-            {
-              "item_id": null,
-              "name": "6 pc. Chicken McNuggets\u00ae Happy Meal\u00ae",
-              "description": null,
-              "section": "Featured items",
-              "addons": [],
-              "required_options": "unknown",
-              "price_cents": 779,
-              "price_raw": "7.79",
-              "currency": "USD",
-              "variant": null,
-              "availability": "unknown",
-              "sections": [
-                "Featured items",
-                "Happy Meal"
-              ]
-            },
-            {
-              "item_id": null,
-              "name": "McChicken\u00ae",
-              "description": null,
-              "section": "Featured items",
-              "addons": [],
-              "required_options": "unknown",
-              "price_cents": 479,
-              "price_raw": "4.79",
-              "currency": "USD",
-              "variant": null,
-              "availability": "unknown",
-              "sections": [
-                "Featured items",
-                "Chicken"
               ]
             },
             {
@@ -8325,6 +8293,38 @@
             },
             {
               "item_id": null,
+              "name": "McChicken\u00ae",
+              "description": null,
+              "section": "Chicken",
+              "addons": [],
+              "required_options": "unknown",
+              "price_cents": 479,
+              "price_raw": "4.79",
+              "currency": "USD",
+              "variant": null,
+              "availability": "unknown",
+              "sections": [
+                "Chicken"
+              ]
+            },
+            {
+              "item_id": null,
+              "name": "6 pc. Chicken McNuggets\u00ae Happy Meal\u00ae",
+              "description": null,
+              "section": "Happy Meal",
+              "addons": [],
+              "required_options": "unknown",
+              "price_cents": 779,
+              "price_raw": "7.79",
+              "currency": "USD",
+              "variant": null,
+              "availability": "unknown",
+              "sections": [
+                "Happy Meal"
+              ]
+            },
+            {
+              "item_id": null,
               "name": "4 pc. Chicken McNugget\u00ae Happy Meal\u00ae",
               "description": null,
               "section": "Happy Meal",
@@ -8396,7 +8396,7 @@
           },
           "lat": 38.2536283,
           "lng": -85.7453594,
-          "observed_at": "2026-10-08T01:29:08Z",
+          "observed_at": "2026-10-08T01:33:39Z",
           "from_cache": false,
           "fetch_via": "http",
           "order_mode": "delivery",
@@ -8410,7 +8410,7 @@
               "item_id": null,
               "name": "10 pc. Chicken McNuggets\u00ae",
               "description": null,
-              "section": "Free with $15 purchase",
+              "section": "Featured items",
               "addons": [],
               "required_options": "unknown",
               "price_cents": 829,
@@ -8419,10 +8419,28 @@
               "variant": null,
               "availability": "unknown",
               "sections": [
+                "Featured items",
                 "Free with $15 purchase",
                 "Chicken",
                 "Protein Picks",
                 "Individual Items"
+              ]
+            },
+            {
+              "item_id": null,
+              "name": "McChicken\u00ae",
+              "description": null,
+              "section": "Featured items",
+              "addons": [],
+              "required_options": "unknown",
+              "price_cents": 389,
+              "price_raw": "3.89",
+              "currency": "USD",
+              "variant": null,
+              "availability": "unknown",
+              "sections": [
+                "Featured items",
+                "Chicken"
               ]
             },
             {
@@ -8546,22 +8564,6 @@
                 "Chicken",
                 "Protein Picks",
                 "Individual Items"
-              ]
-            },
-            {
-              "item_id": null,
-              "name": "McChicken\u00ae",
-              "description": null,
-              "section": "Chicken",
-              "addons": [],
-              "required_options": "unknown",
-              "price_cents": 389,
-              "price_raw": "3.89",
-              "currency": "USD",
-              "variant": null,
-              "availability": "unknown",
-              "sections": [
-                "Chicken"
               ]
             },
             {
@@ -8723,375 +8725,375 @@
         {
           "kind": "captcha",
           "detail": "bot-challenge / CAPTCHA interstitial returned (marker 'challenges.cloudflare.com')",
-          "url": "https://www.doordash.com/store/chipotle-mexican-grill-hayward-26003408/?pickup=false",
+          "url": "https://www.doordash.com/store/chipotle-mexican-grill-gaithersburg-269552/?pickup=false",
           "host": "www.doordash.com",
           "status": 403,
-          "observed_at": "2026-10-08T01:29:15Z"
+          "observed_at": "2026-10-08T01:33:46Z"
         },
         {
           "kind": "captcha",
           "detail": "bot-challenge / CAPTCHA interstitial returned (marker 'challenges.cloudflare.com')",
-          "url": "https://www.doordash.com/store/chipotle-mexican-grill-redwood-city-26003419/?pickup=false",
+          "url": "https://www.doordash.com/store/chipotle-mexican-grill-bethesda-269760/?pickup=false",
           "host": "www.doordash.com",
           "status": 403,
-          "observed_at": "2026-10-08T01:29:18Z"
+          "observed_at": "2026-10-08T01:33:49Z"
         },
         {
           "kind": "captcha",
           "detail": "bot-challenge / CAPTCHA interstitial returned (marker 'challenges.cloudflare.com')",
-          "url": "https://www.doordash.com/store/chipotle-mexican-grill-mountain-view-269577/?pickup=false",
+          "url": "https://www.doordash.com/store/chipotle-mexican-grill-falls-church-269764/?pickup=false",
           "host": "www.doordash.com",
           "status": 403,
-          "observed_at": "2026-10-08T01:29:21Z"
+          "observed_at": "2026-10-08T01:33:52Z"
         }
       ],
       "stores": [
         {
-          "store_id": "269749",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-san-jose-269749/",
+          "store_id": "270846",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-sterling-270846/",
           "source": "chain_page",
           "status": "queued",
           "detail": ""
         },
         {
-          "store_id": "270653",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-san-jose-270653/",
+          "store_id": "693992",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-sterling-693992/",
           "source": "chain_page",
           "status": "queued",
           "detail": ""
         },
         {
-          "store_id": "269886",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-san-jose-269886/",
+          "store_id": "270476",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-sterling-270476/",
           "source": "chain_page",
           "status": "queued",
           "detail": ""
         },
         {
-          "store_id": "269661",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-san-jose-269661/",
+          "store_id": "269991",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-ashburn-269991/",
           "source": "chain_page",
           "status": "queued",
           "detail": ""
         },
         {
-          "store_id": "269670",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-san-jose-269670/",
+          "store_id": "270558",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-ashburn-270558/",
           "source": "chain_page",
           "status": "queued",
           "detail": ""
         },
         {
-          "store_id": "269889",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-san-jose-269889/",
+          "store_id": "269989",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-herndon-269989/",
           "source": "chain_page",
           "status": "queued",
           "detail": ""
         },
         {
-          "store_id": "270323",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-san-jose-270323/",
+          "store_id": "269901",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-reston-269901/",
           "source": "chain_page",
           "status": "queued",
           "detail": ""
         },
         {
-          "store_id": "270758",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-san-jose-270758/",
+          "store_id": "270767",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-reston-270767/",
           "source": "chain_page",
           "status": "queued",
           "detail": ""
         },
         {
-          "store_id": "269858",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-san-jose-269858/",
+          "store_id": "42113295",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-ashburn-42113295/",
           "source": "chain_page",
           "status": "queued",
           "detail": ""
         },
         {
-          "store_id": "270489",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-santa-clara-270489/",
+          "store_id": "270863",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-reston-270863/",
           "source": "chain_page",
           "status": "queued",
           "detail": ""
         },
         {
-          "store_id": "270621",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-campbell-270621/",
+          "store_id": "391407",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-leesburg-391407/",
           "source": "chain_page",
           "status": "queued",
           "detail": ""
         },
         {
-          "store_id": "270670",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-san-jose-270670/",
+          "store_id": "2837515",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-leesburg-2837515/",
           "source": "chain_page",
           "status": "queued",
           "detail": ""
         },
         {
-          "store_id": "270975",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-santa-clara-270975/",
+          "store_id": "269965",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-herndon-269965/",
           "source": "chain_page",
           "status": "queued",
           "detail": ""
         },
         {
-          "store_id": "272536",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-milpitas-272536/",
+          "store_id": "31218669",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-sterling-31218669/",
           "source": "chain_page",
           "status": "queued",
           "detail": ""
         },
         {
-          "store_id": "694012",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-santa-clara-694012/",
+          "store_id": "439084",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-chantilly-439084/",
           "source": "chain_page",
           "status": "queued",
           "detail": ""
         },
         {
-          "store_id": "270728",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-san-jose-270728/",
+          "store_id": "270036",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-potomac-270036/",
           "source": "chain_page",
           "status": "queued",
           "detail": ""
         },
         {
-          "store_id": "269847",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-san-jose-269847/",
+          "store_id": "543467",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-chantilly-543467/",
           "source": "chain_page",
           "status": "queued",
           "detail": ""
         },
         {
-          "store_id": "270821",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-san-jose-270821/",
+          "store_id": "269884",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-gaithersburg-269884/",
           "source": "chain_page",
           "status": "queued",
           "detail": ""
         },
         {
-          "store_id": "270515",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-san-jose-270515/",
+          "store_id": "270959",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-tysons-270959/",
           "source": "chain_page",
           "status": "queued",
           "detail": ""
         },
         {
-          "store_id": "270240",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-cupertino-270240/",
+          "store_id": "270497",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-vienna-270497/",
           "source": "chain_page",
           "status": "queued",
           "detail": ""
         },
         {
-          "store_id": "270342",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-cupertino-270342/",
+          "store_id": "270076",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-oakton-270076/",
           "source": "chain_page",
           "status": "queued",
           "detail": ""
         },
         {
-          "store_id": "270293",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-sunnyvale-270293/",
+          "store_id": "270686",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-fairfax-270686/",
           "source": "chain_page",
           "status": "queued",
           "detail": ""
         },
         {
-          "store_id": "269625",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-san-jose-269625/",
+          "store_id": "269854",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-rockville-269854/",
           "source": "chain_page",
           "status": "queued",
           "detail": ""
         },
         {
-          "store_id": "270873",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-los-gatos-270873/",
+          "store_id": "269799",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-fairfax-269799/",
           "source": "chain_page",
           "status": "queued",
           "detail": ""
         },
         {
-          "store_id": "270852",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-mountain-view-270852/",
-          "source": "chain_page",
-          "status": "queued",
-          "detail": ""
-        },
-        {
-          "store_id": "269704",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-fremont-269704/",
-          "source": "chain_page",
-          "status": "queued",
-          "detail": ""
-        },
-        {
-          "store_id": "270803",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-fremont-270803/",
-          "source": "chain_page",
-          "status": "queued",
-          "detail": ""
-        },
-        {
-          "store_id": "269577",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-mountain-view-269577/",
+          "store_id": "269552",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-gaithersburg-269552/",
           "source": "chain_page",
           "status": "blocked",
           "detail": "captcha: bot-challenge / CAPTCHA interstitial returned (marker 'challenges.cloudflare.com')"
         },
         {
-          "store_id": "270676",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-palo-alto-270676/",
+          "store_id": "270102",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-germantown-270102/",
           "source": "chain_page",
           "status": "queued",
           "detail": ""
         },
         {
-          "store_id": "270167",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-fremont-270167/",
+          "store_id": "270887",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-mclean-270887/",
           "source": "chain_page",
           "status": "queued",
           "detail": ""
         },
         {
-          "store_id": "270796",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-palo-alto-270796/",
+          "store_id": "270570",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-gaithersburg-270570/",
           "source": "chain_page",
           "status": "queued",
           "detail": ""
         },
         {
-          "store_id": "270879",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-newark-270879/",
+          "store_id": "269926",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-fairfax-269926/",
           "source": "chain_page",
           "status": "queued",
           "detail": ""
         },
         {
-          "store_id": "350565",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-morgan-hill-350565/",
+          "store_id": "270547",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-bethesda-270547/",
           "source": "chain_page",
           "status": "queued",
           "detail": ""
         },
         {
-          "store_id": "269792",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-union-city-269792/",
+          "store_id": "270432",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-centreville-270432/",
           "source": "chain_page",
           "status": "queued",
           "detail": ""
         },
         {
-          "store_id": "270531",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-redwood-city-270531/",
+          "store_id": "350555",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-germantown-350555/",
           "source": "chain_page",
           "status": "queued",
           "detail": ""
         },
         {
-          "store_id": "34727735",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-scotts-valley-34727735/",
+          "store_id": "271000",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-mclean-271000/",
           "source": "chain_page",
           "status": "queued",
           "detail": ""
         },
         {
-          "store_id": "693959",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-pleasanton-693959/",
+          "store_id": "271022",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-rockville-271022/",
           "source": "chain_page",
           "status": "queued",
           "detail": ""
         },
         {
-          "store_id": "270446",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-san-carlos-270446/",
-          "source": "chain_page",
-          "status": "queued",
-          "detail": ""
-        },
-        {
-          "store_id": "26003419",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-redwood-city-26003419/",
+          "store_id": "269764",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-falls-church-269764/",
           "source": "chain_page",
           "status": "blocked",
           "detail": "captcha: bot-challenge / CAPTCHA interstitial returned (marker 'challenges.cloudflare.com')"
         },
         {
-          "store_id": "34727740",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-hayward-34727740/",
+          "store_id": "270940",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-fairfax-270940/",
           "source": "chain_page",
           "status": "queued",
           "detail": ""
         },
         {
-          "store_id": "270700",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-livermore-270700/",
+          "store_id": "270978",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-fairfax-270978/",
           "source": "chain_page",
           "status": "queued",
           "detail": ""
         },
         {
-          "store_id": "350644",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-capitola-350644/",
-          "source": "chain_page",
-          "status": "queued",
-          "detail": ""
-        },
-        {
-          "store_id": "270589",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-dublin-270589/",
-          "source": "chain_page",
-          "status": "queued",
-          "detail": ""
-        },
-        {
-          "store_id": "270600",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-dublin-270600/",
-          "source": "chain_page",
-          "status": "queued",
-          "detail": ""
-        },
-        {
-          "store_id": "26003408",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-hayward-26003408/",
+          "store_id": "269760",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-bethesda-269760/",
           "source": "chain_page",
           "status": "blocked",
           "detail": "captcha: bot-challenge / CAPTCHA interstitial returned (marker 'challenges.cloudflare.com')"
         },
         {
-          "store_id": "350660",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-santa-cruz-350660/",
+          "store_id": "271010",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-north-bethesda-271010/",
           "source": "chain_page",
           "status": "queued",
           "detail": ""
         },
         {
-          "store_id": "270455",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-san-mateo-270455/",
+          "store_id": "543527",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-purcellville-543527/",
           "source": "chain_page",
           "status": "queued",
           "detail": ""
         },
         {
-          "store_id": "270792",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-san-mateo-270792/",
+          "store_id": "270281",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-falls-church-270281/",
           "source": "chain_page",
           "status": "queued",
           "detail": ""
         },
         {
-          "store_id": "270420",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-livermore-270420/",
+          "store_id": "29831263",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-rockville-29831263/",
           "source": "chain_page",
           "status": "queued",
           "detail": ""
         },
         {
-          "store_id": "270268",
-          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-castro-valley-270268/",
+          "store_id": "270963",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-burke-270963/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "270787",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-manassas-270787/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "269937",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-bethesda-269937/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "269950",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-kensington-269950/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "439191",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-aspen-hill-439191/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "270136",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-falls-church-270136/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "269970",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-chevy-chase-269970/",
+          "source": "chain_page",
+          "status": "queued",
+          "detail": ""
+        },
+        {
+          "store_id": "270051",
+          "canonical": "https://www.doordash.com/store/chipotle-mexican-grill-arlington-270051/",
           "source": "chain_page",
           "status": "queued",
           "detail": ""
@@ -9159,16 +9161,16 @@
       "barrier": null,
       "error": null,
       "kind": "urlset",
-      "loc_count": 6457,
+      "loc_count": 6452,
       "sample": [
-        "https://www.doordash.com/business/dairy-queen-12915/menu",
+        "https://www.doordash.com/en-CA/business/wayback-burgers-645458/menu",
         "https://www.doordash.com/business/first-watch-16359/menu",
-        "https://www.doordash.com/business/chili-thai-91396/menu",
-        "https://www.doordash.com/business/churromania-111315/menu",
-        "https://www.doordash.com/business/sugarfire-smoke-house-86607/menu",
-        "https://www.doordash.com/business/walgreens-434024/menu",
-        "https://www.doordash.com/business/america%27s-food-basket-11127772/menu",
-        "https://www.doordash.com/business/fox%27s-pizza-den-16162701/menu"
+        "https://www.doordash.com/business/cucho%27s-taco-grill-990809/menu",
+        "https://www.doordash.com/business/graveyard-%28do-not-rename%29-450032/menu",
+        "https://www.doordash.com/business/sucane-11100064/menu",
+        "https://www.doordash.com/business/austin-chicken-nugget-11348418/menu",
+        "https://www.doordash.com/business/crust---fresh-sourdough-deli-460151/menu",
+        "https://www.doordash.com/en-AU/business/c9-chocolate-and-gelato-536350/menu"
       ]
     },
     "pages": [
@@ -9180,13 +9182,13 @@
           "status": 200,
           "final_url": "https://www.doordash.com/business",
           "content_type": "text/html; charset=utf-8",
-          "fetched_at": "2026-10-08T01:29:55Z",
+          "fetched_at": "2026-10-08T01:34:26Z",
           "from_cache": false,
           "via": "http",
           "barrier": null,
           "error": null,
           "attempts": 1,
-          "bytes": 2162161
+          "bytes": 2157594
         },
         "structure": {
           "phrases": {
@@ -9201,35 +9203,35 @@
           "key_contexts": {
             "storeId": [
               "itForStoreId\\\":false,\\\"aggregateStoreIds\\\":\\\"$undefined\\\",\\\"multiStoreShoppingAttr\\\":\\\"$undefined\\\",\\\"storeId\\\":\\\"$undefined\\\"},\\\"children\\\":\\\"$L3d\\\"}]}]}]\\n\"])</script><script>self.__next_f.push([1,\"",
-              "itForStoreId\\\":false,\\\"aggregateStoreIds\\\":\\\"$undefined\\\",\\\"multiStoreShoppingAttr\\\":\\\"$undefined\\\",\\\"storeId\\\":\\\"$undefined\\\"}}}]\\n\"])</script><script>self.__next_f.push([1,\"52:I[344119,[\\\"28316\\\",\\\""
+              "itForStoreId\\\":false,\\\"aggregateStoreIds\\\":\\\"$undefined\\\",\\\"multiStoreShoppingAttr\\\":\\\"$undefined\\\",\\\"storeId\\\":\\\"$undefined\\\"}}}]\\n\"])</script><script>self.__next_f.push([1,\"51:I[344119,[\\\"28316\\\",\\\""
             ]
           },
-          "bytes": 2160853,
+          "bytes": 2156286,
           "challenge_markers": [],
           "embedded_json_scripts": [],
           "inline_scripts": {
-            "count": 54,
-            "anonymous_count": 54,
+            "count": 52,
+            "anonymous_count": 52,
             "largest_anonymous": [
               {
-                "bytes": 769410,
+                "bytes": 769356,
                 "head": "self.__next_f.push([1,\"d:[\\\"$\\\",\\\"html\\\",null,{\\\"lang\\\":\\\"en-US\\\",\\\"children\\\":[null,[\\\"$\\\",\\\"body\\\",null,{\\\"children\\\":"
               },
               {
-                "bytes": 552839,
-                "head": "self.__next_f.push([1,\"{\\\"evaluateCallCache\\\":{\\\"timestamp\\\":1791422994645,\\\"context\\\":{\\\"app_version\\\":\\\"2.17700.0\\\",\\\""
+                "bytes": 552039,
+                "head": "self.__next_f.push([1,\"{\\\"evaluateCallCache\\\":{\\\"timestamp\\\":1791423266157,\\\"context\\\":{\\\"app_version\\\":\\\"2.17700.0\\\",\\\""
               },
               {
                 "bytes": 191442,
-                "head": "self.__next_f.push([1,\"3d:[\\\"$\\\",\\\"$L52\\\",null,{\\\"platformProps\\\":{\\\"initialReactQueryState\\\":{\\\"mutations\\\":[],\\\"querie"
+                "head": "self.__next_f.push([1,\"3d:[\\\"$\\\",\\\"$L51\\\",null,{\\\"platformProps\\\":{\\\"initialReactQueryState\\\":{\\\"mutations\\\":[],\\\"querie"
               },
               {
-                "bytes": 50061,
+                "bytes": 54258,
                 "head": "self.__next_f.push([1,\"42:[\\\"$\\\",\\\"$L43\\\",null,{\\\"apolloCacheData\\\":[{\\\"data\\\":{\\\"consumerOrderCart\\\":null},\\\"query\\\":{\\"
               },
               {
                 "bytes": 26851,
-                "head": "self.__next_f.push([1,\"26:[\\\"$\\\",\\\"$L3e\\\",null,{\\\"dvsEvaluationCache\\\":\\\"$3f\\\",\\\"dvsHash\\\":\\\"c1e9a423e26e3e8e84d7346697e"
+                "head": "self.__next_f.push([1,\"26:[\\\"$\\\",\\\"$L3e\\\",null,{\\\"dvsEvaluationCache\\\":\\\"$3f\\\",\\\"dvsHash\\\":\\\"851fcb14adabb1d7d256e75cbea"
               }
             ]
           },
@@ -9237,7 +9239,7 @@
             "\"price\"": 0,
             "\\\"price\\\"": 1,
             "displayPrice": 0,
-            "__next_f": 54,
+            "__next_f": 52,
             "__APOLLO_STATE__": 0,
             "__REACT_QUERY_STATE__": 0,
             "application/ld+json": 0,
@@ -9287,13 +9289,13 @@
           "status": 200,
           "final_url": "https://www.doordash.com/business",
           "content_type": "text/html; charset=utf-8",
-          "fetched_at": "2026-10-08T01:29:58Z",
+          "fetched_at": "2026-10-08T01:34:29Z",
           "from_cache": false,
           "via": "http",
           "barrier": null,
           "error": null,
           "attempts": 1,
-          "bytes": 2162153
+          "bytes": 2157594
         },
         "structure": {
           "phrases": {
@@ -9308,35 +9310,35 @@
           "key_contexts": {
             "storeId": [
               "itForStoreId\\\":false,\\\"aggregateStoreIds\\\":\\\"$undefined\\\",\\\"multiStoreShoppingAttr\\\":\\\"$undefined\\\",\\\"storeId\\\":\\\"$undefined\\\"},\\\"children\\\":\\\"$L3d\\\"}]}]}]\\n\"])</script><script>self.__next_f.push([1,\"",
-              "itForStoreId\\\":false,\\\"aggregateStoreIds\\\":\\\"$undefined\\\",\\\"multiStoreShoppingAttr\\\":\\\"$undefined\\\",\\\"storeId\\\":\\\"$undefined\\\"}}}]\\n\"])</script><script>self.__next_f.push([1,\"52:I[344119,[\\\"28316\\\",\\\""
+              "itForStoreId\\\":false,\\\"aggregateStoreIds\\\":\\\"$undefined\\\",\\\"multiStoreShoppingAttr\\\":\\\"$undefined\\\",\\\"storeId\\\":\\\"$undefined\\\"}}}]\\n\"])</script><script>self.__next_f.push([1,\"51:I[344119,[\\\"28316\\\",\\\""
             ]
           },
-          "bytes": 2160845,
+          "bytes": 2156286,
           "challenge_markers": [],
           "embedded_json_scripts": [],
           "inline_scripts": {
-            "count": 54,
-            "anonymous_count": 54,
+            "count": 52,
+            "anonymous_count": 52,
             "largest_anonymous": [
               {
-                "bytes": 769410,
+                "bytes": 769356,
                 "head": "self.__next_f.push([1,\"d:[\\\"$\\\",\\\"html\\\",null,{\\\"lang\\\":\\\"en-US\\\",\\\"children\\\":[null,[\\\"$\\\",\\\"body\\\",null,{\\\"children\\\":"
               },
               {
-                "bytes": 552839,
-                "head": "self.__next_f.push([1,\"{\\\"evaluateCallCache\\\":{\\\"timestamp\\\":1791422997672,\\\"context\\\":{\\\"app_version\\\":\\\"2.17700.0\\\",\\\""
+                "bytes": 552039,
+                "head": "self.__next_f.push([1,\"{\\\"evaluateCallCache\\\":{\\\"timestamp\\\":1791423269121,\\\"context\\\":{\\\"app_version\\\":\\\"2.17700.0\\\",\\\""
               },
               {
                 "bytes": 191442,
-                "head": "self.__next_f.push([1,\"3d:[\\\"$\\\",\\\"$L52\\\",null,{\\\"platformProps\\\":{\\\"initialReactQueryState\\\":{\\\"mutations\\\":[],\\\"querie"
+                "head": "self.__next_f.push([1,\"3d:[\\\"$\\\",\\\"$L51\\\",null,{\\\"platformProps\\\":{\\\"initialReactQueryState\\\":{\\\"mutations\\\":[],\\\"querie"
               },
               {
-                "bytes": 50061,
-                "head": "self.__next_f.push([1,\"46:[\\\"$\\\",\\\"$L47\\\",null,{\\\"apolloCacheData\\\":[{\\\"data\\\":{\\\"consumerOrderCart\\\":null},\\\"query\\\":{\\"
+                "bytes": 54258,
+                "head": "self.__next_f.push([1,\"42:[\\\"$\\\",\\\"$L43\\\",null,{\\\"apolloCacheData\\\":[{\\\"data\\\":{\\\"consumerOrderCart\\\":null},\\\"query\\\":{\\"
               },
               {
                 "bytes": 26851,
-                "head": "self.__next_f.push([1,\"26:[\\\"$\\\",\\\"$L42\\\",null,{\\\"dvsEvaluationCache\\\":\\\"$43\\\",\\\"dvsHash\\\":\\\"c1e9a423e26e3e8e84d7346697e"
+                "head": "self.__next_f.push([1,\"26:[\\\"$\\\",\\\"$L3e\\\",null,{\\\"dvsEvaluationCache\\\":\\\"$3f\\\",\\\"dvsHash\\\":\\\"851fcb14adabb1d7d256e75cbea"
               }
             ]
           },
@@ -9344,7 +9346,7 @@
             "\"price\"": 0,
             "\\\"price\\\"": 1,
             "displayPrice": 0,
-            "__next_f": 54,
+            "__next_f": 52,
             "__APOLLO_STATE__": 0,
             "__REACT_QUERY_STATE__": 0,
             "application/ld+json": 0,
@@ -9450,7 +9452,7 @@
             "status": 200,
             "final_url": "https://www.allmenus.com/il/buffalo-grove/233783-lou-malnatis-pizzeria/menu/",
             "content_type": "text/html",
-            "fetched_at": "2026-10-08T01:30:01Z",
+            "fetched_at": "2026-10-08T01:34:33Z",
             "from_cache": false,
             "via": "http",
             "barrier": null,
@@ -9681,7 +9683,7 @@
             "status": 200,
             "final_url": "https://menupages.com/lou-malnatis-pizzeria/6456-s-cicero-ave-chicago",
             "content_type": "text/html",
-            "fetched_at": "2026-10-08T01:30:05Z",
+            "fetched_at": "2026-10-08T01:34:36Z",
             "from_cache": false,
             "via": "http",
             "barrier": null,
@@ -9941,18 +9943,18 @@
           "status": 200,
           "final_url": "https://www.ubereats.com/brand-city/rockford-il/portillos-hot-dogs",
           "content_type": "text/html; charset=utf-8",
-          "fetched_at": "2026-10-08T01:30:07Z",
+          "fetched_at": "2026-10-08T01:34:39Z",
           "from_cache": false,
           "via": "http",
           "barrier": null,
           "error": null,
           "attempts": 1,
-          "bytes": 1431750
+          "bytes": 1431749
         },
         "structure": {
           "phrases": {},
           "key_contexts": {},
-          "bytes": 1430863,
+          "bytes": 1430862,
           "challenge_markers": [],
           "embedded_json_scripts": [
             {
@@ -10385,7 +10387,7 @@
             {
               "id": "__REDUX_STATE__",
               "type": "application/json",
-              "bytes": 467110,
+              "bytes": 467109,
               "parsed": null,
               "head": " {\\u0022activeOrders\\u0022:{\\u0022hasLoaded\\u0022:false,\\u0022isLoading\\u0022:false,\\u0022data\\u0022:null,\\u0022error\\u0022:null},\\u0022assets\\u0022"
             },
@@ -10734,7 +10736,7 @@
           {
             "id": "__REDUX_STATE__",
             "type": "application/json",
-            "length": 467110
+            "length": 467109
           },
           {
             "id": "__FUSION_PLUGIN_PARAMETERS__",
@@ -10762,6 +10764,152 @@
         "store_link_count": 1
       }
     ]
+  },
+  "menupages_mapping": {
+    "index": {
+      "url": "https://menupages.com/sitemap-index.xml",
+      "status": 200,
+      "barrier": null,
+      "kind": "index",
+      "count": 5,
+      "sample": [
+        "https://menupages.com/sitemap-restaurants.xml.gz",
+        "https://menupages.com/sitemap-abc.xml.gz",
+        "https://menupages.com/sitemap-states.xml",
+        "https://menupages.com/sitemap-cities-1.xml",
+        "https://menupages.com/sitemap-cities-paginated-1.xml"
+      ]
+    },
+    "child": {
+      "url": "https://menupages.com/sitemap-restaurants.xml.gz",
+      "status": 200,
+      "barrier": null,
+      "kind": "urlset",
+      "count": 28133,
+      "sample": [
+        "https://menupages.com/planet-pizza/411-main-st-ridgefield",
+        "https://menupages.com/bells-greek-pizza-east-grand-river/1135-e-grand-river-rd-east-lansing",
+        "https://menupages.com/dairy-queen/211-s-main-st-alpharetta",
+        "https://menupages.com/pizza-fiore/9540-ne-2nd-ave-miami",
+        "https://menupages.com/connies-pizza-archer-ave/2373-s-archer-ave-chicago",
+        "https://menupages.com/east-coast-wings-grill/2539-castor-ave-philadelphia",
+        "https://menupages.com/the-prime-deli-cafe/580-south-st-waltham",
+        "https://menupages.com/parkview-diner/2939-cropsey-ave-brooklyn",
+        "https://menupages.com/turanos-pizza-kitchen/69-e-northfield-rd-livingston",
+        "https://menupages.com/razzis-pizzeria/8523-greenwood-ave-n-seattle",
+        "https://menupages.com/peter-pan-diner/999-sunrise-hwy-bay-shore",
+        "https://menupages.com/westgate-pizza-bella/911-central-ave-albany"
+      ],
+      "lou_malnatis_entries": [
+        "https://menupages.com/lou-malnatis-pizzeria/958-w-wrightwood-ave-chicago",
+        "https://menupages.com/lou-malnatis-pizzeria/1235-w-randolph-st-chicago",
+        "https://menupages.com/lou-malnatis-pizzeria/6456-s-cicero-ave-chicago",
+        "https://menupages.com/lou-malnatis-pizzeria/4340-n-lincoln-ave-chicago",
+        "https://menupages.com/lou-malnatis-pizzeria/439-n-wells-st-chicago",
+        "https://menupages.com/lou-malnatis-pizzeria/805-s-state-st-chicago",
+        "https://menupages.com/lou-malnatis-pizzeria/831-n-sedgwick-st-chicago",
+        "https://menupages.com/lou-malnatis-pizzeria/3986-n-avondale-ave-chicago",
+        "https://menupages.com/lou-malnatis-pizzeria/1520-n-damen-ave-chicago"
+      ]
+    },
+    "known_page": {
+      "url": "https://menupages.com/lou-malnatis-pizzeria-midway/6456-s-cicero-ave-chicago",
+      "status": 200,
+      "barrier": null,
+      "bytes": 4625400,
+      "restaurant_found": true,
+      "name": "Lou Malnati's Pizzeria",
+      "address": {
+        "street": "6456 S Cicero Ave",
+        "city": "Chicago",
+        "state": "IL",
+        "zip": "60638",
+        "country": "US"
+      },
+      "items": 198,
+      "sample_items": [
+        {
+          "name": "Personal - Deep Dish Margherita",
+          "variant": null,
+          "price_cents": 1425,
+          "currency": "USD",
+          "section": "Deep Dish Margherita Pesto Pizza"
+        },
+        {
+          "name": "Small - Deep Dish Margherita",
+          "variant": null,
+          "price_cents": 2155,
+          "currency": "USD",
+          "section": "Deep Dish Margherita Pesto Pizza"
+        },
+        {
+          "name": "Medium - Deep Dish Margherita",
+          "variant": null,
+          "price_cents": 2765,
+          "currency": "USD",
+          "section": "Deep Dish Margherita Pesto Pizza"
+        },
+        {
+          "name": "Large - Deep Dish Margherita",
+          "variant": null,
+          "price_cents": 3355,
+          "currency": "USD",
+          "section": "Deep Dish Margherita Pesto Pizza"
+        },
+        {
+          "name": "Personal - Deep Dish Mike's Hot Honey",
+          "variant": null,
+          "price_cents": 1455,
+          "currency": "USD",
+          "section": "Deep Dish Mike's Hot Honey\ufffd\ufffd"
+        },
+        {
+          "name": "Small - Deep Dish Mike's Hot Honey",
+          "variant": null,
+          "price_cents": 2275,
+          "currency": "USD",
+          "section": "Deep Dish Mike's Hot Honey\ufffd\ufffd"
+        },
+        {
+          "name": "Medium - Deep Dish Mike's Hot Honey",
+          "variant": null,
+          "price_cents": 3055,
+          "currency": "USD",
+          "section": "Deep Dish Mike's Hot Honey\ufffd\ufffd"
+        },
+        {
+          "name": "Large - Deep Dish Mike's Hot Honey",
+          "variant": null,
+          "price_cents": 3715,
+          "currency": "USD",
+          "section": "Deep Dish Mike's Hot Honey\ufffd\ufffd"
+        },
+        {
+          "name": "Personal - Deep Dish Chicago Classic",
+          "variant": null,
+          "price_cents": 1445,
+          "currency": "USD",
+          "section": "Deep Dish Malnati Chicago Classic\ufffd\ufffd\ufffd"
+        },
+        {
+          "name": "Small - Deep Dish Chicago Classic",
+          "variant": null,
+          "price_cents": 2225,
+          "currency": "USD",
+          "section": "Deep Dish Malnati Chicago Classic\ufffd\ufffd\ufffd"
+        }
+      ],
+      "grubhub_ids": [
+        "434510"
+      ]
+    },
+    "derived_candidate": {
+      "url": "https://menupages.com/lou-malnatis-pizzeria/85-s-buffalo-grove-rd-buffalo-grove",
+      "status": 404,
+      "barrier": null,
+      "bytes": 22661,
+      "expected_grubhub_id": "517712"
+    }
   },
   "grubhub": {
     "discovery": [
@@ -10817,7 +10965,7 @@
         "notes": [
           "No schema.org Restaurant data on the Grubhub page (the page may need JavaScript). Fields come from the URL only."
         ],
-        "observed_at": "2026-10-08T01:30:11Z",
+        "observed_at": "2026-10-08T01:34:52Z",
         "page_jsonld_types": []
       },
       "page_structure": {
@@ -10828,7 +10976,7 @@
           "status": 200,
           "final_url": "https://www.grubhub.com/restaurant/lou-malnatis-pizzeria-85-s-buffalo-grove-rd-buffalo-grove/517712",
           "content_type": "text/html",
-          "fetched_at": "2026-10-08T01:30:14Z",
+          "fetched_at": "2026-10-08T01:34:55Z",
           "from_cache": true,
           "via": "http",
           "barrier": null,
@@ -10892,5 +11040,5 @@
       }
     }
   },
-  "finished_at": "2026-10-08T01:30:14Z"
+  "finished_at": "2026-10-08T01:34:55Z"
 }
