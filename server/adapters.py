@@ -322,6 +322,10 @@ def extract_grubhub(client: PoliteClient, url: str, grubhub_base: str) -> dict:
 
 def inspect_url(client: PoliteClient, url: str, use_browser: bool = False) -> dict:
     fetched = client.fetch(url, kind="inspect", ttl=0, use_browser=use_browser)
+    return inspect_fetched(url, fetched)
+
+
+def inspect_fetched(url: str, fetched) -> dict:
     report = {"url": url, "fetch": fetched.summary()}
     if not fetched.ok:
         return report
@@ -361,6 +365,6 @@ def order_prefilter(order: dict) -> set[str]:
 
 __all__ = [
     "DoorDashAdapter", "UberEatsAdapter", "make_adapters", "parse_store_page", "build_observation",
-    "store_links_from_page", "extract_grubhub", "inspect_url", "order_prefilter", "chain_guess_from_slug",
+    "store_links_from_page", "extract_grubhub", "inspect_url", "inspect_fetched", "order_prefilter", "chain_guess_from_slug",
     "barrier",
 ]

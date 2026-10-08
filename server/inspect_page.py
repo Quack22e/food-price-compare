@@ -25,11 +25,15 @@ from .config import Config
 def save_capture(svc: Service, url: str, browser: bool, out_dir: Path) -> None:
     """Store a real page (HTML + provenance) for tests/test_real_captures.py."""
     out = svc.client.fetch(url, kind="inspect", ttl=0, use_browser=browser)
+    save_capture_outcome(svc, url, out, out_dir)
+
+
+def save_capture_outcome(svc: Service, url: str, out, out_dir: Path, suffix: str = "") -> None:
     if not out.ok:
         print(f"not saved: {out.barrier or out.error}", file=sys.stderr)
         return
     out_dir.mkdir(parents=True, exist_ok=True)
-    stem = re.sub(r"[^A-Za-z0-9]+", "_", urlsplit(url).netloc + urlsplit(url).path).strip("_")[:120]
+    stem = re.sub(r"[^A-Za-z0-9]+", "_", urlsplit(url).netloc + urlsplit(url).path).strip("_")[:120] + suffix
     (out_dir / f"{stem}.html").write_bytes(out.body or b"")
     (out_dir / f"{stem}.json").write_text(json.dumps({
         "url": url, "final_url": out.final_url, "status": out.status, "fetched_at": out.fetched_at,
