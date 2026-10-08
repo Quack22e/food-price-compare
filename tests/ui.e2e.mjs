@@ -247,6 +247,27 @@ describe('index.html end-to-end', { timeout: 300000 }, () => {
     await page.click('#resetOrder');
   });
 
+  it('fills the Grubhub item and price from the Grubhub-owned MenuPages menu', async () => {
+    await page.click('#resetOrder');
+    await page.click('#inputTabs button[data-tab="link"]');
+    await page.fill('#ghUrl', 'https://www.grubhub.com/restaurant/lou-malnatis-pizzeria-6456-s-cicero-ave-chicago/434510');
+    await page.click('#ghExtract');
+    await page.waitForSelector('#ghMenuSelect', { timeout: 30000 });
+    assert.equal(await page.inputValue('#chain'), "Lou Malnati's Pizzeria");
+    assert.match(await text('#ghMenu'), /Grubhub menu for Lou Malnati's Pizzeria, 6456 S Cicero Ave, Chicago, IL/);
+    await page.fill('#it0_qty', '2');
+    const opt = await page.locator('#ghMenuSelect option', { hasText: 'Small - Deep Dish Margherita' }).getAttribute('value');
+    await page.selectOption('#ghMenuSelect', opt);
+    assert.equal(await page.inputValue('#it0_name'), 'Small - Deep Dish Margherita');
+    assert.equal(await page.inputValue('#it0_gh'), '43.10');
+    assert.match(await text('#it0_hint'), /Grubhub price \$21\.55 × 2 from MenuPages/);
+    assert.match(await text('#it0_hint'), /Detected in name: size small/);
+    // The fixture source is http://127.0.0.1, which the URL allowlist refuses to link.
+    assert.match(await text('#ghMenu'), /Source page \(no link\)/);
+    assert.equal(await page.locator('#ghMenu a').count(), 0);
+    await page.click('#resetOrder');
+  });
+
   it('probes platforms', async () => {
     await page.click('#probeBtn');
     await waitText('#progressArea', /Live probe results/, 30000);

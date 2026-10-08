@@ -167,3 +167,43 @@ def build_ubereats(site: FakeSite):
         [("Chicken", "10 pc Chicken McNuggets", "4.00", "CAD", None, None)], country="CA"))
     site.route("/store/mcdonalds-js-only/NoMenu555555", "<html><head><title>McDonald's</title></head><body><div id=root></div></body></html>")
     return urls
+
+
+def build_menupages(mp, gh_id="434510", layout="exact"):
+    """SYNTHETIC MenuPages-shaped site (shape observed on real MenuPages pages, 2026-10-08).
+
+    layout="midway" mirrors the live listing: the sitemap's exact-slug URL is
+    not the page that links to Grubhub; a same-address "-midway" page is, and a
+    same-address decoy links to a different Grubhub restaurant.
+    """
+    import gzip as _gz
+    import json
+    b = mp.base
+    mp.route("/robots.txt", f"User-agent: *\nDisallow: /*/*/checkout\nSitemap: {b}/sitemap-index.xml\n", ctype="text/plain")
+    mp.route("/sitemap-index.xml", '<?xml version="1.0"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
+             f'<sitemap><loc>{b}/sitemap-restaurants.xml.gz</loc></sitemap><sitemap><loc>{b}/sitemap-states.xml</loc></sitemap></sitemapindex>',
+             ctype="application/xml")
+    urls = [f"{b}/planet-pizza/411-main-st-ridgefield", f"{b}/planet-pizza/6456-s-cicero-ave-chicago",
+            f"{b}/lou-malnatis-pizzeria/6456-s-cicero-ave-chicago"]
+    if layout == "midway":
+        urls += [f"{b}/lou-malnatis-pizzeria-express/6456-s-cicero-ave-chicago", f"{b}/lou-malnatis-pizzeria-midway/6456-s-cicero-ave-chicago"]
+    xml = '<?xml version="1.0"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + "".join(f"<url><loc>{u}</loc></url>" for u in urls) + "</urlset>"
+    mp.routes["/sitemap-restaurants.xml.gz"] = {"body": _gz.compress(xml.encode()), "status": 200, "headers": {}, "delay": None, "ctype": "application/x-gzip"}
+    rest = {"@context": "https://schema.org", "@type": "Restaurant", "name": "Lou Malnati&#39;s Pizzeria",
+            "address": {"@type": "PostalAddress", "streetAddress": "6456 S Cicero Ave", "addressLocality": "Chicago", "addressRegion": "IL", "postalCode": "60638", "addressCountry": "US"},
+            "hasMenu": f"{b}/lou-malnatis-pizzeria/6456-s-cicero-ave-chicago"}
+    menu = {"@context": "https://schema.org", "@type": "Menu", "hasMenuSection": [{"@type": "MenuSection", "name": "Deep Dish", "hasMenuItem": [
+        {"@type": "MenuItem", "name": "Small - Deep Dish Margherita", "offers": {"@type": "Offer", "price": "21.55", "priceCurrency": "USD"}},
+        {"@type": "MenuItem", "name": "Personal - Deep Dish Margherita", "offers": {"@type": "Offer", "price": "14.25", "priceCurrency": "USD"}}]}]}
+    def page(linked_id):
+        return ("<html><head><title>Lou</title>"
+                f"<script type=\"application/ld+json\" id=\"restaurantStructuredData\">{json.dumps(rest)}</script>"
+                f"<script type=\"application/ld+json\" id=\"menuStructuredData\">{json.dumps(menu)}</script></head><body>"
+                f"<a href=\"https://www.grubhub.com/restaurant/lou-malnatis-pizzeria-6456-s-cicero-ave-chicago/{linked_id}\">Order on Grubhub</a></body></html>")
+    mp.route("/planet-pizza/6456-s-cicero-ave-chicago", page("111111"))  # same address, other name: never a candidate
+    if layout == "midway":
+        mp.route("/lou-malnatis-pizzeria/6456-s-cicero-ave-chicago", "<html><title>Not found</title></html>", status=404)
+        mp.route("/lou-malnatis-pizzeria-express/6456-s-cicero-ave-chicago", page("222222"))
+        mp.route("/lou-malnatis-pizzeria-midway/6456-s-cicero-ave-chicago", page(gh_id))
+    else:
+        mp.route("/lou-malnatis-pizzeria/6456-s-cicero-ave-chicago", page(gh_id))

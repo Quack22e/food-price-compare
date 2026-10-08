@@ -25,8 +25,9 @@ from fake_platform import FakeSite, build_doordash, build_ubereats, restaurant_p
 
 def make_cfg(tmp_path, bases: dict, **kw) -> Config:
     cfg = Config()
+    # Unit tests never reach real sites: MenuPages defaults to a closed local port.
     cfg.platform_bases = {"doordash": "https://www.doordash.com", "ubereats": "https://www.ubereats.com",
-                          "grubhub": "https://www.grubhub.com", **bases}
+                          "grubhub": "https://www.grubhub.com", "menupages": "http://127.0.0.1:9", **bases}
     cfg.test_mode = True
     cfg.data_dir = tmp_path / "data"
     cfg.min_interval_s = 0.01
@@ -534,3 +535,57 @@ def test_state_store_sitemap_read_first_for_location_filter(sites, tmp_path):
     wait_for(job)
     done = job.state["platforms"]["doordash"]["sitemaps"]["done"]
     assert done[1].endswith("sitemap-doordash-tx-stores.xml")  # index first, then the filtered state
+
+
+# ---------------------------------------------------------------- Grubhub prices via MenuPages (synthetic fixtures)
+
+from fake_platform import build_menupages as _menupages_site  # noqa: E402
+
+
+def test_grubhub_menu_via_menupages(sites, tmp_path):
+    _, _, gh = sites
+    mp = FakeSite()
+    try:
+        _menupages_site(mp)
+        gh.route("/robots.txt", "User-agent: *\nAllow: /\n", ctype="text/plain")
+        gh.route("/restaurant/lou-malnatis-pizzeria-6456-s-cicero-ave-chicago/434510", "<html><head><title>Prepare your taste buds...</title></head><body><div id=app></div></body></html>")
+        cfg = make_cfg(tmp_path, {"grubhub": gh.base, "menupages": mp.base})
+        client = PoliteClient(cfg, DiskCache(cfg.data_dir))
+        r = extract_grubhub(client, "https://www.grubhub.com/restaurant/lou-malnatis-pizzeria-6456-s-cicero-ave-chicago/434510", gh.base, mp.base)
+        assert r["ok"] and r["fields"]["chain"] == "Lou Malnati's Pizzeria"
+        assert "linked to this Grubhub ID" in r["field_sources"]["chain"]
+        assert r["fields"]["restaurant_address"]["zip"] == "60638"
+        menu = r["grubhub_menu"]
+        assert {(i["name"], i["price_cents"]) for i in menu["items"]} == {("Small - Deep Dish Margherita", 2155), ("Personal - Deep Dish Margherita", 1425)}
+        assert menu["source_url"].endswith("/lou-malnatis-pizzeria/6456-s-cicero-ave-chicago") and menu["grubhub_ids_linked"] == ["434510"]
+        assert "/sitemap-states.xml" not in mp.hits  # only restaurant sitemaps are read
+        # Same slug but the page links to a different Grubhub restaurant: not used.
+        mp2 = FakeSite()
+        try:
+            _menupages_site(mp2, gh_id="999999")
+            cfg2 = make_cfg(tmp_path / "c2", {"grubhub": gh.base, "menupages": mp2.base})
+            r2 = extract_grubhub(PoliteClient(cfg2, DiskCache(cfg2.data_dir)), "https://www.grubhub.com/restaurant/lou-malnatis-pizzeria-6456-s-cicero-ave-chicago/434510", gh.base, mp2.base)
+            assert "grubhub_menu" not in r2 and any("not 434510" in n for n in r2["notes"])
+        finally:
+            mp2.close()
+            # A MenuPages base outside the configured allowlist is refused.
+            r_bad = extract_grubhub(client, "https://www.grubhub.com/restaurant/lou-malnatis-pizzeria-6456-s-cicero-ave-chicago/434510", gh.base, mp2.base)
+            assert "grubhub_menu" not in r_bad and any("not_allowed" in n for n in r_bad["notes"])
+        # Live layout: exact-slug page 404s, a same-address decoy links elsewhere,
+        # the "-midway" page links to this Grubhub ID and is used.
+        mp3 = FakeSite()
+        try:
+            _menupages_site(mp3, layout="midway")
+            cfg3 = make_cfg(tmp_path / "c3", {"grubhub": gh.base, "menupages": mp3.base})
+            r4 = extract_grubhub(PoliteClient(cfg3, DiskCache(cfg3.data_dir)), "https://www.grubhub.com/restaurant/lou-malnatis-pizzeria-6456-s-cicero-ave-chicago/434510", gh.base, mp3.base)
+            assert r4["grubhub_menu"]["source_url"].endswith("/lou-malnatis-pizzeria-midway/6456-s-cicero-ave-chicago")
+            assert any("not 434510" in n for n in r4["notes"])  # the decoy was checked and refused
+            assert "/planet-pizza/6456-s-cicero-ave-chicago" not in mp3.hits
+        finally:
+            mp3.close()
+        # Not listed on MenuPages: clear note, manual entry.
+        r3 = extract_grubhub(client, "https://www.grubhub.com/restaurant/lou-malnatis-pizzeria-85-s-buffalo-grove-rd-buffalo-grove/517712", gh.base, mp.base)
+        assert "grubhub_menu" not in r3 and any("not listed on MenuPages" in n for n in r3["notes"])
+        assert r3["fields"]["chain"] == "Lou Malnatis Pizzeria"  # URL guess, flagged
+    finally:
+        mp.close()

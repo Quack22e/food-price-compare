@@ -138,8 +138,22 @@ def explore_grubhub(svc):
         url = found[0]
         result = extract_grubhub(svc.client, url, svc.cfg.platform_bases["grubhub"])
         page = svc.client.fetch(url.split("?")[0], kind="page")  # served from the extractor's cache
-        entry["extract"] = {"url": url, "result": result, "page_structure": inspect_fetched(url, page)}
+        entry["extract"] = {"url": url, "result": _menu_summary(result), "page_structure": inspect_fetched(url, page)}
+    # The app's Grubhub extractor on a Grubhub URL that MenuPages itself links to
+    # (observed on menupages.com/lou-malnatis-pizzeria-midway/6456-s-cicero-ave-chicago,
+    # run 37713405667): exercises the Grubhub -> MenuPages price path end to end.
+    url = "https://www.grubhub.com/restaurant/lou-malnatis-pizzeria-6456-s-cicero-ave-chicago/434510"
+    entry["menupages_path"] = {"url": url, "result": _menu_summary(extract_grubhub(svc.client, url, svc.cfg.platform_bases["grubhub"]))}
     return entry
+
+
+def _menu_summary(result):
+    """Keep the report small: item count plus a sample of the MenuPages menu."""
+    r = dict(result)
+    menu = r.get("grubhub_menu")
+    if menu:
+        r["grubhub_menu"] = dict(menu, item_count=len(menu["items"]), items=menu["items"][:12])
+    return r
 
 
 MIRROR_PAGES = {

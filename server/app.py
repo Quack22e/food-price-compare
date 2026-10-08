@@ -180,7 +180,8 @@ def make_handler(svc: Service):
                     return self._send(200, {"probe": svc.probe(plats)})
                 if path == "/api/grubhub/extract":
                     url = str(body.get("url") or "")[:2000]
-                    return self._send(200, extract_grubhub(svc.client, url, svc.cfg.platform_bases["grubhub"]))
+                    return self._send(200, extract_grubhub(svc.client, url, svc.cfg.platform_bases["grubhub"],
+                                                           svc.cfg.platform_bases.get("menupages")))
                 if path == "/api/inspect":
                     url = str(body.get("url") or "")[:2000]
                     return self._send(200, inspect_url(svc.client, url, bool(body.get("browser"))))

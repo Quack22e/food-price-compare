@@ -153,6 +153,7 @@ tr.details td { background: var(--bg); }
         <label for="ghUrl">Grubhub restaurant or menu-item URL</label>
         <div class="row"><input id="ghUrl" class="grow2" type="url" placeholder="https://www.grubhub.com/restaurant/…/12345?menuItemId=…" spellcheck="false"><button id="ghExtract" class="shrink" type="button">Extract</button></div>
         <div id="ghResult"></div>
+        <div id="ghMenu"></div>
       </div>
       <div data-pane="paste" hidden>
         <label for="receiptText">Paste order confirmation / receipt text</label>
@@ -1094,7 +1095,7 @@ tr.details td { background: var(--bg); }
     try {
       var x = new URL(String(u));
       if (x.protocol !== 'https:' || x.username || x.password) return null;
-      var hosts = platform ? PLATFORM_HOSTS[platform] : [].concat(PLATFORM_HOSTS.doordash, PLATFORM_HOSTS.ubereats, ['www.grubhub.com', 'grubhub.com']);
+      var hosts = platform ? PLATFORM_HOSTS[platform] : [].concat(PLATFORM_HOSTS.doordash, PLATFORM_HOSTS.ubereats, ['www.grubhub.com', 'grubhub.com', 'menupages.com', 'www.menupages.com']);
       if (!hosts || hosts.indexOf(x.hostname.toLowerCase()) < 0) return null;
       return x.href;
     } catch (e) { return null; }
@@ -1517,8 +1518,10 @@ tr.details td { background: var(--bg); }
     }
     $('ghExtract').disabled = true;
     setKids(out, msg('', 'Retrieving the Grubhub page through the backend (robots.txt-checked)…'));
-    api('/api/grubhub/extract', { method: 'POST', body: { url: url }, timeout: 90000 }).then(function (r) {
+    setKids($('ghMenu'));
+    api('/api/grubhub/extract', { method: 'POST', body: { url: url }, timeout: 120000 }).then(function (r) {
       applyFields(r.fields || {});
+      renderGrubhubMenu(r.grubhub_menu);
       var notes = (r.notes || []).slice();
       (r.barriers || []).forEach(function (b) { notes.unshift('Barrier: ' + b.kind + ' — ' + b.detail); });
       Object.keys(r.field_sources || {}).forEach(function (k) { notes.push(k + ': ' + r.field_sources[k]); });
@@ -1528,6 +1531,38 @@ tr.details td { background: var(--bg); }
       applyFields({ chain: local.chainGuess });
       setKids(out, msg('bad', 'Extraction failed (' + e.message + '). Chain guessed from the URL; enter the item manually.'));
     }).then(function () { $('ghExtract').disabled = false; });
+  }
+  function renderGrubhubMenu(menu) {
+    var box = $('ghMenu');
+    if (!menu || !menu.items || !menu.items.length) { setKids(box); return; }
+    var sel = h('select', { id: 'ghMenuSelect' }, h('option', { value: '' }, 'Choose your item (' + menu.items.length + ' listings)'),
+      menu.items.map(function (it, i) {
+        return h('option', { value: String(i) }, it.name + (it.variant ? ' — ' + it.variant : '') + ' · ' +
+          (Number.isInteger(it.price_cents) ? E.formatCents(it.price_cents) : 'price set by options') + (it.section ? '  (' + it.section + ')' : ''));
+      }));
+    var target = h('select', { id: 'ghMenuTarget', 'aria-label': 'Order item to fill' }, S.order.items.map(function (it, i) {
+      return h('option', { value: String(i) }, 'Fill item ' + (i + 1) + (it.name ? ': ' + it.name : ''));
+    }));
+    sel.addEventListener('change', function () {
+      var it = menu.items[+sel.value]; if (!it) return;
+      var idx = +target.value || 0;
+      var item = S.order.items[idx] || (S.order.items[idx] = newItem());
+      item.name = it.name; item.size = it.variant || '';
+      var q = /^\d{1,3}$/.test(String(item.quantity || '').trim()) ? +item.quantity : 1;
+      item._notes = (item._notes || []).filter(function (n) { return n.indexOf('MenuPages') < 0; });
+      if (Number.isInteger(it.price_cents)) {
+        item.ghSubtotal = (E.mulCents(it.price_cents, q) / 100).toFixed(2);
+        item._notes.push('Grubhub price ' + E.formatCents(it.price_cents) + ' × ' + q + ' from MenuPages (Grubhub-owned), observed ' + rel(menu.observed_at) + '. It excludes option charges; add them if you chose options.');
+      } else {
+        item.ghSubtotal = '';
+        item._notes.push('MenuPages lists this item without a price (set by options); enter your Grubhub item subtotal.');
+      }
+      renderOrder();
+    });
+    setKids(box, h('div', { class: 'msg ok' },
+      h('label', { for: 'ghMenuSelect' }, 'Grubhub menu for ' + (menu.restaurant_name || 'this restaurant') + (menu.address ? ', ' + [menu.address.street, menu.address.city, menu.address.state].filter(Boolean).join(', ') : '')),
+      h('div', { class: 'row' }, h('div', { class: 'grow2' }, sel), h('div', null, target)),
+      h('div', { class: 'note' }, 'Read from MenuPages, a Grubhub-owned site, which links to this exact Grubhub listing. Prices exclude option charges and fees. ', safeLink(menu.source_url, 'Source page'))));
   }
   function receiptParse() {
     var r = E.parseReceipt($('receiptText').value);

@@ -19,6 +19,9 @@ DEFAULT_PLATFORM_BASES = {
     "doordash": "https://www.doordash.com",
     "ubereats": "https://www.ubereats.com",
     "grubhub": "https://www.grubhub.com",
+    # Grubhub-owned menu site that publishes Grubhub menus as schema.org
+    # JSON-LD (observed live); used only to read the Grubhub-side price.
+    "menupages": "https://menupages.com",
 }
 
 

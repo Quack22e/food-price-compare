@@ -254,7 +254,7 @@ def chain_guess_from_slug(slug: str) -> str:
     return " ".join(w.capitalize() for w in words) if words else ""
 
 
-def extract_grubhub(client: PoliteClient, url: str, grubhub_base: str) -> dict:
+def extract_grubhub(client: PoliteClient, url: str, grubhub_base: str, menupages_base: str | None = None) -> dict:
     out = {"ok": False, "url": url, "fields": {}, "field_sources": {}, "barriers": [], "notes": [],
            "observed_at": utcnow_iso()}
     try:
@@ -273,47 +273,66 @@ def extract_grubhub(client: PoliteClient, url: str, grubhub_base: str) -> dict:
         return out
     qs = parse_qs(parts.query)
     menu_item_id = (qs.get("menuItemId") or [None])[0]
+    gh_id = m.group("id")
     guess = chain_guess_from_slug(m.group("slug"))
-    out["fields"].update({"grubhub_restaurant_id": m.group("id"), "grubhub_menu_item_id": menu_item_id})
+    out["fields"].update({"grubhub_restaurant_id": gh_id, "grubhub_menu_item_id": menu_item_id})
     if guess:
         out["fields"]["chain"] = guess
         out["field_sources"]["chain"] = "guessed from URL slug (confirm spelling/punctuation)"
-    # Always fetched from the configured Grubhub base (the real site unless
-    # the test-suite substitutes a local fixture server).
+
+    # 1) The Grubhub page itself. Always fetched from the configured Grubhub
+    # base (the real site unless the test-suite substitutes a local fixture).
     canonical = grubhub_base.rstrip("/") + parts.path
     fetched = client.fetch(canonical + (f"?menuItemId={menu_item_id}" if menu_item_id else ""), kind="page")
+    parsed = None
     if fetched.barrier:
         out["barriers"].append(fetched.barrier)
-        out["notes"].append("Grubhub page could not be retrieved (see barrier). Fields derived from the URL "
-                            "only; complete the item details manually.")
-        return out
-    if not fetched.ok:
-        out["notes"].append(f"Grubhub page fetch failed: {fetched.error}. Complete the details manually.")
-        return out
-    parsed = parse_store_page(fetched.text, fetched.final_url or canonical, m.group("id"))
-    if parsed["restaurant_found"] and parsed["name"]:
-        out["fields"]["chain"] = parsed["name"]
-        out["field_sources"]["chain"] = "schema.org Restaurant.name on the Grubhub page"
-        addr, _ = normalize_us_address(parsed["address_raw"])
-        if addr:
-            out["fields"]["restaurant_address"] = addr
-    if menu_item_id:
-        hit = next((it for it in parsed["items"] if it.get("item_id") and menu_item_id in it["item_id"]), None)
-        if hit:
-            out["fields"]["item"] = hit["name"]
-            out["field_sources"]["item"] = "schema.org MenuItem matching menuItemId"
-            if hit.get("variant"):
-                out["fields"]["size"] = hit["variant"]
-            if hit.get("price_cents") is not None and (hit.get("currency") or "").upper() == "USD":
-                out["fields"]["unit_price_cents"] = hit["price_cents"]
-                out["field_sources"]["unit_price_cents"] = "MenuItem Offer price (base price, before options)"
-        else:
-            out["notes"].append("The page did not publish a MenuItem matching menuItemId; enter the item name.")
-    if not parsed["restaurant_found"]:
-        out["notes"].append("No schema.org Restaurant data on the Grubhub page (the page may need JavaScript). "
-                            "Fields come from the URL only.")
+        out["notes"].append("Grubhub page could not be retrieved (see barrier).")
+    elif not fetched.ok:
+        out["notes"].append(f"Grubhub page fetch failed: {fetched.error}.")
+    else:
+        parsed = parse_store_page(fetched.text, fetched.final_url or canonical, gh_id)
+        out["page_jsonld_types"] = parsed["jsonld_types"]
+        if parsed["restaurant_found"] and parsed["name"]:
+            out["fields"]["chain"] = parsed["name"]
+            out["field_sources"]["chain"] = "schema.org Restaurant.name on the Grubhub page"
+            addr, _ = normalize_us_address(parsed["address_raw"])
+            if addr:
+                out["fields"]["restaurant_address"] = addr
+        if menu_item_id and parsed["items"]:
+            hit = next((it for it in parsed["items"] if it.get("item_id") and menu_item_id in it["item_id"]), None)
+            if hit:
+                out["fields"]["item"] = hit["name"]
+                out["field_sources"]["item"] = "schema.org MenuItem matching menuItemId"
+                if hit.get("variant"):
+                    out["fields"]["size"] = hit["variant"]
+                if hit.get("price_cents") is not None and (hit.get("currency") or "").upper() == "USD":
+                    out["fields"]["unit_price_cents"] = hit["price_cents"]
+                    out["field_sources"]["unit_price_cents"] = "MenuItem Offer price (base price, before options)"
+        if not parsed["restaurant_found"]:
+            out["notes"].append("The Grubhub page publishes no structured data (its content is drawn by JavaScript).")
+
+    # 2) The same restaurant's menu on MenuPages (Grubhub-owned), matched by
+    # slug and accepted only if that page links back to this Grubhub ID.
+    mp_base = menupages_base or client.cfg.platform_bases.get("menupages")
+    if mp_base and not out["fields"].get("item"):
+        from .grubhub_mirror import grubhub_menu_for
+        menu = grubhub_menu_for(client, m.group("slug"), gh_id, mp_base)
+        out["notes"] += menu.get("notes", [])
+        if menu.get("barrier"):
+            out["barriers"].append(menu["barrier"])
+        if menu.get("ok"):
+            out["grubhub_menu"] = {k: menu.get(k) for k in ("restaurant_name", "address", "items", "source_url",
+                                                           "observed_at", "source", "price_context", "grubhub_ids_linked")}
+            out["fields"]["chain"] = menu["restaurant_name"]
+            out["field_sources"]["chain"] = "restaurant name on MenuPages (Grubhub-owned), linked to this Grubhub ID"
+            if menu.get("address"):
+                out["fields"]["restaurant_address"] = menu["address"]
+            out["notes"].append(f"Grubhub menu with {len(menu['items'])} priced listings found on MenuPages; "
+                                "pick your item to fill its name and Grubhub price.")
+    if not out.get("grubhub_menu") and not out["fields"].get("item"):
+        out["notes"].append("Complete the item details and the Grubhub item subtotal manually.")
     out["ok"] = bool(out["fields"].get("chain"))
-    out["page_jsonld_types"] = parsed["jsonld_types"]
     return out
 
 

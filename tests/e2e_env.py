@@ -15,11 +15,12 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 from server.app import serve  # noqa: E402
 from server.config import Config  # noqa: E402
-from fake_platform import FakeSite, build_doordash, build_ubereats, restaurant_page  # noqa: E402
+from fake_platform import FakeSite, build_doordash, build_menupages, build_ubereats, restaurant_page  # noqa: E402
 
 
 def main():
-    dd, ue, gh = FakeSite(), FakeSite(), FakeSite()
+    dd, ue, gh, mp = FakeSite(), FakeSite(), FakeSite(), FakeSite()
+    build_menupages(mp)
     build_doordash(dd, n_stores=6, slow=float(os.environ.get("E2E_SLOW", "0.35")))
     build_ubereats(ue)
     gh.route("/robots.txt", "User-agent: *\nAllow: /\n", ctype="text/plain")
@@ -27,7 +28,9 @@ def main():
         "McDonald's", gh.base + "/restaurant/mcdonalds-1-main-st-chicago/555", "1 Main St", "Chicago", "IL", "60601",
         [("Chicken", "Chicken McNuggets", "6.29", "USD", None, {"identifier": "menuitem-777"})]))
     cfg = Config()
-    cfg.platform_bases = {"doordash": dd.base, "ubereats": ue.base, "grubhub": gh.base}
+    gh.route("/restaurant/lou-malnatis-pizzeria-6456-s-cicero-ave-chicago/434510",
+             "<html><head><title>Prepare your taste buds...</title></head><body><div id=app></div></body></html>")
+    cfg.platform_bases = {"doordash": dd.base, "ubereats": ue.base, "grubhub": gh.base, "menupages": mp.base}
     cfg.test_mode = True
     cfg.data_dir = __import__("pathlib").Path(tempfile.mkdtemp(prefix="fpc-e2e-"))
     cfg.min_interval_s = 0.02
