@@ -326,7 +326,8 @@ class Job:
         toks = self._chain_tokens()
         added = 0
         if parsed["kind"] == "index":
-            children = [l["loc"] for l in parsed["locs"] if urlsplit(l["loc"]).netloc.lower() == adapter.host]
+            ok_hosts = {adapter.host, *self.cfg.sitemap_hosts.get(platform, [])}
+            children = [l["loc"] for l in parsed["locs"] if urlsplit(l["loc"]).netloc.lower() in ok_hosts]
             # Read store/brand sitemaps first; everything stays queued for resume.
             def rank(u):
                 lu = u.lower()

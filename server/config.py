@@ -68,6 +68,10 @@ class Config:
     max_chain_pages: int = 5
     data_dir: Path = Path(os.environ.get("FPC_DATA_DIR", str(APP_ROOT / ".fpc-data")))
     platform_bases: dict = field(default_factory=lambda: dict(DEFAULT_PLATFORM_BASES))
+    # Hosts a platform serves its robots.txt-declared sitemaps from. Only
+    # sitemap fetches may use them. Observed live (2026-10-08): DoorDash's
+    # declared sitemaps redirect to https://cdn.doordash.com/sitemaps/...
+    sitemap_hosts: dict = field(default_factory=lambda: {"doordash": ["cdn.doordash.com"]})
     # Only the test-suite sets this; it lets plain-http local fixtures stand in
     # for the real hosts.
     test_mode: bool = False
@@ -86,3 +90,7 @@ class Config:
         from urllib.parse import urlsplit
 
         return {urlsplit(b).netloc.lower() for b in self.platform_bases.values()}
+
+    @property
+    def sitemap_only_hosts(self) -> set[str]:
+        return {h.lower() for hosts in self.sitemap_hosts.values() for h in hosts}

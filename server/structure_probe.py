@@ -140,7 +140,14 @@ def probe_structure(html: str) -> dict:
         hits = [m.start() for m in re.finditer(r'\\?"' + key + r'\\?"\s*:', html)][:2]
         if hits:
             key_ctx[key] = [_snip(html, i, 100) for i in hits]
+    phrases = {}
+    for ph in ("estimated based on", "prices are estimated", "may vary", "price may differ", "prices may differ",
+               "prices vary", "menu prices", "service fee"):
+        i = lower.find(ph)
+        if i >= 0:
+            phrases[ph] = _snip(html, i, 110)
     return {
+        "phrases": phrases,
         "key_contexts": key_ctx,
         "bytes": len(html),
         "challenge_markers": markers[:10],

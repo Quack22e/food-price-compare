@@ -508,3 +508,13 @@ def test_redirect_to_bot_challenge_is_a_captcha_barrier(sites, tmp_path):
     cfg = make_cfg(tmp_path, {"doordash": dd.base})
     out = PoliteClient(cfg, DiskCache(cfg.data_dir)).fetch(dd.base + "/store/x/AbCdEf123456")
     assert out.barrier["kind"] == "captcha" and "not followed" in out.barrier["detail"]
+
+
+def test_sitemap_cdn_host_allowed_for_sitemaps_only(tmp_path):
+    cfg = make_cfg(tmp_path, {})
+    cfg.test_mode = False
+    client = PoliteClient(cfg, DiskCache(cfg.data_dir))
+    url = "https://cdn.doordash.com/sitemaps/sitemaps/sitemap-store-doordash-index.xml"
+    assert client.check_allowed_url(url, "sitemap") is None          # observed redirect target for sitemaps
+    assert client.check_allowed_url(url, "page") is not None          # never for pages
+    assert client.check_allowed_url("https://cdn.doordash.com/x", "inspect") is not None

@@ -9,8 +9,9 @@ so tests/test_real_captures.py can verify the extractors against them.
 Request budget: 3 robots.txt, two search jobs limited to 3 stores and 3
 sitemap documents each (6 stores for the Uber Eats job), up to 7 inspected
 pages (4 fixed + 3 discovered), DoorDash's business_menu sitemap (index + one
-child + 2 pages), and Grubhub: homepage and/or /sitemap.xml to find one real
-restaurant link, then one run of the Grubhub URL extractor. Grubhub's Terms of
+child + 2 pages; store sitemap index + one child), and Grubhub: homepage,
+/sitemap.xml, or a Grubhub-powered AllMenus page to find one real restaurant
+link, then one run of the Grubhub URL extractor. Grubhub's Terms of
 Use prohibit automated scraping; this single fetch exercises the user-requested
 link-extraction feature and nothing more.
 """
@@ -63,6 +64,11 @@ def explore_doordash_menu_sitemap(svc, report, captures):
     declared = (report["probe"].get("doordash") or {}).get("declared_sitemaps") or []
     idx_url = next((u for u in declared if "business_menu" in u), None)
     entry = {"declared": idx_url}
+    store_idx = next((u for u in declared if "sitemap-store" in u), None)
+    if store_idx:
+        entry["store_index"], store_children = _sitemap(svc, store_idx)
+        if store_children:
+            entry["store_child"], _ = _sitemap(svc, store_children[0])
     if not idx_url:
         return entry
     entry["index"], children = _sitemap(svc, idx_url)
@@ -103,6 +109,30 @@ def explore_grubhub(svc):
         entry["discovery"].append(rec)
         if found:
             break
+    if not found:
+        # AllMenus is Grubhub-powered; its Lou Malnati's (Buffalo Grove) page,
+        # found via web search, links to the restaurant's Grubhub listing.
+        # Fetched with the same robots/rate-limit rules via a separate client
+        # (the app's own allowlist is unchanged).
+        import copy
+        from server.http_client import PoliteClient
+        cfg2 = copy.deepcopy(svc.cfg)
+        cfg2.platform_bases = dict(cfg2.platform_bases, allmenus="https://www.allmenus.com")
+        client2 = PoliteClient(cfg2, svc.cache)
+        page = "https://www.allmenus.com/il/buffalo-grove/233783-lou-malnatis-pizzeria/menu/"
+        out = client2.fetch(page, kind="inspect", ttl=0)
+        rec = {"url": page, "status": out.status, "barrier": out.barrier and out.barrier["kind"], "bytes": len(out.body or b"")}
+        gh_links = []
+        if out.ok:
+            for a in scan_html(out.text, page).anchors:
+                parts = __import__("urllib.parse").parse.urlsplit(a["href"])
+                if parts.netloc.lower().endswith("grubhub.com"):
+                    gh_links.append(a["href"])
+                    if GRUBHUB_PATH_RE.match(parts.path):
+                        found.append(a["href"])
+        rec["grubhub_links_sample"] = gh_links[:8]
+        rec["restaurant_links"] = len(found)
+        entry["discovery"].append(rec)
     entry["restaurant_links_found"] = len(found)
     if found:
         url = found[0]

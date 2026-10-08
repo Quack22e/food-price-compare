@@ -302,14 +302,15 @@ class PoliteClient:
             self._tls.session = s
         return s
 
-    def check_allowed_url(self, url: str) -> str | None:
+    def check_allowed_url(self, url: str, kind: str = "page") -> str | None:
         try:
             parts = urlsplit(url)
         except ValueError:
             return "malformed URL"
         if parts.scheme != "https" and not (self.cfg.test_mode and parts.scheme == "http"):
             return "only https URLs are fetched"
-        if parts.netloc.lower() not in self.cfg.allowed_hosts:
+        host = parts.netloc.lower()
+        if host not in self.cfg.allowed_hosts and not (kind == "sitemap" and host in self.cfg.sitemap_only_hosts):
             return f"host '{parts.netloc}' is not a supported platform host"
         if parts.username or parts.password:
             return "credentials in URLs are not accepted"
@@ -343,7 +344,7 @@ class PoliteClient:
     # -- public fetch ----------------------------------------------------
     def fetch(self, url: str, *, kind: str = "page", cancel: threading.Event | None = None,
               ttl: int | None = None, use_browser: bool = False) -> FetchOutcome:
-        bad = self.check_allowed_url(url)
+        bad = self.check_allowed_url(url, kind)
         if bad:
             return FetchOutcome(url=url, error=bad, barrier=barrier("not_allowed", bad, url))
         return self._fetch_raw(url, kind=kind, cancel=cancel, ttl=ttl, check_robots=True, use_browser=use_browser)
@@ -373,7 +374,7 @@ class PoliteClient:
                 raise Cancelled()
             self.limiter.wait(host, self._interval(host), cancel)
             try:
-                resp, final_url, redirect_barrier = self._get_following_redirects(url, cancel)
+                resp, final_url, redirect_barrier = self._get_following_redirects(url, cancel, kind)
                 if redirect_barrier:
                     return FetchOutcome(url=url, attempts=attempts, final_url=final_url, barrier=redirect_barrier,
                                         error=redirect_barrier["detail"])
@@ -435,7 +436,7 @@ class PoliteClient:
                                     barrier=barrier("network", last_error or "network error", url))
             self._sleep_backoff(attempts, None, cancel)
 
-    def _get_following_redirects(self, url: str, cancel):
+    def _get_following_redirects(self, url: str, cancel, kind: str = "page"):
         """GET with manual redirects: every hop must stay on an allowed
         platform host and be permitted by that host's robots.txt."""
         current = url
@@ -448,7 +449,7 @@ class PoliteClient:
             nxt = urljoin(current, loc)
             if any(h in urlsplit(nxt).path.lower() for h in LOGIN_PATH_HINTS):
                 return None, nxt, barrier("login_wall", f"redirected to a login page ({nxt})", url, resp.status_code)
-            bad = self.check_allowed_url(nxt)
+            bad = self.check_allowed_url(nxt, kind)
             if bad and re.search(r"challenge|captcha|bot[-_]?check|verify", urlsplit(nxt).path + "?" + urlsplit(nxt).query, re.I):
                 # Observed live (Uber Eats, 2026-10-08): bot checks arrive as a
                 # 307 to https://def.uber.com/en/challenge?... - reported, not followed.
