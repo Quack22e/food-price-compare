@@ -34,24 +34,42 @@ MENUPAGES_BASE = "https://menupages.com"
 GRUBHUB_LINK_RE = re.compile(r"grubhub\.com/restaurant/([^/?#]+)/(\d+)")
 
 
-def _restaurant_sitemaps(client: PoliteClient, base: str, cancel=None, label: str = "MenuPages") -> tuple[list[str], list[str]]:
-    """Return (restaurant sitemap URLs, notes) from the robots.txt-declared index."""
-    notes = []
+# Barriers that mean "stop asking this host now" (never worked around).
+STOP_KINDS = {"rate_limited", "captcha", "forbidden", "login_wall", "robots_disallow", "egress_denied", "not_allowed"}
+
+
+def _barrier_kind(f) -> str:
+    return (f.barrier or {}).get("kind") or f.error or "unavailable"
+
+
+def _restaurant_sitemaps(client: PoliteClient, base: str, cancel=None, label: str = "MenuPages") -> dict:
+    """Restaurant sitemap URLs from the robots.txt-declared index.
+
+    Returns {"sitemaps", "notes", "barrier", "complete"}; complete is False
+    when an index could not be read, so callers never claim "not listed".
+    """
+    res = {"sitemaps": [], "notes": [], "barrier": None, "complete": True}
     rules, rb = client.robots(base, cancel)
     index_urls = [u for u in rules.sitemaps if urlsplit(u).netloc == urlsplit(base).netloc] or [base + "/sitemap-index.xml"]
-    out = []
     for idx in index_urls[:3]:
         f = client.fetch(idx, kind="sitemap", cancel=cancel, ttl=client.cfg.cache_ttl_sitemap_s)
         if not f.ok:
-            notes.append(f"{label} sitemap index unavailable ({(f.barrier or {}).get('kind') or f.error})")
+            res["complete"] = False
+            res["notes"].append(f"{label} sitemap index unavailable ({_barrier_kind(f)})")
+            if f.barrier and f.barrier.get("kind") in STOP_KINDS:
+                res["barrier"] = f.barrier
+                break
             continue
         parsed = parse_sitemap(f.body or b"", client.cfg.max_sitemap_bytes)
         locs = [l["loc"] for l in parsed["locs"]]
-        out += [u for u in locs if "restaurant" in u.lower()] if parsed["kind"] == "index" else [idx]
-    return out, notes
+        res["sitemaps"] += [u for u in locs if "restaurant" in u.lower()] if parsed["kind"] == "index" else [idx]
+    return res
 
 
 MAX_CANDIDATES = 4
+
+
+MAX_MENUPAGES_SITEMAPS = 5
 
 
 def find_menupages_pages(client: PoliteClient, grubhub_slug: str, base: str = MENUPAGES_BASE, cancel=None) -> dict:
@@ -62,16 +80,23 @@ def find_menupages_pages(client: PoliteClient, grubhub_slug: str, base: str = ME
     live Midway listing is "lou-malnatis-pizzeria-midway/6456-s-cicero-ave-chicago"
     in pages while the slug is "lou-malnatis-pizzeria-6456-s-cicero-ave-chicago").
     Candidates are only accepted later if the page links to the same Grubhub ID.
+    "Not listed" is said only when every restaurant sitemap was read.
     """
     slug = grubhub_slug.strip("/").lower()
-    res = {"urls": [], "candidates_checked": 0, "notes": []}
+    idx = _restaurant_sitemaps(client, base, cancel)
+    res = {"urls": [], "candidates_checked": 0, "notes": list(idx["notes"]), "barrier": idx["barrier"], "complete": idx["complete"]}
     exact, near = [], []
-    sitemaps, notes = _restaurant_sitemaps(client, base, cancel)
-    res["notes"] += notes
-    for sm in sitemaps[:5]:
+    if len(idx["sitemaps"]) > MAX_MENUPAGES_SITEMAPS:
+        res["complete"] = False
+        res["notes"].append(f"Read {MAX_MENUPAGES_SITEMAPS} of {len(idx['sitemaps'])} MenuPages restaurant sitemaps.")
+    for sm in [] if res["barrier"] else idx["sitemaps"][:MAX_MENUPAGES_SITEMAPS]:
         f = client.fetch(sm, kind="sitemap", cancel=cancel, ttl=client.cfg.cache_ttl_sitemap_s)
         if not f.ok:
-            res["notes"].append(f"MenuPages sitemap {sm} unavailable ({(f.barrier or {}).get('kind') or f.error})")
+            res["complete"] = False
+            res["notes"].append(f"MenuPages sitemap {sm} unavailable ({_barrier_kind(f)})")
+            if f.barrier and f.barrier.get("kind") in STOP_KINDS:
+                res["barrier"] = f.barrier
+                break
             continue
         for loc in parse_sitemap(f.body or b"", client.cfg.max_sitemap_bytes)["locs"]:
             parts = [p.lower() for p in urlsplit(loc["loc"]).path.split("/") if p]
@@ -84,77 +109,127 @@ def find_menupages_pages(client: PoliteClient, grubhub_slug: str, base: str = ME
                 near.append(loc["loc"])
     res["urls"] = list(dict.fromkeys(exact + near))[:MAX_CANDIDATES]
     if not res["urls"]:
-        res["notes"].append("This Grubhub restaurant is not listed on MenuPages (it covers a subset of Grubhub restaurants).")
+        res["notes"].append("This Grubhub restaurant is not listed on MenuPages (it covers a subset of Grubhub restaurants)."
+                            if res["complete"] else "The MenuPages lookup was incomplete (see above), so it is not known "
+                            "whether MenuPages lists this restaurant.")
     return res
 
 
+def _linked_grubhub_ids(html: str, url: str) -> list[str]:
+    return sorted({m.group(2) for a in scan_html(html, url).anchors for m in [GRUBHUB_LINK_RE.search(a["href"])] if m})
+
+
+def _id_problem(site: str, linked: list[str], grubhub_id: str | None) -> str | None:
+    """A page is this listing only if it links to exactly this one Grubhub restaurant."""
+    if not grubhub_id or linked == [grubhub_id]:
+        return None
+    if grubhub_id in linked:
+        return f"{site} page links to several Grubhub restaurants ({', '.join(linked)}), so it is not known which one it shows; not used."
+    return f"{site} page links to Grubhub {linked or 'nothing'}, not {grubhub_id}; not used."
+
+
 def read_menupages_menu(client: PoliteClient, url: str, grubhub_id: str | None, cancel=None) -> dict:
-    """Read a MenuPages page; accept it only if it links to the same Grubhub ID."""
+    """Read a MenuPages page; accept it only if it links to the same (single) Grubhub ID."""
     out = {"ok": False, "source_url": url, "observed_at": utcnow_iso(), "notes": [], "barrier": None}
     f = client.fetch(url, kind="page", cancel=cancel)
     if f.barrier:
         out["barrier"] = f.barrier
+        out["notes"].append(f"MenuPages page {url} not read ({f.barrier.get('kind')}).")
         return out
     if not f.ok:
         out["notes"].append(f"MenuPages page fetch failed: {f.error}")
         return out
     from .adapters import parse_store_page  # local import: adapters imports this module's users
     parsed = parse_store_page(f.text, f.final_url or url, "")
-    linked = sorted({m.group(2) for a in scan_html(f.text, url).anchors for m in [GRUBHUB_LINK_RE.search(a["href"])] if m})
+    linked = _linked_grubhub_ids(f.text, url)
     out["grubhub_ids_linked"] = linked
     out["observed_at"] = f.fetched_at or out["observed_at"]
-    if grubhub_id and grubhub_id not in linked:
-        out["notes"].append(f"MenuPages page links to Grubhub {linked or 'nothing'}, not {grubhub_id}; not used.")
+    problem = _id_problem("MenuPages", linked, grubhub_id)
+    if problem:
+        out["notes"].append(problem)
         return out
     if not parsed["restaurant_found"]:
         out["notes"].append("MenuPages page has no schema.org Restaurant data.")
         return out
     address, _why = normalize_us_address(parsed["address_raw"])
-    items = [{k: it.get(k) for k in ("name", "variant", "price_cents", "currency", "section", "price_note")}
-             for it in flag_zero_prices(dedupe_items(parsed["items"])) if (it.get("currency") or "USD") == "USD"]
+    items = []
+    for it in flag_zero_prices(dedupe_items(parsed["items"])):
+        rec = {k: it.get(k) for k in ("name", "variant", "price_cents", "currency", "section", "price_note")}
+        cur = (it.get("currency") or "").upper()
+        if cur and cur != "USD":
+            continue  # USD only
+        if not cur and rec["price_cents"] is not None:
+            # A price without a published currency is not assumed to be USD.
+            rec["price_cents"], rec["price_note"] = None, "price published without a currency; USD cannot be confirmed"
+        items.append(rec)
+    priced = sum(1 for it in items if it["price_cents"] is not None)
     out.update({
-        "ok": bool(items),
-        "restaurant_name": parsed["name"],
+        "ok": priced > 0,
+        "restaurant_name": parsed["name"] or None,
         "address": address,
         "items": items,
         "site": "MenuPages",
         "source": "MenuPages (Grubhub-owned menu site), schema.org Menu JSON-LD",
         "price_context": "Grubhub menu price as published on MenuPages; options/add-ons and fees not included",
     })
-    if not items:
+    if not priced:
         out["notes"].append("MenuPages page lists no priced menu items.")
     return out
 
 
 def grubhub_menu_for(client: PoliteClient, grubhub_slug: str, grubhub_id: str, base: str = MENUPAGES_BASE, cancel=None,
                      allmenus_base: str | None = None) -> dict:
-    """Grubhub menu prices from MenuPages, then (if configured) AllMenus."""
+    """Grubhub menu prices from MenuPages, then (if configured) AllMenus.
+
+    A barrier stops work on that site and is returned in "barriers"; the
+    other site is still tried. Nothing is returned as a menu unless a page
+    linked to exactly this Grubhub ID published at least one USD price.
+    """
+    barriers: list[dict] = []
     found = find_menupages_pages(client, grubhub_slug, base, cancel)
     notes = list(found["notes"])
+    if found["barrier"]:
+        barriers.append(found["barrier"])
     for url in found["urls"]:
         menu = read_menupages_menu(client, url, grubhub_id, cancel)
-        if menu["ok"] or menu.get("barrier"):
-            menu["notes"] = notes + menu["notes"]
-            menu["candidates_checked"] = found["candidates_checked"]
+        if menu["ok"]:
+            menu.update(notes=notes + menu["notes"], candidates_checked=found["candidates_checked"], barriers=barriers)
             return menu
         notes += [f"{url}: {n}" for n in menu["notes"]]
-    if found["urls"]:
-        notes.append(f"No MenuPages candidate linked to Grubhub restaurant {grubhub_id}.")
+        if menu.get("barrier"):
+            barriers.append(menu["barrier"])
+            if menu["barrier"].get("kind") in STOP_KINDS:
+                break
+    if found["urls"] and not barriers:
+        notes.append(f"No MenuPages candidate linked to Grubhub restaurant {grubhub_id} alone with a USD price.")
     checked = found["candidates_checked"]
+    complete = found["complete"] and not barriers
     if allmenus_base:
-        for url, n_checked, note in find_allmenus_pages(client, grubhub_slug, allmenus_base, cancel):
+        look = find_allmenus_pages(client, grubhub_slug, allmenus_base, cancel)
+        for url, n_checked, note in look:
             checked = n_checked
             if note:
                 notes.append(note)
                 continue
             menu = read_allmenus_menu(client, url, grubhub_id, cancel)
-            if menu["ok"] or menu.get("barrier"):
-                menu["notes"] = notes + menu["notes"]
-                menu["candidates_checked"] = checked
+            if menu["ok"]:
+                look.close()
+                menu.update(notes=notes + menu["notes"], candidates_checked=checked, barriers=barriers)
                 return menu
             notes += [f"{url}: {n}" for n in menu["notes"]]
-    notes.append("No Grubhub-owned menu page linked to this Grubhub restaurant was found; enter the Grubhub price manually.")
-    return {"ok": False, "notes": notes, "candidates_checked": checked}
+            if menu.get("barrier"):
+                barriers.append(menu["barrier"])
+                if menu["barrier"].get("kind") in STOP_KINDS:
+                    look.close()
+                    break
+        barriers += [b for b in look.barriers if b not in barriers]
+        complete = complete and look.complete
+    else:
+        complete = False
+    notes.append("No Grubhub-owned menu page linked to this Grubhub restaurant was found; enter the Grubhub price manually."
+                 if complete else "The Grubhub-owned menu sites could not be fully searched (see notes); enter the "
+                 "Grubhub price manually.")
+    return {"ok": False, "notes": notes, "candidates_checked": checked, "barriers": barriers}
 
 
 # ---------------------------------------------------------------- AllMenus
@@ -176,7 +251,7 @@ def grubhub_menu_for(client: PoliteClient, grubhub_slug: str, grubhub_id: str, b
 ALLMENUS_BASE = "https://www.allmenus.com"
 _ALLMENUS_PRICE = re.compile(r"^\$(\d{1,4}\.\d{2})$")
 _ALLMENUS_TITLE = re.compile(r"^(?P<name>.+?) menu - (?P<city>.+?) (?P<state>[A-Z]{2}) (?P<zip>\d{5})\b")
-_ALLMENUS_DESC = re.compile(r"located in (?P<zip>\d{5}), (?P<city>.+?) (?P<state>[A-Z]{2}), (?P<street>[^.]+)\.?\s*$")
+_ALLMENUS_DESC = re.compile(r"located in (?P<zip>\d{5}), (?P<city>.+?) (?P<state>[A-Z]{2}), (?P<street>.+?)\.?\s*$")
 
 
 class _AllMenusItems(HTMLParser):
@@ -190,8 +265,18 @@ class _AllMenusItems(HTMLParser):
         self._depth = 0
         self._item_depth = None
 
+    VOID = {"area", "base", "br", "col", "embed", "hr", "img", "input", "link", "meta", "source", "track", "wbr"}
+
+    def handle_startendtag(self, tag, attrs):
+        # "<br/>" or "<img ... />": a void element never changes the depth.
+        # Any other self-closed element opens and closes at once.
+        if tag in self.VOID:
+            return
+        self.handle_starttag(tag, attrs)
+        self.handle_endtag(tag)
+
     def handle_starttag(self, tag, attrs):
-        if tag in ("br", "img", "input", "meta", "link", "hr", "source", "wbr"):
+        if tag in self.VOID:
             return
         self._depth += 1
         cls = set(dict(attrs).get("class", "").split()) if attrs else set()
@@ -206,6 +291,8 @@ class _AllMenusItems(HTMLParser):
                 self._capture, self._buf = (kind, tag, self._depth), []
 
     def handle_endtag(self, tag):
+        if tag in self.VOID:
+            return
         if self._capture and self._capture[1] == tag and self._capture[2] == self._depth:
             text = _text("".join(self._buf))
             kind = self._capture[0]
@@ -238,8 +325,11 @@ def parse_allmenus_page(html: str, url: str) -> dict:
     parsed = parse_store_page(html, url, "")
     ld_names = Counter(it["name"] for it in parsed["items"])
     html_names = Counter(it["title"] for it in p.items if it["title"])
+    untitled = sum(1 for it in p.items if not it["title"])
     if not p.items:
         out["problems"].append("no li.menu-items entries")
+    elif untitled:
+        out["problems"].append(f"{untitled} menu item(s) without a title, so their prices cannot be tied to an item")
     elif not ld_names:
         out["problems"].append("no JSON-LD item names to cross-check the HTML prices against")
     elif ld_names != html_names:
@@ -275,15 +365,17 @@ def read_allmenus_menu(client: PoliteClient, url: str, grubhub_id: str | None, c
     f = client.fetch(url, kind="page", cancel=cancel)
     if f.barrier:
         out["barrier"] = f.barrier
+        out["notes"].append(f"AllMenus page {url} not read ({f.barrier.get('kind')}).")
         return out
     if not f.ok:
         out["notes"].append(f"AllMenus page fetch failed: {f.error}")
         return out
-    linked = sorted({m.group(2) for a in scan_html(f.text, url).anchors for m in [GRUBHUB_LINK_RE.search(a["href"])] if m})
+    linked = _linked_grubhub_ids(f.text, url)
     out["grubhub_ids_linked"] = linked
     out["observed_at"] = f.fetched_at or out["observed_at"]
-    if grubhub_id and grubhub_id not in linked:
-        out["notes"].append(f"AllMenus page links to Grubhub {linked or 'nothing'}, not {grubhub_id}; not used.")
+    problem = _id_problem("AllMenus", linked, grubhub_id)
+    if problem:
+        out["notes"].append(problem)
         return out
     page = parse_allmenus_page(f.text, f.final_url or url)
     if page["problems"]:
@@ -305,10 +397,11 @@ def read_allmenus_menu(client: PoliteClient, url: str, grubhub_id: str | None, c
 
 _ALLMENUS_PATH = re.compile(r"^/(?P<st>[a-z]{2})/(?P<city>[a-z0-9-]+)/(?P<id>\d+)-(?P<name>[a-z0-9-]+)/menu/?$")
 MAX_ALLMENUS_SITEMAPS = 30
+MAX_ALLMENUS_CANDIDATES = 12
 
 
-def find_allmenus_pages(client: PoliteClient, grubhub_slug: str, base: str = ALLMENUS_BASE, cancel=None):
-    """Yield (url, urls_checked, note) for AllMenus pages that may be this Grubhub listing.
+class find_allmenus_pages:
+    """Iterate (url, urls_checked, note) over AllMenus pages that may be this Grubhub listing.
 
     Observed live (run 37826699377): AllMenus' robots-declared sitemap index
     lists 21 restaurant sitemaps of up to 40,000 URLs shaped
@@ -317,31 +410,62 @@ def find_allmenus_pages(client: PoliteClient, grubhub_slug: str, base: str = ALL
     must begin the Grubhub slug and its city must end it, e.g.
       /il/buffalo-grove/233783-lou-malnatis-pizzeria/menu/
       lou-malnatis-pizzeria-85-s-buffalo-grove-rd-buffalo-grove
-    Sitemaps are read lazily (cached 24 h) and scanning stops at the first
-    candidate the caller accepts; acceptance requires the page to link to the
-    same Grubhub ID.
+    The paths carry no street, so every branch of a chain in that city is a
+    candidate; at most MAX_ALLMENUS_CANDIDATES are offered and a note says so
+    when that cap is reached. Sitemaps are read lazily (cached 24 h). A
+    barrier stops the scan (.barriers); .complete is True only if every
+    restaurant sitemap was read and the cap was not reached, which is the
+    only case in which "not listed" is said.
     """
-    slug = grubhub_slug.strip("/").lower()
-    checked = 0
-    sitemaps, notes = _restaurant_sitemaps(client, base, cancel, label="AllMenus")
-    for n in notes:
-        yield None, checked, n
-    seen = set()
-    for sm in sitemaps[:MAX_ALLMENUS_SITEMAPS]:
-        f = client.fetch(sm, kind="sitemap", cancel=cancel, ttl=client.cfg.cache_ttl_sitemap_s)
-        if not f.ok:
-            yield None, checked, f"AllMenus sitemap {sm} unavailable ({(f.barrier or {}).get('kind') or f.error})"
-            continue
-        for loc in parse_sitemap(f.body or b"", client.cfg.max_sitemap_bytes)["locs"]:
-            checked += 1
-            m = _ALLMENUS_PATH.match(urlsplit(loc["loc"]).path)
-            if (m and loc["loc"] not in seen and slug.startswith(m["name"] + "-") and slug.endswith("-" + m["city"])
-                    and len(m["name"]) + len(m["city"]) + 2 <= len(slug)):
-                seen.add(loc["loc"])
-                yield loc["loc"], checked, None
-                if len(seen) >= MAX_CANDIDATES:
+
+    def __init__(self, client: PoliteClient, grubhub_slug: str, base: str = ALLMENUS_BASE, cancel=None):
+        self.client, self.slug, self.base, self.cancel = client, grubhub_slug.strip("/").lower(), base, cancel
+        self.barriers: list[dict] = []
+        self.complete = False
+        self._gen = self._run()
+
+    def __iter__(self):
+        return self._gen
+
+    def close(self):
+        self._gen.close()
+
+    def _run(self):
+        client, slug = self.client, self.slug
+        checked, seen, complete = 0, [], True
+        idx = _restaurant_sitemaps(client, self.base, self.cancel, label="AllMenus")
+        for n in idx["notes"]:
+            yield None, checked, n
+        if idx["barrier"]:
+            self.barriers.append(idx["barrier"])
+            return
+        complete = idx["complete"]
+        if len(idx["sitemaps"]) > MAX_ALLMENUS_SITEMAPS:
+            complete = False
+            yield None, checked, f"Only {MAX_ALLMENUS_SITEMAPS} of {len(idx['sitemaps'])} AllMenus restaurant sitemaps are read."
+        for sm in idx["sitemaps"][:MAX_ALLMENUS_SITEMAPS]:
+            f = client.fetch(sm, kind="sitemap", cancel=self.cancel, ttl=client.cfg.cache_ttl_sitemap_s)
+            if not f.ok:
+                complete = False
+                yield None, checked, f"AllMenus sitemap {sm} unavailable ({_barrier_kind(f)})"
+                if f.barrier and f.barrier.get("kind") in STOP_KINDS:
+                    self.barriers.append(f.barrier)
+                    yield None, checked, "AllMenus lookup stopped at that barrier."
                     return
-    if len(sitemaps) > MAX_ALLMENUS_SITEMAPS:
-        yield None, checked, f"Read {MAX_ALLMENUS_SITEMAPS} of {len(sitemaps)} AllMenus restaurant sitemaps."
-    if not seen:
-        yield None, checked, f"This Grubhub restaurant is not listed on AllMenus ({checked:,} AllMenus restaurant pages checked)."
+                continue
+            for loc in parse_sitemap(f.body or b"", client.cfg.max_sitemap_bytes)["locs"]:
+                checked += 1
+                m = _ALLMENUS_PATH.match(urlsplit(loc["loc"]).path)
+                if (m and loc["loc"] not in seen and slug.startswith(m["name"] + "-") and slug.endswith("-" + m["city"])
+                        and len(m["name"]) + len(m["city"]) + 2 <= len(slug)):
+                    seen.append(loc["loc"])
+                    yield loc["loc"], checked, None
+                    if len(seen) >= MAX_ALLMENUS_CANDIDATES:
+                        yield None, checked, (f"Stopped after {MAX_ALLMENUS_CANDIDATES} AllMenus pages with this name and city; "
+                                              "more may exist.")
+                        return
+        self.complete = complete
+        if not seen:
+            yield None, checked, (f"This Grubhub restaurant is not listed on AllMenus ({checked:,} AllMenus restaurant pages checked)."
+                                  if complete else "The AllMenus lookup was incomplete (see above), so it is not known "
+                                  "whether AllMenus lists this restaurant.")

@@ -31,11 +31,34 @@ def script_body(html: str, attrs: str) -> str:
     return m.group(1)
 
 
+_SURROGATE = re.compile("[\ud800-\udfff]")
+
+
+def _clean(obj):
+    """Scraped text as it is safe to publish: U+FFFD (invalid UTF-8 in a source
+    page) and lone surrogates (a string cut mid-emoji) carry no information and
+    would make the page unwritable as UTF-8, so both are dropped."""
+    if isinstance(obj, str):
+        return _SURROGATE.sub("", obj.replace("\ufffd", ""))
+    if isinstance(obj, list):
+        return [_clean(v) for v in obj]
+    if isinstance(obj, dict):
+        return {_clean(k): _clean(v) for k, v in obj.items()}
+    return obj
+
+
 def embed_json(obj) -> str:
     # Safe inside <script type="application/json">: no "<" can end the element.
-    # U+FFFD (invalid UTF-8 in a source page, e.g. older MenuPages captures)
-    # carries no information and is dropped, as server/extract.py does now.
-    return json.dumps(obj, ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c").replace("\ufffd", "")
+    return json.dumps(_clean(obj), ensure_ascii=False, separators=(",", ":")).replace("<", "\\u003c")
+
+
+def fill_template(template: str, values: dict[str, str]) -> str:
+    """Replace each placeholder, which must occur exactly once, in one pass over
+    the template only, so text inside inserted data is never taken for one."""
+    for key in values:
+        if template.count(key) != 1:
+            raise SystemExit(f"template must contain {key} exactly once")
+    return re.sub("|".join(map(re.escape, values)), lambda m: values[m.group(0)], template)
 
 
 def snapshot_from_report(report: dict) -> dict:
@@ -50,8 +73,11 @@ def snapshot_from_report(report: dict) -> dict:
                          "barriers": j.get("barriers", []), "observations": j.get("observations", [])})
     menus = []
     mp = (report.get("grubhub") or {}).get("menupages_path")
-    if mp and mp["result"].get("grubhub_menu"):
-        menus.append({"grubhub_url": mp["url"], "ok": True, "menu": mp["result"]["grubhub_menu"]})
+    gm = mp and mp["result"].get("grubhub_menu")
+    # live_verify keeps only a sample of the menu in report.json; a sample is
+    # never offered as the menu.
+    if gm and len(gm.get("items") or []) >= (gm.get("item_count") or 0):
+        menus.append({"grubhub_url": mp["url"], "ok": True, "menu": gm})
     return {"generated_at": report.get("finished_at"), "github_run_id": report.get("runner", {}).get("github_run_id"),
             "searches": searches, "grubhub_menus": menus}
 
@@ -66,7 +92,10 @@ def board_snapshot(snap: dict) -> dict:
         e["request"] = {"order": (s.get("request") or {}).get("order")}
         e["barriers"] = [{"kind": b.get("kind"), "detail": str(b.get("detail") or "")[:160]} for b in s.get("barriers") or [] if isinstance(b, dict)]
         out["searches"].append(e)
-    out["grubhub_menus"] = [{"grubhub_url": g.get("grubhub_url"), "ok": g.get("ok"), "menu": g.get("menu"), "notes": g.get("notes")}
+    out["grubhub_menus"] = [{"grubhub_url": g.get("grubhub_url"), "ok": g.get("ok"), "menu": g.get("menu"), "notes": g.get("notes"),
+                             "error": g.get("error"),
+                             "barriers": [{"kind": b.get("kind"), "detail": str(b.get("detail") or "")[:160]}
+                                          for b in g.get("barriers") or [] if isinstance(b, dict)]}
                             for g in snap.get("grubhub_menus", [])]
     return out
 
@@ -100,8 +129,8 @@ def collect_runs(max_runs: int) -> list[dict]:
         snap = snapshot_from_report(rep)
         rid = str(snap.get("github_run_id") or snap.get("generated_at"))
         runs.setdefault(rid, board_snapshot(snap))  # a run's snapshot.json wins over its report
-    useful = [r for r in runs.values()
-              if any(s.get("observations") for s in r["searches"]) or any(g.get("ok") for g in r["grubhub_menus"])]
+    # A run that found no prices is kept too: its blocks and barriers are news.
+    useful = [r for r in runs.values() if r["searches"] or r["grubhub_menus"]]
     useful.sort(key=lambda r: str(r.get("generated_at")), reverse=True)
     return useful[:max_runs]
 
@@ -117,13 +146,10 @@ def main() -> None:
     template = (ROOT / "board" / "template.html").read_text(encoding="utf-8")
     runs = collect_runs(args.max_runs)
     sources = json.loads((ROOT / "board" / "sources.json").read_text(encoding="utf-8"))
-    page = template
-    for key, value in (("@SNAPSHOT@", embed_json({"runs": runs})), ("@SOURCES@", embed_json(sources)),
-                       ("@CAPTURE@", script_body(app, 'type="text/plain" id="fpc-capture"')),
-                       ("@ENGINE@", script_body(app, 'id="fpc-engine"'))):
-        if page.count(key) != 1:
-            raise SystemExit(f"template must contain {key} exactly once")
-        page = page.replace(key, value)
+    values = {"@SNAPSHOT@": embed_json({"runs": runs}), "@SOURCES@": embed_json(sources),
+              "@CAPTURE@": script_body(app, 'type="text/plain" id="fpc-capture"'),
+              "@ENGINE@": script_body(app, 'id="fpc-engine"')}
+    page = fill_template(template, values)
     if not args.fragment:
         head, sep, body = page.partition('<div class="wrap">')
         page = ('<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'

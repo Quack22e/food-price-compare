@@ -666,3 +666,136 @@ def test_grubhub_menu_falls_back_to_allmenus(sites, tmp_path):
     finally:
         mp.close()
         am.close()
+
+
+# ---------------------------------------------------------------- review findings (Grubhub-owned mirrors)
+
+def test_mirror_barriers_stop_the_host_and_are_reported(sites, tmp_path):
+    from fake_platform import build_allmenus
+    _, _, gh = sites
+    mp, am = FakeSite(), FakeSite()
+    try:
+        _menupages_site(mp)
+        mp.route("/sitemap-index.xml", "<html><title>Forbidden</title></html>", status=403)
+        build_allmenus(am)
+        am.route("/sitemap-restaurants.xml.gz", "slow down", status=429, headers={"Retry-After": "3600"})
+        gh.route("/robots.txt", "User-agent: *\nAllow: /\n", ctype="text/plain")
+        cfg = make_cfg(tmp_path, {"grubhub": gh.base, "menupages": mp.base, "allmenus": am.base})
+        r = extract_grubhub(PoliteClient(cfg, DiskCache(cfg.data_dir)),
+                            "https://www.grubhub.com/restaurant/lou-malnatis-pizzeria-85-s-buffalo-grove-rd-buffalo-grove/517712", gh.base)
+        kinds = sorted(b["kind"] for b in r["barriers"])
+        assert kinds == ["forbidden", "rate_limited"], kinds
+        assert "/sitemap-restaurants.xml.gz" not in mp.hits                  # MenuPages: stopped at the index
+        assert am.hits.get("/sitemap-restaurants.xml.gz") == 1 and "/sitemap-restaurants2.xml.gz" not in am.hits  # AllMenus: stopped
+        assert not any("not listed" in n for n in r["notes"])                 # no coverage claim from an incomplete search
+        assert any("could not be fully searched" in n for n in r["notes"]) and "grubhub_menu" not in r
+    finally:
+        mp.close()
+        am.close()
+
+
+def test_menupages_without_usable_prices_falls_back_and_never_assumes_usd(sites, tmp_path):
+    import json
+    from fake_platform import allmenus_page, build_allmenus
+    from server.grubhub_mirror import read_menupages_menu
+    _, _, gh = sites
+    mp, am = FakeSite(), FakeSite()
+    try:
+        _menupages_site(mp)
+        rest = {"@type": "Restaurant", "name": "", "address": {"@type": "PostalAddress", "streetAddress": "85 S Buffalo Grove Rd",
+                "addressLocality": "Buffalo Grove", "addressRegion": "IL", "postalCode": "60089", "addressCountry": "US"}}
+        menu = {"@type": "Menu", "hasMenuSection": [{"@type": "MenuSection", "name": "Pizza", "hasMenuItem": [
+            {"@type": "MenuItem", "name": "Small - Deep Dish Margherita", "offers": {"@type": "Offer", "price": "21.95"}},   # no currency
+            {"@type": "MenuItem", "name": "Large - Deep Dish Margherita", "offers": {"@type": "Offer", "price": "0.00", "priceCurrency": "USD"}}]}]}
+        page = (f'<html><script type="application/ld+json">{json.dumps(rest)}</script><script type="application/ld+json">{json.dumps(menu)}</script>'
+                '<a href="https://www.grubhub.com/restaurant/lou-malnatis-pizzeria-85-s-buffalo-grove-rd-buffalo-grove/517712">G</a></html>')
+        urls = [f"{mp.base}/lou-malnatis-pizzeria/85-s-buffalo-grove-rd-buffalo-grove"]
+        import gzip as _gz
+        xml = '<?xml version="1.0"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + "".join(f"<url><loc>{u}</loc></url>" for u in urls) + "</urlset>"
+        mp.routes["/sitemap-restaurants.xml.gz"] = {"body": _gz.compress(xml.encode()), "status": 200, "headers": {}, "delay": None, "ctype": "application/x-gzip"}
+        mp.route("/lou-malnatis-pizzeria/85-s-buffalo-grove-rd-buffalo-grove", page)
+        build_allmenus(am)
+        gh.route("/robots.txt", "User-agent: *\nAllow: /\n", ctype="text/plain")
+        cfg = make_cfg(tmp_path, {"grubhub": gh.base, "menupages": mp.base, "allmenus": am.base})
+        client = PoliteClient(cfg, DiskCache(cfg.data_dir))
+        m = read_menupages_menu(client, urls[0], "517712")
+        assert not m["ok"] and m["restaurant_name"] is None
+        assert {i["name"]: i["price_cents"] for i in m["items"]} == {"Small - Deep Dish Margherita": None, "Large - Deep Dish Margherita": None}
+        assert "USD cannot be confirmed" in m["items"][0]["price_note"]
+        r = extract_grubhub(client, "https://www.grubhub.com/restaurant/lou-malnatis-pizzeria-85-s-buffalo-grove-rd-buffalo-grove/517712", gh.base)
+        assert r["grubhub_menu"]["site"] == "AllMenus"                    # fell back instead of stopping at a priceless page
+    finally:
+        mp.close()
+        am.close()
+
+
+def test_allmenus_reader_edge_markup():
+    from fake_platform import allmenus_page
+    from server.grubhub_mirror import parse_allmenus_page
+    url = "https://www.allmenus.com/il/buffalo-grove/233783-lou-malnatis-pizzeria/menu/"
+    html = allmenus_page().replace('<p class="description">About Fountain Drink.</p>',
+                                   '<p class="description">About<br/>Fountain <img src="x.jpg" /> Drink.</p>')
+    assert "<br/>" in html
+    page = parse_allmenus_page(html, url)
+    assert not page["problems"] and len(page["items"]) == 5                  # void tags do not shift the depth
+    untitled = allmenus_page().replace('<span class="item-title">Fountain Drink</span>', '')
+    assert any("without a title" in p for p in parse_allmenus_page(untitled, url)["problems"])
+    dotted = parse_allmenus_page(allmenus_page(desc="Restaurant menu, map for Lou Malnati&#39;s Pizzeria located in 60089, "
+                                                    "Buffalo Grove IL, 85 S. Buffalo Grove Rd."), url)
+    assert not dotted["problems"] and dotted["address"]["street"] == "85 S. Buffalo Grove Rd"
+
+
+def test_mirror_page_linking_to_several_grubhub_restaurants_is_refused(sites, tmp_path):
+    from fake_platform import allmenus_page
+    from server.grubhub_mirror import read_allmenus_menu
+    am = FakeSite()
+    try:
+        am.route("/robots.txt", "User-agent: *\nAllow: /\n", ctype="text/plain")
+        two = allmenus_page().replace("</body>", '<a href="https://www.grubhub.com/restaurant/lou-malnatis-pizzeria-1-main-st-elsewhere/999">Nearby</a></body>')
+        am.route("/il/buffalo-grove/233783-lou-malnatis-pizzeria/menu/", two)
+        cfg = make_cfg(tmp_path, {"allmenus": am.base})
+        r = read_allmenus_menu(PoliteClient(cfg, DiskCache(cfg.data_dir)), am.base + "/il/buffalo-grove/233783-lou-malnatis-pizzeria/menu/", "517712")
+        assert not r["ok"] and "several Grubhub restaurants" in r["notes"][0]
+    finally:
+        am.close()
+
+
+def test_allmenus_lookup_reaches_past_four_same_city_branches(sites, tmp_path):
+    import gzip as _gz
+    from fake_platform import allmenus_page
+    from server.grubhub_mirror import grubhub_menu_for
+    am = FakeSite()
+    try:
+        b = am.base
+        am.route("/robots.txt", f"User-agent: *\nAllow: /\nSitemap: {b}/sitemap-index.xml\n", ctype="text/plain")
+        am.route("/sitemap-index.xml", f'<?xml version="1.0"?><sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><sitemap><loc>{b}/sitemap-restaurants.xml.gz</loc></sitemap></sitemapindex>', ctype="application/xml")
+        urls = [f"{b}/il/chicago/{i}-lou-malnatis-pizzeria/menu/" for i in range(1, 7)]
+        xml = '<?xml version="1.0"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' + "".join(f"<url><loc>{u}</loc></url>" for u in urls) + "</urlset>"
+        am.routes["/sitemap-restaurants.xml.gz"] = {"body": _gz.compress(xml.encode()), "status": 200, "headers": {}, "delay": None, "ctype": "application/x-gzip"}
+        for i in range(1, 7):
+            am.route(f"/il/chicago/{i}-lou-malnatis-pizzeria/menu/", allmenus_page(gh_id=str(1000 + i)))
+        cfg = make_cfg(tmp_path, {"allmenus": am.base})
+        menu = grubhub_menu_for(PoliteClient(cfg, DiskCache(cfg.data_dir)), "lou-malnatis-pizzeria-1-n-state-st-chicago", "1005",
+                                "http://127.0.0.1:9", allmenus_base=am.base)
+        assert menu["ok"] and menu["source_url"].endswith("/5-lou-malnatis-pizzeria/menu/")
+    finally:
+        am.close()
+
+
+def test_blank_mirror_name_keeps_the_url_chain_guess(sites, tmp_path):
+    import json
+    _, _, gh = sites
+    mp = FakeSite()
+    try:
+        _menupages_site(mp)
+        page = mp.routes["/lou-malnatis-pizzeria/6456-s-cicero-ave-chicago"]["body"].replace('"name": "Lou Malnati&#39;s Pizzeria"', '"name": ""')
+        assert '"name": ""' in page
+        mp.route("/lou-malnatis-pizzeria/6456-s-cicero-ave-chicago", page)
+        gh.route("/robots.txt", "User-agent: *\nAllow: /\n", ctype="text/plain")
+        cfg = make_cfg(tmp_path, {"grubhub": gh.base, "menupages": mp.base})
+        r = extract_grubhub(PoliteClient(cfg, DiskCache(cfg.data_dir)),
+                            "https://www.grubhub.com/restaurant/lou-malnatis-pizzeria-6456-s-cicero-ave-chicago/434510", gh.base)
+        assert r["ok"] and r["fields"]["chain"] == "Lou Malnatis Pizzeria" and "guessed" in r["field_sources"]["chain"]
+        assert r["grubhub_menu"]["items"]
+    finally:
+        mp.close()

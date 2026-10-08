@@ -269,7 +269,7 @@ Each run's budget is bounded:
 * up to 7 inspected pages
 * the snapshot: three Uber Eats searches capped at 24, 10 and 12 store pages and 12 sitemap documents each, plus two Grubhub listings looked up on MenuPages
 
-It commits `live-verification/report.json`, which holds observations and structure summaries but no raw HTML, plus the real-capture test output. Raw pages are kept only as a 14-day workflow artifact.
+It commits `live-verification/report.json` and `live-verification/snapshot.json`, which hold observations, coverage, barriers and structure summaries, plus the real-capture test output. They contain no raw pages; structure summaries quote at most short snippets (a few hundred characters) around price and challenge markers. Raw pages are kept only as a 14-day workflow artifact. The snapshot step runs only when the unit tests passed, and the commit step rebases onto the branch if it moved during the run.
 
 | Run | What happened | Fixes made from it |
 |---|---|---|

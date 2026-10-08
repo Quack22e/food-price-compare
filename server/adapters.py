@@ -321,15 +321,15 @@ def extract_grubhub(client: PoliteClient, url: str, grubhub_base: str, menupages
         from .grubhub_mirror import grubhub_menu_for
         menu = grubhub_menu_for(client, m.group("slug"), gh_id, mp_base, allmenus_base=am_base)
         out["notes"] += menu.get("notes", [])
-        if menu.get("barrier"):
-            out["barriers"].append(menu["barrier"])
+        out["barriers"] += [b for b in menu.get("barriers", []) if b]
         if menu.get("ok"):
             site = menu.get("site") or "a Grubhub-owned site"
             out["grubhub_menu"] = {k: menu.get(k) for k in ("restaurant_name", "address", "items", "source_url",
                                                            "observed_at", "source", "price_context", "grubhub_ids_linked",
                                                            "checks", "site")}
-            out["fields"]["chain"] = menu["restaurant_name"]
-            out["field_sources"]["chain"] = f"restaurant name on {site} (Grubhub-owned), linked to this Grubhub ID"
+            if menu.get("restaurant_name"):
+                out["fields"]["chain"] = menu["restaurant_name"]
+                out["field_sources"]["chain"] = f"restaurant name on {site} (Grubhub-owned), linked to this Grubhub ID"
             if menu.get("address"):
                 out["fields"]["restaurant_address"] = menu["address"]
             priced = sum(1 for it in menu["items"] if it.get("price_cents") is not None)

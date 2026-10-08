@@ -391,9 +391,12 @@ tr.details td { background: var(--sunken); }
   var EMPTY_RUN = { obs: [], rejected: [], searches: [], grubhub_menus: [] };
   function RUN() { return RUNS[S.run] || EMPTY_RUN; }
   // Grubhub menus: the newest successful read of each Grubhub listing.
-  var MENUS = [], seenGh = {};
+  var MENUS = [], seenGh = {}, BLOCKED = {};
   RUNS.forEach(function (run) {
     (run.grubhub_menus || []).forEach(function (g) {
+      var id = g && (/\/(\d+)\/?$/.exec(g.grubhub_url || '') || [])[1];
+      // Newest failed lookup per listing, kept to say why it has no menu.
+      if (g && !g.ok && id && !BLOCKED[id] && ((g.barriers || []).length || g.error)) BLOCKED[id] = { run: run, entry: g };
       if (!g || !g.ok || !g.menu || !(g.menu.items || []).length || seenGh[g.grubhub_url]) return;
       seenGh[g.grubhub_url] = 1; MENUS.push(g);
     });
@@ -560,6 +563,14 @@ tr.details td { background: var(--sunken); }
       renderMenus(mi);
     } else {
       if (!S.order.chain) { S.order.chain = r.chainGuess; $('chain').value = r.chainGuess; evaluate(); }
+      var bl = BLOCKED[r.restaurantId];
+      if (bl) {
+        var kinds = (bl.entry.barriers || []).map(function (b) { return String(b.kind || 'blocked').replace(/_/g, ' '); });
+        setKids($('ghResult'), h('p', { class: 'msg warn' }, 'The run of ' + stamp(bl.run.generated_at) + ' could not finish looking up Grubhub restaurant ' +
+          r.restaurantId + ' on the Grubhub-owned menu sites (' + (kinds.join(', ') || 'error') + '). Enter the item and your Grubhub subtotal by hand.'));
+        renderMenus();
+        return;
+      }
       setKids($('ghResult'), h('p', { class: 'msg' }, 'Grubhub restaurant ' + r.restaurantId + ' is not in this snapshot. Its pages are drawn by JavaScript and publish no prices, so enter the item and your Grubhub subtotal by hand. The full app can look it up on MenuPages and AllMenus for you. ', r.chainGuess ? 'Chain guessed from the link: ' + r.chainGuess + '.' : ''));
       renderMenus();
     }

@@ -3,7 +3,8 @@
 Runs the service code unchanged (robots.txt, rate limits, barrier reporting)
 from a machine that has internet access - e.g. the GitHub Actions workflow
 .github/workflows/fpc-live-verification.yml - and writes a JSON report that
-contains no raw HTML. Raw pages are saved to tests/captures/ (git-ignored)
+contains no raw pages (structure summaries quote only short snippets around
+price and challenge markers). Raw pages are saved to tests/captures/ (git-ignored)
 so tests/test_real_captures.py can verify the extractors against them.
 
 Request budget: 3 robots.txt, two search jobs limited to 3 stores and 3
@@ -298,13 +299,9 @@ def explore_allmenus(svc, captures):
                     "sample_items": [{k: it.get(k) for k in ("name", "variant", "price_cents", "currency", "section")} for it in parsed["items"][:12]],
                     "grubhub_links": sorted({m.group(0) for a in scan_html(f.text, page).anchors
                                              for m in [re.search(r"grubhub\.com/restaurant/[^/?#]+/\d+", a["href"])] if m})})
-        # Markup evidence for prices that are only in HTML: the element around
-        # the first few price spans, the address markup, and class counts.
+        # Markup evidence (recorded in runs 37744579395+, summarised in README):
+        # class counts only; raw markup stays in the short-lived artifact.
         html = f.text
-        idx = [m.start() for m in re.finditer(r'class="item-price"', html)][:3]
-        rep["item_html_samples"] = [re.sub(r"\s+", " ", html[max(0, i - 900): i + 250]) for i in idx]
-        rep["address_html_samples"] = [re.sub(r"\s+", " ", html[max(0, m.start() - 400): m.start() + 300])
-                                       for m in list(re.finditer(r"Buffalo Grove Rd", html))[:2]]
         rep["class_counts"] = {c: html.count(f'class="{c}"') for c in sorted(set(re.findall(r'class="([a-z][a-z0-9_-]{2,40})"', html)))
                                if html.count(f'class="{c}"') >= 20}
         save_capture_outcome(svc, page, f, Path(captures + "_mirrors"))
