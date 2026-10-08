@@ -1,0 +1,783 @@
+<title>Delivery Price Finder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+/* Layout: an order slip on the left, a shelf-edge price label and the evidence table on the right; sources below. */
+:root {
+  --bg: #eef1ee;
+  --surface: #ffffff;
+  --sunken: #e3e8e4;
+  --ink: #17201c;
+  --muted: #56625c;
+  --line: #cfd7d1;
+  --accent: #1d5f8a;
+  --accent-ink: #ffffff;
+  --tag: #ffd84a;
+  --tag-ink: #1a1a12;
+  --ok: #1d7446;
+  --ok-bg: #dcf0e3;
+  --warn: #8a5800;
+  --warn-bg: #fbecc8;
+  --bad: #a3312a;
+  --bad-bg: #f8dedb;
+  --info-bg: #e2ecf4;
+  --display: "Archivo", "Arial Narrow", system-ui, sans-serif;
+  --body: "Atkinson Hyperlegible", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  --r: 6px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111513; --surface: #1a201d; --sunken: #232a26; --ink: #e6ece8; --muted: #9aa8a1; --line: #303a35;
+    --accent: #7fb8de; --accent-ink: #0d1a24; --tag: #f2cb3a; --tag-ink: #16140a;
+    --ok: #7fd3a0; --ok-bg: #173325; --warn: #f0c56b; --warn-bg: #3a2d10; --bad: #f1958c; --bad-bg: #3d1d1a; --info-bg: #1b2a36;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111513; --surface: #1a201d; --sunken: #232a26; --ink: #e6ece8; --muted: #9aa8a1; --line: #303a35;
+  --accent: #7fb8de; --accent-ink: #0d1a24; --tag: #f2cb3a; --tag-ink: #16140a;
+  --ok: #7fd3a0; --ok-bg: #173325; --warn: #f0c56b; --warn-bg: #3a2d10; --bad: #f1958c; --bad-bg: #3d1d1a; --info-bg: #1b2a36;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.5; margin: 0; }
+.wrap { max-width: 1240px; margin: 0 auto; padding-inline: clamp(16px, 3vw, 32px); padding-block: 20px 56px; display: grid; gap: 28px; }
+a { color: var(--accent); text-underline-offset: 2px; }
+button, input, select, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+h1, h2, h3 { font-family: var(--display); text-wrap: balance; margin: 0; }
+h2 { font-size: 1.15rem; font-stretch: 112%; font-weight: 750; letter-spacing: .01em; }
+h3 { font-size: .98rem; font-weight: 700; }
+p { margin: 0; }
+.mono, .num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+.muted { color: var(--muted); }
+.small { font-size: .86rem; }
+.eyebrow { font-family: var(--display); font-size: .74rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--muted); }
+
+/* header */
+.top { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px 24px; border-bottom: 2px solid var(--ink); padding-bottom: 14px; }
+.brand { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.brand svg { flex: none; }
+.brand h1 { font-size: clamp(1.5rem, 3.2vw, 2.1rem); font-stretch: 118%; font-weight: 800; line-height: 1.05; }
+.brand p { color: var(--muted); font-size: .9rem; }
+.snapmeta { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { display: inline-flex; align-items: center; gap: 6px; border-radius: 999px; padding: 2px 10px; font-size: .8rem; border: 1px solid var(--line); background: var(--surface); white-space: nowrap; }
+.chip.ok { background: var(--ok-bg); color: var(--ok); border-color: transparent; }
+.chip.warn { background: var(--warn-bg); color: var(--warn); border-color: transparent; }
+.chip.bad { background: var(--bad-bg); color: var(--bad); border-color: transparent; }
+.chip.info { background: var(--info-bg); color: var(--accent); border-color: transparent; }
+.dot { width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
+
+/* main grid */
+.main { display: grid; grid-template-columns: minmax(0, 370px) minmax(0, 1fr); gap: 28px; align-items: start; }
+@media (max-width: 920px) { .main { grid-template-columns: minmax(0, 1fr); } }
+
+/* order slip */
+.slip { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 18px; display: grid; gap: 16px; position: relative; }
+.slip::after { content: ""; position: absolute; left: 0; right: 0; bottom: -7px; height: 8px;
+  background: radial-gradient(circle at 6px 0, transparent 5px, var(--surface) 5.5px) 0 0 / 12px 8px repeat-x; }
+.field { display: grid; gap: 4px; min-width: 0; }
+.field > label, .lbl { font-size: .82rem; font-weight: 700; color: var(--muted); }
+input[type=text], input[type=url], input[type=number], select, textarea {
+  width: 100%; min-width: 0; border: 1px solid var(--line); background: var(--bg); border-radius: 4px; padding: 7px 9px; }
+textarea { font-family: var(--mono); font-size: .82rem; min-height: 110px; resize: vertical; }
+.row2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.row3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.presets { display: flex; flex-wrap: wrap; gap: 6px; }
+.btn { white-space: nowrap; border: 1px solid var(--line); background: var(--surface); border-radius: 4px; padding: 6px 12px; cursor: pointer; font-weight: 700; font-size: .88rem; }
+.btn:hover { border-color: var(--ink); }
+.btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.btn.ghost { border-color: transparent; background: transparent; color: var(--accent); padding-inline: 4px; }
+.btn.preset { font-weight: 400; border-radius: 999px; font-size: .84rem; }
+.btn.preset[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.item { border-top: 1px dashed var(--line); padding-top: 12px; display: grid; gap: 10px; }
+.item-head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.hint { font-size: .8rem; color: var(--muted); }
+.hint.warn { color: var(--warn); }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 4px; overflow: hidden; }
+.seg label { padding: 5px 12px; cursor: pointer; font-size: .86rem; }
+.seg input { position: absolute; opacity: 0; pointer-events: none; }
+.seg input:checked + span { font-weight: 700; }
+.seg label:has(input:checked) { background: var(--ink); color: var(--bg); }
+.seg label:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: -2px; }
+.checks { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: .9rem; }
+.ghbox { background: var(--sunken); border-radius: var(--r); padding: 12px; display: grid; gap: 8px; }
+.ghbox .menuhead { font-size: .86rem; }
+.msg { font-size: .84rem; padding: 7px 10px; border-radius: 4px; background: var(--info-bg); }
+.msg.ok { background: var(--ok-bg); color: var(--ok); }
+.msg.warn { background: var(--warn-bg); color: var(--warn); }
+.msg.bad { background: var(--bad-bg); color: var(--bad); }
+
+/* results */
+.results { display: grid; gap: 18px; min-width: 0; }
+.wrap, .slip, .results, .section, .panel, .pcard, .ghbox, .item, .cov { grid-template-columns: minmax(0, 1fr); }
+.label-tag { background: var(--tag); color: var(--tag-ink); border-radius: 3px; padding: 16px 20px 14px; display: grid;
+  grid-template-columns: minmax(0, 1fr) auto; gap: 6px 20px; box-shadow: 0 1px 0 rgba(0,0,0,.18); position: relative; }
+.label-tag .eyebrow { color: var(--tag-ink); opacity: .78; grid-column: 1 / -1; }
+.label-tag .what { font-family: var(--display); font-weight: 750; font-size: 1.12rem; font-stretch: 108%; line-height: 1.2; }
+.label-tag .where { font-size: .9rem; }
+.label-tag .price { font-family: var(--display); font-weight: 800; font-stretch: 85%; font-size: clamp(2.6rem, 6vw, 3.6rem); line-height: .95; font-variant-numeric: tabular-nums; align-self: start; text-align: right; }
+.label-tag .price sup { font-size: .45em; vertical-align: .95em; margin-left: 1px; }
+.label-tag .foot { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 4px 18px; border-top: 1px solid color-mix(in srgb, var(--tag-ink) 25%, transparent); padding-top: 8px; font-size: .84rem; }
+.label-tag .foot a { color: var(--tag-ink); font-weight: 700; }
+.label-tag .bar { position: absolute; right: 20px; bottom: 100%; transform: translateY(50%); background: var(--ink); color: var(--bg); font-family: var(--mono); font-size: .7rem; padding: 1px 6px; border-radius: 2px; }
+.label-empty { background: var(--surface); border: 2px dashed var(--line); border-radius: var(--r); padding: 18px 20px; display: grid; gap: 6px; }
+.label-empty strong { font-family: var(--display); font-size: 1.05rem; }
+.save { font-weight: 700; }
+.coverage { font-size: .86rem; color: var(--muted); }
+.reshead { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 8px 16px; }
+.runpick { display: flex; align-items: center; justify-content: flex-end; gap: 8px; font-size: .84rem; color: var(--muted); flex: 1 1 240px; min-width: 0; }
+.runpick span { white-space: nowrap; }
+.runpick select { flex: 0 1 340px; min-width: 0; padding: 4px 8px; }
+.tabs { display: flex; flex-wrap: wrap; gap: 2px; border-bottom: 1px solid var(--line); }
+.tabs button { border: 0; background: transparent; padding: 8px 12px; cursor: pointer; border-bottom: 3px solid transparent; font-weight: 700; color: var(--muted); font-size: .9rem; }
+.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--ink); }
+.tabs .n { font-family: var(--mono); font-weight: 500; font-size: .8rem; margin-left: 4px; }
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--r); background: var(--surface); }
+table { border-collapse: collapse; width: 100%; font-size: .9rem; }
+th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-family: var(--display); font-size: .74rem; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); font-weight: 700; background: var(--sunken); white-space: nowrap; }
+td.price { font-family: var(--mono); font-variant-numeric: tabular-nums; font-weight: 600; white-space: nowrap; text-align: right; }
+th.r { text-align: right; }
+tr.best td { background: color-mix(in srgb, var(--tag) 18%, var(--surface)); }
+tr.details td { background: var(--sunken); }
+.reasons { list-style: none; padding: 0; margin: 0; display: grid; gap: 3px; font-size: .86rem; }
+.reasons li { display: grid; grid-template-columns: 18px minmax(0, 1fr); gap: 6px; }
+.reasons .ok { color: var(--ok); } .reasons .warn { color: var(--warn); } .reasons .fail { color: var(--bad); } .reasons .info { color: var(--accent); }
+.empty { padding: 22px; text-align: center; color: var(--muted); }
+.pf { font-size: .74rem; font-weight: 700; border-radius: 3px; padding: 1px 6px; white-space: nowrap; background: var(--sunken); }
+.store { font-weight: 700; }
+.sub { font-size: .8rem; color: var(--muted); }
+.cov-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; padding: 14px; }
+.cov { display: grid; gap: 6px; font-size: .86rem; }
+.cov dl { display: grid; grid-template-columns: auto auto; justify-content: start; gap: 2px 14px; margin: 0; }
+.cov dt { color: var(--muted); } .cov dd { margin: 0; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+
+/* lower sections */
+.section { display: grid; gap: 14px; }
+.section > header { display: grid; gap: 4px; max-width: 70ch; }
+.cards3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+@media (max-width: 900px) { .cards3 { grid-template-columns: minmax(0, 1fr); } }
+.pcard { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 16px; display: grid; gap: 10px; align-content: start; }
+.pcard .head { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+.pcard ul { margin: 0; padding-left: 18px; display: grid; gap: 5px; font-size: .88rem; }
+.alt th:first-child, .alt td:first-child { min-width: 190px; }
+.fit { font-weight: 700; font-size: .78rem; white-space: nowrap; }
+.split { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+@media (max-width: 900px) { .split { grid-template-columns: minmax(0, 1fr); } }
+.panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 16px; display: grid; gap: 10px; align-content: start; }
+.btnbar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.bookmarklet { display: inline-block; border: 2px dashed var(--accent); border-radius: 4px; padding: 5px 12px; font-weight: 700; text-decoration: none; cursor: grab; }
+.pagefoot { border-top: 1px solid var(--line); padding-top: 16px; color: var(--muted); font-size: .84rem; display: grid; gap: 6px; max-width: 90ch; }
+@media (prefers-reduced-motion: no-preference) { .label-tag { animation: drop .35s ease-out both; } @keyframes drop { from { transform: translateY(-6px); opacity: .6; } } }
+@media (max-width: 520px) { .row3 { grid-template-columns: repeat(2, minmax(0, 1fr)); } .label-tag { grid-template-columns: minmax(0, 1fr); } .label-tag .price { text-align: left; } }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true"><path d="M6 6h20l8 8v20H6z" fill="var(--tag)" stroke="var(--ink)" stroke-width="2"/><circle cx="27" cy="13" r="2.4" fill="var(--ink)"/><path d="M11 24h18M11 29h11" stroke="var(--ink)" stroke-width="2.4" stroke-linecap="round"/></svg>
+      <div>
+        <h1>Delivery Price Finder</h1>
+        <p>Start from your Grubhub order. See the lowest verified price for the same item on Uber Eats or DoorDash, branch by branch.</p>
+      </div>
+    </div>
+    <div class="snapmeta" id="snapMeta"></div>
+  </header>
+
+  <div class="main">
+    <section class="slip" aria-labelledby="orderTitle">
+      <div style="display:grid;gap:6px">
+        <h2 id="orderTitle">Your Grubhub order</h2>
+        <div class="presets" id="presets" aria-label="Example orders from the snapshot"></div>
+      </div>
+
+      <div class="ghbox">
+        <div class="field">
+          <label for="ghUrl">Grubhub restaurant link (optional)</label>
+          <div class="btnbar" style="flex-wrap:nowrap">
+            <input type="url" id="ghUrl" placeholder="https://www.grubhub.com/restaurant/…/434510">
+            <button class="btn" id="ghLookup" type="button">Look up</button>
+          </div>
+        </div>
+        <div id="ghResult"></div>
+        <div id="ghMenus"></div>
+      </div>
+
+      <div class="field">
+        <label for="chain">Restaurant or chain</label>
+        <input type="text" id="chain" placeholder="e.g. McDonald's" autocomplete="off">
+      </div>
+      <div class="row2">
+        <div class="field">
+          <span class="lbl" id="modeLbl">Order mode</span>
+          <div class="seg" role="radiogroup" aria-labelledby="modeLbl">
+            <label><input type="radio" name="mode" id="modeDelivery" value="delivery" checked><span>Delivery</span></label>
+            <label><input type="radio" name="mode" id="modePickup" value="pickup"><span>Pickup</span></label>
+          </div>
+        </div>
+        <div class="field">
+          <label for="stateFilter">Location</label>
+          <select id="stateFilter"><option value="">All 50 states + DC</option></select>
+        </div>
+      </div>
+
+      <div id="items"></div>
+      <div class="btnbar">
+        <button class="btn" id="addItem" type="button">Add item</button>
+        <button class="btn ghost" id="resetOrder" type="button">Clear order</button>
+      </div>
+
+      <div class="row2">
+        <div class="field">
+          <label for="fresh">Use prices observed within</label>
+          <select id="fresh">
+            <option value="24">24 hours</option>
+            <option value="168" selected>7 days</option>
+            <option value="720">30 days</option>
+          </select>
+        </div>
+        <div class="field">
+          <span class="lbl">Platforms</span>
+          <div class="checks">
+            <label><input type="checkbox" id="pfUbereats" checked> Uber Eats</label>
+            <label><input type="checkbox" id="pfDoordash" checked> DoorDash</label>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="results" aria-labelledby="resultsTitle">
+      <div class="reshead">
+        <h2 id="resultsTitle" class="eyebrow" style="font-size:.78rem">Best verified match</h2>
+        <label class="runpick"><span>Prices from</span> <select id="runSel"></select></label>
+      </div>
+      <div id="winner"></div>
+      <p class="coverage" id="coverage"></p>
+      <div class="tabs" role="tablist" id="tabs">
+        <button role="tab" data-tab="verified" aria-selected="true">Verified matches<span class="n" id="nVerified">0</span></button>
+        <button role="tab" data-tab="uncertain" aria-selected="false">Needs confirmation<span class="n" id="nUncertain">0</span></button>
+        <button role="tab" data-tab="rejected" aria-selected="false">Not the same item<span class="n" id="nRejected">0</span></button>
+        <button role="tab" data-tab="coverage" aria-selected="false">Coverage &amp; blocks</button>
+      </div>
+      <div id="tabBody"></div>
+    </section>
+  </div>
+
+  <section class="section" aria-labelledby="srcTitle">
+    <header>
+      <h2 id="srcTitle">Where the prices come from</h2>
+      <p class="muted">What each platform publishes to an anonymous visitor, as observed from GitHub-hosted runners. Blocks are reported, never bypassed.</p>
+    </header>
+    <div class="cards3" id="platformCards"></div>
+  </section>
+
+  <section class="section" aria-labelledby="altTitle">
+    <header>
+      <h2 id="altTitle">Other ways to get DoorDash, Uber Eats and Grubhub data</h2>
+      <p class="muted" id="altIntro"></p>
+    </header>
+    <div class="tablewrap"><table class="alt" id="altTable"></table></div>
+  </section>
+
+  <section class="section" aria-labelledby="addTitle">
+    <header>
+      <h2 id="addTitle">Add prices you collected</h2>
+      <p class="muted">Imported prices are checked against the same rules and labelled “Imported”. Nothing you add leaves this page.</p>
+    </header>
+    <div class="split">
+      <div class="panel">
+        <h3>Import JSON or CSV</h3>
+        <p class="small muted">Accepts the full app’s export, the capture bookmarklet’s output, or CSV with the documented columns. US stores, USD and https store links on doordash.com or ubereats.com only.</p>
+        <input type="file" id="importFile" accept=".json,.csv,application/json,text/csv">
+        <textarea id="importText" aria-label="Paste JSON or CSV" placeholder='{"observations":[{"platform":"ubereats","store_id":"…","store_name":"…","store_url":"https://www.ubereats.com/store/…","address":{"street":"…","city":"…","state":"IL","zip":"60638","country":"US"},"observed_at":"2026-10-08T12:00:00Z","order_mode":"delivery","items":[{"name":"…","price":"21.55"}]}]}'></textarea>
+        <div class="btnbar"><button class="btn primary" id="importBtn" type="button">Check and add</button><button class="btn" id="clearImport" type="button">Remove imported</button></div>
+        <div id="importMsg"></div>
+      </div>
+      <div class="panel">
+        <h3>Capture a store page in your own browser</h3>
+        <p class="small muted">DoorDash store pages show servers a bot check, so they cannot be read from here. In your own browser, open a DoorDash or Uber Eats store page, choose Delivery or Pickup, then run this bookmarklet. It reads only the menu data the page publishes (schema.org), shows it to you, and gives you JSON to paste on the left. It sends nothing anywhere.</p>
+        <div class="btnbar"><a id="captureBookmarklet" class="bookmarklet" href="#">Capture menu</a><button class="btn" id="captureCopy" type="button">Copy bookmarklet code</button></div>
+        <p class="small muted">Drag “Capture menu” to your bookmarks bar, or copy the code and save it as a new bookmark’s URL. Prices you capture can depend on your login and delivery address, and are labelled as captured in your session.</p>
+        <textarea id="captureCode" aria-label="Bookmarklet code" readonly hidden></textarea>
+        <div id="captureMsg"></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="pagefoot" id="footer">
+    <p>Prices are item subtotals before tax, fees, tip and promotions, as published on public store pages to an anonymous visitor with no delivery address. A match is “verified” only when chain, product, size, flavor, piece count, modifiers and quantity all agree. Results name the number of locations checked; they are not a claim about every US branch.</p>
+    <p>A distant branch’s price does not mean it delivers to you. This page stores nothing and sends nothing; it ranks a published snapshot plus anything you import.</p>
+  </footer>
+</div>
+
+<script type="application/json" id="snapshot-data">@SNAPSHOT@</script>
+<script type="application/json" id="sources-data">@SOURCES@</script>
+<script type="text/plain" id="fpc-capture">@CAPTURE@</script>
+<script id="fpc-engine">@ENGINE@</script>
+<script id="board-ui">
+(function () {
+  'use strict';
+  var E = window.FPCEngine;
+  var $ = function (id) { return document.getElementById(id); };
+  function h(tag, props) {
+    var el = document.createElement(tag);
+    if (props) Object.keys(props).forEach(function (k) {
+      var v = props[k];
+      if (v == null || v === false) return;
+      if (k === 'class') el.className = v;
+      else if (k === 'text') el.textContent = v;
+      else if (k === 'on') Object.keys(v).forEach(function (ev) { el.addEventListener(ev, v[ev]); });
+      else if (k === 'value' || k === 'checked' || k === 'disabled' || k === 'hidden' || k === 'selected') el[k] = v;
+      else el.setAttribute(k, v === true ? '' : String(v));
+    });
+    for (var i = 2; i < arguments.length; i++) add(el, arguments[i]);
+    return el;
+  }
+  function add(el, c) {
+    if (c == null || c === false) return;
+    if (Array.isArray(c)) { c.forEach(function (x) { add(el, x); }); return; }
+    el.appendChild(typeof c === 'object' ? c : document.createTextNode(String(c)));
+  }
+  function setKids(el) { while (el.firstChild) el.removeChild(el.firstChild); for (var i = 1; i < arguments.length; i++) add(el, arguments[i]); }
+  function readJSON(id) { try { return JSON.parse($(id).textContent); } catch (e) { return null; } }
+  function link(url, text, platform) {
+    var u = E.safeUrl(url, platform);
+    return u ? h('a', { href: u, target: '_blank', rel: 'noopener noreferrer nofollow' }, text) : h('span', { class: 'muted' }, text);
+  }
+  function money(c) { return Number.isInteger(c) ? E.formatCents(c) : '—'; }
+  var PLAT = { doordash: 'DoorDash', ubereats: 'Uber Eats' };
+  var MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  function stamp(iso) {
+    var d = new Date(iso); if (!isFinite(d)) return 'unknown time';
+    function p(n) { return n < 10 ? '0' + n : '' + n; }
+    return d.getUTCDate() + ' ' + MONTHS[d.getUTCMonth()] + ' ' + d.getUTCFullYear() + ', ' + p(d.getUTCHours()) + ':' + p(d.getUTCMinutes()) + ' UTC';
+  }
+  function ago(iso) {
+    var t = Date.parse(iso); if (!isFinite(t)) return 'unknown time';
+    var s = (Date.now() - t) / 1000;
+    if (s < 90) return 'just now'; if (s < 5400) return Math.round(s / 60) + ' min ago';
+    if (s < 172800) return Math.round(s / 3600) + ' h ago'; return Math.round(s / 86400) + ' days ago';
+  }
+  function addrLine(a) { a = a || {}; return [a.street, a.city, [a.state, a.zip].filter(Boolean).join(' ')].filter(Boolean).join(', '); }
+
+  // ------------------------------------------------------------------ data
+  // Each live run is one coherent snapshot (menus change through the day, so
+  // runs are never merged: a store's newest observation would hide an item it
+  // listed at another hour).
+  var DATA = readJSON('snapshot-data') || { runs: [] };
+  var RUNS = (DATA.runs || []).slice().sort(function (a, b) { return String(b.generated_at).localeCompare(String(a.generated_at)); });
+  var SRC = readJSON('sources-data') || {};
+  RUNS.forEach(function (run) {
+    run.obs = []; run.rejected = [];
+    (run.searches || []).forEach(function (s) {
+      (s.observations || []).forEach(function (o) {
+        // Same checks as any import (US-only, USD, https platform link, valid timestamp).
+        // A store page that was read but listed nothing like the order still
+        // counts as a checked location, so it is validated with a placeholder
+        // item that is removed again.
+        var none = !(o.items || []).length;
+        var v = E.validateImport([none ? Object.assign({}, o, { items: [{ name: 'placeholder' }] }) : o], { now: Date.now() });
+        if (!v.observations.length) { run.rejected.push(v.errors.join('; ')); return; }
+        var x = v.observations[0];
+        if (none) x.items = [];
+        x.source = 'snapshot'; x.extraction = o.extraction || 'snapshot'; x.search = s.label;
+        run.obs.push(x);
+      });
+    });
+  });
+  var EMPTY_RUN = { obs: [], rejected: [], searches: [], grubhub_menus: [] };
+  function RUN() { return RUNS[S.run] || EMPTY_RUN; }
+  // Grubhub menus: the newest successful read of each Grubhub listing.
+  var MENUS = [], seenGh = {};
+  RUNS.forEach(function (run) {
+    (run.grubhub_menus || []).forEach(function (g) {
+      if (!g || !g.ok || !g.menu || !(g.menu.items || []).length || seenGh[g.grubhub_url]) return;
+      seenGh[g.grubhub_url] = 1; MENUS.push(g);
+    });
+  });
+
+  function blankItem() { return { name: '', size: '', flavor: '', count: '', quantity: '1', ghSubtotal: '', modifiers: [], aliases: '', note: '' }; }
+  var S = {
+    order: { chain: '', chainAliases: '', mode: 'delivery', items: [blankItem()] },
+    state: '', staleHours: 168, platforms: { ubereats: true, doordash: true },
+    imported: [], tab: 'verified', open: {}, preset: null, run: 0, runNote: ''
+  };
+
+  // ------------------------------------------------------------------ presets from the snapshot searches
+  function presetList() {
+    var out = [], seen = {};
+    var all = [], withData = {};
+    RUNS.forEach(function (run) { (run.searches || []).forEach(function (s) {
+      all.push(s);
+      var o = s.request && s.request.order;
+      if (o && o.chain && (o.items || []).length && (s.observations || []).length) withData[(o.chain + '|' + o.items[0].name).toLowerCase()] = 1;
+    }); });
+    all.forEach(function (s, i) {
+      var o = s.request && s.request.order; if (!o || !o.chain || !(o.items || []).length) return;
+      var k = (o.chain + '|' + o.items[0].name).toLowerCase(); if (seen[k] || !withData[k]) return; seen[k] = 1;
+      var gh = null;
+      if (/lou malnati/i.test(o.chain) && MENUS.length) {
+        var m = MENUS[0].menu, it = (m.items || []).filter(function (x) { return /^small - deep dish margherita$/i.test(x.name); })[0];
+        if (it) gh = { menu: 0, item: it };
+      }
+      out.push({ key: 's' + i, label: o.chain + ' · ' + (gh ? gh.item.name : o.items[0].name), chain: o.chain, item: gh ? gh.item.name : o.items[0].name, gh: gh });
+    });
+    // Orders with a real Grubhub price first: they show the whole comparison.
+    return out.filter(function (p) { return p.gh; }).concat(out.filter(function (p) { return !p.gh; }));
+  }
+  function applyPreset(p) {
+    S.preset = p.key;
+    var it = blankItem(); it.name = p.item;
+    if (p.gh) {
+      it.ghUnit = ghUnit(p.gh.item.price_cents, MENUS[p.gh.menu].menu);
+      it.ghSubtotal = (p.gh.item.price_cents / 100).toFixed(2);
+      it.note = it.ghUnit.text(1);
+    }
+    S.order = { chain: p.chain, chainAliases: '', mode: 'delivery', items: [it] };
+    // Use the newest run in which a checked store listed this exact item.
+    S.runNote = '';
+    var pick = -1;
+    for (var i = 0; i < RUNS.length && pick < 0; i++) if (evalRun(i).winner) pick = i;
+    if (pick > 0) S.runNote = 'The newest run (' + stamp(RUNS[0].generated_at) + ') found no exact listing for this item at the stores it checked; menus can change by time of day. Showing the newest run that did.';
+    S.run = pick < 0 ? 0 : pick;
+    $('runSel').value = String(S.run);
+    renderOrder(); renderMeta(); evaluate();
+  }
+
+  // ------------------------------------------------------------------ order form
+  function inputField(id, label, value, onInput, attrs) {
+    var inp = h('input', Object.assign({ type: 'text', id: id, value: value, autocomplete: 'off', on: { input: function () { onInput(inp.value); } } }, attrs || {}));
+    return h('div', { class: 'field' }, h('label', { for: id }, label), inp);
+  }
+  function renderOrder() {
+    $('chain').value = S.order.chain;
+    $('modeDelivery').checked = S.order.mode === 'delivery'; $('modePickup').checked = S.order.mode === 'pickup';
+    var box = $('items'); setKids(box);
+    S.order.items.forEach(function (it, i) {
+      var multi = S.order.items.length > 1;
+      var hint = h('p', { class: 'hint', id: 'it' + i + '_hint' });
+      var upd = function (k) {
+        return function (v) {
+          it[k] = v;
+          if (k === 'name' || k === 'ghSubtotal') { it.note = ''; it.ghUnit = null; }
+          if (k === 'quantity' && it.ghUnit) {
+            // Price picked from a Grubhub menu: keep the subtotal in step with the quantity.
+            var q = E.prepareItem(it, i).quantity || 1;
+            it.ghSubtotal = (E.mulCents(it.ghUnit.cents, q) / 100).toFixed(2);
+            it.note = it.ghUnit.text(q);
+            var g = $('it' + i + '_gh'); if (g) g.value = it.ghSubtotal;
+          }
+          S.preset = null; markPresets(); itemHint(it, i); evaluate();
+        };
+      };
+      box.appendChild(h('div', { class: 'item' },
+        h('div', { class: 'item-head' }, h('span', { class: 'eyebrow' }, multi ? 'Item ' + (i + 1) : 'Item'),
+          multi ? h('button', { class: 'btn ghost', type: 'button', on: { click: function () { S.order.items.splice(i, 1); renderOrder(); evaluate(); } } }, 'Remove') : null),
+        inputField('it' + i + '_name', 'Item name', it.name, upd('name'), { placeholder: 'e.g. 10 pc. Chicken McNuggets' }),
+        h('div', { class: 'row3' },
+          inputField('it' + i + '_size', 'Size', it.size, upd('size'), { placeholder: 'e.g. Large' }),
+          inputField('it' + i + '_flavor', 'Flavor', it.flavor, upd('flavor'), { placeholder: 'e.g. BBQ' }),
+          inputField('it' + i + '_count', 'Pieces', it.count, upd('count'), { placeholder: 'e.g. 10', inputmode: 'numeric' })),
+        h('div', { class: 'row2' },
+          inputField('it' + i + '_qty', 'Quantity', it.quantity, upd('quantity'), { inputmode: 'numeric' }),
+          inputField('it' + i + '_gh', 'Grubhub item subtotal ($)', it.ghSubtotal, upd('ghSubtotal'), { inputmode: 'decimal', placeholder: 'qty × price' })),
+        hint));
+      itemHint(it, i);
+    });
+    markPresets();
+  }
+  function itemHint(it, i) {
+    var el = $('it' + i + '_hint'); if (!el) return;
+    var p = E.prepareItem(it, i), bits = [];
+    if (p.count) bits.push(p.count + ' pieces');
+    var a = p.size; if (a.sizeWord) bits.push('size ' + a.sizeWord); if (a.oz) bits.push(a.oz + ' oz'); if (a.inch) bits.push(a.inch + '-inch');
+    var txt = [];
+    if (it.note) txt.push(it.note);
+    if (bits.length) txt.push('Read from the name: ' + bits.join(', ') + '.');
+    var issues = p.issues.filter(function (x) { return !/required/.test(x) || it.name; });
+    el.className = 'hint' + (issues.length ? ' warn' : '');
+    el.textContent = issues.length ? issues.join(' · ') : txt.join(' ');
+  }
+  function renderPresets() {
+    var box = $('presets'); setKids(box);
+    presetList().forEach(function (p) {
+      box.appendChild(h('button', { class: 'btn preset', type: 'button', 'data-key': p.key, 'aria-pressed': 'false', on: { click: function () { applyPreset(p); } } }, p.label));
+    });
+  }
+  function markPresets() { Array.prototype.forEach.call(document.querySelectorAll('#presets button'), function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-key') === S.preset)); }); }
+
+  // ------------------------------------------------------------------ Grubhub menus (MenuPages, Grubhub-owned)
+  function renderMenus(onlyIdx) {
+    var box = $('ghMenus'); setKids(box);
+    MENUS.forEach(function (g, mi) {
+      if (onlyIdx != null && onlyIdx !== mi) return;
+      var m = g.menu;
+      var sel = h('select', { id: 'ghMenu' + mi, 'aria-label': 'Grubhub menu item' }, h('option', { value: '' }, 'Pick an item to fill the order (' + m.items.length + ' priced listings)'));
+      m.items.forEach(function (it, j) {
+        if (!Number.isInteger(it.price_cents)) return;
+        sel.appendChild(h('option', { value: String(j) }, it.name + (it.variant ? ' — ' + it.variant : '') + ' · ' + E.formatCents(it.price_cents) + (it.section ? ' (' + it.section + ')' : '')));
+      });
+      sel.addEventListener('change', function () {
+        var it = m.items[+sel.value]; if (!it) return;
+        var target = S.order.items[0];
+        if (S.order.chain && E.matchChain(S.order.chain, m.restaurant_name, []).status === 'mismatch') S.order.items = [target = blankItem()];
+        S.order.chain = m.restaurant_name;
+        target.name = it.name; target.size = it.variant || '';
+        var q = E.prepareItem(target, 0).quantity || 1;
+        target.ghUnit = ghUnit(it.price_cents, m);
+        target.ghSubtotal = (E.mulCents(it.price_cents, q) / 100).toFixed(2);
+        target.note = target.ghUnit.text(q);
+        S.preset = null; renderOrder(); evaluate();
+      });
+      var gid = (/\/(\d+)\/?$/.exec(g.grubhub_url) || [])[1];
+      box.appendChild(h('div', { class: 'field' },
+        h('p', { class: 'menuhead' }, h('strong', null, m.restaurant_name), ' · ', addrLine(m.address), h('br'),
+          h('span', { class: 'sub' }, 'Grubhub ID ', gid || '?', ' · menu from ', link(m.source_url, 'MenuPages'), ' (Grubhub-owned), which links to this Grubhub listing · ', stamp(m.observed_at))),
+        sel));
+    });
+  }
+  function ghUnit(cents, m) {
+    return { cents: cents, text: function (q) {
+      return 'Grubhub price ' + E.formatCents(cents) + (q > 1 ? ' × ' + q : '') + ' at ' + m.restaurant_name + ', ' + (m.address && m.address.city || '') +
+        ', from MenuPages (Grubhub-owned), observed ' + stamp(m.observed_at) + '.';
+    } };
+  }
+  function ghLookup() {
+    var r = E.parseGrubhubUrl($('ghUrl').value);
+    if (!r.ok) { setKids($('ghResult'), h('p', { class: 'msg warn' }, r.error + '. Enter the order by hand.')); renderMenus(); return; }
+    var mi = -1;
+    MENUS.forEach(function (g, i) { if ((/\/(\d+)\/?$/.exec(g.grubhub_url) || [])[1] === r.restaurantId) mi = i; });
+    if (mi >= 0) {
+      setKids($('ghResult'), h('p', { class: 'msg ok' }, 'This Grubhub restaurant’s menu is in the snapshot. Pick your item below.'));
+      renderMenus(mi);
+    } else {
+      if (!S.order.chain) { S.order.chain = r.chainGuess; $('chain').value = r.chainGuess; evaluate(); }
+      setKids($('ghResult'), h('p', { class: 'msg' }, 'Grubhub restaurant ' + r.restaurantId + ' is not in this snapshot. Its pages are drawn by JavaScript and publish no prices, so enter the item and your Grubhub subtotal by hand. The full app can look it up on MenuPages for you. ', r.chainGuess ? 'Chain guessed from the link: ' + r.chainGuess + '.' : ''));
+      renderMenus();
+    }
+  }
+
+  // ------------------------------------------------------------------ evaluate + results
+  var EV = null, timer = null;
+  function evaluate() { clearTimeout(timer); timer = setTimeout(run, 60); }
+  function evalRun(idx) {
+    var pf = Object.keys(S.platforms).filter(function (k) { return S.platforms[k]; });
+    return E.evaluate(S.order, (RUNS[idx] || EMPTY_RUN).obs.concat(S.imported), {
+      mode: S.order.mode, platforms: pf, staleHours: S.staleHours, includeImported: true,
+      filters: S.state ? { state: S.state } : null, now: Date.now()
+    });
+  }
+  function run() { EV = evalRun(S.run); renderWinner(); renderTabs(); }
+  function renderWinner() {
+    var box = $('winner'), ev = EV;
+    $('coverage').textContent = (S.runNote ? S.runNote + ' ' : '') + ev.coverage.statement + excludedText(ev.coverage.excluded);
+    if (ev.prep.problems.length || ev.prep.items.some(function (i) { return !i.name; })) {
+      setKids(box, h('div', { class: 'label-empty' }, h('strong', null, 'Choose an example above or enter your order'), h('p', { class: 'muted small' }, 'Restaurant and item name are enough to start. Add your Grubhub subtotal to see the difference.')));
+      return;
+    }
+    if (!ev.winner) {
+      var why = ev.rows.verified.length ? 'Verified listings exist but are older than your freshness setting or marked unavailable.' :
+        (ev.rows.uncertain.length ? 'Some listings look close but need confirmation; see the Needs confirmation tab.' : 'No checked store lists this exact item. See Coverage & blocks for what was checked.');
+      setKids(box, h('div', { class: 'label-empty' }, h('strong', null, 'No verified match yet'), h('p', { class: 'muted small' }, why)));
+      return;
+    }
+    var w = ev.winner, r = w.kind === 'item' ? w.row : w.basket;
+    var cents = w.kind === 'item' ? r.lineCents : r.subtotalCents;
+    var dollars = E.formatCents(cents).replace('$', '').split('.');
+    var save = r.savingsCents;
+    var what = w.kind === 'item' ? (r.quantity > 1 ? r.quantity + ' × ' : '') + r.candidate : 'Your ' + r.parts.length + '-item basket at one branch';
+    setKids(box, h('div', { class: 'label-tag', role: 'group', 'aria-label': 'Lowest verified price' },
+      h('span', { class: 'bar' }, (r.storeId || '').slice(0, 14)),
+      h('p', { class: 'eyebrow' }, ev.winnerLabel + (w.ties ? ' · ' + (w.ties + 1) + ' stores tie' : '')),
+      h('div', { style: 'display:grid;gap:4px;min-width:0' },
+        h('p', { class: 'what' }, what),
+        h('p', { class: 'where' }, h('strong', null, PLAT[r.platform] || r.platform), ' · ', r.storeName),
+        h('p', { class: 'where' }, addrLine(r.address))),
+      h('p', { class: 'price', 'aria-label': E.formatCents(cents) }, '$' + dollars[0], h('sup', null, '.' + dollars[1])),
+      h('div', { class: 'foot' },
+        h('span', null, 'Item subtotal before tax, fees and tip'),
+        h('span', null, 'Observed ' + stamp(r.observedAt) + ' (' + ago(r.observedAt) + ')'),
+        Number.isInteger(save) ? h('span', { class: 'save' }, save > 0 ? 'Saves ' + E.formatCents(save) + ' vs your Grubhub ' + E.formatCents(r.ghLineCents != null ? r.ghLineCents : r.ghSubtotalCents) : save === 0 ? 'Same as your Grubhub subtotal' : E.formatCents(-save) + ' more than your Grubhub subtotal') : h('span', null, 'Add your Grubhub subtotal to compare'),
+        link(r.storeUrl, 'Open store page', r.platform),
+        r.source === 'import' ? h('span', null, 'Imported by you') : null,
+        h('span', null, 'May not deliver to you'))));
+  }
+  function excludedText(x) {
+    var parts = [];
+    if (x.otherChain) parts.push(x.otherChain + ' other-chain store' + (x.otherChain > 1 ? 's' : ''));
+    if (x.location) parts.push(x.location + ' outside your location filter');
+    if (x.otherMode) parts.push(x.otherMode + ' priced for the other order mode');
+    if (x.platform) parts.push(x.platform + ' on a platform you turned off');
+    return parts.length ? ' Not counted: ' + parts.join(', ') + '.' : '';
+  }
+  function renderTabs() {
+    var ev = EV;
+    $('nVerified').textContent = ev.multi ? ev.baskets.filter(function (b) { return b.status === 'complete'; }).length : ev.rows.verified.length;
+    $('nUncertain').textContent = ev.rows.uncertain.length; $('nRejected').textContent = ev.rows.rejected.length;
+    Array.prototype.forEach.call(document.querySelectorAll('#tabs button'), function (b) { b.setAttribute('aria-selected', String(b.dataset.tab === S.tab)); });
+    var body = $('tabBody');
+    if (S.tab === 'coverage') { setKids(body, coverageView()); return; }
+    var rows = S.tab === 'verified' && ev.multi ? null : ev.rows[S.tab].slice().sort(function (a, b) { return (a.lineCents == null) - (b.lineCents == null) || a.lineCents - b.lineCents; });
+    if (rows === null) { setKids(body, basketView()); return; }
+    if (!rows.length) { setKids(body, h('div', { class: 'tablewrap' }, h('p', { class: 'empty' }, S.tab === 'verified' ? 'No exact matches in the checked stores.' : 'Nothing here.'))); return; }
+    var bestId = ev.winner && ev.winner.kind === 'item' ? ev.winner.row.id : null;
+    var tb = h('tbody');
+    rows.slice(0, 200).forEach(function (r) {
+      var open = !!S.open[r.id];
+      tb.appendChild(h('tr', { class: r.id === bestId ? 'best' : null },
+        h('td', { class: 'price' }, money(r.lineCents), r.quantity > 1 && Number.isInteger(r.unitCents) ? h('div', { class: 'sub' }, r.quantity + ' × ' + money(r.unitCents)) : null),
+        h('td', null, h('div', { class: 'store' }, r.storeName), h('div', { class: 'sub' }, h('span', { class: 'pf' }, PLAT[r.platform]), ' ', r.source === 'import' ? 'Imported · ' : '', 'store ', r.storeId)),
+        h('td', null, [r.city, r.state].filter(Boolean).join(', '), h('div', { class: 'sub mono' }, r.zip)),
+        h('td', null, r.candidate, r.section ? h('div', { class: 'sub' }, r.section) : null),
+        h('td', { class: 'sub' }, ago(r.observedAt), r.stale ? h('div', null, 'older than your setting') : null),
+        h('td', null, h('button', { class: 'btn ghost', type: 'button', 'aria-expanded': String(open), on: { click: function () { S.open[r.id] = !open; renderTabs(); } } }, open ? 'Hide' : 'Why?'))));
+      if (open) tb.appendChild(h('tr', { class: 'details' }, h('td', { colspan: '6' }, details(r))));
+    });
+    setKids(body, h('div', { class: 'tablewrap' }, h('table', null,
+      h('thead', null, h('tr', null, h('th', { class: 'r' }, 'Subtotal'), h('th', null, 'Store'), h('th', null, 'Location'), h('th', null, 'Listing'), h('th', null, 'Observed'), h('th', null, ''))), tb)));
+  }
+  var GLYPH = { ok: '✓', warn: '!', fail: '✕', info: 'i' };
+  function details(r) {
+    return h('div', { style: 'display:grid;gap:8px' },
+      h('ul', { class: 'reasons' }, (r.reasons || []).map(function (x) { return h('li', null, h('span', { class: x.level, 'aria-hidden': 'true' }, GLYPH[x.level] || '·'), h('span', null, x.text)); })),
+      h('p', { class: 'sub' }, addrLine(r.address), ' · ', r.orderMode, ' · ', r.priceContext),
+      h('p', { class: 'sub' }, 'Order mode: ', r.modeBasis),
+      h('p', { class: 'sub' }, 'Read via ', r.extraction, ' · ', link(r.storeUrl, 'store page', r.platform)));
+  }
+  function basketView() {
+    var list = EV.baskets.slice().sort(function (a, b) { return (a.subtotalCents == null) - (b.subtotalCents == null) || a.subtotalCents - b.subtotalCents; });
+    if (!list.length) return h('div', { class: 'tablewrap' }, h('p', { class: 'empty' }, 'No checked branch carries these items.'));
+    return h('div', { class: 'tablewrap' }, h('table', null,
+      h('thead', null, h('tr', null, h('th', { class: 'r' }, 'Basket'), h('th', null, 'Store'), h('th', null, 'Status'), h('th', null, 'Items'))),
+      h('tbody', null, list.map(function (b) {
+        return h('tr', null, h('td', { class: 'price' }, money(b.subtotalCents)),
+          h('td', null, h('div', { class: 'store' }, b.storeName), h('div', { class: 'sub' }, PLAT[b.platform], ' · ', [b.city, b.state, b.zip].filter(Boolean).join(' '))),
+          h('td', null, h('span', { class: 'chip ' + (b.status === 'complete' ? 'ok' : b.status === 'partial' ? 'bad' : 'warn') }, b.status)),
+          h('td', { class: 'sub' }, b.parts.map(function (p) { return p.candidate + ' ' + money(p.lineCents); }).join(' · '), b.missing.length ? h('div', null, 'Missing: ' + b.missing.join(', ')) : null));
+      }))));
+  }
+  function coverageView() {
+    var wrap = h('div', { class: 'tablewrap' });
+    var grid = h('div', { class: 'cov-grid' });
+    (RUN().searches || []).forEach(function (s) {
+      var c = (s.coverage || {}).ubereats || (s.coverage || {}).doordash || {};
+      var bk = {};
+      (s.barriers || []).forEach(function (b) { var k = b && b.kind || 'other'; bk[k] = (bk[k] || 0) + 1; });
+      grid.appendChild(h('div', { class: 'cov' },
+        h('h3', null, s.label),
+        h('p', { class: 'sub' }, 'Search ', s.status || 'not run', ' · ', s.seconds != null ? s.seconds + ' s' : '', s.error ? ' · error: ' + s.error : ''),
+        h('dl', null,
+          h('dt', null, 'Store links found'), h('dd', null, c.discovered != null ? c.discovered : '—'),
+          h('dt', null, 'Outside the US (skipped)'), h('dd', null, c.non_us != null ? c.non_us : '—'),
+          h('dt', null, 'Store pages read'), h('dd', null, c.checked != null ? c.checked : '—'),
+          h('dt', null, 'Blocked'), h('dd', null, c.blocked != null ? c.blocked : '—'),
+          h('dt', null, 'Not yet read (budget)'), h('dd', null, c.remaining != null ? c.remaining : '—'),
+          h('dt', null, 'Sitemaps read / left'), h('dd', null, (c.sitemaps_done != null ? c.sitemaps_done : '—') + ' / ' + (c.sitemaps_pending != null ? c.sitemaps_pending : '—'))),
+        Object.keys(bk).length ? h('p', { class: 'sub' }, 'Blocks: ', Object.keys(bk).map(function (k) { return k.replace(/_/g, ' ') + ' × ' + bk[k]; }).join(', ')) : h('p', { class: 'sub' }, 'No blocks reported.')));
+    });
+    var x = EV.coverage.excluded;
+    grid.appendChild(h('div', { class: 'cov' }, h('h3', null, 'This comparison'),
+      h('dl', null,
+        h('dt', null, 'Locations checked'), h('dd', null, EV.coverage.checkedLocations),
+        h('dt', null, 'Other chains'), h('dd', null, x.otherChain),
+        h('dt', null, 'Other order mode'), h('dd', null, x.otherMode),
+        h('dt', null, 'Outside location filter'), h('dd', null, x.location),
+        h('dt', null, 'Duplicate listings'), h('dd', null, EV.coverage.duplicates + EV.coverage.addressDuplicateListings)),
+      RUN().rejected.length ? h('p', { class: 'sub' }, RUN().rejected.length + ' snapshot record(s) failed validation and are not used.') : null));
+    wrap.appendChild(grid);
+    return wrap;
+  }
+
+  // ------------------------------------------------------------------ static sections
+  function renderMeta() {
+    var box = $('snapMeta');
+    var r = RUN(), n = r.obs.length, menus = MENUS.length;
+    setKids(box,
+      h('span', { class: 'chip info' }, h('span', { class: 'dot' }), 'Prices from ' + (r.generated_at ? stamp(r.generated_at) : 'no run')),
+      h('span', { class: 'chip' }, n + ' store menu' + (n === 1 ? '' : 's') + ' in this run'),
+      h('span', { class: 'chip' }, menus + ' Grubhub menu' + (menus === 1 ? '' : 's') + ' via MenuPages'),
+      r.github_run_id ? h('span', { class: 'chip' }, 'Run ', h('a', { href: 'https://github.com/Quack22e/prediction-market-analytics/actions/runs/' + encodeURIComponent(r.github_run_id), target: '_blank', rel: 'noopener noreferrer' }, r.github_run_id)) : null);
+  }
+  function renderPlatforms() {
+    var box = $('platformCards'); setKids(box);
+    (SRC.platforms || []).forEach(function (p) {
+      box.appendChild(h('article', { class: 'pcard' },
+        h('div', { class: 'head' }, h('h3', null, p.name), h('span', { class: 'chip ' + (p.tone || '') }, h('span', { class: 'dot' }), p.status)),
+        h('p', { class: 'small' }, p.summary),
+        h('ul', null, (p.evidence || []).map(function (e) { return h('li', null, e); }))));
+    });
+  }
+  function renderAlternatives() {
+    var A = SRC.alternatives || {};
+    $('altIntro').textContent = A.intro || '';
+    var t = $('altTable'); setKids(t);
+    var rows = A.methods || [];
+    if (!rows.length) { add(t, h('tbody', null, h('tr', null, h('td', { class: 'empty' }, 'Research in progress.')))); return; }
+    add(t, h('thead', null, h('tr', null, h('th', null, 'Method'), h('th', null, 'Platforms'), h('th', null, 'Who can get it'), h('th', null, 'Branch prices'), h('th', null, 'Fits this app'))));
+    add(t, h('tbody', null, rows.map(function (m) {
+      return h('tr', null,
+        h('td', null, h('strong', null, m.name), h('div', { class: 'sub' }, m.how), (m.evidence || []).length ? h('div', { class: 'sub' }, (m.evidence || []).slice(0, 2).map(function (u, i) { return [i ? ' · ' : '', link(u, 'source ' + (i + 1))]; })) : null),
+        h('td', { class: 'small' }, (m.platforms || []).map(function (p) { return PLAT[p] || (p === 'grubhub' ? 'Grubhub' : p); }).join(', ')),
+        h('td', { class: 'small' }, m.access),
+        h('td', { class: 'small' }, m.branch_prices),
+        h('td', null, h('span', { class: 'chip ' + ({ now: 'ok', user: 'info', contract: 'warn', no: 'bad' }[m.fit] || '') }, m.fit_label), m.fit_note ? h('div', { class: 'sub' }, m.fit_note) : null));
+    })));
+  }
+  function initCapture() {
+    var src = (($('fpc-capture') || {}).textContent || '').replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '').replace(/\n\s+/g, '\n');
+    var bm = 'javascript:' + encodeURIComponent('(function(){' + src + '})();void 0');
+    $('captureBookmarklet').setAttribute('href', bm);
+    $('captureBookmarklet').addEventListener('click', function (e) { e.preventDefault(); setKids($('captureMsg'), h('p', { class: 'msg' }, 'Drag “Capture menu” to your bookmarks bar, then click it while viewing a DoorDash or Uber Eats store page.')); });
+    $('captureCopy').addEventListener('click', function () {
+      var ok = function () { setKids($('captureMsg'), h('p', { class: 'msg ok' }, 'Copied. Create a bookmark and paste the code as its URL.')); };
+      var fail = function () { var t = $('captureCode'); t.hidden = false; t.value = bm; t.focus(); t.select(); setKids($('captureMsg'), h('p', { class: 'msg warn' }, 'Copying was blocked here. The code is selected above; copy it with your keyboard.')); };
+      try { navigator.clipboard.writeText(bm).then(ok, fail); } catch (err) { fail(); }
+    });
+  }
+  function doImport(text) {
+    var v = E.validateImport(text, { now: Date.now() });
+    var added = 0;
+    v.observations.forEach(function (o) { S.imported.push(o); added++; });
+    var parts = [h('p', { class: 'msg ' + (added ? 'ok' : 'bad') }, added ? 'Added ' + added + ' store menu' + (added > 1 ? 's' : '') + ' (labelled Imported).' : 'Nothing was added.')];
+    if (v.errors.length) parts.push(h('p', { class: 'msg bad' }, v.errors.length + ' problem' + (v.errors.length > 1 ? 's' : '') + ': ' + v.errors.slice(0, 6).join(' · ') + (v.errors.length > 6 ? ' …' : '')));
+    if (v.warnings.length) parts.push(h('p', { class: 'msg warn' }, v.warnings.slice(0, 4).join(' · ')));
+    setKids($('importMsg'), parts);
+    evaluate();
+  }
+
+  // ------------------------------------------------------------------ wiring
+  function init() {
+    var sf = $('stateFilter');
+    Object.keys(E.US_STATES).sort().forEach(function (k) { sf.appendChild(h('option', { value: k }, k + ' · ' + E.US_STATES[k])); });
+    $('chain').addEventListener('input', function () { S.order.chain = this.value; S.preset = null; markPresets(); evaluate(); });
+    ['modeDelivery', 'modePickup'].forEach(function (id) { $(id).addEventListener('change', function () { S.order.mode = this.value; evaluate(); }); });
+    sf.addEventListener('change', function () { S.state = this.value; evaluate(); });
+    $('fresh').addEventListener('change', function () { S.staleHours = +this.value; evaluate(); });
+    $('pfUbereats').addEventListener('change', function () { S.platforms.ubereats = this.checked; evaluate(); });
+    $('pfDoordash').addEventListener('change', function () { S.platforms.doordash = this.checked; evaluate(); });
+    $('addItem').addEventListener('click', function () { if (S.order.items.length < 5) { S.order.items.push(blankItem()); renderOrder(); evaluate(); } });
+    $('resetOrder').addEventListener('click', function () { S.order = { chain: '', chainAliases: '', mode: 'delivery', items: [blankItem()] }; S.preset = null; S.open = {}; renderOrder(); evaluate(); });
+    $('ghLookup').addEventListener('click', ghLookup);
+    $('ghUrl').addEventListener('keydown', function (e) { if (e.key === 'Enter') ghLookup(); });
+    $('tabs').addEventListener('click', function (e) { var b = e.target.closest('button[data-tab]'); if (!b) return; S.tab = b.dataset.tab; renderTabs(); });
+    $('importBtn').addEventListener('click', function () { doImport($('importText').value); });
+    $('importFile').addEventListener('change', function () {
+      var f = this.files && this.files[0]; if (!f) return;
+      if (f.size > 8 * 1024 * 1024) { setKids($('importMsg'), h('p', { class: 'msg bad' }, 'That file is over 8 MB.')); return; }
+      var rd = new FileReader(); rd.onload = function () { doImport(String(rd.result || '')); }; rd.readAsText(f);
+    });
+    $('clearImport').addEventListener('click', function () { S.imported = []; setKids($('importMsg'), h('p', { class: 'msg' }, 'Imported prices removed.')); evaluate(); });
+    var rs = $('runSel');
+    RUNS.forEach(function (r, i) { rs.appendChild(h('option', { value: String(i) }, stamp(r.generated_at) + ' · ' + r.obs.length + ' store menu' + (r.obs.length === 1 ? '' : 's') + (i === 0 ? ' (newest)' : ''))); });
+    if (!RUNS.length) rs.appendChild(h('option', { value: '0' }, 'No snapshot'));
+    rs.addEventListener('change', function () { S.run = +this.value; S.runNote = ''; S.open = {}; renderMeta(); evaluate(); });
+    renderMeta(); renderPlatforms(); renderAlternatives(); renderPresets(); renderMenus(); initCapture();
+    var first = presetList()[0];
+    if (first) applyPreset(first); else { renderOrder(); evaluate(); }
+  }
+  init();
+})();
+</script>
