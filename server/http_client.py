@@ -333,6 +333,10 @@ class PoliteClient:
                 if time.time() - hit[0] < ttl:
                     return hit[1], hit[2]
         url = f"{urlsplit(base).scheme}://{host}/robots.txt"
+        bad = self.check_allowed_url(url, "sitemap")   # platform hosts plus sitemap-only hosts
+        if bad:
+            # Never contact a host outside the allowlist, not even for robots.txt.
+            return rules_for_status(403, None, self.cfg.robots_token), barrier("not_allowed", bad, url)
         out = self._fetch_raw(url, kind="robots", cancel=cancel, ttl=self.cfg.cache_ttl_robots_s, check_robots=False)
         net_barrier = out.barrier if out.barrier and out.barrier["kind"] in ("egress_denied", "network") else None
         status = None if net_barrier else out.status

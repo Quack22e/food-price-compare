@@ -90,11 +90,28 @@ test('imports render untrusted text as text, are labelled, and invalid records a
 });
 
 test('switching snapshot runs keeps each run separate', async () => {
+  // Every price shown for a run must have been observed during that run.
   const n = await page.locator('#runSel option').count();
-  if (n < 2) return;
-  await page.selectOption('#runSel', '1');
-  assert.match(await text('#snapMeta'), /store menus? in this run/);
+  assert.ok(n >= 2, 'the committed board should hold several runs');
+  await page.locator('#presets button', { hasText: "McDonald's" }).first().click();
+  const when = (t) => { const m = /(\d{1,2}) (\w{3}) (\d{4}), (\d\d):(\d\d) UTC/.exec(t); return m && Date.parse(`${m[1]} ${m[2]} ${m[3]} ${m[4]}:${m[5]} UTC`); };
+  let withWinner = 0;
+  for (let i = 0; i < n; i++) {
+    await page.selectOption('#runSel', String(i));
+    await page.waitForTimeout(150);
+    const runAt = when(await page.locator('#runSel option').nth(i).innerText());
+    const w = await text('#winner');
+    const seen = /Observed ([^(]+)\(/.exec(w);
+    if (!seen) continue;
+    withWinner++;
+    const at = when(seen[1]);
+    assert.ok(at <= runAt + 5 * 60000 && at >= runAt - 30 * 60000, `run ${i}: price observed ${seen[1]} outside the run at ${new Date(runAt).toISOString()}`);
+    const rows = page.locator('#tabBody tbody tr:not(.details) td:nth-child(5)');
+    assert.ok(await rows.count() >= 1);
+  }
+  assert.ok(withWinner >= 1 && withWinner < n || withWinner === n, 'at least one run shows a verified price');
   await page.selectOption('#runSel', '0');
+  await page.click('#resetOrder');
 });
 
 test('coverage tab lists what each search checked and what blocked it', async () => {

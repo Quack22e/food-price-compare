@@ -38,13 +38,13 @@ def test_extraction_on_real_capture(html_path):
         addr, why = normalize_us_address(parsed["address_raw"])
         assert addr or why, summary
         priced = [i for i in parsed["items"] if i.get("price_cents") is not None]
-        if "menuitem" in parsed["jsonld_types"]:
+        if parsed["items"]:
             assert priced, f"menu published without prices: {summary}"
         else:
             # Observed live (run 37826699377): a military-base McDonald's page
             # publishes Restaurant JSON-LD with no Menu at all. The app records
             # that store as "no menu data"; nothing is extracted or guessed.
-            assert not parsed["items"], summary
+            assert "menu" not in parsed["jsonld_types"], summary
         assert all(i["currency"] in ("USD", None) for i in priced) or not addr, summary
 
 
@@ -70,12 +70,15 @@ def test_grubhub_mirror_reader_on_real_capture(html_path):
                           "address": page["address"], "items": len(page["items"]), "priced": len(priced), "grubhub": linked,
                           "sample": [(i["name"], i["price_cents"]) for i in priced[:5]]}))
         assert not page["problems"], page["problems"]
-        assert page["address"] and page["address"]["state"] and len(priced) >= 10 and linked
+        assert page["address"] and page["address"]["state"] and len(priced) >= 10
+        assert len(linked) == 1, linked              # the reader accepts a page only for exactly one Grubhub ID
     elif host.endswith("menupages.com"):
         parsed = parse_store_page(html, meta.get("final_url") or meta["url"], "")
         priced = [i for i in parsed["items"] if i.get("price_cents")]
         print(json.dumps({"url": meta["url"], "name": parsed["name"], "items": len(parsed["items"]), "priced": len(priced),
                           "grubhub": linked}))
-        assert parsed["restaurant_found"] and priced and linked
+        assert parsed["restaurant_found"] and len(linked) == 1, linked
+        usd = [i for i in priced if (i.get("currency") or "").upper() == "USD"]
+        assert usd, "no priced item publishes its currency as USD"   # the reader never assumes USD
     else:
         pytest.skip(f"not a restaurant menu page: {meta['url']}")

@@ -575,11 +575,14 @@ def test_grubhub_menu_via_menupages(sites, tmp_path):
             cfg2 = make_cfg(tmp_path / "c2", {"grubhub": gh.base, "menupages": mp2.base})
             r2 = extract_grubhub(PoliteClient(cfg2, DiskCache(cfg2.data_dir)), "https://www.grubhub.com/restaurant/lou-malnatis-pizzeria-6456-s-cicero-ave-chicago/434510", gh.base, mp2.base)
             assert "grubhub_menu" not in r2 and any("not 434510" in n for n in r2["notes"])
-        finally:
-            mp2.close()
-            # A MenuPages base outside the configured allowlist is refused.
+            # A MenuPages base outside this client's allowlist is refused without
+            # contacting it at all (not even robots.txt).
+            mp2.hits.clear()
             r_bad = extract_grubhub(client, "https://www.grubhub.com/restaurant/lou-malnatis-pizzeria-6456-s-cicero-ave-chicago/434510", gh.base, mp2.base)
             assert "grubhub_menu" not in r_bad and any("not_allowed" in n for n in r_bad["notes"])
+            assert mp2.hits == {}, mp2.hits
+        finally:
+            mp2.close()
         # Live layout: exact-slug page 404s, a same-address decoy links elsewhere,
         # the "-midway" page links to this Grubhub ID and is used.
         mp3 = FakeSite()
@@ -733,11 +736,15 @@ def test_allmenus_reader_edge_markup():
     from fake_platform import allmenus_page
     from server.grubhub_mirror import parse_allmenus_page
     url = "https://www.allmenus.com/il/buffalo-grove/233783-lou-malnatis-pizzeria/menu/"
-    html = allmenus_page().replace('<p class="description">About Fountain Drink.</p>',
-                                   '<p class="description">About<br/>Fountain <img src="x.jpg" /> Drink.</p>')
-    assert "<br/>" in html
-    page = parse_allmenus_page(html, url)
-    assert not page["problems"] and len(page["items"]) == 5                  # void tags do not shift the depth
+    for a in ("<br>", '<img src="x.jpg">', "<br/>", '<img src="x.jpg" />'):
+        # One void tag (plain or self-closed) in an early description, before later items.
+        # (Exactly one: two unclosed tags would shift the depth by the nesting distance
+        # of the category list and hide the bug.)
+        html = allmenus_page().replace('<p class="description">About BuffaLou Chicken Deep Dish - GF.</p>',
+                                       f'<p class="description">About{a}BuffaLou Chicken.</p>')
+        assert a in html
+        page = parse_allmenus_page(html, url)
+        assert not page["problems"] and len(page["items"]) == 5, (a, page["problems"])  # void tags do not shift the depth
     untitled = allmenus_page().replace('<span class="item-title">Fountain Drink</span>', '')
     assert any("without a title" in p for p in parse_allmenus_page(untitled, url)["problems"])
     dotted = parse_allmenus_page(allmenus_page(desc="Restaurant menu, map for Lou Malnati&#39;s Pizzeria located in 60089, "
