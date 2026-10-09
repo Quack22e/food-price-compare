@@ -338,7 +338,7 @@ The sandbox also checked npm and PyPI packages for these platforms (read as data
 | AllMenus (Grubhub-owned) JSON-LD has item names but no prices, name or address; prices only in HTML | Runs 37743302443, 37744579395 | **Verified live**; HTML prices used only when the HTML names equal the JSON-LD names |
 | AllMenus restaurant sitemaps are unordered and its city pages list no restaurants in HTML | Run 37826699377 | **Verified live**; lookup scans the 21 sitemaps (cached 24 h) |
 | Some real Uber Eats store pages publish Restaurant JSON-LD without a Menu | Run 37826699377 (military-base McDonald's) | **Verified live**; reported as "no menu data" |
-| DoorDash `?pickup=false|true`, Uber Eats `?diningMode=` change the published prices | Pages load with them; no price comparison across modes was made | **Unverified** (recorded in `mode_basis`) |
+| DoorDash `?pickup=false|true`, Uber Eats `?diningMode=` change the published prices | Uber Eats: 18 of 18 branches published the same price in both modes (runs 37886686091, 37888372974). DoorDash: store pages unreadable | Uber Eats: **no difference observed**; DoorDash: **unverified** (both recorded in `mode_basis`) |
 | Uber Eats `__REACT_QUERY_STATE__` (2–3 MB, `\u0022`-escaped JSON) holds the app state | Structure probe | Observed; **not parsed** (undocumented) |
 | Uber Eats `/_p/api/*`, DoorDash `graphql/consumer` | Third-party clients using logged-in sessions | **Not used**: private and session-bound |
 
@@ -351,7 +351,7 @@ These ran on GitHub's runners against the real site (`scripts/snapshot.py`), and
 | Cancel mid-run, then resume from the checkpoint in a new process (as after a restart) | [37887316803](https://github.com/Quack22e/prediction-market-analytics/actions/runs/37887316803) | **Passed.** Cancelled after 2 store pages (status `cancelled`). The resumed job re-fetched none of the 4 handled stores, kept their timestamps, and read 20 new ones (18 menus). |
 | Resume of a job that stopped at its per-run limit | [37886686091](https://github.com/Quack22e/prediction-market-analytics/actions/runs/37886686091) | **Passed.** 6 stores done, 0 re-fetched, 6 new after resume. |
 | Same-branch basket: Taco Bell Crunchwrap Supreme + Chalupa Supreme | 37886686091 | **6 complete baskets**, each at one branch. Lowest: **$14.01** ($7.31 + $6.70) at Fulton MS and Fort Oglethorpe GA (tie), "among 6 checked locations". |
-| Pickup vs delivery (`?diningMode=PICKUP` vs `DELIVERY`), same item, same branches | 37886686091 | Kept separate by the engine. The 5 branches read in both modes published **identical** prices (e.g. $7.31 / $7.31 at Fulton MS). Whether Uber Eats' public JSON-LD ever differs by mode is still unproven. |
+| Pickup vs delivery (`?diningMode=PICKUP` vs `DELIVERY`), same item, same branches | 37886686091, [37888372974](https://github.com/Quack22e/prediction-market-analytics/actions/runs/37888372974) | Kept separate by the engine. **18 of 18 branches** read in both modes (9 McDonald's, 4 Lou Malnati's, 5 Taco Bell) published **identical** prices, e.g. $5.19 / $5.19 for 10 pc. McNuggets in Abingdon VA. Either these merchants price both modes alike, or Uber Eats' public page does not carry mode-specific prices; the data cannot tell which. Each observation's `mode_basis` says so. |
 | Exact matching on real menus | all snapshot runs | 10 pc. McNuggets: 21–22 verified per run, $5.19–$8.55. Look-alikes rejected with reasons (20/40 pc, Meals, Happy Meal, breakfast items). |
 
 ## Alternative data sources
