@@ -262,9 +262,28 @@ describe('index.html end-to-end', { timeout: 300000 }, () => {
     assert.equal(await page.inputValue('#it0_gh'), '43.10');
     assert.match(await text('#it0_hint'), /Grubhub price \$21\.55 × 2 from MenuPages/);
     assert.match(await text('#it0_hint'), /Detected in name: size small/);
+    // Quantity edits keep a picked Grubhub price in step; a new pick starts a fresh item.
+    await page.fill('#it0_qty', '3');
+    assert.equal(await page.inputValue('#it0_gh'), '64.65');
+    assert.match(await text('#it0_hint'), /Grubhub price \$21\.55 × 3 from MenuPages/);
+    await page.fill('#it0_flavor', 'Pesto');
+    const opt2 = await page.locator('#ghMenuSelect option', { hasText: 'Personal - Deep Dish Margherita' }).getAttribute('value');
+    await page.selectOption('#ghMenuSelect', opt2);
+    assert.equal(await page.inputValue('#it0_name'), 'Personal - Deep Dish Margherita');
+    assert.equal(await page.inputValue('#it0_flavor'), '');
+    assert.equal(await page.inputValue('#it0_gh'), '42.75');            // $14.25 × 3, quantity kept
+    assert.equal(await page.inputValue('#ghMenuSelect'), '');           // placeholder again; re-picking it changes nothing
+    await page.click('#addItem');
+    assert.equal(await page.locator('#ghMenuTarget option').count(), 2); // the target list follows the order
+    await page.locator('#items .item-card').nth(1).locator('button:has-text("Remove item")').click();
+    assert.equal(await page.locator('#ghMenuTarget option').count(), 1);
     // The fixture source is http://127.0.0.1, which the URL allowlist refuses to link.
     assert.match(await text('#ghMenu'), /Source page \(no link\)/);
     assert.equal(await page.locator('#ghMenu a').count(), 0);
+    // A rejected URL clears the previous restaurant's menu.
+    await page.fill('#ghUrl', 'https://example.com/foo');
+    await page.click('#ghExtract');
+    assert.equal(await page.locator('#ghMenuSelect').count(), 0);
     await page.click('#resetOrder');
   });
 

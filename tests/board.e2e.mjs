@@ -105,6 +105,64 @@ test('coverage tab lists what each search checked and what blocked it', async ()
   await page.click('#tabs button[data-tab="verified"]');
 });
 
+test('an item the snapshot never searched for is not reported as missing from checked stores', async () => {
+  await page.click('#resetOrder');
+  await page.fill('#chain', "McDonald's");
+  await page.fill('#it0_name', 'Big Mac');
+  await page.waitForFunction(() => /did not search for this item/.test(document.querySelector('#winner').innerText));
+  assert.doesNotMatch(await text('#winner'), /No checked store lists/);
+  assert.match(await text('#coverage'), /read only for a different item/);
+  assert.match(await text('#coverage'), /Results cover only the 0 locations/);
+});
+
+test('picking a menu item starts a fresh item, keeps the quantity, and can be picked again', async () => {
+  await page.click('#resetOrder');
+  await page.fill('#ghUrl', 'https://www.grubhub.com/restaurant/lou-malnatis-pizzeria-6456-s-cicero-ave-chicago/434510');
+  await page.click('#ghLookup');
+  const pick = async (label) => {
+    const v = await page.locator('#ghMenus select option', { hasText: label }).first().getAttribute('value');
+    await page.selectOption('#ghMenus select', v);
+  };
+  await pick('Small - Deep Dish Margherita ·');
+  await page.fill('#it0_qty', '2');
+  await page.fill('#it0_flavor', 'Pesto');
+  await page.fill('#it0_count', '8');
+  await pick('Small - Deep Dish Chicago Classic ·');
+  assert.equal(await page.inputValue('#it0_name'), 'Small - Deep Dish Chicago Classic');
+  assert.equal(await page.inputValue('#it0_flavor'), '');
+  assert.equal(await page.inputValue('#it0_count'), '');
+  assert.equal(await page.inputValue('#it0_qty'), '2');
+  assert.equal(await page.inputValue('#ghMenus select'), '');          // picker reset
+  await page.click('#resetOrder');
+  await pick('Small - Deep Dish Chicago Classic ·');                   // same listing again
+  assert.equal(await page.inputValue('#it0_name'), 'Small - Deep Dish Chicago Classic');
+  assert.match(await page.locator('#ghMenus select option').first().innerText(), /\((\d+) priced listings\)/);
+});
+
+test('the run note follows the current order and filters', async () => {
+  await page.selectOption('#stateFilter', 'AZ');
+  await page.locator('#presets button', { hasText: 'Taco Bell' }).click();
+  await page.selectOption('#stateFilter', '');
+  await page.waitForTimeout(200);
+  const cov = await text('#coverage');
+  const newest = await page.locator('#runSel option').first().innerText();
+  // With all states again, the newest run's own result is shown unless it truly had no match.
+  if (/found no exact listing|checked no stores/.test(cov)) assert.notEqual(await page.inputValue('#runSel'), '0');
+  else assert.equal(await page.inputValue('#runSel'), '0', newest);
+});
+
+test('no horizontal scroll at phone widths', async () => {
+  for (const w of [400, 375, 360]) {
+    const p = await browser.newPage({ viewport: { width: w, height: 800 } });
+    await p.route(/^https?:\/\//, (r) => r.abort());
+    await p.goto('file://' + boardPath);
+    await p.waitForSelector('#winner .label-tag, #winner .label-empty');
+    const [sw, iw] = await p.evaluate(() => [document.documentElement.scrollWidth, window.innerWidth]);
+    assert.ok(sw <= iw, `scrollWidth ${sw} > ${iw} at ${w}px`);
+    await p.close();
+  }
+});
+
 test('no page errors, and no requests except optional fonts', () => {
   assert.deepEqual(errors, []);
   for (const h of hosts) assert.ok(['fonts.googleapis.com', 'fonts.gstatic.com'].includes(h), 'unexpected request to ' + h);

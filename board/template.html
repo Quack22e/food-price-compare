@@ -112,7 +112,9 @@ textarea { font-family: var(--mono); font-size: .82rem; min-height: 110px; resiz
 
 /* results */
 .results { display: grid; gap: 18px; min-width: 0; }
-.wrap, .slip, .results, .section, .panel, .pcard, .ghbox, .item, .cov { grid-template-columns: minmax(0, 1fr); }
+.wrap, .slip, .results, .section, .panel, .pcard, .ghbox, .item, .cov, .slip-head { grid-template-columns: minmax(0, 1fr); }
+.slip-head { display: grid; gap: 6px; }
+.btn.preset { white-space: normal; text-align: left; max-width: 100%; }
 .label-tag { background: var(--tag); color: var(--tag-ink); border-radius: 3px; padding: 16px 20px 14px; display: grid;
   grid-template-columns: minmax(0, 1fr) auto; gap: 6px 20px; box-shadow: 0 1px 0 rgba(0,0,0,.18); position: relative; }
 .label-tag .eyebrow { color: var(--tag-ink); opacity: .78; grid-column: 1 / -1; }
@@ -189,7 +191,7 @@ tr.details td { background: var(--sunken); }
 
   <div class="main">
     <section class="slip" aria-labelledby="orderTitle">
-      <div style="display:grid;gap:6px">
+      <div class="slip-head">
         <h2 id="orderTitle">Your Grubhub order</h2>
         <div class="presets" id="presets" aria-label="Example orders from the snapshot"></div>
       </div>
@@ -367,12 +369,33 @@ tr.details td { background: var(--sunken); }
   // Each live run is one coherent snapshot (menus change through the day, so
   // runs are never merged: a store's newest observation would hide an item it
   // listed at another hour).
+  // Snapshot observations keep only the items whose name contains a word of
+  // the search's item (server/adapters.build_observation prefilter), so a store
+  // counts as checked for an order item only if that item shares such a word.
+  var SIZE_WORDS = { small: 1, medium: 1, large: 1, regular: 1, kids: 1, family: 1, personal: 1, extra: 1, xl: 1 };
+  function looseNorm(x) { return String(x || '').toLowerCase().replace(/['’`]/g, '').replace(/[^a-z0-9]+/g, ' ').trim(); }
+  function scopeTokens(texts) {
+    var t = [];
+    texts.forEach(function (x) { looseNorm(x).split(' ').forEach(function (w) { if (w.length >= 3 && !SIZE_WORDS[w] && !/^\d+$/.test(w) && t.indexOf(w) < 0) t.push(w); }); });
+    return t;
+  }
+  function searchScope(s) {
+    var items = ((s.request || {}).order || {}).items || [];
+    var texts = [];
+    items.forEach(function (it) { texts.push(it.name || ''); (it.aliases || []).forEach(function (a) { texts.push(a); }); if (it.flavor) texts.push(it.flavor); });
+    return scopeTokens(texts);
+  }
+  function covers(scope, item) {
+    var n = looseNorm([item.name].concat(String(item.aliases || '').split(',')).join(' '));
+    return scope.some(function (t) { return n.indexOf(t) >= 0; });
+  }
   var DATA = readJSON('snapshot-data') || { runs: [] };
   var RUNS = (DATA.runs || []).slice().sort(function (a, b) { return String(b.generated_at).localeCompare(String(a.generated_at)); });
   var SRC = readJSON('sources-data') || {};
   RUNS.forEach(function (run) {
     run.obs = []; run.rejected = [];
     (run.searches || []).forEach(function (s) {
+      var scope = searchScope(s);
       (s.observations || []).forEach(function (o) {
         // Same checks as any import (US-only, USD, https platform link, valid timestamp).
         // A store page that was read but listed nothing like the order still
@@ -383,7 +406,7 @@ tr.details td { background: var(--sunken); }
         if (!v.observations.length) { run.rejected.push(v.errors.join('; ')); return; }
         var x = v.observations[0];
         if (none) x.items = [];
-        x.source = 'snapshot'; x.extraction = o.extraction || 'snapshot'; x.search = s.label;
+        x.source = 'snapshot'; x.extraction = o.extraction || 'snapshot'; x.search = s.label; x.scope = scope;
         run.obs.push(x);
       });
     });
@@ -406,7 +429,7 @@ tr.details td { background: var(--sunken); }
   var S = {
     order: { chain: '', chainAliases: '', mode: 'delivery', items: [blankItem()] },
     state: '', staleHours: 168, platforms: { ubereats: true, doordash: true },
-    imported: [], tab: 'verified', open: {}, preset: null, run: 0, runNote: ''
+    imported: [], tab: 'verified', open: {}, preset: null, run: 0, runNote: '', runAuto: true
   };
 
   // ------------------------------------------------------------------ presets from the snapshot searches
@@ -440,14 +463,8 @@ tr.details td { background: var(--sunken); }
       it.note = it.ghUnit.text(1);
     }
     S.order = { chain: p.chain, chainAliases: '', mode: 'delivery', items: [it] };
-    // Use the newest run in which a checked store listed this exact item.
-    S.runNote = '';
-    var pick = -1;
-    for (var i = 0; i < RUNS.length && pick < 0; i++) if (evalRun(i).winner) pick = i;
-    if (pick > 0) S.runNote = 'The newest run (' + stamp(RUNS[0].generated_at) + ') found no exact listing for this item at the stores it checked; menus can change by time of day. Showing the newest run that did.';
-    S.run = pick < 0 ? 0 : pick;
-    $('runSel').value = String(S.run);
-    renderOrder(); renderMeta(); evaluate();
+    S.runAuto = true;
+    renderOrder(); evaluate();
   }
 
   // ------------------------------------------------------------------ order form
@@ -465,7 +482,7 @@ tr.details td { background: var(--sunken); }
       var upd = function (k) {
         return function (v) {
           it[k] = v;
-          if (k === 'name' || k === 'ghSubtotal') { it.note = ''; it.ghUnit = null; }
+          if (k === 'name' || k === 'ghSubtotal' || k === 'size' || k === 'flavor' || k === 'count') { it.note = ''; it.ghUnit = null; }
           if (k === 'quantity' && it.ghUnit) {
             // Price picked from a Grubhub menu: keep the subtotal in step with the quantity.
             var q = E.prepareItem(it, i).quantity || 1;
@@ -473,7 +490,7 @@ tr.details td { background: var(--sunken); }
             it.note = it.ghUnit.text(q);
             var g = $('it' + i + '_gh'); if (g) g.value = it.ghSubtotal;
           }
-          S.preset = null; markPresets(); itemHint(it, i); evaluate();
+          S.preset = null; S.runAuto = S.runAuto || k === 'name'; markPresets(); itemHint(it, i); evaluate();
         };
       };
       box.appendChild(h('div', { class: 'item' },
@@ -522,22 +539,28 @@ tr.details td { background: var(--sunken); }
     MENUS.forEach(function (g, mi) {
       if (onlyIdx != null && onlyIdx !== mi) return;
       var m = g.menu;
-      var sel = h('select', { id: 'ghMenu' + mi, 'aria-label': 'Grubhub menu item' }, h('option', { value: '' }, 'Pick an item to fill the order (' + m.items.length + ' priced listings)'));
+      var priced = m.items.filter(function (x) { return Number.isInteger(x.price_cents); }).length;
+      var sel = h('select', { id: 'ghMenu' + mi, 'aria-label': 'Grubhub menu item' }, h('option', { value: '' }, 'Pick an item to fill the order (' + priced + ' priced listings)'));
       m.items.forEach(function (it, j) {
         if (!Number.isInteger(it.price_cents)) return;
         sel.appendChild(h('option', { value: String(j) }, it.name + (it.variant ? ' — ' + it.variant : '') + ' · ' + E.formatCents(it.price_cents) + (it.section ? ' (' + it.section + ')' : '')));
       });
       sel.addEventListener('change', function () {
-        var it = m.items[+sel.value]; if (!it) return;
-        var target = S.order.items[0];
-        if (S.order.chain && E.matchChain(S.order.chain, m.restaurant_name, []).status === 'mismatch') S.order.items = [target = blankItem()];
-        S.order.chain = m.restaurant_name;
+        if (sel.value === '') return;
+        var it = m.items[+sel.value]; sel.value = '';   // reset, so the same listing can be picked again
+        if (!it) return;
+        var prev = S.order.items[0] || blankItem();
+        // A different product: nothing of the previous item's identity carries over.
+        var target = blankItem();
+        if (!(S.order.chain && E.matchChain(S.order.chain, m.restaurant_name, []).status === 'mismatch')) target.quantity = prev.quantity || '1';
+        S.order.items = [target].concat(S.order.items.slice(1));
+        if (m.restaurant_name) S.order.chain = m.restaurant_name;
         target.name = it.name; target.size = it.variant || '';
         var q = E.prepareItem(target, 0).quantity || 1;
         target.ghUnit = ghUnit(it.price_cents, m);
         target.ghSubtotal = (E.mulCents(it.price_cents, q) / 100).toFixed(2);
         target.note = target.ghUnit.text(q);
-        S.preset = null; renderOrder(); evaluate();
+        S.preset = null; S.runAuto = true; renderOrder(); evaluate();
       });
       var gid = (/\/(\d+)\/?$/.exec(g.grubhub_url) || [])[1];
       box.appendChild(h('div', { class: 'field' },
@@ -581,12 +604,37 @@ tr.details td { background: var(--sunken); }
   function evaluate() { clearTimeout(timer); timer = setTimeout(run, 60); }
   function evalRun(idx) {
     var pf = Object.keys(S.platforms).filter(function (k) { return S.platforms[k]; });
-    return E.evaluate(S.order, (RUNS[idx] || EMPTY_RUN).obs.concat(S.imported), {
+    var inScope = [], out = {};
+    (RUNS[idx] || EMPTY_RUN).obs.forEach(function (o) {
+      if (S.order.items.every(function (it) { return !it.name || covers(o.scope, it); })) inScope.push(o);
+      else out[o.search] = (out[o.search] || 0) + 1;
+    });
+    var ev = E.evaluate(S.order, inScope.concat(S.imported), {
       mode: S.order.mode, platforms: pf, staleHours: S.staleHours, includeImported: true,
       filters: S.state ? { state: S.state } : null, now: Date.now()
     });
+    ev.outOfScope = out;
+    return ev;
   }
-  function run() { EV = evalRun(S.run); renderWinner(); renderTabs(); }
+  function pickRun() {
+    // Newest run in which a checked store listed the order exactly; said so
+    // when that is not the newest run.
+    S.runNote = '';
+    var pick = -1;
+    for (var i = 0; i < RUNS.length && pick < 0; i++) if (evalRun(i).winner) pick = i;
+    if (pick > 0) {
+      var first = evalRun(0), n = first.coverage.checkedLocations;
+      S.runNote = n ? 'The newest run (' + stamp(RUNS[0].generated_at) + ') found no exact listing for this order at the ' + n + ' store' + (n === 1 ? '' : 's') +
+                      ' it checked in your scope; menus can change by time of day. Showing the newest run that did.'
+                    : 'The newest run (' + stamp(RUNS[0].generated_at) + ') checked no stores for this order in your scope. Showing the newest run that did.';
+    }
+    S.run = pick < 0 ? 0 : pick;
+    if ($('runSel')) $('runSel').value = String(S.run);
+  }
+  function run() {
+    if (S.runAuto) { pickRun(); renderMeta(); }
+    EV = evalRun(S.run); renderWinner(); renderTabs();
+  }
   function renderWinner() {
     var box = $('winner'), ev = EV;
     $('coverage').textContent = (S.runNote ? S.runNote + ' ' : '') + ev.coverage.statement + excludedText(ev.coverage.excluded);
@@ -595,8 +643,13 @@ tr.details td { background: var(--sunken); }
       return;
     }
     if (!ev.winner) {
+      var skipped = Object.keys(ev.outOfScope || {});
       var why = ev.rows.verified.length ? 'Verified listings exist but are older than your freshness setting or marked unavailable.' :
-        (ev.rows.uncertain.length ? 'Some listings look close but need confirmation; see the Needs confirmation tab.' : 'No checked store lists this exact item. See Coverage & blocks for what was checked.');
+        (ev.rows.uncertain.length ? 'Some listings look close but need confirmation; see the Needs confirmation tab.' :
+          ev.coverage.checkedLocations ? 'No checked store lists this exact item. See Coverage & blocks for what was checked.' :
+          skipped.length ? 'This snapshot did not search for this item, so it cannot say whether any store sells it. Its searches were: ' + skipped.join('; ') +
+                           '. Pick an example order, or import prices you collected.'
+                         : 'No store in this run is in your scope. See Coverage & blocks for what was checked.');
       setKids(box, h('div', { class: 'label-empty' }, h('strong', null, 'No verified match yet'), h('p', { class: 'muted small' }, why)));
       return;
     }
@@ -623,6 +676,8 @@ tr.details td { background: var(--sunken); }
   }
   function excludedText(x) {
     var parts = [];
+    var oos = 0; Object.keys((EV && EV.outOfScope) || {}).forEach(function (k) { oos += EV.outOfScope[k]; });
+    if (oos) parts.push(oos + ' store page' + (oos > 1 ? 's' : '') + ' read only for a different item, which cannot show this one');
     if (x.otherChain) parts.push(x.otherChain + ' other-chain store' + (x.otherChain > 1 ? 's' : ''));
     if (x.location) parts.push(x.location + ' outside your location filter');
     if (x.otherMode) parts.push(x.otherMode + ' priced for the other order mode');
@@ -679,19 +734,24 @@ tr.details td { background: var(--sunken); }
     var wrap = h('div', { class: 'tablewrap' });
     var grid = h('div', { class: 'cov-grid' });
     (RUN().searches || []).forEach(function (s) {
-      var c = (s.coverage || {}).ubereats || (s.coverage || {}).doordash || {};
+      var cov = s.coverage || {}, plats = Object.keys(cov);
       var bk = {};
       (s.barriers || []).forEach(function (b) { var k = b && b.kind || 'other'; bk[k] = (bk[k] || 0) + 1; });
       grid.appendChild(h('div', { class: 'cov' },
         h('h3', null, s.label),
         h('p', { class: 'sub' }, 'Search ', s.status || 'not run', ' · ', s.seconds != null ? s.seconds + ' s' : '', s.error ? ' · error: ' + s.error : ''),
-        h('dl', null,
-          h('dt', null, 'Store links found'), h('dd', null, c.discovered != null ? c.discovered : '—'),
-          h('dt', null, 'Outside the US (skipped)'), h('dd', null, c.non_us != null ? c.non_us : '—'),
-          h('dt', null, 'Store pages read'), h('dd', null, c.checked != null ? c.checked : '—'),
-          h('dt', null, 'Blocked'), h('dd', null, c.blocked != null ? c.blocked : '—'),
-          h('dt', null, 'Not yet read (budget)'), h('dd', null, c.remaining != null ? c.remaining : '—'),
-          h('dt', null, 'Sitemaps read / left'), h('dd', null, (c.sitemaps_done != null ? c.sitemaps_done : '—') + ' / ' + (c.sitemaps_pending != null ? c.sitemaps_pending : '—'))),
+        (plats.length ? plats : ['']).map(function (pk) {
+          var c = cov[pk] || {};
+          function v(k) { return c[k] != null ? c[k] : '—'; }
+          return [plats.length > 1 ? h('p', { class: 'sub' }, h('strong', null, PLAT[pk] || pk)) : null,
+            h('dl', null,
+              h('dt', null, 'Store links found'), h('dd', null, v('discovered')),
+              h('dt', null, 'Outside the US (skipped)'), h('dd', null, v('non_us')),
+              h('dt', null, 'Store pages read'), h('dd', null, v('checked')),
+              h('dt', null, 'Blocked'), h('dd', null, v('blocked')),
+              h('dt', null, 'Not yet read (budget)'), h('dd', null, v('remaining')),
+              h('dt', null, 'Sitemaps read / left'), h('dd', null, v('sitemaps_done') + ' / ' + v('sitemaps_pending')))];
+        }),
         Object.keys(bk).length ? h('p', { class: 'sub' }, 'Blocks: ', Object.keys(bk).map(function (k) { return k.replace(/_/g, ' ') + ' × ' + bk[k]; }).join(', ')) : h('p', { class: 'sub' }, 'No blocks reported.')));
     });
     var x = EV.coverage.excluded;
@@ -775,7 +835,7 @@ tr.details td { background: var(--sunken); }
     $('pfUbereats').addEventListener('change', function () { S.platforms.ubereats = this.checked; evaluate(); });
     $('pfDoordash').addEventListener('change', function () { S.platforms.doordash = this.checked; evaluate(); });
     $('addItem').addEventListener('click', function () { if (S.order.items.length < 5) { S.order.items.push(blankItem()); renderOrder(); evaluate(); } });
-    $('resetOrder').addEventListener('click', function () { S.order = { chain: '', chainAliases: '', mode: 'delivery', items: [blankItem()] }; S.preset = null; S.open = {}; renderOrder(); evaluate(); });
+    $('resetOrder').addEventListener('click', function () { S.order = { chain: '', chainAliases: '', mode: 'delivery', items: [blankItem()] }; S.preset = null; S.open = {}; S.runAuto = true; renderOrder(); renderMenus(); evaluate(); });
     $('ghLookup').addEventListener('click', ghLookup);
     $('ghUrl').addEventListener('keydown', function (e) { if (e.key === 'Enter') ghLookup(); });
     $('tabs').addEventListener('click', function (e) { var b = e.target.closest('button[data-tab]'); if (!b) return; S.tab = b.dataset.tab; renderTabs(); });
@@ -789,7 +849,7 @@ tr.details td { background: var(--sunken); }
     var rs = $('runSel');
     RUNS.forEach(function (r, i) { rs.appendChild(h('option', { value: String(i) }, stamp(r.generated_at) + ' · ' + r.obs.length + ' store menu' + (r.obs.length === 1 ? '' : 's') + (i === 0 ? ' (newest)' : ''))); });
     if (!RUNS.length) rs.appendChild(h('option', { value: '0' }, 'No snapshot'));
-    rs.addEventListener('change', function () { S.run = +this.value; S.runNote = ''; S.open = {}; renderMeta(); evaluate(); });
+    rs.addEventListener('change', function () { S.run = +this.value; S.runAuto = false; S.runNote = ''; S.open = {}; renderMeta(); evaluate(); });
     renderMeta(); renderPlatforms(); renderAlternatives(); renderPresets(); renderMenus(); initCapture();
     var first = presetList()[0];
     if (first) applyPreset(first); else { renderOrder(); evaluate(); }

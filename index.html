@@ -1448,7 +1448,14 @@ tr.details td { background: var(--bg); }
     $(S.order.mode === 'pickup' ? 'modePickup' : 'modeDelivery').checked = true;
     var box = $('items'); setKids(box);
     S.order.items.forEach(function (it, i) { box.appendChild(itemCard(it, i)); });
+    refreshMenuTarget();
     renderOrderIssues(); scheduleEval();
+  }
+  function refreshMenuTarget() {
+    var t = $('ghMenuTarget'); if (!t) return;
+    var keep = Math.min(+t.value || 0, S.order.items.length - 1);
+    setKids(t, S.order.items.map(function (it, i) { return h('option', { value: String(i) }, 'Fill item ' + (i + 1) + (it.name ? ': ' + it.name : '')); }));
+    t.value = String(Math.max(0, keep));
   }
   function field(label, id, value, onInput, attrs) {
     return h('div', null, h('label', { for: id }, label), h('input', Object.assign({ id: id, value: value, on: { input: function (e) { onInput(e.target.value); } } }, attrs || {})));
@@ -1456,7 +1463,20 @@ tr.details td { background: var(--bg); }
   function itemCard(it, i) {
     var p = 'it' + i + '_';
     var hint = h('div', { class: 'hint', id: p + 'hint' });
-    function upd(k) { return function (v) { it[k] = v; updateHint(it, i); renderOrderIssues(); scheduleEval(); }; }
+    function upd(k) {
+      return function (v) {
+        it[k] = v;
+        if (it._ghUnit && k === 'quantity') {
+          // Price picked from a Grubhub menu: keep the subtotal in step with the quantity.
+          applyGhUnit(it);
+          var g = $(p + 'gh'); if (g) g.value = it.ghSubtotal;
+        } else if (it._ghUnit && (k === 'ghSubtotal' || k === 'name' || k === 'size' || k === 'flavor' || k === 'count')) {
+          it._ghUnit = null;   // edited by hand: the menu price no longer describes this item
+          it._notes = (it._notes || []).filter(function (n) { return n.indexOf('(Grubhub-owned)') < 0; });
+        }
+        updateHint(it, i); renderOrderIssues(); scheduleEval();
+      };
+    }
     var mods = h('div', { class: 'mods' });
     it.modifiers.forEach(function (m, j) {
       mods.appendChild(h('div', { class: 'mod' },
@@ -1525,6 +1545,7 @@ tr.details td { background: var(--bg); }
   function ghExtract() {
     var url = $('ghUrl').value.trim();
     var out = $('ghResult');
+    setKids($('ghMenu'));   // a previous restaurant's menu must never fill this order
     var local = E.parseGrubhubUrl(url);
     if (!local.ok) { setKids(out, msg('bad', local.error + '. Use “Paste order” or “Manual entry” instead.')); return; }
     if (!S.connected) {
@@ -1548,6 +1569,12 @@ tr.details td { background: var(--bg); }
       setKids(out, msg('bad', 'Extraction failed (' + e.message + '). Chain guessed from the URL; enter the item manually.'));
     }).then(function () { $('ghExtract').disabled = false; });
   }
+  function applyGhUnit(item) {
+    var u = item._ghUnit, q = /^\d{1,3}$/.test(String(item.quantity || '').trim()) && +item.quantity > 0 ? +item.quantity : 1;
+    item.ghSubtotal = (E.mulCents(u.cents, q) / 100).toFixed(2);
+    item._notes = (item._notes || []).filter(function (n) { return n.indexOf('(Grubhub-owned)') < 0; });
+    item._notes.push('Grubhub price ' + E.formatCents(u.cents) + ' × ' + q + ' from ' + u.site + ' (Grubhub-owned), observed ' + rel(u.observed) + '. It excludes option charges; add them if you chose options. Published menu prices can lag the live Grubhub menu, so check your cart or receipt.');
+  }
   function mirrorName(url) {
     var host = '';
     try { host = new URL(url).hostname.replace(/^www\./, ''); } catch (e) { /* not a URL */ }
@@ -1560,24 +1587,28 @@ tr.details td { background: var(--bg); }
     var sel = h('select', { id: 'ghMenuSelect' }, h('option', { value: '' }, 'Choose your item (' + menu.items.length + ' listings)'),
       menu.items.map(function (it, i) {
         return h('option', { value: String(i) }, it.name + (it.variant ? ' — ' + it.variant : '') + ' · ' +
-          (Number.isInteger(it.price_cents) ? E.formatCents(it.price_cents) : 'price set by options') + (it.section ? '  (' + it.section + ')' : ''));
+          (Number.isInteger(it.price_cents) ? E.formatCents(it.price_cents) : 'no usable price') + (it.section ? '  (' + it.section + ')' : ''));
       }));
     var target = h('select', { id: 'ghMenuTarget', 'aria-label': 'Order item to fill' }, S.order.items.map(function (it, i) {
       return h('option', { value: String(i) }, 'Fill item ' + (i + 1) + (it.name ? ': ' + it.name : ''));
     }));
     sel.addEventListener('change', function () {
-      var it = menu.items[+sel.value]; if (!it) return;
-      var idx = +target.value || 0;
-      var item = S.order.items[idx] || (S.order.items[idx] = newItem());
+      if (sel.value === '') return;
+      var it = menu.items[+sel.value];
+      sel.value = '';   // reset, so the same listing can be picked again
+      if (!it) return;
+      var idx = Math.max(0, Math.min(+target.value || 0, S.order.items.length - 1));
+      // A different product: only the quantity carries over from the slot.
+      var item = newItem();
+      item.quantity = (S.order.items[idx] && S.order.items[idx].quantity) || '1';
+      S.order.items[idx] = item;
       item.name = it.name; item.size = it.variant || '';
-      var q = /^\d{1,3}$/.test(String(item.quantity || '').trim()) ? +item.quantity : 1;
-      item._notes = (item._notes || []).filter(function (n) { return n.indexOf('(Grubhub-owned)') < 0 && n.indexOf('lists this item without a price') < 0; });
       if (Number.isInteger(it.price_cents)) {
-        item.ghSubtotal = (E.mulCents(it.price_cents, q) / 100).toFixed(2);
-        item._notes.push('Grubhub price ' + E.formatCents(it.price_cents) + ' × ' + q + ' from ' + site + ' (Grubhub-owned), observed ' + rel(menu.observed_at) + '. It excludes option charges; add them if you chose options. Published menu prices can lag the live Grubhub menu, so check your cart or receipt.');
+        item._ghUnit = { cents: it.price_cents, site: site, observed: menu.observed_at };
+        applyGhUnit(item);
       } else {
         item.ghSubtotal = '';
-        item._notes.push(site + ' lists this item without a price (set by options); enter your Grubhub item subtotal.');
+        item._notes.push(site + ' publishes no usable price for this item' + (it.price_note ? ' (' + it.price_note + ')' : '') + '; enter your Grubhub item subtotal.');
       }
       renderOrder();
     });
