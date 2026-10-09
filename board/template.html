@@ -300,7 +300,7 @@ tr.details td { background: var(--sunken); }
       </div>
       <div class="panel">
         <h3>Capture a store page in your own browser</h3>
-        <p class="small muted">DoorDash store pages show servers a bot check, so they cannot be read from here. In your own browser, open a DoorDash or Uber Eats store page, choose Delivery or Pickup, then run this bookmarklet. It reads only the menu data the page publishes (schema.org), shows it to you, and gives you JSON to paste on the left. It sends nothing anywhere.</p>
+        <p class="small muted">DoorDash store pages show servers a bot check, so they cannot be read from here. In your own browser, open a DoorDash or Uber Eats store page, choose Delivery or Pickup, then run this bookmarklet. It reads only the menu data the page publishes (schema.org), shows it to you, and gives you JSON to paste on the left. It sends nothing anywhere. DoorDash’s terms forbid copying its site with scripts, even ones you run yourself, and Uber’s terms restrict scraping. Use it only if you accept that risk.</p>
         <div class="btnbar"><a id="captureBookmarklet" class="bookmarklet" href="#">Capture menu</a><button class="btn" id="captureCopy" type="button">Copy bookmarklet code</button></div>
         <p class="small muted">Drag “Capture menu” to your bookmarks bar, or copy the code and save it as a new bookmark’s URL. Prices you capture can depend on your login and delivery address, and are labelled as captured in your session.</p>
         <textarea id="captureCode" aria-label="Bookmarklet code" readonly hidden></textarea>
@@ -348,6 +348,14 @@ tr.details td { background: var(--sunken); }
   function link(url, text, platform) {
     var u = E.safeUrl(url, platform);
     return u ? h('a', { href: u, target: '_blank', rel: 'noopener noreferrer nofollow' }, text) : h('span', { class: 'muted' }, text);
+  }
+  // Evidence links in board/sources.json are this project's own curated
+  // references (not scraped data), so any https URL may be linked.
+  function evidenceLink(url, text) {
+    var x = null;
+    try { x = new URL(String(url)); } catch (e) { /* not a URL */ }
+    return x && x.protocol === 'https:' && !x.username && !x.password
+      ? h('a', { href: x.href, target: '_blank', rel: 'noopener noreferrer nofollow' }, text) : h('span', { class: 'muted' }, text);
   }
   function money(c) { return Number.isInteger(c) ? E.formatCents(c) : '—'; }
   var PLAT = { doordash: 'DoorDash', ubereats: 'Uber Eats' };
@@ -566,7 +574,7 @@ tr.details td { background: var(--sunken); }
       box.appendChild(h('div', { class: 'field' },
         h('p', { class: 'menuhead' }, h('strong', null, m.restaurant_name), ' · ', addrLine(m.address), h('br'),
           h('span', { class: 'sub' }, 'Grubhub ID ', gid || '?', ' · menu from ', link(m.source_url, m.site || siteName(m.source_url)), ' (Grubhub-owned), which links to this Grubhub listing · ', stamp(m.observed_at)),
-          h('br'), h('span', { class: 'sub' }, 'Published menu prices can lag the live Grubhub menu and leave out option charges. Check them against your Grubhub cart or receipt.')),
+          h('br'), h('span', { class: 'sub' }, 'Published menu prices can lag the live Grubhub menu and leave out option charges. Check them against your Grubhub cart or receipt. Grubhub’s terms limit this site to personal, non-commercial use.')),
         sel));
     });
   }
@@ -795,7 +803,7 @@ tr.details td { background: var(--sunken); }
     add(t, h('thead', null, h('tr', null, h('th', null, 'Method'), h('th', null, 'Platforms'), h('th', null, 'Who can get it'), h('th', null, 'Branch prices'), h('th', null, 'Fits this app'))));
     add(t, h('tbody', null, rows.map(function (m) {
       return h('tr', null,
-        h('td', null, h('strong', null, m.name), h('div', { class: 'sub' }, m.how), (m.evidence || []).length ? h('div', { class: 'sub' }, (m.evidence || []).slice(0, 2).map(function (u, i) { return [i ? ' · ' : '', link(u, 'source ' + (i + 1))]; })) : null),
+        h('td', null, h('strong', null, m.name), h('div', { class: 'sub' }, m.how), (m.evidence || []).length ? h('div', { class: 'sub' }, (m.evidence || []).slice(0, 2).map(function (u, i) { return [i ? ' · ' : '', evidenceLink(u, 'source ' + (i + 1))]; })) : null),
         h('td', { class: 'small' }, (m.platforms || []).map(function (p) { return PLAT[p] || (p === 'grubhub' ? 'Grubhub' : p); }).join(', ')),
         h('td', { class: 'small' }, m.access),
         h('td', { class: 'small' }, m.branch_prices),

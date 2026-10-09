@@ -89,6 +89,11 @@ class Config:
         if override:
             cfg.platform_bases.update(json.loads(override))
             cfg.test_mode = True
+        if os.environ.get("FPC_DISABLE_GRUBHUB_MIRRORS", "").strip().lower() in ("1", "true", "yes"):
+            # Grubhub's terms limit MenuPages and AllMenus to personal,
+            # non-commercial use; operators can switch both lookups off.
+            cfg.platform_bases.pop("menupages", None)
+            cfg.platform_bases.pop("allmenus", None)
         return cfg
 
     @property

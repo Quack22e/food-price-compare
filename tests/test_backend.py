@@ -806,3 +806,13 @@ def test_blank_mirror_name_keeps_the_url_chain_guess(sites, tmp_path):
         assert r["grubhub_menu"]["items"]
     finally:
         mp.close()
+
+
+def test_grubhub_mirrors_can_be_switched_off(monkeypatch):
+    from server.config import Config
+    monkeypatch.setenv("FPC_DISABLE_GRUBHUB_MIRRORS", "1")
+    cfg = Config.from_env()
+    assert "menupages" not in cfg.platform_bases and "allmenus" not in cfg.platform_bases
+    assert "menupages.com" not in cfg.allowed_hosts and "www.allmenus.com" not in cfg.allowed_hosts
+    monkeypatch.delenv("FPC_DISABLE_GRUBHUB_MIRRORS")
+    assert "allmenus" in Config.from_env().platform_bases

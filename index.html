@@ -248,7 +248,7 @@ tr.details td { background: var(--bg); }
       <span class="inline" style="margin-top:8px"><input type="checkbox" id="includeImported" checked><label for="includeImported" style="display:inline;margin:0">Include imported data in rankings (labeled “Imported”)</label></span>
       <div id="importReport"></div>
       <h3>Capture from your own browser</h3>
-      <p class="note">For pages this tool cannot read from a server (DoorDash store pages answer servers with a bot check), you can read them yourself: open a DoorDash or Uber Eats store page in your browser, set Delivery or Pickup as you would order, then click the bookmark below. It reads only the menu data the page publishes, shows it, and gives you JSON to paste into Import. It sends nothing anywhere.</p>
+      <p class="note">For pages this tool cannot read from a server (DoorDash store pages answer servers with a bot check), you can read them yourself: open a DoorDash or Uber Eats store page in your browser, set Delivery or Pickup as you would order, then click the bookmark below. It reads only the menu data the page publishes, shows it, and gives you JSON to paste into Import. It sends nothing anywhere. DoorDash’s terms forbid copying its site with scripts, even ones you run yourself, and Uber’s terms restrict scraping. Use it only if you accept that risk.</p>
       <div class="btnbar"><a id="captureBookmarklet" class="bookmarklet" href="#">Capture menu</a><button id="captureCopy" type="button">Copy bookmarklet code</button></div>
       <p class="note">Drag “Capture menu” to your bookmarks bar (or copy the code into a new bookmark’s URL). Captured prices are labelled as captured in your session; your login and delivery address may affect them.</p>
       <div id="captureMsg"></div>
@@ -1615,7 +1615,7 @@ tr.details td { background: var(--bg); }
     setKids(box, h('div', { class: 'msg ok' },
       h('label', { for: 'ghMenuSelect' }, 'Grubhub menu for ' + (menu.restaurant_name || 'this restaurant') + (menu.address ? ', ' + [menu.address.street, menu.address.city, menu.address.state].filter(Boolean).join(', ') : '')),
       h('div', { class: 'row' }, h('div', { class: 'grow2' }, sel), h('div', null, target)),
-      h('div', { class: 'note' }, 'Read from ' + site + ', a Grubhub-owned site, which links to this exact Grubhub listing. Prices exclude option charges and fees. ', safeLink(menu.source_url, 'Source page'))));
+      h('div', { class: 'note' }, 'Read from ' + site + ', a Grubhub-owned site, which links to this exact Grubhub listing. Prices exclude option charges and fees. Grubhub’s terms limit this site to personal, non-commercial use. ', safeLink(menu.source_url, 'Source page'))));
   }
   function receiptParse() {
     var r = E.parseReceipt($('receiptText').value);

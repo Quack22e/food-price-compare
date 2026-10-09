@@ -6,9 +6,10 @@
       "tone": "ok",
       "summary": "Public store pages publish the whole menu with USD prices and the branch's street address as schema.org data, so each price is tied to one US branch.",
       "evidence": [
-        "Prices read from real US store pages in every live run since 37708779121 (up to 335 menu items per page); 36 branches in the 18:59 UTC snapshot.",
+        "Prices read from real US store pages in every live run since 37708779121 (up to 335 menu items per page); 40 branches in the 00:01 UTC run on 9 Oct.",
         "Store links come from robots.txt-declared sitemaps and brand pages. Non-US country sections are skipped without a request.",
-        "A few store pages answered with a challenge. Those are counted as blocked and not worked around."
+        "A few store pages answered with a challenge. Those are counted as blocked and not worked around.",
+        "Uber's terms reportedly bar scripts that scrape or data-mine the service (the US wording was not confirmed)."
       ]
     },
     {
@@ -17,7 +18,7 @@
       "tone": "bad",
       "summary": "Branch discovery works, but store pages answer datacenter requests with a Cloudflare challenge, so no DoorDash branch price could be read from a server.",
       "evidence": [
-        "49 of 49 store-page requests across ten live runs returned 403 “Just a moment…”.",
+        "69 of 69 store-page requests across 14 live runs returned 403 “Just a moment…”.",
         "131 per-state store sitemaps are readable (California alone lists 106,228 store URLs).",
         "/business/…/menu pages show prices DoorDash labels “estimated based on your predicted location”, so they are not used as branch prices.",
         "In your own browser, the capture bookmarklet below can read a store page you open."
@@ -29,15 +30,339 @@
       "tone": "info",
       "summary": "Grubhub's restaurant pages are drawn by JavaScript and publish no prices. Two Grubhub-owned menu sites publish the same restaurants' menus with prices and link back to each Grubhub listing, so a menu is used only when it links to the same Grubhub restaurant ID.",
       "evidence": [
-        "MenuPages: Lou Malnati's, 6456 S Cicero Ave, Chicago (Grubhub ID 434510), 162 priced listings from its Menu JSON-LD. Its restaurant sitemap lists 28,133 pages.",
+        "MenuPages: Lou Malnati's, 6456 S Cicero Ave, Chicago (Grubhub ID 434510), 169 priced listings of 171 from its Menu JSON-LD. Its restaurant sitemap lists 28,133 pages.",
         "AllMenus: Lou Malnati's, 85 S Buffalo Grove Rd (ID 517712, not on MenuPages), 169 priced listings. Prices are read from the page HTML only because its 217 item names match the page's own JSON-LD names.",
-        "AllMenus has 21 restaurant sitemaps of up to 40,000 pages each, read once a day to find a listing.",
-        "Published menu prices can lag the live Grubhub menu and leave out option charges. Grubhub's terms restrict automated access."
+        "A menu is used only from a page that links to exactly that one Grubhub restaurant; a blocked or incomplete lookup is reported as such.",
+        "Published menu prices can lag the live Grubhub menu (AllMenus says its menus may not be current) and leave out option charges.",
+        "Grubhub's terms limit both sites to personal, non-commercial use and forbid automated access; operators can switch the lookups off (FPC_DISABLE_GRUBHUB_MIRRORS=1)."
       ]
     }
   ],
   "alternatives": {
-    "intro": "Research in progress.",
-    "methods": []
+    "intro": "24 ways to get this data were researched in October 2026, and 23 of them were re-checked by an independent search. Prices for arbitrary US branches come only from public pages: every official API is limited to partners and their own stores. “Not usable” means the method breaks this app's rules (no bypassing bot checks, no private APIs) or the provider's terms.",
+    "methods": [
+      {
+        "name": "Uber Eats public store pages (schema.org JSON-LD)",
+        "platforms": [
+          "ubereats"
+        ],
+        "how": "Each store page publishes its menu, USD prices and street address as structured data.",
+        "access": "None: public pages, robots.txt allows them.",
+        "branch_prices": "Yes",
+        "fit": "now",
+        "fit_label": "In use · verified live",
+        "fit_note": "Uber's terms reportedly bar scraping scripts; a few pages answer with a challenge, which is reported, not bypassed.",
+        "evidence": [
+          "https://www.ubereats.com/brand-city/chicago-il/wingstop"
+        ]
+      },
+      {
+        "name": "MenuPages (Grubhub-owned)",
+        "platforms": [
+          "grubhub"
+        ],
+        "how": "Grubhub menus as JSON-LD with USD prices; each page links to its Grubhub listing.",
+        "access": "None: public pages, robots.txt allows them.",
+        "branch_prices": "Yes, for listed restaurants",
+        "fit": "now",
+        "fit_label": "In use · verified live",
+        "fit_note": "Covers a subset of Grubhub (28,133 pages). Terms: personal, non-commercial use only.",
+        "evidence": [
+          "https://menupages.com/info/about-us",
+          "https://menupages.com/info/terms-of-use"
+        ]
+      },
+      {
+        "name": "AllMenus (Grubhub-owned)",
+        "platforms": [
+          "grubhub"
+        ],
+        "how": "Menu prices in the page HTML, item names in JSON-LD, a link to the Grubhub listing.",
+        "access": "None: public pages, robots.txt allows them.",
+        "branch_prices": "Partly: undated, sometimes stale",
+        "fit": "now",
+        "fit_label": "In use · verified live",
+        "fit_note": "Used only when HTML and JSON-LD names agree. Same Grubhub terms as MenuPages.",
+        "evidence": [
+          "https://www.allmenus.com/about-us/"
+        ]
+      },
+      {
+        "name": "Uber Eats brand-city pages",
+        "platforms": [
+          "ubereats"
+        ],
+        "how": "Lists a chain's Uber Eats stores in a city with links to each store page.",
+        "access": "None.",
+        "branch_prices": "No (sample prices are not tied to a branch)",
+        "fit": "now",
+        "fit_label": "Discovery only",
+        "fit_note": "Useful for finding store pages; prices still come from each store page.",
+        "evidence": [
+          "https://www.ubereats.com/brand-city/chicago-il/wingstop"
+        ]
+      },
+      {
+        "name": "Capture bookmarklet in your own browser",
+        "platforms": [
+          "doordash",
+          "ubereats"
+        ],
+        "how": "Reads the schema.org menu data of the store page you are viewing and gives you JSON to import.",
+        "access": "You run it on pages you open.",
+        "branch_prices": "Partly: DoorDash pages may lack JSON-LD or modifiers",
+        "fit": "user",
+        "fit_label": "Built · your action",
+        "fit_note": "DoorDash's terms ban copying its site with scripts, even manually run ones. High terms risk.",
+        "evidence": [
+          "https://help.doordash.com/en-us/consumers/article/storefront-consumer-terms-and-conditions-english"
+        ]
+      },
+      {
+        "name": "Your order receipts (paste or upload)",
+        "platforms": [
+          "grubhub",
+          "doordash",
+          "ubereats"
+        ],
+        "how": "Item lines and prices from your own receipts.",
+        "access": "Your own mailbox or receipts.",
+        "branch_prices": "No: your past orders, no store ID",
+        "fit": "user",
+        "fit_label": "Built (paste) · historical",
+        "fit_note": "Good for your Grubhub side of the comparison; never current prices for other stores.",
+        "evidence": [
+          "https://rideshare-study.cs.princeton.edu/delivery/emails.html"
+        ]
+      },
+      {
+        "name": "Personal data downloads (Uber Privacy Center, DoorDash archive)",
+        "platforms": [
+          "ubereats",
+          "doordash"
+        ],
+        "how": "Your own past orders with item prices, requested from each platform.",
+        "access": "Any account holder, 1–3 days.",
+        "branch_prices": "No: no store address or URL",
+        "fit": "user",
+        "fit_label": "Not built · historical",
+        "fit_note": "Low risk, but only your own past orders.",
+        "evidence": [
+          "https://help.uber.com/riders/article/whats-in-your-data-download?nodeId=3d476006-87a4-4404-ac1e-216825414e05",
+          "https://help.doordash.com/en-us/consumers/article/i-want-to-delete-my-personal-information-data-from-doordash"
+        ]
+      },
+      {
+        "name": "DoorDash Marketplace API",
+        "platforms": [
+          "doordash"
+        ],
+        "how": "Partner API returning a store's menu with delivery and pickup prices.",
+        "access": "Approved POS/middleware partners under a signed agreement.",
+        "branch_prices": "Only the partner's own connected stores",
+        "fit": "contract",
+        "fit_label": "Partnership only",
+        "fit_note": "Cannot read arbitrary DoorDash stores; not open to a comparison app.",
+        "evidence": [
+          "https://developer.doordash.com/docs/marketplace/overview/about_marketplace",
+          "https://developer.doordash.com/docs/marketplace/how_to/get_doordash_menu"
+        ]
+      },
+      {
+        "name": "Uber Eats Marketplace APIs",
+        "platforms": [
+          "ubereats"
+        ],
+        "how": "Partner menu and store APIs with full per-store menus.",
+        "access": "NDA, API licence and a business agreement with Uber.",
+        "branch_prices": "Only stores that activated your app",
+        "fit": "contract",
+        "fit_label": "Partnership only",
+        "fit_note": "Uber has used its API terms against price comparison before.",
+        "evidence": [
+          "https://developer.uber.com/docs/eats/references/api/v2/get-eats-stores-storeid-menu",
+          "https://developer.uber.com/docs/eats/guides/getting-started"
+        ]
+      },
+      {
+        "name": "Grubhub partner / POS APIs",
+        "platforms": [
+          "grubhub"
+        ],
+        "how": "Menu ingestion and retrieval for integrated merchants.",
+        "access": "Approved POS and ordering partners.",
+        "branch_prices": "Only integrated merchants",
+        "fit": "contract",
+        "fit_label": "Partnership only",
+        "fit_note": "Grubhub's consumer api-gtm host is a private backend and off-limits.",
+        "evidence": [
+          "https://apis.io/apis/grubhub/grubhub-menu-retrieval-api/"
+        ]
+      },
+      {
+        "name": "Menu middleware (Deliverect, Otter, Checkmate, Olo)",
+        "platforms": [
+          "doordash",
+          "ubereats",
+          "grubhub"
+        ],
+        "how": "Per-channel menu prices that merchants push to each platform.",
+        "access": "Partner agreement plus each restaurant's consent.",
+        "branch_prices": "Opted-in locations only",
+        "fit": "contract",
+        "fit_label": "Partnership + consent",
+        "fit_note": "Shows the merchant's intended price, which the platform can override.",
+        "evidence": [
+          "https://developers.deliverect.com/docs/price-level-configuration"
+        ]
+      },
+      {
+        "name": "MealMe API",
+        "platforms": [
+          "doordash",
+          "ubereats",
+          "grubhub"
+        ],
+        "how": "Licensed B2B menu and ordering API with its own store IDs.",
+        "access": "API key request and a signed licence.",
+        "branch_prices": "Yes, but not the DoorDash or Uber Eats listing",
+        "fit": "contract",
+        "fit_label": "Licensed · no platform IDs",
+        "fit_note": "Returns no DoorDash/Uber Eats price, store ID or URL, so it cannot verify platform prices.",
+        "evidence": [
+          "https://docs.mealme.ai/docs/menu-prices-faq"
+        ]
+      },
+      {
+        "name": "E-receipt panel data (Edison Trends)",
+        "platforms": [
+          "doordash",
+          "ubereats",
+          "grubhub"
+        ],
+        "how": "Consented e-receipt panel covering delivery orders.",
+        "access": "Enterprise data licence.",
+        "branch_prices": "Unconfirmed; lagged and sampled",
+        "fit": "contract",
+        "fit_label": "Enterprise licence · historical",
+        "fit_note": "Analytics only, not current branch prices.",
+        "evidence": [
+          "https://datarade.ai/data-providers/edison-trends/profile"
+        ]
+      },
+      {
+        "name": "DoorDash CLI (dd-cli)",
+        "platforms": [
+          "doordash"
+        ],
+        "how": "Official command-line tool for a logged-in consumer.",
+        "access": "Invite-only waitlist; your DoorDash login.",
+        "branch_prices": "Partly",
+        "fit": "no",
+        "fit_label": "Not usable",
+        "fit_note": "Its access terms forbid price comparison, aggregation and storing results.",
+        "evidence": [
+          "https://github.com/doordash-oss/doordash-cli"
+        ]
+      },
+      {
+        "name": "Unblocking scraping APIs (Zyte, ScraperAPI, Oxylabs, Bright Data …)",
+        "platforms": [
+          "doordash",
+          "ubereats",
+          "grubhub"
+        ],
+        "how": "Proxies that fetch pages through residential IPs.",
+        "access": "Self-serve, pay as you go.",
+        "branch_prices": "Partly",
+        "fit": "no",
+        "fit_label": "Not usable",
+        "fit_note": "They get past DoorDash's Cloudflare by spoofing fingerprints and solving CAPTCHAs, which this app never does.",
+        "evidence": [
+          "https://docs.zyte.com/zyte-api/pricing.html",
+          "https://brightdata.com/products/web-scraper/doordash"
+        ]
+      },
+      {
+        "name": "Apify store actors for Uber Eats and Grubhub",
+        "platforms": [
+          "ubereats",
+          "grubhub"
+        ],
+        "how": "Community scrapers run on demand.",
+        "access": "Self-serve account.",
+        "branch_prices": "Yes",
+        "fit": "no",
+        "fit_label": "Not usable",
+        "fit_note": "They rely on residential proxies or Grubhub's private api-gtm endpoints.",
+        "evidence": [
+          "https://apify.com/parseforge/grubhub-scraper",
+          "https://apify.com/bovi/ubereats-menu"
+        ]
+      },
+      {
+        "name": "DoorDash /business/…/menu pages",
+        "platforms": [
+          "doordash"
+        ],
+        "how": "Chain-level menu with prices.",
+        "access": "None.",
+        "branch_prices": "No: DoorDash labels them estimated",
+        "fit": "no",
+        "fit_label": "Not branch prices · verified live",
+        "fit_note": "“Prices are estimated based on your predicted location.” Used for store discovery only.",
+        "evidence": [
+          "https://www.doordash.com/business/chipotle-mexican-grill-115/"
+        ]
+      },
+      {
+        "name": "DoorDash Storefront pages (order.online)",
+        "platforms": [
+          "doordash"
+        ],
+        "how": "Restaurants' first-party ordering pages.",
+        "access": "None.",
+        "branch_prices": "First-party base price, not the DoorDash delivery price",
+        "fit": "no",
+        "fit_label": "Not usable",
+        "fit_note": "Different prices from Marketplace, and the Storefront terms ban scraping.",
+        "evidence": [
+          "https://developer.doordash.com/en-US/docs/marketplace/how_to/how_to_build_dual_pricing/"
+        ]
+      },
+      {
+        "name": "Yelp menu pages",
+        "platforms": [
+          "grubhub"
+        ],
+        "how": "Menu pages on Yelp.",
+        "access": "Paid Places API has only a menu link.",
+        "branch_prices": "Unknown",
+        "fit": "no",
+        "fit_label": "Not usable",
+        "fit_note": "DoorDash now powers most Yelp ordering, and Yelp's terms forbid scraping.",
+        "evidence": [
+          "https://terms.yelp.com/tos/en_us/20260101_en_us/"
+        ]
+      },
+      {
+        "name": "Archives and old datasets (Wayback, Common Crawl, Kaggle)",
+        "platforms": [
+          "ubereats",
+          "doordash",
+          "grubhub"
+        ],
+        "how": "Captured copies of public pages, months to years old.",
+        "access": "Free.",
+        "branch_prices": "Historical only",
+        "fit": "no",
+        "fit_label": "Historical only",
+        "fit_note": "Never current prices; Wayback is for research, non-commercial use.",
+        "evidence": [
+          "https://archive.org/help/wayback_api.php",
+          "https://commoncrawl.org/common-crawl-url-index/"
+        ]
+      }
+    ]
   }
 }
