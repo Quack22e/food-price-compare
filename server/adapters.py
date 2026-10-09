@@ -21,7 +21,7 @@ from urllib.parse import parse_qs, urlencode, urlsplit, urlunsplit
 
 from .extract import (
     contains_sequence, dedupe_items, flag_zero_prices, extract_menu_objects, extract_restaurants, jsonld_type_summary,
-    normalize_us_address, parse_jsonld_blocks, prefilter_tokens, loose_norm, scan_html,
+    normalize_us_address, page_currency_codes, parse_jsonld_blocks, prefilter_tokens, loose_norm, scan_html,
     slug_tokens, same_site,
 )
 from .http_client import PoliteClient, barrier, utcnow_iso
@@ -147,8 +147,26 @@ def parse_store_page(html: str, page_url: str, store_id: str) -> dict:
         "items": (r["items"] if r else []) + ([] if (r and r["items"]) else loose_items),
         "menu_urls": (r["menu_urls"] if r else []) + loose_menu_urls,
         "json_script_ids": [s["id"] for s in scan.json_scripts if s["id"]][:20],
+        "page_currency_codes": page_currency_codes(html),
     }
     return result
+
+
+def _currency_from_page(items: list[dict], codes: list[str]) -> str | None:
+    """Real DoorDash store pages publish menu prices in JSON-LD without
+    priceCurrency (verified on archived pages). Such prices count as USD only
+    when the page's own data states USD and no other currency; the caller has
+    already established that the store's published address is in the US."""
+    priced = [it for it in items if it.get("price_cents") is not None]
+    if not priced or any(it.get("currency") for it in priced):
+        return None
+    if codes == ["USD"]:
+        for it in priced:
+            it["currency"] = "USD"
+        return ("the menu JSON-LD omits priceCurrency; the page's own data states currency USD and no other, "
+                "for a store whose published address is in the US")
+    return (f"the menu JSON-LD omits priceCurrency and the page's own data states {', '.join(codes) or 'no currency'}; "
+            "prices are not treated as USD")
 
 
 def build_observation(adapter: PlatformAdapter, ref: dict, parsed: dict, fetched, mode: str,
@@ -167,12 +185,14 @@ def build_observation(adapter: PlatformAdapter, ref: dict, parsed: dict, fetched
     items = flag_zero_prices(dedupe_items(parsed["items"]))
     if not items:
         return "no_menu", None, "restaurant data published but no menu items/prices"
+    currency_note = _currency_from_page(items, parsed.get("page_currency_codes") or [])
     kept = []
     for it in items:
         name_norm = loose_norm(" ".join(filter(None, [it.get("name"), it.get("variant")])))
         if not prefilter or any(t in name_norm for t in prefilter):
             kept.append(it)
-    currencies = sorted({it.get("currency") or "?" for it in items})
+    # Judged on priced items: an item published without an Offer has no currency.
+    currencies = sorted({it.get("currency") or "?" for it in items if it.get("price_cents") is not None}) or ["?"]
     obs = {
         "source": "live",
         "platform": adapter.key,
@@ -189,7 +209,7 @@ def build_observation(adapter: PlatformAdapter, ref: dict, parsed: dict, fetched
         "order_mode": mode,
         "mode_basis": mode_basis,
         "price_context": "anonymous session (no login, no saved cookies), no delivery address set; "
-                         "menu prices as published on the public store page",
+                         "menu prices as published on the public store page" + (f"; currency: {currency_note}" if currency_note else ""),
         "currency": currencies[0] if len(currencies) == 1 else "mixed",
         "extraction": "schema.org JSON-LD (Restaurant.hasMenu -> MenuItem.offers)",
         "menu_item_count": len(items),

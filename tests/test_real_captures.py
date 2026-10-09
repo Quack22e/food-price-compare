@@ -93,22 +93,34 @@ ARCHIVED = sorted(Path(__file__).parent.joinpath("captures_archive").glob("*.htm
 @pytest.mark.skipif(not ARCHIVED, reason="no archived DoorDash captures (saved only by scripts/archive_probe.py)")
 @pytest.mark.parametrize("html_path", ARCHIVED, ids=[p.stem for p in ARCHIVED])
 def test_doordash_reader_on_archived_page(html_path):
+    """The whole DoorDash store-page path (parse_store_page -> build_observation)
+    on a real archived page: a US store yields USD prices with the currency
+    basis recorded; anything else is excluded with a reason, never guessed."""
     import re
-    from server.extract import dedupe_items, flag_zero_prices
+    from server.adapters import build_observation
+    from server.http_client import FetchOutcome
     store_id = re.search(r"-(\d+)$", html_path.stem).group(1)
+    ad = DoorDashAdapter("https://www.doordash.com")
+    ref = ad.parse_store_url(f"https://www.doordash.com/store/{store_id}/")
     html = html_path.read_text(errors="replace")
-    parsed = parse_store_page(html, f"https://www.doordash.com/store/{store_id}/", store_id)
-    items = flag_zero_prices(dedupe_items(parsed["items"]))
-    priced = [i for i in items if isinstance(i.get("price_cents"), int)]
-    addr, why = normalize_us_address(parsed["address_raw"]) if parsed["address_raw"] else (None, "no address")
-    print(json.dumps({"page": html_path.name, "jsonld_types": parsed["jsonld_types"],
-                      "restaurant_found": parsed["restaurant_found"], "address": addr and addr.get("state"),
-                      "items": len(items), "priced": len(priced),
-                      "sample": [(i["name"], i["price_cents"], i.get("currency")) for i in priced[:3]]}))
-    if parsed["restaurant_found"] and items:
-        # Whatever the page publishes as a menu must come out priced, in USD for a US store.
-        assert priced, "menu published without prices"
-        assert not addr or all(i.get("currency") == "USD" for i in priced)
+    parsed = parse_store_page(html, ref["canonical"], store_id)
+    fetched = FetchOutcome(url=ref["canonical"], ok=True, status=200, fetched_at="archived")
+    status, obs, detail = build_observation(ad, ref, parsed, fetched, "delivery", "archived page", set())
+    priced = [i for i in (obs or {}).get("items", []) if i.get("price_cents") is not None]
+    print(json.dumps({"page": html_path.name, "status": status, "detail": detail[:160],
+                      "page_currency_codes": parsed.get("page_currency_codes"),
+                      "currency": obs and obs["currency"], "state": obs and obs["address"]["state"], "priced": len(priced),
+                      "sample": [(i["name"], i["price_cents"]) for i in priced[:3]]}))
+    assert status in ("checked", "non_us", "no_menu"), detail
+    if status == "checked":
+        assert obs["address"]["country"] == "US" and obs["address"]["state"]
+        assert priced, "a US store page with a menu must yield prices"
+        if parsed.get("page_currency_codes") == ["USD"]:
+            assert obs["currency"] == "USD" and all(i["currency"] == "USD" for i in priced)
+            assert "omits priceCurrency" in obs["price_context"]
+        else:
+            assert obs["currency"] != "USD"
+    elif status == "non_us":
+        assert "outside the US" in detail or "country section" in detail or "not one of the 50 states" in detail
     else:
-        # The app records such a store as "no menu data"; nothing is guessed.
-        assert "menuitem" not in parsed["jsonld_types"]
+        assert "restaurant" not in parsed["jsonld_types"] or not parsed["items"]

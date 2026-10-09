@@ -196,6 +196,35 @@ def _cut(o, n=700):
     return t if len(t) <= n else t[:n] + "…"
 
 
+INTEREST = re.compile(r"crunchwrap supreme|chalupa supreme|burrito bowl|deep dish|mcnuggets", re.I)
+
+
+def items_of_interest(blocks, html: str) -> list[dict]:
+    """The JSON-LD MenuItems of the snapshot items, verbatim (short), with the
+    price the page displays for the same name, to see how offers relate to the
+    displayed price (e.g. a trailing "+" for a starting price)."""
+    found = []
+
+    def walk(o, depth=0):
+        if depth > 14 or len(found) >= 6:
+            return
+        if isinstance(o, dict):
+            if str(o.get("@type")) == "MenuItem" and INTEREST.search(str(o.get("name", ""))):
+                name = str(o.get("name"))
+                shown = re.findall(r'\\?"name\\?":\\?"' + re.escape(name).replace('"', '\\\\?"') +
+                                   r'\\?".{0,600}?\\?"displayPrice\\?":\\?"([^"\\]{1,20})', html)[:3]
+                found.append({"item": _cut(o, 600), "displayed": shown})
+            for v in o.values():
+                walk(v, depth + 1)
+        elif isinstance(o, list):
+            for v in o:
+                walk(v, depth + 1)
+
+    for b in blocks:
+        walk(b)
+    return found
+
+
 def jsonld_shape(html: str, url: str) -> dict:
     """How the JSON-LD is laid out: top-level types and keys, the address
     object, where the menu sits, and the first items and offers verbatim
@@ -237,6 +266,9 @@ def jsonld_shape(html: str, url: str) -> dict:
                     ent["menu_keys"] = sorted(m0.keys())
                     secs = m0.get("hasMenuSection") or []
                     secs = secs if isinstance(secs, list) else [secs]
+                    ent["section_nesting"] = "list of lists" if secs and isinstance(secs[0], list) else "list"
+                    while secs and isinstance(secs[0], list):          # DoorDash nests the section list
+                        secs = secs[0]
                     ent["sections"] = len(secs)
                     s0 = secs[0] if secs and isinstance(secs[0], dict) else {}
                     its = s0.get("hasMenuItem") or []
@@ -250,6 +282,7 @@ def jsonld_shape(html: str, url: str) -> dict:
                     ent[k] = _cut(o[k], 160)
             shape["blocks"].append(ent)
             walk(o)
+    shape["items_of_interest"] = items_of_interest(blocks, html)
     shape["offers"] = offers_total
     shape["offers_with_priceCurrency"] = offers_with_currency
     shape["priceCurrency_values"] = sorted(currency_values)

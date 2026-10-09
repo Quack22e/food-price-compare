@@ -43,6 +43,8 @@ _STATE_BY_NAME["washington dc"] = "DC"
 _STATE_BY_NAME["washington d.c."] = "DC"
 _US_COUNTRY = {"us", "usa", "u.s.", "u.s.a.", "united states", "united states of america"}
 _ZIP_RE = re.compile(r"^\d{5}(?:-\d{4})?$")
+# "currency":"USD" in a page's own embedded data, also inside escaped JSON strings.
+_CURRENCY_CODE_RE = re.compile(r'\\*"currency\\*"\s*:\s*\\*"([A-Z]{3})\\*"')
 
 FOOD_ESTABLISHMENT_TYPES = {
     "restaurant", "foodestablishment", "fastfoodrestaurant", "cafeorcoffeeshop",
@@ -147,6 +149,15 @@ def normalize_us_address(addr) -> tuple[dict | None, str | None]:
     out["country"] = "US"
     out["zip"] = zip_code[:5] if zip_code else ""
     return out, None
+
+
+def page_currency_codes(html: str) -> list[str]:
+    """Currency codes stated in the page's own data ("currency":"USD").
+
+    Evidence for pages whose menu JSON-LD omits priceCurrency: archived real
+    DoorDash store pages carry "currency":"USD" for US stores and "CAD" for
+    Canadian ones (scripts/archive_probe.py)."""
+    return sorted(set(_CURRENCY_CODE_RE.findall(html)))
 
 
 # --------------------------------------------------------------------------
