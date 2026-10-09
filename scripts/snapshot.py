@@ -108,16 +108,20 @@ def check_cancel_resume(cfg: Config) -> dict:
     NEW Service (as after a server restart) and check nothing is refetched."""
     out = {"label": "Cancel and resume (Taco Bell Crunchwrap Supreme, Uber Eats)"}
     req = {"order": {"chain": "Taco Bell", "items": [{"name": "Crunchwrap Supreme"}]}, "platforms": ["ubereats"],
-           "max_stores_per_platform": 6, "order_mode": "delivery", "fetch_mode": "http"}
+           "max_stores_per_platform": 20, "order_mode": "delivery", "fetch_mode": "http"}
     try:
         svc = Service(cfg)
         job = svc.jobs.start(req)
         deadline = time.time() + 240
         while time.time() < deadline and job.thread.is_alive():
-            c = job.summary()["platforms"].get("ubereats", {}).get("counters", {})
-            if (c.get("checked", 0) + c.get("blocked", 0) + c.get("no_menu", 0)) >= 2:
+            # Cancel as soon as the second store page has been handled (the
+            # store table is updated under the job lock as each store finishes).
+            with job.lock:
+                handled = sum(1 for st in job.state["platforms"].get("ubereats", {}).get("stores", {}).values()
+                              if st.get("status") not in ("queued", "in_progress", "non_us"))
+            if handled >= 2:
                 break
-            time.sleep(0.5)
+            time.sleep(0.1)
         job.cancel()
         job.thread.join(120)
         before = job.summary()
@@ -142,8 +146,9 @@ def check_cancel_resume(cfg: Config) -> dict:
         out["new_stores_after_resume"] = sum(1 for k, st in stores.items()
                                              if k not in done_before and st.get("status") not in ("queued", "non_us"))
         out["observations"] = len(job2.state["observations"])
-        out["passed"] = bool(done_before) and not out["refetched_after_resume"] and out["kept_checked_at"] \
-            and out["new_stores_after_resume"] > 0
+        out["cancelled_mid_run"] = before["status"] == "cancelled"
+        out["passed"] = out["cancelled_mid_run"] and bool(done_before) and not out["refetched_after_resume"] \
+            and out["kept_checked_at"] and out["new_stores_after_resume"] > 0
     except Exception as exc:  # recorded, never hidden
         out["error"] = repr(exc)
         out["passed"] = False
