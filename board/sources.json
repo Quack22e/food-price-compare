@@ -39,7 +39,7 @@
     }
   ],
   "alternatives": {
-    "intro": "24 ways to get this data were researched in October 2026, and 23 of them were re-checked by an independent search. Prices for arbitrary US branches come only from public pages: every official API is limited to partners and their own stores. “Not usable” means the method breaks this app's rules (no bypassing bot checks, no private APIs) or the provider's terms.",
+    "intro": "24 ways to get this data were researched in October 2026, each claim was re-checked by an independent search, and a final pass looked for anything missed (it added five). Prices for arbitrary US branches come only from public pages today: every official API is limited to partners. “Not usable” means the method breaks this app's rules (no bypassing bot checks, no private APIs) or the provider's terms.",
     "methods": [
       {
         "name": "Uber Eats public store pages (schema.org JSON-LD)",
@@ -150,6 +150,38 @@
         "evidence": [
           "https://help.uber.com/riders/article/whats-in-your-data-download?nodeId=3d476006-87a4-4404-ac1e-216825414e05",
           "https://help.doordash.com/en-us/consumers/article/i-want-to-delete-my-personal-information-data-from-doordash"
+        ]
+      },
+      {
+        "name": "Screenshots of the app's menu or cart (OCR, you confirm)",
+        "platforms": [
+          "doordash",
+          "ubereats",
+          "grubhub"
+        ],
+        "how": "You share the store link and a screenshot from the mobile app; text is read on your device and you confirm it.",
+        "access": "Your phone.",
+        "branch_prices": "Yes, for the branch, address and mode you chose",
+        "fit": "user",
+        "fit_label": "Not built · your action",
+        "fit_note": "The main legitimate way to see a DoorDash price at your exact branch; needs your confirmation of every value.",
+        "evidence": [
+          "https://help.doordash.com/en-us/merchants/article/how-do-i-find-my-store-id"
+        ]
+      },
+      {
+        "name": "Grubhub page captured in your own browser",
+        "platforms": [
+          "grubhub"
+        ],
+        "how": "A bookmarklet would read the Grubhub page after its own scripts have drawn it.",
+        "access": "Your browser on grubhub.com.",
+        "branch_prices": "Yes (your Grubhub side)",
+        "fit": "user",
+        "fit_label": "Not built · markup not observed",
+        "fit_note": "This project never saw the rendered Grubhub markup, so no selectors were written; Grubhub's terms forbid scraping.",
+        "evidence": [
+          "https://conductatlas.com/platform/grubhub/grubhub-terms-of-use/provision/CA-P-028371/no-scraping-or-automated-data-extraction/"
         ]
       },
       {
@@ -357,10 +389,58 @@
         "branch_prices": "Historical only",
         "fit": "no",
         "fit_label": "Historical only",
-        "fit_note": "Never current prices; Wayback is for research, non-commercial use.",
+        "fit_note": "Never current prices. Wayback is for research, non-commercial use; the Kaggle Uber Eats dump has no store ID, URL or timestamp and is for educational use.",
         "evidence": [
           "https://archive.org/help/wayback_api.php",
           "https://commoncrawl.org/common-crawl-url-index/"
+        ]
+      },
+      {
+        "name": "Uber Consumer Delivery APIs",
+        "platforms": [
+          "ubereats"
+        ],
+        "how": "Official APIs for consumer apps: find merchants, browse menus and items, carts, with Uber account linking.",
+        "access": "Written approval from Uber.",
+        "branch_prices": "Yes, if approved",
+        "fit": "contract",
+        "fit_label": "Partnership only",
+        "fit_note": "The one official Uber surface that reaches arbitrary stores; response fields were not confirmed.",
+        "evidence": [
+          "https://developer.uber.com/docs/consumer-delivery/introduction"
+        ]
+      },
+      {
+        "name": "Distribution partnerships (Grubhub and Uber Eats in ChatGPT, Alexa+, Eater …)",
+        "platforms": [
+          "grubhub",
+          "ubereats",
+          "doordash"
+        ],
+        "how": "Platforms already send live listings and menu items to selected outside apps.",
+        "access": "A bilateral business deal; no public program.",
+        "branch_prices": "Yes, for partners",
+        "fit": "contract",
+        "fit_label": "Business deal",
+        "fit_note": "The legitimate route to live Grubhub menus at scale.",
+        "evidence": [
+          "https://www.fastcasual.com/news/wonder-owned-grubhub-launches-chatgpt-ordering-integration/"
+        ]
+      },
+      {
+        "name": "Universal Commerce Protocol (UCP) food ordering",
+        "platforms": [
+          "doordash",
+          "ubereats"
+        ],
+        "how": "An open agentic-commerce protocol with a food working group that includes DoorDash and Uber Eats.",
+        "access": "Waitlist; the food menu spec is not published yet.",
+        "branch_prices": "Unknown until the spec ships",
+        "fit": "contract",
+        "fit_label": "Not available yet",
+        "fit_note": "Worth watching: it may become a documented route to DoorDash and Uber Eats menus without a bilateral contract.",
+        "evidence": [
+          "https://developers.google.com/actions-center/verticals/ordering/ucp"
         ]
       }
     ]

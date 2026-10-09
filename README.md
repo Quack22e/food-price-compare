@@ -342,9 +342,21 @@ The sandbox also checked npm and PyPI packages for these platforms (read as data
 | Uber Eats `__REACT_QUERY_STATE__` (2–3 MB, `\u0022`-escaped JSON) holds the app state | Structure probe | Observed; **not parsed** (undocumented) |
 | Uber Eats `/_p/api/*`, DoorDash `graphql/consumer` | Third-party clients using logged-in sessions | **Not used**: private and session-bound |
 
+### Live checks of the engine rules (real Uber Eats pages)
+
+These ran on GitHub's runners against the real site (`scripts/snapshot.py`), and the results were ranked with the shipped engine (`node scripts/rank_snapshot.mjs`):
+
+| Check | Run | Result |
+|---|---|---|
+| Cancel mid-run, then resume from the checkpoint in a new process (as after a restart) | [37887316803](https://github.com/Quack22e/prediction-market-analytics/actions/runs/37887316803) | **Passed.** Cancelled after 2 store pages (status `cancelled`). The resumed job re-fetched none of the 4 handled stores, kept their timestamps, and read 20 new ones (18 menus). |
+| Resume of a job that stopped at its per-run limit | [37886686091](https://github.com/Quack22e/prediction-market-analytics/actions/runs/37886686091) | **Passed.** 6 stores done, 0 re-fetched, 6 new after resume. |
+| Same-branch basket: Taco Bell Crunchwrap Supreme + Chalupa Supreme | 37886686091 | **6 complete baskets**, each at one branch. Lowest: **$14.01** ($7.31 + $6.70) at Fulton MS and Fort Oglethorpe GA (tie), "among 6 checked locations". |
+| Pickup vs delivery (`?diningMode=PICKUP` vs `DELIVERY`), same item, same branches | 37886686091 | Kept separate by the engine. The 5 branches read in both modes published **identical** prices (e.g. $7.31 / $7.31 at Fulton MS). Whether Uber Eats' public JSON-LD ever differs by mode is still unproven. |
+| Exact matching on real menus | all snapshot runs | 10 pc. McNuggets: 21–22 verified per run, $5.19–$8.55. Look-alikes rejected with reasons (20/40 pc, Meals, Happy Meal, breakfast items). |
+
 ## Alternative data sources
 
-To find other ways to get this data, 24 methods were researched (October 2026), and 23 of them were re-checked by an independent search that tried to refute each claim (the Kaggle check did not run). The same table, with links, is on the board. Main finding: **current prices for arbitrary US branches come only from public pages**. Every official API is limited to partners and to their own connected stores.
+To find other ways to get this data, 24 methods were researched (October 2026). Each claim was re-checked by an independent search that tried to refute it, and a final pass looked for important methods the list missed (it added five, marked †). The same table, with links, is on the board. Main finding: **current prices for arbitrary US branches come only from public pages**. Every official API is limited to partners and to their own connected stores.
 
 | Method | Platforms | Access | Branch prices | Verdict for this app |
 |---|---|---|---|---|
@@ -367,7 +379,12 @@ To find other ways to get this data, 24 methods were researched (October 2026), 
 | DoorDash `/business/…/menu` | DoorDash | public | no ("estimated", verified live) | Discovery only |
 | DoorDash Storefront (order.online) | DoorDash | public | first-party base price, not the DoorDash delivery price | **Not usable**; its terms ban scraping |
 | Yelp menu pages | Grubhub | Places API has only a menu link | unknown | **Not usable**: DoorDash now powers most Yelp ordering; Yelp's terms forbid scraping |
-| Wayback Machine, Common Crawl, Kaggle datasets | all three | free | historical only | Not current; Wayback is for research, non-commercial use |
+| Wayback Machine, Common Crawl, Kaggle datasets | all three | free | historical only | Not current. Wayback is for research, non-commercial use; the Kaggle Uber Eats dump has no store ID, URL or timestamp and is for educational use |
+| † Screenshots of the app's menu or cart (OCR, you confirm) | all three | your phone | yes, for your branch and mode | Not built. The main legitimate way to see a DoorDash price at your branch |
+| † Grubhub page captured in your own browser | Grubhub | your browser | yes (your Grubhub side) | Not built: the rendered Grubhub markup was never observed, so no selectors were written; Grubhub's terms forbid scraping |
+| † [Uber Consumer Delivery APIs](https://developer.uber.com/docs/consumer-delivery/introduction) | Uber Eats | written approval from Uber | yes, if approved | Partnership only; the one official Uber surface that reaches arbitrary stores |
+| † Distribution partnerships (Grubhub/Uber Eats in ChatGPT, Alexa+, Eater …) | all three | bilateral business deal | yes, for partners | Business deal |
+| † [Universal Commerce Protocol food ordering](https://developers.google.com/actions-center/verticals/ordering/ucp) | DoorDash, Uber Eats | waitlist; food spec unpublished | unknown | Not available yet; worth watching |
 
 ## Access limitations and dependencies
 
