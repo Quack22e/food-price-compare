@@ -1,0 +1,1381 @@
+{
+ "started_at": "2026-10-09T06:16:33Z",
+ "user_agent": "FoodPriceCompare/1.0 (structure research; reads existing archive captures only)",
+ "note": "Structure evidence only. Archived prices are historical and are not used as current prices.",
+ "wayback": {
+  "source": "Wayback Machine (web.archive.org), existing captures, raw bytes via id_",
+  "queries": [
+   {
+    "query": "https://web.archive.org/cdx/search/cdx?url=www.doordash.com%2Fstore%2F&matchType=prefix&from=2025&output=json&fl=timestamp,original,statuscode,mimetype,length&filter=statuscode:200&filter=mimetype:text/html&collapse=urlkey&limit=400",
+    "status": 200,
+    "captures": 400
+   },
+   {
+    "query": "https://web.archive.org/cdx/search/cdx?url=www.doordash.com%2Fstore%2F24633898%2F&output=json&fl=timestamp,original,statuscode,mimetype,length&filter=statuscode:200&limit=20",
+    "status": 200,
+    "captures": 1
+   },
+   {
+    "query": "https://web.archive.org/cdx/search/cdx?url=www.doordash.com%2Fstore%2Famore-mio-italian-restaurant-aurora-32211933%2F&output=json&fl=timestamp,original,statuscode,mimetype,length&filter=statuscode:200&limit=20",
+    "status": "<Response [503]>"
+   },
+   {
+    "query": "https://web.archive.org/cdx/search/cdx?url=www.doordash.com%2Fstore%2Fchipotle-mexican-grill-campbell-270621%2F&output=json&fl=timestamp,original,statuscode,mimetype,length&filter=statuscode:200&limit=20",
+    "status": "<Response [503]>"
+   },
+   {
+    "query": "https://web.archive.org/cdx/search/cdx?url=www.doordash.com%2Fstore%2Fchipotle-mexican-grill-capitola-350644%2F&output=json&fl=timestamp,original,statuscode,mimetype,length&filter=statuscode:200&limit=20",
+    "status": "<Response [503]>"
+   },
+   {
+    "query": "https://web.archive.org/cdx/search/cdx?url=www.doordash.com%2Fstore%2Fchipotle-mexican-grill-castro-valley-270268%2F&output=json&fl=timestamp,original,statuscode,mimetype,length&filter=statuscode:200&limit=20",
+    "status": "<Response [503]>"
+   },
+   {
+    "query": "https://web.archive.org/cdx/search/cdx?url=www.doordash.com%2Fstore%2Fchipotle-mexican-grill-cupertino-270240%2F&output=json&fl=timestamp,original,statuscode,mimetype,length&filter=statuscode:200&limit=20",
+    "status": "<Response [503]>"
+   }
+  ],
+  "pages": [
+   {
+    "original": "https://www.doordash.com/store/$12-eats-12-dollars-combo-meal-baltimore-43658093/",
+    "captured": "20260703020245",
+    "status": 200,
+    "bytes": 2572132,
+    "challenge": false,
+    "challenge_markers": [],
+    "title": "Order $12 Eats (12-Dollars Combo Meal) - Baltimore, MD Menu Delivery [Menu &amp; Prices] | Baltimore - DoorDash",
+    "jsonld_types": [
+     "organization",
+     "menu",
+     "menuitem",
+     "faqpage",
+     "question",
+     "answer",
+     "breadcrumblist",
+     "listitem"
+    ],
+    "restaurant_found": false,
+    "name": "Order $12 Eats (12-Dollars Combo Meal) - Baltimore, MD Menu Delivery [Menu & Prices] | Baltimore - DoorDash",
+    "us_address": null,
+    "address_problem": "no address",
+    "menu_items": 67,
+    "priced_items": 63,
+    "currencies": [
+     "?"
+    ],
+    "sample_items": [
+     {
+      "name": "8-Inch Philly Steak Sub with Fries Can Soda",
+      "price_cents": 1200,
+      "currency": null
+     },
+     {
+      "name": "Honey Garlic Chicken Over Rice",
+      "price_cents": 1200,
+      "currency": null
+     },
+     {
+      "name": "Jerk chicken Over Rice",
+      "price_cents": 1200,
+      "currency": null
+     },
+     {
+      "name": "Crispy Funnel Cake",
+      "price_cents": 799,
+      "currency": null
+     },
+     {
+      "name": "8-Inch Fried Fish Sub (Whiting) with Fries Can Soda",
+      "price_cents": 1200,
+      "currency": null
+     }
+    ],
+    "embedded_json": [
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 227,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 18931,
+      "parsed": "json",
+      "price_paths": [
+       {
+        "path": ".hasMenuSection[][].hasMenuItem[].offers.price",
+        "sample": "2 for $12.00"
+       }
+      ],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 1588,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 456,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": [
+       ".itemListElement[].item"
+      ]
+     }
+    ],
+    "counts": {
+     "\"price\"": 79,
+     "\\\"price\\\"": 108,
+     "displayPrice": 107,
+     "__next_f": 64,
+     "__APOLLO_STATE__": 0,
+     "__REACT_QUERY_STATE__": 0,
+     "application/ld+json": 4,
+     "MenuItem": 94,
+     "storeUuid": 0
+    },
+    "phrases": {
+     "estimated based on": "p from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across store, enter address for menu prices at your ne",
+     "prices are estimated": "ry or pickup from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across store, enter address for menu prices",
+     "may vary": "ailStore_schedule_delivery_callout_modal_primary_text\\\":\\\"Got it\\\",\\\"stores_pricing_disclosure_one\\\":\\\"Prices may vary from in-store or elsewhere for this location. Prices for delivery and pickup may vary.\\\",\\\"stores_pri",
+     "prices may differ": "trings_orderCheckInModal_secondaryActionText\\\":\\\"Cancel\\\",\\\"checkoutStrings_itemPriceMayDiffer_title\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\"",
+     "prices vary": "_q10\\\":\\\"How much do popular {{business}} menu items cost?\\\",\\\"seo_faq_business_redesign_a10\\\":\\\"{{business}} prices vary by location. To view the most up-to-date information, check out your nearest {{business}} restaura",
+     "menu prices": "tle\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverSubtitle\\\":\\\"Prices for menus are set directly by th",
+     "service fee": "ble, select store locations will not be awarded 5% credit\\nback in addition to $10 off promo. Fees (including service fee),\\ntaxes, and gratuity apply. $0 delivery fees and 10% off due to\\nreduced service fees only apply"
+    },
+    "price_contexts": [
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "ors. Accompanied by fries, turmeric butter rice, or a selection of sides like onion rings and sweet potato.\\\",\\\"displayPrice\\\":\\\"2 for $12.00\\\",\\\"displayStrikethroughPrice\\\":\\\"$$24.00\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.co"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "ull,\\\"specialInstructions\\\":\\\"\\\",\\\"quickAddContext\\\":{\\\"__typename\\\":\\\"QuickAddContext\\\",\\\"isEligible\\\":false,\\\"price\\\":{\\\"__typename\\\":\\\"QuickAddMonetaryFields\\\",\\\"currency\\\":\\\"USD\\\",\\\"decimalPlaces\\\":2,\\\"displayString\\"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "ium Fried Shrimp with fries or turmeric butter rice\\\",\\\"description\\\":\\\"7 Pc Medium Fried Shrimp With Fries\\\",\\\"displayPrice\\\":\\\"2 for $12.00\\\",\\\"displayStrikethroughPrice\\\":\\\"$$24.00\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.co"
+     }
+    ]
+   },
+   {
+    "original": "https://www.doordash.com/store/$150-fresh-pizza-new-york-1227820/",
+    "captured": "20260312023020",
+    "status": 200,
+    "bytes": 2220037,
+    "challenge": false,
+    "challenge_markers": [],
+    "title": "Order $1.50 Fresh Pizza - New York, NY Menu Delivery [Menu &amp; Prices] | New York - DoorDash",
+    "jsonld_types": [
+     "restaurant",
+     "postaladdress",
+     "geocoordinates",
+     "menu",
+     "review",
+     "person",
+     "aggregaterating",
+     "organization",
+     "menuitem",
+     "faqpage",
+     "question",
+     "answer",
+     "breadcrumblist",
+     "listitem"
+    ],
+    "restaurant_found": true,
+    "name": "$1.50 Fresh Pizza",
+    "us_address": {
+     "city": "New York",
+     "state": "NY",
+     "zip": ""
+    },
+    "address_problem": null,
+    "menu_items": 34,
+    "priced_items": 34,
+    "currencies": [
+     "?"
+    ],
+    "sample_items": [
+     {
+      "name": "Cheese Pie",
+      "price_cents": 1400,
+      "currency": null
+     },
+     {
+      "name": "2 Slices with 1 Topping and 1 Can Drink/Water",
+      "price_cents": 600,
+      "currency": null
+     },
+     {
+      "name": "2 Cheese Slices and 1 Can Drink/Water",
+      "price_cents": 450,
+      "currency": null
+     },
+     {
+      "name": "Pepperoni Pie",
+      "price_cents": 1800,
+      "currency": null
+     },
+     {
+      "name": "18\" Cheese Pie With Half Topping",
+      "price_cents": 1400,
+      "currency": null
+     }
+    ],
+    "embedded_json": [
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 12016,
+      "parsed": "json",
+      "price_paths": [
+       {
+        "path": ".priceRange",
+        "sample": "$$"
+       },
+       {
+        "path": ".hasMenu.hasMenuSection[][].hasMenuItem[].offers.price",
+        "sample": "$14.00"
+       }
+      ],
+      "menu_paths": [
+       ".hasMenu"
+      ]
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 227,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 9591,
+      "parsed": "json",
+      "price_paths": [
+       {
+        "path": ".hasMenuSection[][].hasMenuItem[].offers.price",
+        "sample": "$14.00"
+       }
+      ],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 1388,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 465,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": [
+       ".itemListElement[].item"
+      ]
+     }
+    ],
+    "counts": {
+     "\"price\"": 92,
+     "\\\"price\\\"": 70,
+     "displayPrice": 67,
+     "__next_f": 56,
+     "__APOLLO_STATE__": 0,
+     "__REACT_QUERY_STATE__": 0,
+     "application/ld+json": 5,
+     "MenuItem": 105,
+     "storeUuid": 0
+    },
+    "phrases": {
+     "estimated based on": "p from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across store, enter address for menu prices at your ne",
+     "prices are estimated": "ry or pickup from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across store, enter address for menu prices",
+     "may vary": "ailStore_schedule_delivery_callout_modal_primary_text\\\":\\\"Got it\\\",\\\"stores_pricing_disclosure_one\\\":\\\"Prices may vary from in-store or elsewhere for this location. Prices for delivery and pickup may vary.\\\",\\\"stores_pri",
+     "prices may differ": "trings_orderCheckInModal_secondaryActionText\\\":\\\"Cancel\\\",\\\"checkoutStrings_itemPriceMayDiffer_title\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\"",
+     "prices vary": "_q10\\\":\\\"How much do popular {{business}} menu items cost?\\\",\\\"seo_faq_business_redesign_a10\\\":\\\"{{business}} prices vary by location. To view the most up-to-date information, check out your nearest {{business}} restaura",
+     "menu prices": "tle\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverSubtitle\\\":\\\"Prices for menus are set directly by th",
+     "service fee": "ble, select store locations will not be awarded 5% credit\\nback in addition to $10 off promo. Fees (including service fee),\\ntaxes, and gratuity apply. $0 delivery fees and 10% off due to\\nreduced service fees only apply"
+    },
+    "price_contexts": [
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "iption\\\":\\\"A generous layer of melted mozzarella cheese atop a classic tomato sauce and thin, crispy crust.\\\",\\\"displayPrice\\\":\\\"$$14.00\\\",\\\"displayStrikethroughPrice\\\":\\\"\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/im"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "ull,\\\"specialInstructions\\\":\\\"\\\",\\\"quickAddContext\\\":{\\\"__typename\\\":\\\"QuickAddContext\\\",\\\"isEligible\\\":false,\\\"price\\\":{\\\"__typename\\\":\\\"QuickAddMonetaryFields\\\",\\\"currency\\\":null,\\\"decimalPlaces\\\":null,\\\"displayString\\"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "live, mushroom, pineapple, or sausage. Includes a drink; choose from a variety of sodas, water, or seltzer.\\\",\\\"displayPrice\\\":\\\"$$6.00\\\",\\\"displayStrikethroughPrice\\\":\\\"\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/ima"
+     }
+    ]
+   },
+   {
+    "original": "https://www.doordash.com/store/%22the-original%22-jj-twigs-pizza-palatine-162127/",
+    "captured": "20260222083309",
+    "status": 200,
+    "bytes": 2539290,
+    "challenge": false,
+    "challenge_markers": [],
+    "title": "Order &quot;The Original&quot; JJ Twig&#x27;s Pizza - Palatine, IL Menu Delivery [Menu &amp; Prices] | Palatine - DoorDash",
+    "jsonld_types": [
+     "organization",
+     "menu",
+     "menuitem",
+     "faqpage",
+     "question",
+     "answer",
+     "breadcrumblist",
+     "listitem"
+    ],
+    "restaurant_found": false,
+    "name": "Order \"The Original\" JJ Twig's Pizza - Palatine, IL Menu Delivery [Menu & Prices] | Palatine - DoorDash",
+    "us_address": null,
+    "address_problem": "no address",
+    "menu_items": 88,
+    "priced_items": 76,
+    "currencies": [
+     "?"
+    ],
+    "sample_items": [
+     {
+      "name": "Custom Pizza",
+      "price_cents": 1550,
+      "currency": null
+     },
+     {
+      "name": "JJ Twigs Pizza",
+      "price_cents": 2230,
+      "currency": null
+     },
+     {
+      "name": "Pepperoni Lovers Pizza",
+      "price_cents": 1890,
+      "currency": null
+     },
+     {
+      "name": "6pc Boneless Wings",
+      "price_cents": 1100,
+      "currency": null
+     },
+     {
+      "name": "6pc Bone In Wings",
+      "price_cents": 1210,
+      "currency": null
+     }
+    ],
+    "embedded_json": [
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 227,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 21661,
+      "parsed": "json",
+      "price_paths": [
+       {
+        "path": ".hasMenuSection[][].hasMenuItem[].offers.price",
+        "sample": "$15.50"
+       }
+      ],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 1635,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 406,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": [
+       ".itemListElement[].item"
+      ]
+     }
+    ],
+    "counts": {
+     "\"price\"": 91,
+     "\\\"price\\\"": 171,
+     "displayPrice": 168,
+     "__next_f": 57,
+     "__APOLLO_STATE__": 0,
+     "__REACT_QUERY_STATE__": 0,
+     "application/ld+json": 4,
+     "MenuItem": 105,
+     "storeUuid": 0
+    },
+    "phrases": {
+     "estimated based on": "p from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across store, enter address for menu prices at your ne",
+     "prices are estimated": "ry or pickup from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across store, enter address for menu prices",
+     "may vary": "ailStore_schedule_delivery_callout_modal_primary_text\\\":\\\"Got it\\\",\\\"stores_pricing_disclosure_one\\\":\\\"Prices may vary from in-store or elsewhere for this location. Prices for delivery and pickup may vary.\\\",\\\"stores_pri",
+     "prices may differ": "trings_orderCheckInModal_secondaryActionText\\\":\\\"Cancel\\\",\\\"checkoutStrings_itemPriceMayDiffer_title\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\"",
+     "prices vary": "_q10\\\":\\\"How much do popular {{business}} menu items cost?\\\",\\\"seo_faq_business_redesign_a10\\\":\\\"{{business}} prices vary by location. To view the most up-to-date information, check out your nearest {{business}} restaura",
+     "menu prices": "tle\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverSubtitle\\\":\\\"Prices for menus are set directly by th",
+     "service fee": "ble, select store locations will not be awarded 5% credit\\nback in addition to $10 off promo. Fees (including service fee),\\ntaxes, and gratuity apply. $0 delivery fees and 10% off due to\\nreduced service fees only apply"
+    },
+    "price_contexts": [
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "\\\"CREATE your own pizza- start here. To alter a specialty pizza, just key in the toppings you would prefer.\\\",\\\"displayPrice\\\":\\\"$$15.50\\\",\\\"displayStrikethroughPrice\\\":\\\"\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/im"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "ull,\\\"specialInstructions\\\":\\\"\\\",\\\"quickAddContext\\\":{\\\"__typename\\\":\\\"QuickAddContext\\\",\\\"isEligible\\\":false,\\\"price\\\":{\\\"__typename\\\":\\\"QuickAddMonetaryFields\\\",\\\"currency\\\":null,\\\"decimalPlaces\\\":null,\\\"displayString\\"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "ith our mozzarella- its' a Chicago classic! (Sorry we do not allow substitutions to our specialty pizzas) \\\",\\\"displayPrice\\\":\\\"$$22.30\\\",\\\"displayStrikethroughPrice\\\":\\\"\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/im"
+     }
+    ]
+   },
+   {
+    "original": "https://www.doordash.com/store/$150-fresh-pizza-new-york-1214701/",
+    "captured": "20260218070500",
+    "status": 200,
+    "bytes": 2272860,
+    "challenge": false,
+    "challenge_markers": [],
+    "title": "Order $1.50 Fresh Pizza - New York, NY Menu Delivery [Menu &amp; Prices] | New York - DoorDash",
+    "jsonld_types": [
+     "restaurant",
+     "postaladdress",
+     "geocoordinates",
+     "menu",
+     "review",
+     "person",
+     "aggregaterating",
+     "organization",
+     "menuitem",
+     "faqpage",
+     "question",
+     "answer",
+     "breadcrumblist",
+     "listitem"
+    ],
+    "restaurant_found": true,
+    "name": "$1.50 Fresh Pizza",
+    "us_address": {
+     "city": "New York",
+     "state": "NY",
+     "zip": ""
+    },
+    "address_problem": null,
+    "menu_items": 34,
+    "priced_items": 34,
+    "currencies": [
+     "?"
+    ],
+    "sample_items": [
+     {
+      "name": "2 Slices with 1 Topping and 1 Can Drink/Water",
+      "price_cents": 600,
+      "currency": null
+     },
+     {
+      "name": "Cheese Pie",
+      "price_cents": 1400,
+      "currency": null
+     },
+     {
+      "name": "Pepperoni Pie",
+      "price_cents": 1800,
+      "currency": null
+     },
+     {
+      "name": "2 Cheese Slices and 1 Can Drink/Water",
+      "price_cents": 450,
+      "currency": null
+     },
+     {
+      "name": "18\" Cheese Pie With Half Topping",
+      "price_cents": 1400,
+      "currency": null
+     }
+    ],
+    "embedded_json": [
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 11730,
+      "parsed": "json",
+      "price_paths": [
+       {
+        "path": ".priceRange",
+        "sample": "$$"
+       },
+       {
+        "path": ".hasMenu.hasMenuSection[][].hasMenuItem[].offers.price",
+        "sample": "$6.00"
+       }
+      ],
+      "menu_paths": [
+       ".hasMenu"
+      ]
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 227,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 9556,
+      "parsed": "json",
+      "price_paths": [
+       {
+        "path": ".hasMenuSection[][].hasMenuItem[].offers.price",
+        "sample": "$6.00"
+       }
+      ],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 1366,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 465,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": [
+       ".itemListElement[].item"
+      ]
+     }
+    ],
+    "counts": {
+     "\"price\"": 92,
+     "\\\"price\\\"": 66,
+     "displayPrice": 63,
+     "__next_f": 57,
+     "__APOLLO_STATE__": 0,
+     "__REACT_QUERY_STATE__": 0,
+     "application/ld+json": 5,
+     "MenuItem": 105,
+     "storeUuid": 0
+    },
+    "phrases": {
+     "estimated based on": "p from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across store, enter address for menu prices at your ne",
+     "prices are estimated": "ry or pickup from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across store, enter address for menu prices",
+     "may vary": "ailStore_schedule_delivery_callout_modal_primary_text\\\":\\\"Got it\\\",\\\"stores_pricing_disclosure_one\\\":\\\"Prices may vary from in-store or elsewhere for this location. Prices for delivery and pickup may vary.\\\",\\\"stores_pri",
+     "prices may differ": "trings_orderCheckInModal_secondaryActionText\\\":\\\"Cancel\\\",\\\"checkoutStrings_itemPriceMayDiffer_title\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\"",
+     "prices vary": "_q10\\\":\\\"How much do popular {{business}} menu items cost?\\\",\\\"seo_faq_business_redesign_a10\\\":\\\"{{business}} prices vary by location. To view the most up-to-date information, check out your nearest {{business}} restaura",
+     "menu prices": "tle\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverSubtitle\\\":\\\"Prices for menus are set directly by th",
+     "service fee": "ble, select store locations will not be awarded 5% credit\\nback in addition to $10 off promo. Fees (including service fee),\\ntaxes, and gratuity apply. $0 delivery fees and 10% off due to\\nreduced service fees only apply"
+    },
+    "price_contexts": [
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "iption\\\":\\\"A generous layer of melted mozzarella cheese atop a classic tomato sauce and thin, crispy crust.\\\",\\\"displayPrice\\\":\\\"$$14.00\\\",\\\"displayStrikethroughPrice\\\":\\\"\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/im"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "ull,\\\"specialInstructions\\\":\\\"\\\",\\\"quickAddContext\\\":{\\\"__typename\\\":\\\"QuickAddContext\\\",\\\"isEligible\\\":false,\\\"price\\\":{\\\"__typename\\\":\\\"QuickAddMonetaryFields\\\",\\\"currency\\\":null,\\\"decimalPlaces\\\":null,\\\"displayString\\"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "live, mushroom, pineapple, or sausage. Includes a drink; choose from a variety of sodas, water, or seltzer.\\\",\\\"displayPrice\\\":\\\"$$6.00\\\",\\\"displayStrikethroughPrice\\\":\\\"\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/ima"
+     }
+    ]
+   },
+   {
+    "original": "https://www.doordash.com/store/%22soi%22-southeast-asian-eatz-charlotte-34203405/",
+    "captured": "20250917153012",
+    "status": 200,
+    "bytes": 2045478,
+    "challenge": false,
+    "challenge_markers": [],
+    "title": "Order &quot;Soi&quot; Southeast Asian Eatz - Charlotte, NC Menu Delivery [Menu &amp; Prices] | Charlotte -  DoorDash",
+    "jsonld_types": [
+     "restaurant",
+     "postaladdress",
+     "geocoordinates",
+     "menu",
+     "review",
+     "person",
+     "aggregaterating",
+     "organization",
+     "menuitem",
+     "faqpage",
+     "question",
+     "answer",
+     "breadcrumblist",
+     "listitem"
+    ],
+    "restaurant_found": true,
+    "name": "\"Soi\" Southeast Asian Eatz",
+    "us_address": {
+     "city": "Charlotte",
+     "state": "NC",
+     "zip": ""
+    },
+    "address_problem": null,
+    "menu_items": 28,
+    "priced_items": 28,
+    "currencies": [
+     "?"
+    ],
+    "sample_items": [
+     {
+      "name": "Egg Rolls (4)",
+      "price_cents": 1095,
+      "currency": null
+     },
+     {
+      "name": "Spring Rolls (4)",
+      "price_cents": 895,
+      "currency": null
+     },
+     {
+      "name": "Fried Chicken Wings (7)",
+      "price_cents": 1599,
+      "currency": null
+     },
+     {
+      "name": "Beef Skewers (4)",
+      "price_cents": 1399,
+      "currency": null
+     },
+     {
+      "name": "Lao Sausage",
+      "price_cents": 1299,
+      "currency": null
+     }
+    ],
+    "embedded_json": [
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 10333,
+      "parsed": "json",
+      "price_paths": [
+       {
+        "path": ".priceRange",
+        "sample": ""
+       },
+       {
+        "path": ".hasMenu.hasMenuSection[][].hasMenuItem[].offers.price",
+        "sample": "$10.95"
+       }
+      ],
+      "menu_paths": [
+       ".hasMenu"
+      ]
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 227,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 7586,
+      "parsed": "json",
+      "price_paths": [
+       {
+        "path": ".hasMenuSection[][].hasMenuItem[].offers.price",
+        "sample": "$10.95"
+       }
+      ],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 1210,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 512,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": [
+       ".itemListElement[].item"
+      ]
+     }
+    ],
+    "counts": {
+     "\"price\"": 60,
+     "\\\"price\\\"": 57,
+     "displayPrice": 54,
+     "__next_f": 54,
+     "__APOLLO_STATE__": 0,
+     "__REACT_QUERY_STATE__": 0,
+     "application/ld+json": 5,
+     "MenuItem": 75,
+     "storeUuid": 0
+    },
+    "phrases": {
+     "estimated based on": "p from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across store, enter address for menu prices at your ne",
+     "prices are estimated": "ry or pickup from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across store, enter address for menu prices",
+     "may vary": "ailStore_schedule_delivery_callout_modal_primary_text\\\":\\\"Got it\\\",\\\"stores_pricing_disclosure_one\\\":\\\"Prices may vary from in-store or elsewhere for this location. Prices for delivery and pickup may vary.\\\",\\\"stores_pri",
+     "prices may differ": "trings_orderCheckInModal_secondaryActionText\\\":\\\"Cancel\\\",\\\"checkoutStrings_itemPriceMayDiffer_title\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\"",
+     "prices vary": "_q10\\\":\\\"How much do popular {{business}} menu items cost?\\\",\\\"seo_faq_business_redesign_a10\\\":\\\"{{business}} prices vary by location. To view the most up-to-date information, check out your nearest {{business}} restaura",
+     "menu prices": "tle\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverSubtitle\\\":\\\"Prices for menus are set directly by th",
+     "service fee": "ble, select store locations will not be awarded 5% credit\\nback in addition to $10 off promo. Fees (including service fee),\\ntaxes, and gratuity apply. $0 delivery fees and 10% off due to\\nreduced service fees only apply"
+    },
+    "price_contexts": [
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "f southeast asian flavors. Recommended w/sticky rice, papaya salad or choose one of our Jeow dipping sauce.\\\",\\\"displayPrice\\\":\\\"$$13.99\\\",\\\"displayStrikethroughPrice\\\":\\\"\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/im"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "null,\\\"specialInstructions\\\":\\\"\\\",\\\"quickAddContext\\\":{\\\"__typename\\\":\\\"QuickAddContext\\\",\\\"isEligible\\\":true,\\\"price\\\":{\\\"__typename\\\":\\\"QuickAddMonetaryFields\\\",\\\"currency\\\":\\\"USD\\\",\\\"decimalPlaces\\\":2,\\\"displayString\\"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "me juice, fish sauce and chili. Bold, sweet, and spicy. Great with meat skewers, fried items +sticky rice! \\\",\\\"displayPrice\\\":\\\"$$14.95\\\",\\\"displayStrikethroughPrice\\\":\\\"\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/im"
+     }
+    ]
+   },
+   {
+    "original": "https://www.doordash.com/store/$150-fresh-pizza-new-york-1222193/",
+    "captured": "20250917084456",
+    "status": 200,
+    "bytes": 2066382,
+    "challenge": false,
+    "challenge_markers": [],
+    "title": "Order $1.50 Fresh Pizza - New York, NY Menu Delivery [Menu &amp; Prices] | New York -  DoorDash",
+    "jsonld_types": [
+     "restaurant",
+     "postaladdress",
+     "geocoordinates",
+     "menu",
+     "review",
+     "person",
+     "aggregaterating",
+     "organization",
+     "menuitem",
+     "faqpage",
+     "question",
+     "answer",
+     "breadcrumblist",
+     "listitem"
+    ],
+    "restaurant_found": true,
+    "name": "$1.50 Fresh Pizza",
+    "us_address": {
+     "city": "New York",
+     "state": "NY",
+     "zip": ""
+    },
+    "address_problem": null,
+    "menu_items": 34,
+    "priced_items": 34,
+    "currencies": [
+     "?"
+    ],
+    "sample_items": [
+     {
+      "name": "Cheese Pie",
+      "price_cents": 1400,
+      "currency": null
+     },
+     {
+      "name": "2 Slices with 1 Topping and 1 Can Drink/Water",
+      "price_cents": 600,
+      "currency": null
+     },
+     {
+      "name": "Pepperoni Pie",
+      "price_cents": 1800,
+      "currency": null
+     },
+     {
+      "name": "18\" Cheese Pie With Half Topping",
+      "price_cents": 1400,
+      "currency": null
+     },
+     {
+      "name": "2 Cheese Slices and 1 Can Drink/Water",
+      "price_cents": 450,
+      "currency": null
+     }
+    ],
+    "embedded_json": [
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 12461,
+      "parsed": "json",
+      "price_paths": [
+       {
+        "path": ".priceRange",
+        "sample": "$$"
+       },
+       {
+        "path": ".hasMenu.hasMenuSection[][].hasMenuItem[].offers.price",
+        "sample": "$14.00"
+       }
+      ],
+      "menu_paths": [
+       ".hasMenu"
+      ]
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 227,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 9565,
+      "parsed": "json",
+      "price_paths": [
+       {
+        "path": ".hasMenuSection[][].hasMenuItem[].offers.price",
+        "sample": "$14.00"
+       }
+      ],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 1367,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 465,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": [
+       ".itemListElement[].item"
+      ]
+     }
+    ],
+    "counts": {
+     "\"price\"": 92,
+     "\\\"price\\\"": 69,
+     "displayPrice": 66,
+     "__next_f": 53,
+     "__APOLLO_STATE__": 0,
+     "__REACT_QUERY_STATE__": 0,
+     "application/ld+json": 5,
+     "MenuItem": 103,
+     "storeUuid": 0
+    },
+    "phrases": {
+     "estimated based on": "p from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across store, enter address for menu prices at your ne",
+     "prices are estimated": "ry or pickup from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across store, enter address for menu prices",
+     "may vary": "ailStore_schedule_delivery_callout_modal_primary_text\\\":\\\"Got it\\\",\\\"stores_pricing_disclosure_one\\\":\\\"Prices may vary from in-store or elsewhere for this location. Prices for delivery and pickup may vary.\\\",\\\"stores_pri",
+     "prices may differ": "trings_orderCheckInModal_secondaryActionText\\\":\\\"Cancel\\\",\\\"checkoutStrings_itemPriceMayDiffer_title\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\"",
+     "prices vary": "_q10\\\":\\\"How much do popular {{business}} menu items cost?\\\",\\\"seo_faq_business_redesign_a10\\\":\\\"{{business}} prices vary by location. To view the most up-to-date information, check out your nearest {{business}} restaura",
+     "menu prices": "tle\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverSubtitle\\\":\\\"Prices for menus are set directly by th",
+     "service fee": "ble, select store locations will not be awarded 5% credit\\nback in addition to $10 off promo. Fees (including service fee),\\ntaxes, and gratuity apply. $0 delivery fees and 10% off due to\\nreduced service fees only apply"
+    },
+    "price_contexts": [
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "iption\\\":\\\"A generous layer of melted mozzarella cheese atop a classic tomato sauce and thin, crispy crust.\\\",\\\"displayPrice\\\":\\\"$$14.00\\\",\\\"displayStrikethroughPrice\\\":\\\"\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/im"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "ull,\\\"specialInstructions\\\":\\\"\\\",\\\"quickAddContext\\\":{\\\"__typename\\\":\\\"QuickAddContext\\\",\\\"isEligible\\\":false,\\\"price\\\":{\\\"__typename\\\":\\\"QuickAddMonetaryFields\\\",\\\"currency\\\":null,\\\"decimalPlaces\\\":null,\\\"displayString\\"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "live, mushroom, pineapple, or sausage. Includes a drink; choose from a variety of sodas, water, or seltzer.\\\",\\\"displayPrice\\\":\\\"$$6.00\\\",\\\"displayStrikethroughPrice\\\":\\\"\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/ima"
+     }
+    ]
+   },
+   {
+    "original": "https://www.doordash.com/store/%22don-taco%22-mexican-taqueria-&-birria-house-26001398/",
+    "captured": "20250813230325",
+    "status": 200,
+    "bytes": 2127863,
+    "challenge": false,
+    "challenge_markers": [],
+    "title": "Order &quot;Don Taco&quot; Mexican Taqueria &amp; Birria House - Morgantown, WV Menu Delivery [Menu &amp; Prices] | Morgantown -  DoorDash",
+    "jsonld_types": [
+     "restaurant",
+     "postaladdress",
+     "geocoordinates",
+     "menu",
+     "review",
+     "person",
+     "aggregaterating",
+     "organization",
+     "menuitem",
+     "faqpage",
+     "question",
+     "answer",
+     "breadcrumblist",
+     "listitem"
+    ],
+    "restaurant_found": true,
+    "name": "\"Don Taco\" Mexican Taqueria & Birria House",
+    "us_address": {
+     "city": "Morgantown",
+     "state": "WV",
+     "zip": ""
+    },
+    "address_problem": null,
+    "menu_items": 76,
+    "priced_items": 72,
+    "currencies": [
+     "?"
+    ],
+    "sample_items": [
+     {
+      "name": "Queso & Chips",
+      "price_cents": 499,
+      "currency": null
+     },
+     {
+      "name": "DT Big Burrito",
+      "price_cents": 1499,
+      "currency": null
+     },
+     {
+      "name": "DT Fiesta Bowl",
+      "price_cents": 1399,
+      "currency": null
+     },
+     {
+      "name": "DT Quesadilla",
+      "price_cents": 1399,
+      "currency": null
+     },
+     {
+      "name": "Don Taco Dip",
+      "price_cents": 899,
+      "currency": null
+     }
+    ],
+    "embedded_json": [
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 21598,
+      "parsed": "json",
+      "price_paths": [
+       {
+        "path": ".priceRange",
+        "sample": "$$"
+       },
+       {
+        "path": ".hasMenu.hasMenuSection[][].hasMenuItem[].offers.price",
+        "sample": "$4.99"
+       }
+      ],
+      "menu_paths": [
+       ".hasMenu"
+      ]
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 227,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 18095,
+      "parsed": "json",
+      "price_paths": [
+       {
+        "path": ".hasMenuSection[][].hasMenuItem[].offers.price",
+        "sample": "$4.99"
+       }
+      ],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 1694,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 503,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": [
+       ".itemListElement[].item"
+      ]
+     }
+    ],
+    "counts": {
+     "\"price\"": 176,
+     "\\\"price\\\"": 119,
+     "displayPrice": 116,
+     "__next_f": 52,
+     "__APOLLO_STATE__": 0,
+     "__REACT_QUERY_STATE__": 0,
+     "application/ld+json": 5,
+     "MenuItem": 205,
+     "storeUuid": 0
+    },
+    "phrases": {
+     "estimated based on": "p from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across store, enter address for menu prices at your ne",
+     "prices are estimated": "ry or pickup from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across store, enter address for menu prices",
+     "may vary": "ailStore_schedule_delivery_callout_modal_primary_text\\\":\\\"Got it\\\",\\\"stores_pricing_disclosure_one\\\":\\\"Prices may vary from in-store or elsewhere for this location. Prices for delivery and pickup may vary.\\\",\\\"stores_pri",
+     "prices may differ": "trings_orderCheckInModal_secondaryActionText\\\":\\\"Cancel\\\",\\\"checkoutStrings_itemPriceMayDiffer_title\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\"",
+     "prices vary": "_q10\\\":\\\"How much do popular {{business}} menu items cost?\\\",\\\"seo_faq_business_redesign_a10\\\":\\\"{{business}} prices vary by location. To view the most up-to-date information, check out your nearest {{business}} restaura",
+     "menu prices": "tle\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverSubtitle\\\":\\\"Prices for menus are set directly by th",
+     "service fee": "rded 5% credit\\nback in addition to $10 o\"])</script><script>self.__next_f.push([1,\"ff promo. Fees (including service fee),\\ntaxes, and gratuity apply. $0 delivery fees and 10% off due to\\nreduced service fees only apply"
+    },
+    "price_contexts": [
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "\"description\\\":\\\"Grilled chicken strips served on a bed of Mexican rice. Served with queso dip on the side.\\\",\\\"displayPrice\\\":\\\"2 for $9.99\\\",\\\"displayStrikethroughPrice\\\":\\\"$$19.98\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.com"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "null,\\\"specialInstructions\\\":\\\"\\\",\\\"quickAddContext\\\":{\\\"__typename\\\":\\\"QuickAddContext\\\",\\\"isEligible\\\":true,\\\"price\\\":{\\\"__typename\\\":\\\"QuickAddMonetaryFields\\\",\\\"currency\\\":\\\"USD\\\",\\\"decimalPlaces\\\":2,\\\"displayString\\"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "cription\\\":\\\"Crispy french fries topped with Mexican shredded chesse, bacon bits, jalape\u00f1os, and queso dip.\\\",\\\"displayPrice\\\":\\\"2 for $10.99\\\",\\\"displayStrikethroughPrice\\\":\\\"$$21.98\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.co"
+     }
+    ]
+   },
+   {
+    "original": "https://www.doordash.com/store/%22fat-tuesday-%22%22a-taste-of-new-orleans%22%22%22-los-angeles-924395/",
+    "captured": "20250808052908",
+    "status": 200,
+    "bytes": 2069479,
+    "challenge": false,
+    "challenge_markers": [],
+    "title": "Order &quot;Fat Tuesday &quot;&quot;A Taste of New Orleans&quot;&quot;&quot; - Los Angeles, CA Menu Delivery [Menu &amp; Prices] | Los Angeles -  DoorDash",
+    "jsonld_types": [
+     "restaurant",
+     "postaladdress",
+     "geocoordinates",
+     "menu",
+     "review",
+     "person",
+     "aggregaterating",
+     "organization",
+     "menuitem",
+     "faqpage",
+     "question",
+     "answer",
+     "breadcrumblist",
+     "listitem"
+    ],
+    "restaurant_found": true,
+    "name": "\"Fat Tuesday \"\"A Taste of New Orleans\"\"\"",
+    "us_address": {
+     "city": "Los Angeles",
+     "state": "CA",
+     "zip": ""
+    },
+    "address_problem": null,
+    "menu_items": 52,
+    "priced_items": 52,
+    "currencies": [
+     "?"
+    ],
+    "sample_items": [
+     {
+      "name": "Mac N Cheese",
+      "price_cents": 900,
+      "currency": null
+     },
+     {
+      "name": "Catfish Bites",
+      "price_cents": 1500,
+      "currency": null
+     },
+     {
+      "name": "Red Beans & Rice",
+      "price_cents": 900,
+      "currency": null
+     },
+     {
+      "name": "Creole Collard Greens",
+      "price_cents": 900,
+      "currency": null
+     },
+     {
+      "name": "Cajun Fries",
+      "price_cents": 700,
+      "currency": null
+     }
+    ],
+    "embedded_json": [
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 16764,
+      "parsed": "json",
+      "price_paths": [
+       {
+        "path": ".priceRange",
+        "sample": "$$"
+       },
+       {
+        "path": ".hasMenu.hasMenuSection[][].hasMenuItem[].offers.price",
+        "sample": "$9.00"
+       }
+      ],
+      "menu_paths": [
+       ".hasMenu"
+      ]
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 227,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 13212,
+      "parsed": "json",
+      "price_paths": [
+       {
+        "path": ".hasMenuSection[][].hasMenuItem[].offers.price",
+        "sample": "$9.00"
+       }
+      ],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 1877,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 574,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": [
+       ".itemListElement[].item"
+      ]
+     }
+    ],
+    "counts": {
+     "\"price\"": 128,
+     "\\\"price\\\"": 95,
+     "displayPrice": 92,
+     "__next_f": 52,
+     "__APOLLO_STATE__": 0,
+     "__REACT_QUERY_STATE__": 0,
+     "application/ld+json": 5,
+     "MenuItem": 151,
+     "storeUuid": 0
+    },
+    "phrases": {
+     "estimated based on": "p from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across store, enter address for menu prices at your ne",
+     "prices are estimated": "ry or pickup from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across store, enter address for menu prices",
+     "may vary": "ailStore_schedule_delivery_callout_modal_primary_text\\\":\\\"Got it\\\",\\\"stores_pricing_disclosure_one\\\":\\\"Prices may vary from in-store or elsewhere for this location. Prices for delivery and pickup may vary.\\\",\\\"stores_pri",
+     "prices may differ": "trings_orderCheckInModal_secondaryActionText\\\":\\\"Cancel\\\",\\\"checkoutStrings_itemPriceMayDiffer_title\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\"",
+     "prices vary": "_q10\\\":\\\"How much do popular {{business}} menu items cost?\\\",\\\"seo_faq_business_redesign_a10\\\":\\\"{{business}} prices vary by location. To view the most up-to-date information, check out your nearest {{business}} restaura",
+     "menu prices": "tle\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverSubtitle\\\":\\\"Prices for menus are set directly by th",
+     "service fee": "rded 5% credit\\nback in addition to $10 off\"])</script><script>self.__next_f.push([1,\" promo. Fees (including service fee),\\ntaxes, and gratuity apply. $0 delivery fees and 10% off due to\\nreduced service fees only apply"
+    },
+    "price_contexts": [
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "ption\\\":\\\"Louisiana catfish bites fried in house cornmeal batter, served with our signature remoulade sauce\\\",\\\"displayPrice\\\":\\\"$$15.00\\\",\\\"displayStrikethroughPrice\\\":\\\"\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/im"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "null,\\\"specialInstructions\\\":\\\"\\\",\\\"quickAddContext\\\":{\\\"__typename\\\":\\\"QuickAddContext\\\",\\\"isEligible\\\":true,\\\"price\\\":{\\\"__typename\\\":\\\"QuickAddMonetaryFields\\\",\\\"currency\\\":\\\"USD\\\",\\\"decimalPlaces\\\":2,\\\"displayString\\"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "ption\\\":\\\"Crispy fried shrimp, fresh lettuce, and ripe tomatoes on a soft roll with a side of creamy sauce.\\\",\\\"displayPrice\\\":\\\"$$17.00\\\",\\\"displayStrikethroughPrice\\\":\\\"\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/im"
+     }
+    ]
+   }
+  ],
+  "distinct_stores_with_captures": 9
+ },
+ "common_crawl": {
+  "source": "Common Crawl (index.commoncrawl.org + data.commoncrawl.org), existing WARC records",
+  "indexes": [
+   {
+    "id": "CC-MAIN-2026-39",
+    "status": null,
+    "records": 0
+   },
+   {
+    "id": "CC-MAIN-2026-34",
+    "status": null,
+    "records": 0
+   },
+   {
+    "id": "CC-MAIN-2026-30",
+    "status": null,
+    "records": 0
+   }
+  ],
+  "pages": []
+ },
+ "requests": [
+  {
+   "robots": "web.archive.org",
+   "status": 404
+  },
+  {
+   "url": "https://web.archive.org/cdx/search/cdx?url=www.doordash.com%2Fstore%2F&matchType=prefix&from=2025&output=json&fl=timestamp,original,statuscode,mimetype,length&filter=statuscode:200&filter=mimetype:text/html&collapse=urlkey&limit=400",
+   "status": 200,
+   "bytes": 35237
+  },
+  {
+   "url": "https://web.archive.org/cdx/search/cdx?url=www.doordash.com%2Fstore%2F24633898%2F&output=json&fl=timestamp,original,statuscode,mimetype,length&filter=statuscode:200&limit=20",
+   "status": 200,
+   "bytes": 150
+  },
+  {
+   "url": "https://web.archive.org/cdx/search/cdx?url=www.doordash.com%2Fstore%2Famore-mio-italian-restaurant-aurora-32211933%2F&output=json&fl=timestamp,original,statuscode,mimetype,length&filter=statuscode:200&limit=20",
+   "status": 503,
+   "bytes": 11832
+  },
+  {
+   "url": "https://web.archive.org/cdx/search/cdx?url=www.doordash.com%2Fstore%2Fchipotle-mexican-grill-campbell-270621%2F&output=json&fl=timestamp,original,statuscode,mimetype,length&filter=statuscode:200&limit=20",
+   "status": 503,
+   "bytes": 11832
+  },
+  {
+   "url": "https://web.archive.org/cdx/search/cdx?url=www.doordash.com%2Fstore%2Fchipotle-mexican-grill-capitola-350644%2F&output=json&fl=timestamp,original,statuscode,mimetype,length&filter=statuscode:200&limit=20",
+   "status": 503,
+   "bytes": 11832
+  },
+  {
+   "url": "https://web.archive.org/cdx/search/cdx?url=www.doordash.com%2Fstore%2Fchipotle-mexican-grill-castro-valley-270268%2F&output=json&fl=timestamp,original,statuscode,mimetype,length&filter=statuscode:200&limit=20",
+   "status": 503,
+   "bytes": 11832
+  },
+  {
+   "url": "https://web.archive.org/cdx/search/cdx?url=www.doordash.com%2Fstore%2Fchipotle-mexican-grill-cupertino-270240%2F&output=json&fl=timestamp,original,statuscode,mimetype,length&filter=statuscode:200&limit=20",
+   "status": 503,
+   "bytes": 11832
+  },
+  {
+   "url": "https://web.archive.org/web/20260703020245id_/https://www.doordash.com/store/$12-eats-12-dollars-combo-meal-baltimore-43658093/",
+   "status": 200,
+   "bytes": 2573448
+  },
+  {
+   "url": "https://web.archive.org/web/20260312023020id_/https://www.doordash.com/store/$150-fresh-pizza-new-york-1227820/",
+   "status": 200,
+   "bytes": 2221293
+  },
+  {
+   "url": "https://web.archive.org/web/20260222083309id_/https://www.doordash.com/store/%22the-original%22-jj-twigs-pizza-palatine-162127/",
+   "status": 200,
+   "bytes": 2540504
+  },
+  {
+   "url": "https://web.archive.org/web/20260218070500id_/https://www.doordash.com/store/$150-fresh-pizza-new-york-1214701/",
+   "status": 200,
+   "bytes": 2274088
+  },
+  {
+   "url": "https://web.archive.org/web/20250917153012id_/https://www.doordash.com/store/%22soi%22-southeast-asian-eatz-charlotte-34203405/",
+   "status": 200,
+   "bytes": 2046561
+  },
+  {
+   "url": "https://web.archive.org/web/20250917084456id_/https://www.doordash.com/store/$150-fresh-pizza-new-york-1222193/",
+   "status": 200,
+   "bytes": 2067466
+  },
+  {
+   "url": "https://web.archive.org/web/20250813230325id_/https://www.doordash.com/store/%22don-taco%22-mexican-taqueria-&-birria-house-26001398/",
+   "status": 200,
+   "bytes": 2128947
+  },
+  {
+   "url": "https://web.archive.org/web/20250808052908id_/https://www.doordash.com/store/%22fat-tuesday-%22%22a-taste-of-new-orleans%22%22%22-los-angeles-924395/",
+   "status": 200,
+   "bytes": 2070527
+  },
+  {
+   "robots": "index.commoncrawl.org",
+   "status": 200
+  },
+  {
+   "url": "https://index.commoncrawl.org/collinfo.json",
+   "status": 200,
+   "bytes": 35226
+  },
+  {
+   "url": "https://index.commoncrawl.org/CC-MAIN-2026-39-index?url=www.doordash.com%2Fstore%2F*&output=json&limit=60&filter=status:200",
+   "skipped": "robots.txt disallows"
+  },
+  {
+   "url": "https://index.commoncrawl.org/CC-MAIN-2026-34-index?url=www.doordash.com%2Fstore%2F*&output=json&limit=60&filter=status:200",
+   "skipped": "robots.txt disallows"
+  },
+  {
+   "url": "https://index.commoncrawl.org/CC-MAIN-2026-30-index?url=www.doordash.com%2Fstore%2F*&output=json&limit=60&filter=status:200",
+   "skipped": "robots.txt disallows"
+  }
+ ],
+ "finished_at": "2026-10-09T06:18:05Z"
+}

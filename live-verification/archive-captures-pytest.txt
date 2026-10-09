@@ -1,0 +1,231 @@
+{"page": "wayback-20250808052908-924395.html", "jsonld_types": ["restaurant", "postaladdress", "geocoordinates", "menu", "review", "person", "aggregaterating", "organization", "menuitem", "faqpage", "question", "answer", "breadcrumblist", "listitem"], "restaurant_found": true, "address": "CA", "items": 52, "priced": 52, "sample": [["Mac N Cheese", 900, null], ["Catfish Bites", 1500, null], ["Red Beans & Rice", 900, null]]}
+F{"page": "wayback-20250813230325-26001398.html", "jsonld_types": ["restaurant", "postaladdress", "geocoordinates", "menu", "review", "person", "aggregaterating", "organization", "menuitem", "faqpage", "question", "answer", "breadcrumblist", "listitem"], "restaurant_found": true, "address": "WV", "items": 76, "priced": 72, "sample": [["Queso & Chips", 499, null], ["DT Big Burrito", 1499, null], ["DT Fiesta Bowl", 1399, null]]}
+F{"page": "wayback-20250917084456-1222193.html", "jsonld_types": ["restaurant", "postaladdress", "geocoordinates", "menu", "review", "person", "aggregaterating", "organization", "menuitem", "faqpage", "question", "answer", "breadcrumblist", "listitem"], "restaurant_found": true, "address": "NY", "items": 34, "priced": 34, "sample": [["Cheese Pie", 1400, null], ["2 Slices with 1 Topping and 1 Can Drink/Water", 600, null], ["Pepperoni Pie", 1800, null]]}
+F{"page": "wayback-20250917153012-34203405.html", "jsonld_types": ["restaurant", "postaladdress", "geocoordinates", "menu", "review", "person", "aggregaterating", "organization", "menuitem", "faqpage", "question", "answer", "breadcrumblist", "listitem"], "restaurant_found": true, "address": "NC", "items": 28, "priced": 28, "sample": [["Egg Rolls (4)", 1095, null], ["Spring Rolls (4)", 895, null], ["Fried Chicken Wings (7)", 1599, null]]}
+F{"page": "wayback-20260218070500-1214701.html", "jsonld_types": ["restaurant", "postaladdress", "geocoordinates", "menu", "review", "person", "aggregaterating", "organization", "menuitem", "faqpage", "question", "answer", "breadcrumblist", "listitem"], "restaurant_found": true, "address": "NY", "items": 34, "priced": 34, "sample": [["2 Slices with 1 Topping and 1 Can Drink/Water", 600, null], ["Cheese Pie", 1400, null], ["Pepperoni Pie", 1800, null]]}
+F{"page": "wayback-20260222083309-162127.html", "jsonld_types": ["organization", "menu", "menuitem", "faqpage", "question", "answer", "breadcrumblist", "listitem"], "restaurant_found": false, "address": null, "items": 88, "priced": 76, "sample": [["Custom Pizza", 1550, null], ["JJ Twigs Pizza", 2230, null], ["Pepperoni Lovers Pizza", 1890, null]]}
+F{"page": "wayback-20260312023020-1227820.html", "jsonld_types": ["restaurant", "postaladdress", "geocoordinates", "menu", "review", "person", "aggregaterating", "organization", "menuitem", "faqpage", "question", "answer", "breadcrumblist", "listitem"], "restaurant_found": true, "address": "NY", "items": 34, "priced": 34, "sample": [["Cheese Pie", 1400, null], ["2 Slices with 1 Topping and 1 Can Drink/Water", 600, null], ["2 Cheese Slices and 1 Can Drink/Water", 450, null]]}
+F{"page": "wayback-20260703020245-43658093.html", "jsonld_types": ["organization", "menu", "menuitem", "faqpage", "question", "answer", "breadcrumblist", "listitem"], "restaurant_found": false, "address": null, "items": 67, "priced": 63, "sample": [["8-Inch Philly Steak Sub with Fries Can Soda", 1200, null], ["Honey Garlic Chicken Over Rice", 1200, null], ["Jerk chicken Over Rice", 1200, null]]}
+F
+=================================== FAILURES ===================================
+_____ test_doordash_reader_on_archived_page[wayback-20250808052908-924395] _____
+
+html_path = PosixPath('/home/runner/work/prediction-market-analytics/prediction-market-analytics/food-price-compare/tests/captures_archive/wayback-20250808052908-924395.html')
+
+    @pytest.mark.skipif(not ARCHIVED, reason="no archived DoorDash captures (saved only by scripts/archive_probe.py)")
+    @pytest.mark.parametrize("html_path", ARCHIVED, ids=[p.stem for p in ARCHIVED])
+    def test_doordash_reader_on_archived_page(html_path):
+        import re
+        from server.extract import dedupe_items, flag_zero_prices
+        store_id = re.search(r"-(\d+)$", html_path.stem).group(1)
+        html = html_path.read_text(errors="replace")
+        parsed = parse_store_page(html, f"https://www.doordash.com/store/{store_id}/", store_id)
+        items = flag_zero_prices(dedupe_items(parsed["items"]))
+        priced = [i for i in items if isinstance(i.get("price_cents"), int)]
+        addr, why = normalize_us_address(parsed["address_raw"]) if parsed["address_raw"] else (None, "no address")
+        print(json.dumps({"page": html_path.name, "jsonld_types": parsed["jsonld_types"],
+                          "restaurant_found": parsed["restaurant_found"], "address": addr and addr.get("state"),
+                          "items": len(items), "priced": len(priced),
+                          "sample": [(i["name"], i["price_cents"], i.get("currency")) for i in priced[:3]]}))
+        if parsed["restaurant_found"] and items:
+            # Whatever the page publishes as a menu must come out priced, in USD for a US store.
+            assert priced, "menu published without prices"
+>           assert not addr or all(i.get("currency") == "USD" for i in priced)
+E           AssertionError: assert (not {'street': '14543 Ventura Boulevard', 'city': 'Los Angeles', 'state': 'CA', 'zip': '', ...} or False)
+E            +  where False = all(<generator object test_doordash_reader_on_archived_page.<locals>.<genexpr> at 0x7f5ef8f55150>)
+
+tests/test_real_captures.py:111: AssertionError
+____ test_doordash_reader_on_archived_page[wayback-20250813230325-26001398] ____
+
+html_path = PosixPath('/home/runner/work/prediction-market-analytics/prediction-market-analytics/food-price-compare/tests/captures_archive/wayback-20250813230325-26001398.html')
+
+    @pytest.mark.skipif(not ARCHIVED, reason="no archived DoorDash captures (saved only by scripts/archive_probe.py)")
+    @pytest.mark.parametrize("html_path", ARCHIVED, ids=[p.stem for p in ARCHIVED])
+    def test_doordash_reader_on_archived_page(html_path):
+        import re
+        from server.extract import dedupe_items, flag_zero_prices
+        store_id = re.search(r"-(\d+)$", html_path.stem).group(1)
+        html = html_path.read_text(errors="replace")
+        parsed = parse_store_page(html, f"https://www.doordash.com/store/{store_id}/", store_id)
+        items = flag_zero_prices(dedupe_items(parsed["items"]))
+        priced = [i for i in items if isinstance(i.get("price_cents"), int)]
+        addr, why = normalize_us_address(parsed["address_raw"]) if parsed["address_raw"] else (None, "no address")
+        print(json.dumps({"page": html_path.name, "jsonld_types": parsed["jsonld_types"],
+                          "restaurant_found": parsed["restaurant_found"], "address": addr and addr.get("state"),
+                          "items": len(items), "priced": len(priced),
+                          "sample": [(i["name"], i["price_cents"], i.get("currency")) for i in priced[:3]]}))
+        if parsed["restaurant_found"] and items:
+            # Whatever the page publishes as a menu must come out priced, in USD for a US store.
+            assert priced, "menu published without prices"
+>           assert not addr or all(i.get("currency") == "USD" for i in priced)
+E           AssertionError: assert (not {'street': '406 Suncrest Towne Centre Drive', 'city': 'Morgantown', 'state': 'WV', 'zip': '', ...} or False)
+E            +  where False = all(<generator object test_doordash_reader_on_archived_page.<locals>.<genexpr> at 0x7f5ef8f55ff0>)
+
+tests/test_real_captures.py:111: AssertionError
+____ test_doordash_reader_on_archived_page[wayback-20250917084456-1222193] _____
+
+html_path = PosixPath('/home/runner/work/prediction-market-analytics/prediction-market-analytics/food-price-compare/tests/captures_archive/wayback-20250917084456-1222193.html')
+
+    @pytest.mark.skipif(not ARCHIVED, reason="no archived DoorDash captures (saved only by scripts/archive_probe.py)")
+    @pytest.mark.parametrize("html_path", ARCHIVED, ids=[p.stem for p in ARCHIVED])
+    def test_doordash_reader_on_archived_page(html_path):
+        import re
+        from server.extract import dedupe_items, flag_zero_prices
+        store_id = re.search(r"-(\d+)$", html_path.stem).group(1)
+        html = html_path.read_text(errors="replace")
+        parsed = parse_store_page(html, f"https://www.doordash.com/store/{store_id}/", store_id)
+        items = flag_zero_prices(dedupe_items(parsed["items"]))
+        priced = [i for i in items if isinstance(i.get("price_cents"), int)]
+        addr, why = normalize_us_address(parsed["address_raw"]) if parsed["address_raw"] else (None, "no address")
+        print(json.dumps({"page": html_path.name, "jsonld_types": parsed["jsonld_types"],
+                          "restaurant_found": parsed["restaurant_found"], "address": addr and addr.get("state"),
+                          "items": len(items), "priced": len(priced),
+                          "sample": [(i["name"], i["price_cents"], i.get("currency")) for i in priced[:3]]}))
+        if parsed["restaurant_found"] and items:
+            # Whatever the page publishes as a menu must come out priced, in USD for a US store.
+            assert priced, "menu published without prices"
+>           assert not addr or all(i.get("currency") == "USD" for i in priced)
+E           AssertionError: assert (not {'street': '1723 Broadway', 'city': 'New York', 'state': 'NY', 'zip': '', ...} or False)
+E            +  where False = all(<generator object test_doordash_reader_on_archived_page.<locals>.<genexpr> at 0x7f5ef8f56670>)
+
+tests/test_real_captures.py:111: AssertionError
+____ test_doordash_reader_on_archived_page[wayback-20250917153012-34203405] ____
+
+html_path = PosixPath('/home/runner/work/prediction-market-analytics/prediction-market-analytics/food-price-compare/tests/captures_archive/wayback-20250917153012-34203405.html')
+
+    @pytest.mark.skipif(not ARCHIVED, reason="no archived DoorDash captures (saved only by scripts/archive_probe.py)")
+    @pytest.mark.parametrize("html_path", ARCHIVED, ids=[p.stem for p in ARCHIVED])
+    def test_doordash_reader_on_archived_page(html_path):
+        import re
+        from server.extract import dedupe_items, flag_zero_prices
+        store_id = re.search(r"-(\d+)$", html_path.stem).group(1)
+        html = html_path.read_text(errors="replace")
+        parsed = parse_store_page(html, f"https://www.doordash.com/store/{store_id}/", store_id)
+        items = flag_zero_prices(dedupe_items(parsed["items"]))
+        priced = [i for i in items if isinstance(i.get("price_cents"), int)]
+        addr, why = normalize_us_address(parsed["address_raw"]) if parsed["address_raw"] else (None, "no address")
+        print(json.dumps({"page": html_path.name, "jsonld_types": parsed["jsonld_types"],
+                          "restaurant_found": parsed["restaurant_found"], "address": addr and addr.get("state"),
+                          "items": len(items), "priced": len(priced),
+                          "sample": [(i["name"], i["price_cents"], i.get("currency")) for i in priced[:3]]}))
+        if parsed["restaurant_found"] and items:
+            # Whatever the page publishes as a menu must come out priced, in USD for a US store.
+            assert priced, "menu published without prices"
+>           assert not addr or all(i.get("currency") == "USD" for i in priced)
+E           AssertionError: assert (not {'street': '500 W Summit Ave', 'city': 'Charlotte', 'state': 'NC', 'zip': '', ...} or False)
+E            +  where False = all(<generator object test_doordash_reader_on_archived_page.<locals>.<genexpr> at 0x7f5ef8f55f20>)
+
+tests/test_real_captures.py:111: AssertionError
+____ test_doordash_reader_on_archived_page[wayback-20260218070500-1214701] _____
+
+html_path = PosixPath('/home/runner/work/prediction-market-analytics/prediction-market-analytics/food-price-compare/tests/captures_archive/wayback-20260218070500-1214701.html')
+
+    @pytest.mark.skipif(not ARCHIVED, reason="no archived DoorDash captures (saved only by scripts/archive_probe.py)")
+    @pytest.mark.parametrize("html_path", ARCHIVED, ids=[p.stem for p in ARCHIVED])
+    def test_doordash_reader_on_archived_page(html_path):
+        import re
+        from server.extract import dedupe_items, flag_zero_prices
+        store_id = re.search(r"-(\d+)$", html_path.stem).group(1)
+        html = html_path.read_text(errors="replace")
+        parsed = parse_store_page(html, f"https://www.doordash.com/store/{store_id}/", store_id)
+        items = flag_zero_prices(dedupe_items(parsed["items"]))
+        priced = [i for i in items if isinstance(i.get("price_cents"), int)]
+        addr, why = normalize_us_address(parsed["address_raw"]) if parsed["address_raw"] else (None, "no address")
+        print(json.dumps({"page": html_path.name, "jsonld_types": parsed["jsonld_types"],
+                          "restaurant_found": parsed["restaurant_found"], "address": addr and addr.get("state"),
+                          "items": len(items), "priced": len(priced),
+                          "sample": [(i["name"], i["price_cents"], i.get("currency")) for i in priced[:3]]}))
+        if parsed["restaurant_found"] and items:
+            # Whatever the page publishes as a menu must come out priced, in USD for a US store.
+            assert priced, "menu published without prices"
+>           assert not addr or all(i.get("currency") == "USD" for i in priced)
+E           AssertionError: assert (not {'street': '383 Canal Street', 'city': 'New York', 'state': 'NY', 'zip': '', ...} or False)
+E            +  where False = all(<generator object test_doordash_reader_on_archived_page.<locals>.<genexpr> at 0x7f5ef8d17c60>)
+
+tests/test_real_captures.py:111: AssertionError
+_____ test_doordash_reader_on_archived_page[wayback-20260222083309-162127] _____
+
+html_path = PosixPath('/home/runner/work/prediction-market-analytics/prediction-market-analytics/food-price-compare/tests/captures_archive/wayback-20260222083309-162127.html')
+
+    @pytest.mark.skipif(not ARCHIVED, reason="no archived DoorDash captures (saved only by scripts/archive_probe.py)")
+    @pytest.mark.parametrize("html_path", ARCHIVED, ids=[p.stem for p in ARCHIVED])
+    def test_doordash_reader_on_archived_page(html_path):
+        import re
+        from server.extract import dedupe_items, flag_zero_prices
+        store_id = re.search(r"-(\d+)$", html_path.stem).group(1)
+        html = html_path.read_text(errors="replace")
+        parsed = parse_store_page(html, f"https://www.doordash.com/store/{store_id}/", store_id)
+        items = flag_zero_prices(dedupe_items(parsed["items"]))
+        priced = [i for i in items if isinstance(i.get("price_cents"), int)]
+        addr, why = normalize_us_address(parsed["address_raw"]) if parsed["address_raw"] else (None, "no address")
+        print(json.dumps({"page": html_path.name, "jsonld_types": parsed["jsonld_types"],
+                          "restaurant_found": parsed["restaurant_found"], "address": addr and addr.get("state"),
+                          "items": len(items), "priced": len(priced),
+                          "sample": [(i["name"], i["price_cents"], i.get("currency")) for i in priced[:3]]}))
+        if parsed["restaurant_found"] and items:
+            # Whatever the page publishes as a menu must come out priced, in USD for a US store.
+            assert priced, "menu published without prices"
+            assert not addr or all(i.get("currency") == "USD" for i in priced)
+        else:
+            # The app records such a store as "no menu data"; nothing is guessed.
+>           assert "menuitem" not in parsed["jsonld_types"]
+E           AssertionError: assert 'menuitem' not in ['organization', 'menu', 'menuitem', 'faqpage', 'question', 'answer', ...]
+
+tests/test_real_captures.py:114: AssertionError
+____ test_doordash_reader_on_archived_page[wayback-20260312023020-1227820] _____
+
+html_path = PosixPath('/home/runner/work/prediction-market-analytics/prediction-market-analytics/food-price-compare/tests/captures_archive/wayback-20260312023020-1227820.html')
+
+    @pytest.mark.skipif(not ARCHIVED, reason="no archived DoorDash captures (saved only by scripts/archive_probe.py)")
+    @pytest.mark.parametrize("html_path", ARCHIVED, ids=[p.stem for p in ARCHIVED])
+    def test_doordash_reader_on_archived_page(html_path):
+        import re
+        from server.extract import dedupe_items, flag_zero_prices
+        store_id = re.search(r"-(\d+)$", html_path.stem).group(1)
+        html = html_path.read_text(errors="replace")
+        parsed = parse_store_page(html, f"https://www.doordash.com/store/{store_id}/", store_id)
+        items = flag_zero_prices(dedupe_items(parsed["items"]))
+        priced = [i for i in items if isinstance(i.get("price_cents"), int)]
+        addr, why = normalize_us_address(parsed["address_raw"]) if parsed["address_raw"] else (None, "no address")
+        print(json.dumps({"page": html_path.name, "jsonld_types": parsed["jsonld_types"],
+                          "restaurant_found": parsed["restaurant_found"], "address": addr and addr.get("state"),
+                          "items": len(items), "priced": len(priced),
+                          "sample": [(i["name"], i["price_cents"], i.get("currency")) for i in priced[:3]]}))
+        if parsed["restaurant_found"] and items:
+            # Whatever the page publishes as a menu must come out priced, in USD for a US store.
+            assert priced, "menu published without prices"
+>           assert not addr or all(i.get("currency") == "USD" for i in priced)
+E           AssertionError: assert (not {'street': '71 2nd Avenue', 'city': 'New York', 'state': 'NY', 'zip': '', ...} or False)
+E            +  where False = all(<generator object test_doordash_reader_on_archived_page.<locals>.<genexpr> at 0x7f5ef8f57b90>)
+
+tests/test_real_captures.py:111: AssertionError
+____ test_doordash_reader_on_archived_page[wayback-20260703020245-43658093] ____
+
+html_path = PosixPath('/home/runner/work/prediction-market-analytics/prediction-market-analytics/food-price-compare/tests/captures_archive/wayback-20260703020245-43658093.html')
+
+    @pytest.mark.skipif(not ARCHIVED, reason="no archived DoorDash captures (saved only by scripts/archive_probe.py)")
+    @pytest.mark.parametrize("html_path", ARCHIVED, ids=[p.stem for p in ARCHIVED])
+    def test_doordash_reader_on_archived_page(html_path):
+        import re
+        from server.extract import dedupe_items, flag_zero_prices
+        store_id = re.search(r"-(\d+)$", html_path.stem).group(1)
+        html = html_path.read_text(errors="replace")
+        parsed = parse_store_page(html, f"https://www.doordash.com/store/{store_id}/", store_id)
+        items = flag_zero_prices(dedupe_items(parsed["items"]))
+        priced = [i for i in items if isinstance(i.get("price_cents"), int)]
+        addr, why = normalize_us_address(parsed["address_raw"]) if parsed["address_raw"] else (None, "no address")
+        print(json.dumps({"page": html_path.name, "jsonld_types": parsed["jsonld_types"],
+                          "restaurant_found": parsed["restaurant_found"], "address": addr and addr.get("state"),
+                          "items": len(items), "priced": len(priced),
+                          "sample": [(i["name"], i["price_cents"], i.get("currency")) for i in priced[:3]]}))
+        if parsed["restaurant_found"] and items:
+            # Whatever the page publishes as a menu must come out priced, in USD for a US store.
+            assert priced, "menu published without prices"
+            assert not addr or all(i.get("currency") == "USD" for i in priced)
+        else:
+            # The app records such a store as "no menu data"; nothing is guessed.
+>           assert "menuitem" not in parsed["jsonld_types"]
+E           AssertionError: assert 'menuitem' not in ['organization', 'menu', 'menuitem', 'faqpage', 'question', 'answer', ...]
+
+tests/test_real_captures.py:114: AssertionError
+8 failed, 2 deselected in 0.32s
