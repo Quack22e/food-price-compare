@@ -1,5 +1,5 @@
 {
- "started_at": "2026-10-09T06:23:06Z",
+ "started_at": "2026-10-09T06:30:28Z",
  "user_agent": "FoodPriceCompare/1.0 (structure research; reads existing archive captures only)",
  "note": "Structure evidence only. Archived prices are historical and are not used as current prices.",
  "wayback": {
@@ -219,9 +219,16 @@
         "@type",
         "hasMenuSection"
        ],
-       "sections": 1,
-       "first_section_keys": [],
-       "first_items": [],
+       "section_nesting": "list of lists",
+       "sections": 8,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"Nachos BellGrande\u00ae\", \"description\": \"Warm-and-crispy tortilla chips with seasoned beef, refried beans, diced tomatoes, warm Nacho Cheese sauce, and reduced-fat sour cream. (730 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$8.41\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"Chicken Quesadilla\", \"description\": \"A large flour tortilla filled with a blend of mozzarella, pepperjack, and cheddar cheeses, grilled, marinated all-white-meat chicken, Creamy Jalape\u00f1o sauce, and grilled to perfection. (490 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$8.53\"}}"
+       ],
        "name": "\"Taco Bell\"",
        "servesCuisine": "[\"Mexican\", \"Fast Food\", \"Comfort Food\", \"Chicken\", \"Lunch\", \"Tacos\", \"Nachos\", \"Quesadillas\", \"Beef\", \"Spicy\", \"Potato\", \"Soda\", \"Vegetarian\", \"Dinner\", \"Desse\u2026",
        "priceRange": "\"$$\""
@@ -249,9 +256,16 @@
         "@type",
         "hasMenuSection"
        ],
-       "sections": 1,
-       "first_section_keys": [],
-       "first_items": []
+       "section_nesting": "list of lists",
+       "sections": 8,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"Nachos BellGrande\u00ae\", \"description\": \"Warm-and-crispy tortilla chips with seasoned beef, refried beans, diced tomatoes, warm Nacho Cheese sauce, and reduced-fat sour cream. (730 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$8.41\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"Chicken Quesadilla\", \"description\": \"A large flour tortilla filled with a blend of mozzarella, pepperjack, and cheddar cheeses, grilled, marinated all-white-meat chicken, Creamy Jalape\u00f1o sauce, and grilled to perfection. (490 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$8.53\"}}"
+       ]
       },
       {
        "type": "FAQPage",
@@ -267,6 +281,51 @@
         "@context",
         "@type",
         "itemListElement"
+       ]
+      }
+     ],
+     "items_of_interest": [
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Crunchwrap Supreme\u00ae\", \"description\": \"A warm flour tortilla filled with seasoned beef, warm Nacho Cheese sauce, a crispy tostada shell, lettuce, diced tomatoes, and reduced-fat sour cream folded into our signature Crunchwrap form and grilled to go (530 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$8.53\"}}",
+       "displayed": [
+        "$$8.53",
+        "$$8.53",
+        "$$8.53"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Chalupa Supreme\", \"description\": \"A warm-and-flaky flatbread shell filled with seasoned beef, lettuce, diced tomaotes, a blend of mozzarella, pepperjack, and cheddar cheeses, and reduced-fat sour cream. (350 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$7.31+\"}}",
+       "displayed": [
+        "$$7.31+",
+        "$$7.31+",
+        "$$7.31+"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Crunchwrap Supreme\u00ae Combo\", \"description\": \"Includes a Crunchwrap Supreme\u00ae, a Crunchy Taco, and a Large fountain drink. (700-1120 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$12.55\"}}",
+       "displayed": [
+        "$$12.55",
+        "$$12.55"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Crunchwrap Supreme\u00ae\", \"description\": \"A warm flour tortilla filled with seasoned beef, warm Nacho Cheese sauce, a crispy tostada shell, lettuce, diced tomatoes, and reduced-fat sour cream folded into our signature Crunchwrap form and grilled to go (530 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$8.53\"}}",
+       "displayed": [
+        "$$8.53",
+        "$$8.53",
+        "$$8.53"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Black Bean Crunchwrap Supreme\u00ae\", \"description\": \"A warm flour tortilla filled with slow-simmered black beans, warm Nacho Cheese sauce, a crispy tostada shell, lettuce, diced tomatoes, and reduced-fat sour cream folded into our signature Crunchwrap form and grilled to go. Item is lacto-ovo, allowing for dairy & egg consumption. Preparation methods may lead to cross contact with meat. See ta.co for full details. (520 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$7.55\"}}",
+       "displayed": [
+        "$$7.55"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Black Bean Chalupa Supreme\", \"description\": \"A warm-and-flaky flatbread shell filled with slow-simmered black beans, lettuce, diced tomatoes, a blend of mozzarella, pepperjack, and cheddar cheeses, and reduced-fat sour cream. Item is lacto-ovo, allowing for dairy & egg consumption. Preparation methods may lead to cross contact with meat. See ta.co for full details. (340 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$6.94\"}}",
+       "displayed": [
+        "$$6.94"
        ]
       }
      ],
@@ -462,9 +521,16 @@
         "@type",
         "hasMenuSection"
        ],
-       "sections": 1,
-       "first_section_keys": [],
-       "first_items": [],
+       "section_nesting": "list of lists",
+       "sections": 8,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"Chicken Quesadilla\", \"description\": \"A large flour tortilla filled with a blend of mozzarella, pepperjack, and cheddar cheeses, grilled, marinated all-white-meat chicken, Creamy Jalape\u00f1o sauce, and grilled to perfection. (490 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$8.53\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"Beefy 5-Layer Burrito\", \"description\": \"A warm flour tortilla filled with seasoned beef, refried beans, reduced-fat sour cream, and shredded cheddar cheese with a layer of warm Nacho Cheese sauce wrapped around it. (490 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$6.33\"}}"
+       ],
        "name": "\"Taco Bell\"",
        "servesCuisine": "[\"Mexican\", \"Fast Food\", \"Comfort Food\", \"Chicken\", \"Lunch\", \"Tacos\", \"Nachos\", \"Quesadillas\", \"Beef\", \"Spicy\", \"Potato\", \"Soda\", \"Vegetarian\", \"Dinner\", \"Desse\u2026",
        "priceRange": "\"$$\""
@@ -492,9 +558,16 @@
         "@type",
         "hasMenuSection"
        ],
-       "sections": 1,
-       "first_section_keys": [],
-       "first_items": []
+       "section_nesting": "list of lists",
+       "sections": 8,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"Chicken Quesadilla\", \"description\": \"A large flour tortilla filled with a blend of mozzarella, pepperjack, and cheddar cheeses, grilled, marinated all-white-meat chicken, Creamy Jalape\u00f1o sauce, and grilled to perfection. (490 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$8.53\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"Beefy 5-Layer Burrito\", \"description\": \"A warm flour tortilla filled with seasoned beef, refried beans, reduced-fat sour cream, and shredded cheddar cheese with a layer of warm Nacho Cheese sauce wrapped around it. (490 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$6.33\"}}"
+       ]
       },
       {
        "type": "FAQPage",
@@ -510,6 +583,53 @@
         "@context",
         "@type",
         "itemListElement"
+       ]
+      }
+     ],
+     "items_of_interest": [
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Crunchwrap Supreme\u00ae\", \"description\": \"A warm flour tortilla filled with seasoned beef, warm Nacho Cheese sauce, a crispy tostada shell, lettuce, diced tomatoes, and reduced-fat sour cream folded into our signature Crunchwrap form and grilled to go (530 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$8.53\"}}",
+       "displayed": [
+        "$$8.53",
+        "$$8.53",
+        "$$8.53"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Chalupa Supreme\", \"description\": \"A warm-and-flaky flatbread shell filled with seasoned beef, lettuce, diced tomaotes, a blend of mozzarella, pepperjack, and cheddar cheeses, and reduced-fat sour cream. (350 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$7.31+\"}}",
+       "displayed": [
+        "$$7.31+",
+        "$$7.31+",
+        "$$7.31+"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Crunchwrap Supreme\u00ae Combo\", \"description\": \"Includes a Crunchwrap Supreme\u00ae, a Crunchy Taco, and a Large fountain drink. (700-1120 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$12.55\"}}",
+       "displayed": [
+        "$$12.55",
+        "$$12.55"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Crunchwrap Supreme\u00ae\", \"description\": \"A warm flour tortilla filled with seasoned beef, warm Nacho Cheese sauce, a crispy tostada shell, lettuce, diced tomatoes, and reduced-fat sour cream folded into our signature Crunchwrap form and grilled to go (530 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$8.53\"}}",
+       "displayed": [
+        "$$8.53",
+        "$$8.53",
+        "$$8.53"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Black Bean Crunchwrap Supreme\u00ae\", \"description\": \"A warm flour tortilla filled with slow-simmered black beans, warm Nacho Cheese sauce, a crispy tostada shell, lettuce, diced tomatoes, and reduced-fat sour cream folded into our signature Crunchwrap form and grilled to go. Item is lacto-ovo, allowing for dairy & egg consumption. Preparation methods may lead to cross contact with meat. See ta.co for full details. (520 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$7.55\"}}",
+       "displayed": [
+        "$$7.55",
+        "$$7.55"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Black Bean Crunchwrap Supreme\u00ae\", \"description\": \"A warm flour tortilla filled with slow-simmered black beans, warm Nacho Cheese sauce, a crispy tostada shell, lettuce, diced tomatoes, and reduced-fat sour cream folded into our signature Crunchwrap form and grilled to go. Item is lacto-ovo, allowing for dairy & egg consumption. Preparation methods may lead to cross contact with meat. See ta.co for full details. (520 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$7.55\"}}",
+       "displayed": [
+        "$$7.55",
+        "$$7.55"
        ]
       }
      ],
@@ -705,9 +825,16 @@
         "@type",
         "hasMenuSection"
        ],
-       "sections": 1,
-       "first_section_keys": [],
-       "first_items": [],
+       "section_nesting": "list of lists",
+       "sections": 7,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"Beefy 5-Layer Burrito\", \"description\": \"A warm flour tortilla filled with seasoned beef, refried beans, reduced-fat sour cream, and shredded cheddar cheese with a layer of warm Nacho Cheese sauce wrapped around it. (490 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$4.87\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"Chicken Quesadilla\", \"description\": \"A large flour tortilla filled with a blend of mozzarella, pepperjack, and cheddar cheeses, grilled, marinated all-white-meat chicken, Creamy Jalape\u00f1o sauce, and grilled to perfection. (490 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$7.06\"}}"
+       ],
        "name": "\"Taco Bell\"",
        "servesCuisine": "[\"Mexican\", \"Fast Food\", \"Comfort Food\", \"Chicken\", \"Lunch\", \"Tacos\", \"Nachos\", \"Quesadillas\", \"Beef\", \"Spicy\", \"Potato\", \"Soda\", \"Vegetarian\", \"Dinner\", \"Desse\u2026",
        "priceRange": "\"$$\""
@@ -735,9 +862,16 @@
         "@type",
         "hasMenuSection"
        ],
-       "sections": 1,
-       "first_section_keys": [],
-       "first_items": []
+       "section_nesting": "list of lists",
+       "sections": 7,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"Beefy 5-Layer Burrito\", \"description\": \"A warm flour tortilla filled with seasoned beef, refried beans, reduced-fat sour cream, and shredded cheddar cheese with a layer of warm Nacho Cheese sauce wrapped around it. (490 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$4.87\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"Chicken Quesadilla\", \"description\": \"A large flour tortilla filled with a blend of mozzarella, pepperjack, and cheddar cheeses, grilled, marinated all-white-meat chicken, Creamy Jalape\u00f1o sauce, and grilled to perfection. (490 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$7.06\"}}"
+       ]
       },
       {
        "type": "FAQPage",
@@ -753,6 +887,54 @@
         "@context",
         "@type",
         "itemListElement"
+       ]
+      }
+     ],
+     "items_of_interest": [
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Crunchwrap Supreme\u00ae\", \"description\": \"A warm flour tortilla filled with seasoned beef, warm Nacho Cheese sauce, a crispy tostada shell, lettuce, diced tomatoes, and reduced-fat sour cream folded into our signature Crunchwrap form and grilled to go (530 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$6.94\"}}",
+       "displayed": [
+        "$$6.94",
+        "$$6.94",
+        "$$6.94"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Chalupa Supreme\", \"description\": \"A warm-and-flaky flatbread shell filled with seasoned beef, lettuce, diced tomaotes, a blend of mozzarella, pepperjack, and cheddar cheeses, and reduced-fat sour cream. (350 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$6.09+\"}}",
+       "displayed": [
+        "$$6.09+",
+        "$$6.09+",
+        "$$6.09+"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Crunchwrap Supreme\u00ae Combo\", \"description\": \"Includes a Crunchwrap Supreme\u00ae, a Crunchy Taco, and a Large fountain drink. (700-1120 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$10.60\"}}",
+       "displayed": [
+        "$$10.60",
+        "$$10.60"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Crunchwrap Supreme\u00ae\", \"description\": \"A warm flour tortilla filled with seasoned beef, warm Nacho Cheese sauce, a crispy tostada shell, lettuce, diced tomatoes, and reduced-fat sour cream folded into our signature Crunchwrap form and grilled to go (530 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$6.94\"}}",
+       "displayed": [
+        "$$6.94",
+        "$$6.94",
+        "$$6.94"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Black Bean Crunchwrap Supreme\u00ae\", \"description\": \"A warm flour tortilla filled with slow-simmered black beans, warm Nacho Cheese sauce, a crispy tostada shell, lettuce, diced tomatoes, and reduced-fat sour cream folded into our signature Crunchwrap form and grilled to go. Item is lacto-ovo, allowing for dairy & egg consumption. Preparation methods may lead to cross contact with meat. See ta.co for full details. (520 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$6.70\"}}",
+       "displayed": [
+        "$$6.70",
+        "$$6.70"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Crunchwrap Supreme\u00ae\", \"description\": \"A warm flour tortilla filled with seasoned beef, warm Nacho Cheese sauce, a crispy tostada shell, lettuce, diced tomatoes, and reduced-fat sour cream folded into our signature Crunchwrap form and grilled to go (530 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$6.94\"}}",
+       "displayed": [
+        "$$6.94",
+        "$$6.94",
+        "$$6.94"
        ]
       }
      ],
@@ -916,9 +1098,16 @@
         "@type",
         "hasMenuSection"
        ],
-       "sections": 1,
-       "first_section_keys": [],
-       "first_items": [],
+       "section_nesting": "list of lists",
+       "sections": 7,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"World Famous Fries [240.0 Cals]\", \"description\": \"\", \"offers\": {\"@type\": \"Offer\", \"price\": \"CA$3.59\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"Big Mac Extra Value Meal [710-1140 Cals]\", \"description\": \"\", \"offers\": {\"@type\": \"Offer\", \"price\": \"CA$16.29\"}}"
+       ],
        "name": "\"McDonald's\"",
        "servesCuisine": "[\"Burgers\", \"Chicken\", \"Wraps\", \"Breakfast\", \"Fish\", \"Coffee\"]",
        "priceRange": "\"$$\""
@@ -946,9 +1135,16 @@
         "@type",
         "hasMenuSection"
        ],
-       "sections": 1,
-       "first_section_keys": [],
-       "first_items": []
+       "section_nesting": "list of lists",
+       "sections": 7,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"World Famous Fries [240.0 Cals]\", \"description\": \"\", \"offers\": {\"@type\": \"Offer\", \"price\": \"CA$3.59\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"Big Mac Extra Value Meal [710-1140 Cals]\", \"description\": \"\", \"offers\": {\"@type\": \"Offer\", \"price\": \"CA$16.29\"}}"
+       ]
       },
       {
        "type": "FAQPage",
@@ -964,6 +1160,52 @@
         "@context",
         "@type",
         "itemListElement"
+       ]
+      }
+     ],
+     "items_of_interest": [
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"6 Chicken McNuggets [290-360 Cals]\", \"description\": \"\", \"offers\": {\"@type\": \"Offer\", \"price\": \"CA$7.69\"}}",
+       "displayed": [
+        "CA$7.69",
+        "CA$7.69"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"10 Chicken McNuggets [490-630 Cals]\", \"description\": \"\", \"offers\": {\"@type\": \"Offer\", \"price\": \"CA$11.19\"}}",
+       "displayed": [
+        "CA$11.19",
+        "CA$11.19",
+        "CA$11.19"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"10 McNuggets Extra Value Meal [840-1190 Cals]\", \"description\": \"\", \"offers\": {\"@type\": \"Offer\", \"price\": \"CA$18.19\"}}",
+       "displayed": [
+        "CA$18.19",
+        "CA$18.19",
+        "CA$18.19"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"6 McNuggets Extra Value Meal [640-920 Cals]\", \"description\": \"\", \"offers\": {\"@type\": \"Offer\", \"price\": \"CA$14.69\"}}",
+       "displayed": [
+        "CA$14.69",
+        "CA$14.69",
+        "CA$14.69"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"40-piece Chicken McNuggets (Serves 4) [1860-2210 Cals]\", \"description\": \"\", \"offers\": {\"@type\": \"Offer\", \"price\": \"CA$35.29\"}}",
+       "displayed": [
+        "CA$35.29",
+        "CA$35.29"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"20-piece Chicken McNuggets Meal (Serves 2) [1650-2280 Cals]\", \"description\": \"\", \"offers\": {\"@type\": \"Offer\", \"price\": \"CA$32.99\"}}",
+       "displayed": [
+        "CA$32.99"
        ]
       }
      ],
@@ -1127,9 +1369,16 @@
         "@type",
         "hasMenuSection"
        ],
-       "sections": 1,
-       "first_section_keys": [],
-       "first_items": [],
+       "section_nesting": "list of lists",
+       "sections": 9,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"Sausage 'N Egg McMuffin Extra Value Meal [590.0 Cals]\", \"description\": \"\", \"offers\": {\"@type\": \"Offer\", \"price\": \"CA$10.89\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"Chicken McMuffin [360.0 Cals]\", \"description\": \"\", \"offers\": {\"@type\": \"Offer\", \"price\": \"CA$5.99\"}}"
+       ],
        "name": "\"McDonald's\"",
        "servesCuisine": "[\"Burgers\", \"Chicken\", \"Wraps\", \"Breakfast\", \"Fish\", \"Coffee\"]",
        "priceRange": "\"$$\""
@@ -1157,9 +1406,16 @@
         "@type",
         "hasMenuSection"
        ],
-       "sections": 1,
-       "first_section_keys": [],
-       "first_items": []
+       "section_nesting": "list of lists",
+       "sections": 9,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"Sausage 'N Egg McMuffin Extra Value Meal [590.0 Cals]\", \"description\": \"\", \"offers\": {\"@type\": \"Offer\", \"price\": \"CA$10.89\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"Chicken McMuffin [360.0 Cals]\", \"description\": \"\", \"offers\": {\"@type\": \"Offer\", \"price\": \"CA$5.99\"}}"
+       ]
       },
       {
        "type": "FAQPage",
@@ -1178,6 +1434,7 @@
        ]
       }
      ],
+     "items_of_interest": [],
      "offers": 182,
      "offers_with_priceCurrency": 0,
      "priceCurrency_values": [],
@@ -1338,9 +1595,16 @@
         "@type",
         "hasMenuSection"
        ],
-       "sections": 1,
-       "first_section_keys": [],
-       "first_items": [],
+       "section_nesting": "list of lists",
+       "sections": 7,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"World Famous Fries [240.0 Cals]\", \"description\": \"\", \"offers\": {\"@type\": \"Offer\", \"price\": \"CA$3.49\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"6 Chicken McNuggets [290-360 Cals]\", \"description\": \"\", \"offers\": {\"@type\": \"Offer\", \"price\": \"CA$7.59\"}}"
+       ],
        "name": "\"McDonald's\"",
        "servesCuisine": "[\"Burgers\", \"Chicken\", \"Wraps\", \"Breakfast\", \"Fish\", \"Coffee\"]",
        "priceRange": "\"$$\""
@@ -1368,9 +1632,16 @@
         "@type",
         "hasMenuSection"
        ],
-       "sections": 1,
-       "first_section_keys": [],
-       "first_items": []
+       "section_nesting": "list of lists",
+       "sections": 7,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"World Famous Fries [240.0 Cals]\", \"description\": \"\", \"offers\": {\"@type\": \"Offer\", \"price\": \"CA$3.49\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"6 Chicken McNuggets [290-360 Cals]\", \"description\": \"\", \"offers\": {\"@type\": \"Offer\", \"price\": \"CA$7.59\"}}"
+       ]
       },
       {
        "type": "FAQPage",
@@ -1386,6 +1657,55 @@
         "@context",
         "@type",
         "itemListElement"
+       ]
+      }
+     ],
+     "items_of_interest": [
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"6 Chicken McNuggets [290-360 Cals]\", \"description\": \"\", \"offers\": {\"@type\": \"Offer\", \"price\": \"CA$7.59\"}}",
+       "displayed": [
+        "CA$7.59",
+        "CA$7.59",
+        "CA$7.59"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"10 Chicken McNuggets [490-630 Cals]\", \"description\": \"\", \"offers\": {\"@type\": \"Offer\", \"price\": \"CA$10.99\"}}",
+       "displayed": [
+        "CA$10.99",
+        "CA$10.99",
+        "CA$10.99"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Happy Meal 4 McNuggets with Small Fries [480-660 Cals]\", \"description\": \"\", \"offers\": {\"@type\": \"Offer\", \"price\": \"CA$6.89\"}}",
+       "displayed": [
+        "CA$6.89",
+        "CA$6.89",
+        "CA$6.89"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"10 McNuggets Extra Value Meal [840-1190 Cals]\", \"description\": \"\", \"offers\": {\"@type\": \"Offer\", \"price\": \"CA$17.29\"}}",
+       "displayed": [
+        "CA$17.29",
+        "CA$17.29",
+        "CA$17.29"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"10 McNuggets Extra Value Meal [840-1190 Cals]\", \"description\": \"\", \"offers\": {\"@type\": \"Offer\", \"price\": \"CA$17.29\"}}",
+       "displayed": [
+        "CA$17.29",
+        "CA$17.29",
+        "CA$17.29"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"6 McNuggets Extra Value Meal [640-920 Cals]\", \"description\": \"\", \"offers\": {\"@type\": \"Offer\", \"price\": \"CA$13.39\"}}",
+       "displayed": [
+        "CA$13.39",
+        "CA$13.39"
        ]
       }
      ],
@@ -1581,9 +1901,16 @@
         "@type",
         "hasMenuSection"
        ],
-       "sections": 1,
-       "first_section_keys": [],
-       "first_items": [],
+       "section_nesting": "list of lists",
+       "sections": 6,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"Burrito Bowl\", \"description\": \"Your choice of freshly grilled meat or sofritas served in a delicious bowl with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"US$12.75\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"Burrito\", \"description\": \"Your choice of freshly grilled meat or sofritas wrapped in a warm flour tortilla with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"US$12.75\"}}"
+       ],
        "name": "\"Chipotle Mexican Grill\"",
        "servesCuisine": "[\"Mexican\", \"Bowls\", \"Chicken\", \"Tacos\", \"Salads\", \"Healthy\", \"Burritos\", \"Fresh Steak\", \"Quesadillas\", \"Chips and Salsa\", \"Barbacoa\", \"Carnitas\", \"Guacamole\", \u2026",
        "priceRange": "\"$\""
@@ -1611,9 +1938,16 @@
         "@type",
         "hasMenuSection"
        ],
-       "sections": 1,
-       "first_section_keys": [],
-       "first_items": []
+       "section_nesting": "list of lists",
+       "sections": 6,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"Burrito Bowl\", \"description\": \"Your choice of freshly grilled meat or sofritas served in a delicious bowl with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"US$12.75\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"Burrito\", \"description\": \"Your choice of freshly grilled meat or sofritas wrapped in a warm flour tortilla with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"US$12.75\"}}"
+       ]
       },
       {
        "type": "FAQPage",
@@ -1629,6 +1963,40 @@
         "@context",
         "@type",
         "itemListElement"
+       ]
+      }
+     ],
+     "items_of_interest": [
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Burrito Bowl\", \"description\": \"Your choice of freshly grilled meat or sofritas served in a delicious bowl with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"US$12.75\"}}",
+       "displayed": [
+        "US$12.75",
+        "US$12.75",
+        "US$12.75"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Burrito Bowl\", \"description\": \"Your choice of freshly grilled meat or sofritas served in a delicious bowl with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"US$12.75\"}}",
+       "displayed": [
+        "US$12.75",
+        "US$12.75",
+        "US$12.75"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Burrito Bowl\", \"description\": \"Your choice of freshly grilled meat or sofritas served in a delicious bowl with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"US$12.75\"}}",
+       "displayed": [
+        "US$12.75",
+        "US$12.75",
+        "US$12.75"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Burrito Bowl\", \"description\": \"Your choice of freshly grilled meat or sofritas served in a delicious bowl with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"US$12.75\"}}",
+       "displayed": [
+        "US$12.75",
+        "US$12.75",
+        "US$12.75"
        ]
       }
      ],
@@ -1824,9 +2192,16 @@
         "@type",
         "hasMenuSection"
        ],
-       "sections": 1,
-       "first_section_keys": [],
-       "first_items": [],
+       "section_nesting": "list of lists",
+       "sections": 6,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"Burrito Bowl\", \"description\": \"Your choice of freshly grilled meat or sofritas served in a delicious bowl with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"US$12.95\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"Burrito\", \"description\": \"Your choice of freshly grilled meat or sofritas wrapped in a warm flour tortilla with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"US$12.95\"}}"
+       ],
        "name": "\"Chipotle Mexican Grill\"",
        "servesCuisine": "[\"Mexican\", \"Bowls\", \"Chicken\", \"Tacos\", \"Salads\", \"Healthy\", \"Burritos\", \"Fresh Steak\", \"Quesadillas\", \"Chips and Salsa\", \"Barbacoa\", \"Carnitas\", \"Guacamole\", \u2026",
        "priceRange": "\"$$\""
@@ -1854,9 +2229,16 @@
         "@type",
         "hasMenuSection"
        ],
-       "sections": 1,
-       "first_section_keys": [],
-       "first_items": []
+       "section_nesting": "list of lists",
+       "sections": 6,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"Burrito Bowl\", \"description\": \"Your choice of freshly grilled meat or sofritas served in a delicious bowl with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"US$12.95\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"Burrito\", \"description\": \"Your choice of freshly grilled meat or sofritas wrapped in a warm flour tortilla with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"US$12.95\"}}"
+       ]
       },
       {
        "type": "FAQPage",
@@ -1872,6 +2254,40 @@
         "@context",
         "@type",
         "itemListElement"
+       ]
+      }
+     ],
+     "items_of_interest": [
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Burrito Bowl\", \"description\": \"Your choice of freshly grilled meat or sofritas served in a delicious bowl with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"US$12.95\"}}",
+       "displayed": [
+        "US$12.95",
+        "US$12.95",
+        "US$12.95"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Burrito Bowl\", \"description\": \"Your choice of freshly grilled meat or sofritas served in a delicious bowl with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"US$12.95\"}}",
+       "displayed": [
+        "US$12.95",
+        "US$12.95",
+        "US$12.95"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Burrito Bowl\", \"description\": \"Your choice of freshly grilled meat or sofritas served in a delicious bowl with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"US$12.95\"}}",
+       "displayed": [
+        "US$12.95",
+        "US$12.95",
+        "US$12.95"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Burrito Bowl\", \"description\": \"Your choice of freshly grilled meat or sofritas served in a delicious bowl with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"US$12.95\"}}",
+       "displayed": [
+        "US$12.95",
+        "US$12.95",
+        "US$12.95"
        ]
       }
      ],
@@ -2067,9 +2483,16 @@
         "@type",
         "hasMenuSection"
        ],
-       "sections": 1,
-       "first_section_keys": [],
-       "first_items": [],
+       "section_nesting": "list of lists",
+       "sections": 5,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"Burrito Bowl\", \"description\": \"Your choice of freshly grilled meat or sofritas served in a delicious bowl with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$12.35\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"Burrito\", \"description\": \"Your choice of freshly grilled meat or sofritas wrapped in a warm flour tortilla with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$12.35\"}}"
+       ],
        "name": "\"Chipotle Mexican Grill\"",
        "servesCuisine": "[\"Mexican\", \"Burritos\", \"Tacos\", \"Salads\", \"Chicken\", \"Healthy\", \"Bowls\", \"Steak\", \"Vegetarian Friendly\", \"Chips and Salsa\", \"Fresh Steak\", \"Vegan Friendly\", \"B\u2026",
        "priceRange": "\"$$\""
@@ -2097,9 +2520,16 @@
         "@type",
         "hasMenuSection"
        ],
-       "sections": 1,
-       "first_section_keys": [],
-       "first_items": []
+       "section_nesting": "list of lists",
+       "sections": 5,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"Burrito Bowl\", \"description\": \"Your choice of freshly grilled meat or sofritas served in a delicious bowl with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$12.35\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"Burrito\", \"description\": \"Your choice of freshly grilled meat or sofritas wrapped in a warm flour tortilla with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$12.35\"}}"
+       ]
       },
       {
        "type": "FAQPage",
@@ -2115,6 +2545,40 @@
         "@context",
         "@type",
         "itemListElement"
+       ]
+      }
+     ],
+     "items_of_interest": [
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Burrito Bowl\", \"description\": \"Your choice of freshly grilled meat or sofritas served in a delicious bowl with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$12.35\"}}",
+       "displayed": [
+        "$$12.35",
+        "$$12.35",
+        "$$12.35"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Burrito Bowl\", \"description\": \"Your choice of freshly grilled meat or sofritas served in a delicious bowl with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$12.35\"}}",
+       "displayed": [
+        "$$12.35",
+        "$$12.35",
+        "$$12.35"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Burrito Bowl\", \"description\": \"Your choice of freshly grilled meat or sofritas served in a delicious bowl with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$12.35\"}}",
+       "displayed": [
+        "$$12.35",
+        "$$12.35",
+        "$$12.35"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Burrito Bowl\", \"description\": \"Your choice of freshly grilled meat or sofritas served in a delicious bowl with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$12.35\"}}",
+       "displayed": [
+        "$$12.35",
+        "$$12.35",
+        "$$12.35"
        ]
       }
      ],
@@ -2310,9 +2774,16 @@
         "@type",
         "hasMenuSection"
        ],
-       "sections": 1,
-       "first_section_keys": [],
-       "first_items": [],
+       "section_nesting": "list of lists",
+       "sections": 11,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"Malnati Salad\", \"description\": \"Romaine lettuce, tomatoes, black olives, mushrooms, Volpi salami bits and gorgonzola cheese with our Sweet Vinaigrette and romano cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$15.59+\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"Deep Dish Cheese\", \"description\": \"Mozzarella cheese topped with vine-ripened tomato sauce.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$13.59+\"}}"
+       ],
        "name": "\"Lou Malnati&apos;s Pizzeria\"",
        "servesCuisine": "[\"Italian\", \"Pizzeria\", \"Deep Dish Pizza\", \"Pizza\", \"Chicken Wings\", \"Salads\", \"Happy Hour\", \"Sandwich\", \"Appetizers\", \"Sandwiches\", \"Vegetarian\", \"Desserts\", \"\u2026",
        "priceRange": "\"$$\""
@@ -2340,9 +2811,16 @@
         "@type",
         "hasMenuSection"
        ],
-       "sections": 1,
-       "first_section_keys": [],
-       "first_items": []
+       "section_nesting": "list of lists",
+       "sections": 11,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"Malnati Salad\", \"description\": \"Romaine lettuce, tomatoes, black olives, mushrooms, Volpi salami bits and gorgonzola cheese with our Sweet Vinaigrette and romano cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$15.59+\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"Deep Dish Cheese\", \"description\": \"Mozzarella cheese topped with vine-ripened tomato sauce.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$13.59+\"}}"
+       ]
       },
       {
        "type": "FAQPage",
@@ -2358,6 +2836,56 @@
         "@context",
         "@type",
         "itemListElement"
+       ]
+      }
+     ],
+     "items_of_interest": [
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Deep Dish Cheese\", \"description\": \"Mozzarella cheese topped with vine-ripened tomato sauce.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$13.59+\"}}",
+       "displayed": [
+        "$$13.59+",
+        "$$13.59+",
+        "$$13.59+"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Deep Dish Create Your Own\", \"description\": \"Order your pizza just how you like it \u2013 topped with a mixture of your favorite ingredients, and cooked to your liking!\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$13.59+\"}}",
+       "displayed": [
+        "$$13.59+",
+        "$$13.59+",
+        "$$13.59+"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Deep Dish Malnati Chicago Classic\u2122\", \"description\": \"Made with Lou&apos;s lean sausage, some extra mozzarella cheese and vine-ripened tomato sauce on Buttercrust\u2122. It&apos;s authentic Chicago!\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$16.09+\"}}",
+       "displayed": [
+        "$$16.09+",
+        "$$16.09+",
+        "$$16.09+"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Deep Dish The Lou\", \"description\": \"A pizza so good we gave it his name! Spinach mix (enhanced with garlic, basil &amp; onion), mushrooms and sliced Roma tomatoes covered with three cheeses, on a garlic Buttercrust\u2122.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$17.39+\"}}",
+       "displayed": [
+        "$$17.39+",
+        "$$17.39+",
+        "$$17.39+"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Deep Dish Malnati Chicago Classic\u2122\", \"description\": \"Made with Lou&apos;s lean sausage, some extra mozzarella cheese and vine-ripened tomato sauce on Buttercrust\u2122. It&apos;s authentic Chicago!\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$16.09+\"}}",
+       "displayed": [
+        "$$16.09+",
+        "$$16.09+",
+        "$$16.09+"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Deep Dish The Lou\", \"description\": \"A pizza so good we gave it his name! Spinach mix (enhanced with garlic, basil &amp; onion), mushrooms and sliced Roma tomatoes covered with three cheeses, on a garlic Buttercrust\u2122.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$17.39+\"}}",
+       "displayed": [
+        "$$17.39+",
+        "$$17.39+",
+        "$$17.39+"
        ]
       }
      ],
@@ -2553,9 +3081,16 @@
         "@type",
         "hasMenuSection"
        ],
-       "sections": 1,
-       "first_section_keys": [],
-       "first_items": [],
+       "section_nesting": "list of lists",
+       "sections": 11,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"Thin Crust Create Your Own\", \"description\": \"Order your pizza just how you like it \u2013 topped with a mixture of your favorite ingredients, and cooked to your liking!\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$13.59+\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"Deep Dish Cheese\", \"description\": \"Mozzarella cheese topped with vine-ripened tomato sauce.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$12.99+\"}}"
+       ],
        "name": "\"Lou Malnati&apos;s Pizzeria\"",
        "servesCuisine": "[\"Italian\", \"Pizzeria\", \"Deep Dish Pizza\", \"Pizza\", \"Chicken Wings\", \"Salads\", \"Happy Hour\", \"Sandwich\", \"Appetizers\", \"Sandwiches\", \"Vegetarian\", \"Desserts\", \"\u2026",
        "priceRange": "\"$$\""
@@ -2583,9 +3118,16 @@
         "@type",
         "hasMenuSection"
        ],
-       "sections": 1,
-       "first_section_keys": [],
-       "first_items": []
+       "section_nesting": "list of lists",
+       "sections": 11,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"Thin Crust Create Your Own\", \"description\": \"Order your pizza just how you like it \u2013 topped with a mixture of your favorite ingredients, and cooked to your liking!\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$13.59+\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"Deep Dish Cheese\", \"description\": \"Mozzarella cheese topped with vine-ripened tomato sauce.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$12.99+\"}}"
+       ]
       },
       {
        "type": "FAQPage",
@@ -2602,6 +3144,52 @@
         "@type",
         "itemListElement"
        ]
+      }
+     ],
+     "items_of_interest": [
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Deep Dish Cheese\", \"description\": \"Mozzarella cheese topped with vine-ripened tomato sauce.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$12.99+\"}}",
+       "displayed": [
+        "$$12.99+",
+        "$$12.99+",
+        "$$12.99+"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Deep Dish Create Your Own\", \"description\": \"Order your pizza just how you like it \u2013 topped with a mixture of your favorite ingredients, and cooked to your liking!\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$12.99+\"}}",
+       "displayed": [
+        "$$12.99+",
+        "$$12.99+",
+        "$$12.99+"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Deep Dish Malnati Chicago Classic\u2122\", \"description\": \"Made with Lou&apos;s lean sausage, some extra mozzarella cheese and vine-ripened tomato sauce on Buttercrust\u2122. It&apos;s authentic Chicago!\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$15.59+\"}}",
+       "displayed": [
+        "$$15.59+",
+        "$$15.59+",
+        "$$15.59+"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Deep Dish The Lou\", \"description\": \"A pizza so good we gave it his name! Spinach mix (enhanced with garlic, basil &amp; onion), mushrooms and sliced Roma tomatoes covered with three cheeses, on a garlic Buttercrust\u2122.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$16.89+\"}}",
+       "displayed": [
+        "$$16.89+",
+        "$$16.89+",
+        "$$16.89+"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Deep Dish Malnati Chicago Classic\u2122\", \"description\": \"Made with Lou&apos;s lean sausage, some extra mozzarella cheese and vine-ripened tomato sauce on Buttercrust\u2122. It&apos;s authentic Chicago!\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$15.59+\"}}",
+       "displayed": [
+        "$$15.59+",
+        "$$15.59+",
+        "$$15.59+"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Deep Dish Mike&apos;s Hot Honey\u00ae\", \"description\": \"A Chicago take on pizza\u2019s hottest condiment, with sausage, hot giardiniera, cupped pepperoni, and a drizzle of Mike\u2019s Hot Honey\u00ae.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$16.79+\"}}",
+       "displayed": []
       }
      ],
      "offers": 182,
@@ -2769,9 +3357,16 @@
         "@type",
         "hasMenuSection"
        ],
-       "sections": 1,
-       "first_section_keys": [],
-       "first_items": []
+       "section_nesting": "list of lists",
+       "sections": 11,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"Deep Dish Malnati Chicago Classic\u2122\", \"description\": \"Made with Lou&apos;s lean sausage, some extra mozzarella cheese and vine-ripened tomato sauce on Buttercrust\u2122. It&apos;s authentic Chicago!\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$17.79+\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"Malnati Salad\", \"description\": \"Romaine lettuce, tomatoes, black olives, mushrooms, Volpi salami bits and gorgonzola cheese with our Sweet Vinaigrette and romano cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$18.19+\"}}"
+       ]
       },
       {
        "type": "FAQPage",
@@ -2787,6 +3382,55 @@
         "@context",
         "@type",
         "itemListElement"
+       ]
+      }
+     ],
+     "items_of_interest": [
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Deep Dish Malnati Chicago Classic\u2122\", \"description\": \"Made with Lou&apos;s lean sausage, some extra mozzarella cheese and vine-ripened tomato sauce on Buttercrust\u2122. It&apos;s authentic Chicago!\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$17.79+\"}}",
+       "displayed": [
+        "$$17.79+",
+        "$$17.79+",
+        "$$17.79+"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Deep Dish Cheese\", \"description\": \"Mozzarella cheese topped with vine-ripened tomato sauce.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$14.89+\"}}",
+       "displayed": [
+        "$$14.89+",
+        "$$14.89+",
+        "$$14.89+"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Deep Dish Create Your Own\", \"description\": \"Order your pizza just how you like it \u2013 topped with a mixture of your favorite ingredients, and cooked to your liking!\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$14.89+\"}}",
+       "displayed": [
+        "$$14.89+",
+        "$$14.89+",
+        "$$14.89+"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Deep Dish Pepperoni\", \"description\": \"Mozzarella cheese, topped with slices of pepperoni and vine-ripened tomato sauce.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$16.99+\"}}",
+       "displayed": [
+        "$$16.99+",
+        "$$16.99+",
+        "$$16.99+"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Heart-Shaped Pepperoni Deep Dish Pizza\", \"description\": \"Heart-shaped crust with mozzarella cheese, topped with slices of pepperoni and vine-ripened tomato sauce.\\r\\n\\r\\n*Heart-Shaped Pizzas are available only in small size, and a specialty artisan product.  Unfortunately, additional toppings and other modifications cannot be accommodated.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$27.39\"}}",
+       "displayed": [
+        "$$27.39",
+        "$$27.39"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Heart-Shaped Cheese Deep Dish Pizza\", \"description\": \"Heart-shaped crust with mozzarella cheese and vine-ripened tomato sauce. \\r\\n\\r\\n*Heart-Shaped Pizzas are available only in small size, and a specialty artisan product.  Unfortunately, additional toppings and other modifications cannot be accommodated.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$24.09\"}}",
+       "displayed": [
+        "$$24.09",
+        "$$24.09",
+        "$$24.09"
        ]
       }
      ],
@@ -2955,9 +3599,16 @@
         "@type",
         "hasMenuSection"
        ],
-       "sections": 1,
-       "first_section_keys": [],
-       "first_items": []
+       "section_nesting": "list of lists",
+       "sections": 12,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"5 Pc Buffalo Party Wings with fries or turmeric butter rice\", \"description\": \"Five-piece party wings with diverse wet or dry rub flavors. Accompanied by fries, turmeric butter rice, or a selection of sides like onion rings and sweet potato.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"2 for $12.00\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"2 Pc Whole Wings 1 Pc Whiting with fries or turmeric butter rice\", \"description\": \"2 Pc Whole Wings 1 Pc Whiting With Fries or  turmeric butter rice\", \"offers\": {\"@type\": \"Offer\", \"price\": \"2 for $12.00\"}}"
+       ]
       },
       {
        "type": "FAQPage",
@@ -2976,6 +3627,7 @@
        ]
       }
      ],
+     "items_of_interest": [],
      "offers": 79,
      "offers_with_priceCurrency": 0,
      "priceCurrency_values": [],
@@ -3141,9 +3793,16 @@
         "@type",
         "hasMenuSection"
        ],
-       "sections": 1,
-       "first_section_keys": [],
-       "first_items": []
+       "section_nesting": "list of lists",
+       "sections": 9,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"Custom Pizza\", \"description\": \"CREATE your own pizza- start here. To alter a specialty pizza, just key in the toppings you would prefer.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$15.50\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"JJ Twigs Pizza\", \"description\": \"Our homemade pizza sauce topped with our sausage, freshly sliced mushrooms, onions and green peppers. Topped with our mozzarella- its&apos; a Chicago classic! (Sorry we do not allow substitutions to our specialty pizzas)  \", \"offers\": {\"@type\": \"Offer\", \"price\": \"$22.30\"}}"
+       ]
       },
       {
        "type": "FAQPage",
@@ -3162,6 +3821,7 @@
        ]
       }
      ],
+     "items_of_interest": [],
      "offers": 91,
      "offers_with_priceCurrency": 0,
      "priceCurrency_values": [],
@@ -3354,9 +4014,16 @@
         "@type",
         "hasMenuSection"
        ],
-       "sections": 1,
-       "first_section_keys": [],
-       "first_items": [],
+       "section_nesting": "list of lists",
+       "sections": 6,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"Egg Rolls (4)\", \"description\": \"Classic crispy egg rolls with your choice of pork or chicken filled with cabbage, carrots, glass noodles and spices. Served with Sweet Thai Chili dipping sauce.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$10.95\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"Spring Rolls (4)\", \"description\": \"Crsipy golden spring rolls filled with veggies and glass noodls, served with a sweet chili dipping sauce.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$8.95\"}}"
+       ],
        "name": "\"&quot;Soi&quot; Southeast Asian Eatz\"",
        "servesCuisine": "[\"Asian Fusion\"]",
        "priceRange": "\"\""
@@ -3384,9 +4051,16 @@
         "@type",
         "hasMenuSection"
        ],
-       "sections": 1,
-       "first_section_keys": [],
-       "first_items": []
+       "section_nesting": "list of lists",
+       "sections": 6,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"Egg Rolls (4)\", \"description\": \"Classic crispy egg rolls with your choice of pork or chicken filled with cabbage, carrots, glass noodles and spices. Served with Sweet Thai Chili dipping sauce.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$10.95\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"Spring Rolls (4)\", \"description\": \"Crsipy golden spring rolls filled with veggies and glass noodls, served with a sweet chili dipping sauce.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$8.95\"}}"
+       ]
       },
       {
        "type": "FAQPage",
@@ -3405,6 +4079,7 @@
        ]
       }
      ],
+     "items_of_interest": [],
      "offers": 60,
      "offers_with_priceCurrency": 0,
      "priceCurrency_values": [],
@@ -3475,6 +4150,11 @@
    "url": "https://web.archive.org/cdx/search/cdx?url=www.doordash.com%2Fstore%2F&matchType=prefix&from=2025&output=json&fl=timestamp,original,statuscode,mimetype,length&filter=statuscode:200&filter=mimetype:text/html&collapse=urlkey&limit=300",
    "status": 200,
    "bytes": 26440
+  },
+  {
+   "url": "https://web.archive.org/cdx/search/cdx?url=www.doordash.com%2Fstore%2F24633898%2F&output=json&fl=timestamp,original,statuscode,mimetype,length&filter=statuscode:200&filter=mimetype:text/html&limit=20",
+   "status": 503,
+   "bytes": 11832
   },
   {
    "url": "https://web.archive.org/cdx/search/cdx?url=www.doordash.com%2Fstore%2F24633898%2F&output=json&fl=timestamp,original,statuscode,mimetype,length&filter=statuscode:200&filter=mimetype:text/html&limit=20",
@@ -3578,5 +4258,5 @@
    "skipped": "robots.txt disallows"
   }
  ],
- "finished_at": "2026-10-09T06:24:51Z"
+ "finished_at": "2026-10-09T06:32:42Z"
 }
