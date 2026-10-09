@@ -5,3 +5,4 @@ __pycache__/
 tests/captures_barriers/
 live-verification/*.html
 tests/captures_mirrors/
+tests/captures_archive/

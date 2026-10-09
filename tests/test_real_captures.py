@@ -82,3 +82,33 @@ def test_grubhub_mirror_reader_on_real_capture(html_path):
         assert usd, "no priced item publishes its currency as USD"   # the reader never assumes USD
     else:
         pytest.skip(f"not a restaurant menu page: {meta['url']}")
+
+
+# Archived DoorDash store pages (Wayback Machine, Common Crawl), saved by
+# scripts/archive_probe.py. Structure evidence only: they show what the DoorDash
+# reader extracts from a real page, not current prices.
+ARCHIVED = sorted(Path(__file__).parent.joinpath("captures_archive").glob("*.html"))
+
+
+@pytest.mark.skipif(not ARCHIVED, reason="no archived DoorDash captures (saved only by scripts/archive_probe.py)")
+@pytest.mark.parametrize("html_path", ARCHIVED, ids=[p.stem for p in ARCHIVED])
+def test_doordash_reader_on_archived_page(html_path):
+    import re
+    from server.extract import dedupe_items, flag_zero_prices
+    store_id = re.search(r"-(\d+)$", html_path.stem).group(1)
+    html = html_path.read_text(errors="replace")
+    parsed = parse_store_page(html, f"https://www.doordash.com/store/{store_id}/", store_id)
+    items = flag_zero_prices(dedupe_items(parsed["items"]))
+    priced = [i for i in items if isinstance(i.get("price_cents"), int)]
+    addr, why = normalize_us_address(parsed["address_raw"]) if parsed["address_raw"] else (None, "no address")
+    print(json.dumps({"page": html_path.name, "jsonld_types": parsed["jsonld_types"],
+                      "restaurant_found": parsed["restaurant_found"], "address": addr and addr.get("state"),
+                      "items": len(items), "priced": len(priced),
+                      "sample": [(i["name"], i["price_cents"], i.get("currency")) for i in priced[:3]]}))
+    if parsed["restaurant_found"] and items:
+        # Whatever the page publishes as a menu must come out priced, in USD for a US store.
+        assert priced, "menu published without prices"
+        assert not addr or all(i.get("currency") == "USD" for i in priced)
+    else:
+        # The app records such a store as "no menu data"; nothing is guessed.
+        assert "menuitem" not in parsed["jsonld_types"]
