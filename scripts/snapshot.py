@@ -56,6 +56,16 @@ SEARCHES = [
     {"label": "Taco Bell Crunchwrap Supreme, pickup (Uber Eats)",
      "request": {"order": {"chain": "Taco Bell", "items": [{"name": "Crunchwrap Supreme"}]},
                  "platforms": ["ubereats"], "max_stores_per_platform": 8, "order_mode": "pickup"}},
+    # More pickup evidence: the same stores as the delivery searches above, so
+    # rank_snapshot.mjs can compare the two modes branch by branch.
+    {"label": "McDonald's 10 pc. Chicken McNuggets, pickup (Uber Eats)",
+     "request": {"order": {"chain": "McDonald's", "items": [{"name": "10 pc. Chicken McNuggets"}]},
+                 "platforms": ["ubereats"], "seed_urls": ["https://www.ubereats.com/brand/mcdonalds"],
+                 "max_stores_per_platform": 12, "order_mode": "pickup"}},
+    {"label": "Lou Malnati's Pizzeria, pickup (Uber Eats, Chicago first)",
+     "request": {"order": {"chain": "Lou Malnati's Pizzeria", "items": [{"name": "Small Deep Dish Margherita"}]},
+                 "platforms": ["ubereats"], "max_stores_per_platform": 8, "order_mode": "pickup",
+                 "prioritize": {"state": "IL", "city": "Chicago"}}},
 ]
 # Grubhub listings whose URL was observed on a Grubhub-owned page (MenuPages /
 # AllMenus links recorded in live-verification/report.json).
