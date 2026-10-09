@@ -47,6 +47,15 @@ SEARCHES = [
     {"label": "Taco Bell Crunchwrap Supreme (Uber Eats, nationwide)",
      "request": {"order": {"chain": "Taco Bell", "items": [{"name": "Crunchwrap Supreme"}]},
                  "platforms": ["ubereats"], "max_stores_per_platform": 12}},
+    # Live checks of engine rules on real pages (see README "Live checks"):
+    # a two-item basket that must come from one branch, and the same item with
+    # Uber Eats' pickup mode requested, never mixed with delivery prices.
+    {"label": "Taco Bell basket: Crunchwrap Supreme + Chalupa Supreme (Uber Eats)",
+     "request": {"order": {"chain": "Taco Bell", "items": [{"name": "Crunchwrap Supreme"}, {"name": "Chalupa Supreme"}]},
+                 "platforms": ["ubereats"], "max_stores_per_platform": 8}},
+    {"label": "Taco Bell Crunchwrap Supreme, pickup (Uber Eats)",
+     "request": {"order": {"chain": "Taco Bell", "items": [{"name": "Crunchwrap Supreme"}]},
+                 "platforms": ["ubereats"], "max_stores_per_platform": 8, "order_mode": "pickup"}},
 ]
 # Grubhub listings whose URL was observed on a Grubhub-owned page (MenuPages /
 # AllMenus links recorded in live-verification/report.json).
@@ -67,7 +76,7 @@ def slim(obs: dict) -> dict:
 
 
 def run_search(svc: Service, spec: dict, fetch_mode: str) -> dict:
-    req = dict(spec["request"], order_mode="delivery", fetch_mode=fetch_mode)
+    req = dict({"order_mode": "delivery"}, **spec["request"], fetch_mode=fetch_mode)
     entry = {"label": spec["label"], "request": {k: v for k, v in req.items() if k != "prioritize"},
              "prioritize": req.get("prioritize")}
     started = time.time()
@@ -94,6 +103,53 @@ def run_search(svc: Service, spec: dict, fetch_mode: str) -> dict:
     return entry
 
 
+def check_cancel_resume(cfg: Config) -> dict:
+    """Cancel a real search mid-run, then resume it from its checkpoint in a
+    NEW Service (as after a server restart) and check nothing is refetched."""
+    out = {"label": "Cancel and resume (Taco Bell Crunchwrap Supreme, Uber Eats)"}
+    req = {"order": {"chain": "Taco Bell", "items": [{"name": "Crunchwrap Supreme"}]}, "platforms": ["ubereats"],
+           "max_stores_per_platform": 6, "order_mode": "delivery", "fetch_mode": "http"}
+    try:
+        svc = Service(cfg)
+        job = svc.jobs.start(req)
+        deadline = time.time() + 240
+        while time.time() < deadline and job.thread.is_alive():
+            c = job.summary()["platforms"].get("ubereats", {}).get("counters", {})
+            if (c.get("checked", 0) + c.get("blocked", 0) + c.get("no_menu", 0)) >= 2:
+                break
+            time.sleep(0.5)
+        job.cancel()
+        job.thread.join(120)
+        before = job.summary()
+        done_before = {k: st.get("checked_at") for k, st in job.state["platforms"]["ubereats"]["stores"].items()
+                       if st.get("status") not in ("queued", "non_us")}
+        out["after_cancel"] = {"status": before["status"], "counters": before["platforms"]["ubereats"]["counters"]}
+        svc2 = Service(cfg)                       # fresh manager: the job is loaded from its checkpoint file
+        job2 = svc2.jobs.resume(job.id)
+        deadline = time.time() + 300
+        while time.time() < deadline and job2.thread.is_alive():
+            time.sleep(1)
+        after = job2.summary()
+        stores = job2.state["platforms"]["ubereats"]["stores"]
+        fetch_events = {}
+        for e in job2.state["events"]:
+            if e["type"] == "store" and e.get("store_key"):
+                fetch_events[e["store_key"]] = fetch_events.get(e["store_key"], 0) + 1
+        out["after_resume"] = {"status": after["status"], "counters": after["platforms"]["ubereats"]["counters"]}
+        out["stores_done_before_cancel"] = len(done_before)
+        out["refetched_after_resume"] = sorted(k for k, n in fetch_events.items() if n > 1)
+        out["kept_checked_at"] = all(stores[k].get("checked_at") == t for k, t in done_before.items())
+        out["new_stores_after_resume"] = sum(1 for k, st in stores.items()
+                                             if k not in done_before and st.get("status") not in ("queued", "non_us"))
+        out["observations"] = len(job2.state["observations"])
+        out["passed"] = bool(done_before) and not out["refetched_after_resume"] and out["kept_checked_at"] \
+            and out["new_stores_after_resume"] > 0
+    except Exception as exc:  # recorded, never hidden
+        out["error"] = repr(exc)
+        out["passed"] = False
+    return out
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default="live-verification")
@@ -107,6 +163,7 @@ def main() -> None:
             "searches": [], "grubhub_menus": []}
     for spec in SEARCHES:
         snap["searches"].append(run_search(svc, spec, "http"))
+    snap["checks"] = {"cancel_resume": check_cancel_resume(cfg)}
     for url in GRUBHUB_URLS:
         try:
             r = extract_grubhub(svc.client, url, cfg.platform_bases["grubhub"])
