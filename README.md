@@ -147,9 +147,15 @@ The universe of US branches on a platform is **not known**. Even after every dec
   * A partial name (for example "Chipotle" vs "Chipotle Mexican Grill") needs confirmation, unless you add it as a confirmed alias.
   * A different chain is excluded.
 * **Product:**
-  * Normalization handles only harmless differences: case, punctuation, `&` and `+` vs "and", `'N'` vs "and", `w/` vs "with", and inch marks.
-  * Product tokens must be identical once size and piece-count tokens are extracted. Extra or missing words mean **not equivalent**, because fuzzy names never prove equivalence.
-  * Item aliases are used only when you enter them, and they are labeled as yours.
+  * Normalization handles only harmless differences: case, punctuation, `&` and `+` vs "and", `'N'` vs "and", `w/` vs "with", and inch marks. Calorie notes such as `[490-630 Cals]` or `(350 cal.)` (seen on archived DoorDash pages) are removed.
+  * A **verified** match needs identical product words once size and piece-count words are extracted. A bare leading number ("10 Chicken McNuggets") counts as the piece count only when it equals the count the other side states, so "7 Layer Burrito" stays a name.
+  * When the names differ:
+    * by a **variant word** (meal, combo, bundle, supreme, deluxe, double, jr, spicy, crispy, grilled, gf, vegan, bowl, salad, wrap, with, no, extra …) or by a number: **not equivalent**;
+    * by one or two other words, with one name containing the other ("Small Deep Dish Margherita **Pizza**", "**World Famous** Fries - Large", "**Chicken** Burrito Bowl"): **needs confirmation**, with the words shown. Such a listing is never verified on its own;
+    * otherwise: **not equivalent**.
+  * **Closest listings:** when no checked store lists an order item exactly, the results show up to five listings it may mean. Each shares a product word, has no variant-word difference, and is ranked by text similarity (character trigrams). These are only suggestions. **Same item** adds the listing to the item's confirmed alternate names (aliases), after which it is checked like any listing: size, piece count, flavor, modifiers, currency and price.
+  * Aliases are used only when you enter or confirm them, and matches through them are labelled as yours.
+  * No embedding model decides a match: one would score "10 pc" vs "20 pc", "Small" vs "Large", or an item vs its Meal as near-identical, which are exactly the differences this app must catch.
 * **Size, count and flavor:**
   * Sizes are word sizes (small … extra large, kids, regular, tall/grande/venti, footlong), ounces and inches. Piece counts accept pc, piece, ct, pack and dozen.
   * The same attribute stated differently on each side means **not equivalent**. If either side doesn't state it, the match **needs confirmation**.
