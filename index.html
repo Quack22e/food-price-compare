@@ -240,6 +240,12 @@ tr.details td { background: var(--bg); }
 
     <section class="panel" aria-labelledby="dataH">
       <h2 id="dataH">Data sources</h2>
+      <h3>Live-run snapshot (real prices, no backend needed)</h3>
+      <p class="note">Real public menu prices recorded by this project's live runs (<code>scripts/snapshot.py</code> on GitHub Actions, robots.txt-checked). A snapshot is one run, a moment in time; it is never merged with another run. Its prices are as old as the run, so the “Stale after” setting decides whether they can win.</p>
+      <input id="snapFile" type="file" accept=".json,application/json" aria-label="Snapshot file (snapshot.json)">
+      <div class="btnbar"><button id="snapServer" type="button">Load the server's snapshot</button><button id="snapClear" type="button">Clear snapshot</button></div>
+      <span class="inline" style="margin-top:8px"><input type="checkbox" id="includeSnapshot" checked><label for="includeSnapshot" style="display:inline;margin:0">Include snapshot prices (labeled “Snapshot”)</label></span>
+      <div id="snapMsg"></div>
       <h3>Import collected menus (JSON or CSV)</h3>
       <input id="importFile" type="file" accept=".json,.csv,application/json,text/csv">
       <label for="importText" style="margin-top:6px">…or paste JSON / CSV</label>
@@ -247,6 +253,28 @@ tr.details td { background: var(--bg); }
       <div class="btnbar"><button id="importBtn" type="button">Validate &amp; import</button><button id="importClear" type="button">Clear imported data</button></div>
       <span class="inline" style="margin-top:8px"><input type="checkbox" id="includeImported" checked><label for="includeImported" style="display:inline;margin:0">Include imported data in rankings (labeled “Imported”)</label></span>
       <div id="importReport"></div>
+      <h3>Add prices you saw yourself</h3>
+      <p class="note">This is how DoorDash prices get in without any scraping. Open the store in the DoorDash or Uber Eats app or website as you normally would, choose Delivery or Pickup, and type the prices it shows. Nothing is fetched or sent. Entries are labelled “Imported” and record that you typed them, at your account, address and time.</p>
+      <div class="row">
+        <div><label for="seenPlatform">Platform</label><select id="seenPlatform"><option value="doordash">DoorDash</option><option value="ubereats">Uber Eats</option></select></div>
+        <div><label for="seenMode">Order mode</label><select id="seenMode"><option value="delivery">Delivery</option><option value="pickup">Pickup</option></select></div>
+        <div class="grow2"><label for="seenAt">Seen at (your local time)</label><input id="seenAt" type="datetime-local"></div>
+      </div>
+      <label for="seenUrl">Store link (Share → Copy link in the app, or the browser address)</label>
+      <input id="seenUrl" type="url" spellcheck="false" placeholder="https://www.doordash.com/store/…">
+      <div class="row">
+        <div class="grow2"><label for="seenName">Store name</label><input id="seenName" placeholder="Taco Bell"></div>
+        <div class="grow2"><label for="seenStreet">Street</label><input id="seenStreet"></div>
+      </div>
+      <div class="row">
+        <div class="grow2"><label for="seenCity">City</label><input id="seenCity"></div>
+        <div><label for="seenState">State</label><input id="seenState" maxlength="20" placeholder="IL"></div>
+        <div><label for="seenZip">ZIP</label><input id="seenZip" inputmode="numeric" maxlength="10"></div>
+      </div>
+      <label for="seenLines">Items and prices, one per line</label>
+      <textarea id="seenLines" rows="3" spellcheck="false" placeholder="Crunchwrap Supreme $7.31"></textarea>
+      <div class="btnbar"><button id="seenAdd" type="button">Add these prices</button></div>
+      <div id="seenMsg"></div>
       <h3>Capture from your own browser</h3>
       <p class="note">For pages this tool cannot read from a server (DoorDash store pages answer servers with a bot check), you can read them yourself: open a DoorDash or Uber Eats store page in your browser, set Delivery or Pickup as you would order, then click the bookmark below. It reads only the menu data the page publishes, shows it, and gives you JSON to paste into Import. It sends nothing anywhere. DoorDash’s terms forbid copying its site with scripts, even ones you run yourself, and Uber’s terms restrict scraping. Use it only if you accept that risk.</p>
       <div class="btnbar"><a id="captureBookmarklet" class="bookmarklet" href="#">Capture menu</a><button id="captureCopy" type="button">Copy bookmarklet code</button></div>
@@ -405,15 +433,31 @@ tr.details td { background: var(--bg); }
     items = dedupe(items);
     if (!items.length) { res.notes.push('Restaurant data found, but no menu items with prices.'); return res; }
     var a = list(r.address)[0] || {};
+    // Real DoorDash pages publish prices without priceCurrency (checked on
+    // archived pages); their own app data states the currency. Missing
+    // currencies count as USD only when that data states USD and no other.
+    var codes = {};
+    Array.prototype.forEach.call(document.querySelectorAll('script:not([src])'), function (s) {
+      var re = /\\*"currency\\*"\s*:\s*\\*"([A-Z]{3})\\*"/g, mm;
+      while ((mm = re.exec(s.textContent))) codes[mm[1]] = 1;
+    });
+    codes = Object.keys(codes).sort();
+    var missing = items.filter(function (it) { return it.price_cents != null && !it.currency; }).length;
+    var fill = missing && codes.length === 1 && codes[0] === 'USD' ? 'USD' : null;
+    if (missing) res.notes.push(fill ? missing + ' price(s) have no currency in the structured data; the page\'s own data states USD and no other, so they are taken as USD.'
+                                     : missing + ' price(s) have no currency in the structured data and the page\'s own data states ' + (codes.join(', ') || 'none') + '; they are not taken as USD and the app will reject them.');
+    var curs = {};
+    items.forEach(function (it) { if (it.price_cents != null) curs[it.currency || fill || 'UNKNOWN'] = 1; });
+    curs = Object.keys(curs);
     var pickup = platform === 'doordash' ? loc.searchParams.get('pickup') === 'true' : /^pickup$/i.test(loc.searchParams.get('diningMode') || '');
     res.observation = {
       platform: platform, store_id: m[1], store_name: txt(r.name), store_url: loc.origin + loc.pathname,
-      address: { street: txt(a.streetAddress), city: txt(a.addressLocality), state: txt(a.addressRegion), zip: txt(a.postalCode), country: txt(a.addressCountry) || 'US' },
-      observed_at: new Date().toISOString(), order_mode: pickup ? 'pickup' : 'delivery', currency: 'USD',
+      address: { street: txt(a.streetAddress), city: txt(a.addressLocality), state: txt(a.addressRegion), zip: txt(a.postalCode), country: txt(a.addressCountry) },
+      observed_at: new Date().toISOString(), order_mode: pickup ? 'pickup' : 'delivery', currency: curs.length === 1 ? curs[0] : (curs.length ? 'MIXED' : 'USD'),
       mode_basis: pickup ? 'page address requested pickup' : 'page address did not request pickup; assumed delivery - switch if the page shows Pickup',
       price_context: 'captured from the schema.org data of a page open in the user\'s own browser session (their login and delivery address may affect prices)',
       items: items.map(function (it) {
-        var o = { name: it.name, variant: it.variant, section: it.section, price_cents: it.price_cents, currency: it.currency || 'USD', availability: it.availability, addons: it.addons, required_options: it.required_options };
+        var o = { name: it.name, variant: it.variant, section: it.section, price_cents: it.price_cents, currency: it.currency || (it.price_cents != null ? fill || 'UNKNOWN' : null), availability: it.availability, addons: it.addons, required_options: it.required_options };
         if (it.price_note) o.price_note = it.price_note;
         return o;
       })
@@ -1141,7 +1185,9 @@ tr.details td { background: var(--bg); }
     if (!isUSCountry(a.country)) { err('address.country "' + str(a.country, 40) + '" is outside the US (excluded)'); return null; }
     if (!state) { err('address.state must be one of the 50 US states or DC'); return null; }
     var zip = str(a.zip || a.postal_code, 10);
-    if (!/^\d{5}(-\d{4})?$/.test(zip)) { err('address.zip must be a 5-digit US ZIP'); return null; }
+    if (zip && !/^\d{5}(-\d{4})?$/.test(zip)) { err('address.zip must be a 5-digit US ZIP'); return null; }
+    // DoorDash store pages publish no postal code (verified on archived real pages).
+    if (!zip) warnings.push(where + ': no ZIP code; a ZIP filter cannot match this store');
     var city = str(a.city, 100); if (!city) { err('address.city is required'); return null; }
     var ts = Date.parse(o.observed_at);
     if (!o.observed_at || !isFinite(ts)) { err('observed_at must be an ISO-8601 timestamp'); return null; }
@@ -1295,6 +1341,105 @@ tr.details td { background: var(--bg); }
     return { observations: out, errors: errors, warnings: warnings, format: format };
   }
 
+  // ---------------------------------------------------------------- prices you saw yourself (hand entry)
+  // For stores no server can read (DoorDash answers servers with a bot check):
+  // the user opens the store in the platform's own app or site and types what
+  // it shows. The record goes through the same import validation.
+  var STORE_PATH = { doordash: /^\/(?:[a-z]{2}(?:-[a-z]{2})?\/)?store\/(?:[^\/]*?-)?(\d+)\/?$/i,
+                     ubereats: /^\/(?:[a-z]{2}(?:-[a-z]{2})?\/)?store\/[^\/]+\/([A-Za-z0-9_-]{6,})\/?$/i };
+  var PLATFORM_LABEL = { doordash: 'DoorDash', ubereats: 'Uber Eats' };
+  function storeIdFromUrl(u, platform) {
+    var safe = safeUrl(u, platform);
+    var m = safe && STORE_PATH[platform] && STORE_PATH[platform].exec(new URL(safe).pathname);
+    return m ? m[1] : null;
+  }
+  function parsePriceLines(text) {
+    var items = [], problems = [];
+    String(text || '').split(/\r?\n/).forEach(function (line, i) {
+      var t = line.trim(); if (!t) return;
+      var m = /^(.*?)[\s\-–—:·|]*(?:US)?\$\s*(\d[\d,]*(?:\.\d{1,2})?)\s*$/.exec(t);
+      if (!m || !m[1].trim()) { problems.push('line ' + (i + 1) + ' ("' + t.slice(0, 60) + '"): write it as "item name $price"'); return; }
+      items.push({ name: m[1].trim(), price: m[2] });
+    });
+    return { items: items, problems: problems };
+  }
+  function enteredObservation(f, opts) {
+    opts = opts || {};
+    var now = opts.now != null ? opts.now : Date.now();
+    var platform = PLATFORM_LABEL[f.platform] ? f.platform : null;
+    if (!platform) return { observations: [], errors: ['Choose DoorDash or Uber Eats'], warnings: [] };
+    var label = PLATFORM_LABEL[platform], errors = [];
+    var id = storeIdFromUrl(f.store_url, platform);
+    if (!id) errors.push('Store link must be a ' + PLATFORM_HOSTS[platform][0] + ' store page (…/store/…). In the app, use Share → Copy link, open it, and copy the full address it opens.');
+    var lines = parsePriceLines(f.lines);
+    errors = errors.concat(lines.problems);
+    if (!lines.items.length && !lines.problems.length) errors.push('Enter at least one line: item name and price, e.g. "Crunchwrap Supreme $7.31"');
+    var ts = f.seen_at ? Date.parse(f.seen_at) : now;
+    if (!isFinite(ts)) errors.push('"Seen at" is not a valid date and time');
+    if (errors.length) return { observations: [], errors: errors, warnings: [] };
+    var rec = { platform: platform, store_id: id, store_name: f.store_name, store_url: f.store_url,
+      address: { street: f.street, city: f.city, state: f.state, zip: f.zip, country: 'US' },
+      observed_at: new Date(ts).toISOString(), order_mode: f.order_mode, currency: 'USD',
+      mode_basis: 'order mode you selected in the ' + label + ' app or site',
+      price_context: 'entered by you from what ' + label + ' showed you; your account, address and promotions may affect it',
+      items: lines.items };
+    var r = validateImport([rec], { now: now });
+    r.observations.forEach(function (o) { o.extraction = 'entered by hand from the ' + label + ' app or site'; });
+    r.errors = r.errors.map(function (e) { return e.replace(/^record 1: /, ''); });
+    return r;
+  }
+
+  // ---------------------------------------------------------------- live-run snapshots (scripts/snapshot.py)
+  // A snapshot is one live run: real public menu observations per search, in
+  // the import schema. Runs are never merged: menus change through the day, so
+  // a store's newest observation could hide an item it listed at another hour.
+  // Snapshot observations keep only the items whose name contains a word of
+  // the search's item (server/adapters.build_observation prefilter), so a store
+  // counts as checked for an order item only if that item shares such a word.
+  var SIZE_WORDS = { small: 1, medium: 1, large: 1, regular: 1, kids: 1, family: 1, personal: 1, extra: 1, xl: 1 };
+  function looseNorm(x) { return String(x || '').toLowerCase().replace(/['’`]/g, '').replace(/[^a-z0-9]+/g, ' ').trim(); }
+  function scopeTokens(texts) {
+    var t = [];
+    texts.forEach(function (x) { looseNorm(x).split(' ').forEach(function (w) { if (w.length >= 3 && !SIZE_WORDS[w] && !/^\d+$/.test(w) && t.indexOf(w) < 0) t.push(w); }); });
+    return t;
+  }
+  function searchScope(s) {
+    var items = ((s && s.request || {}).order || {}).items || [];
+    var texts = [];
+    items.forEach(function (it) { texts.push(it.name || ''); (it.aliases || []).forEach(function (a) { texts.push(a); }); if (it.flavor) texts.push(it.flavor); });
+    return scopeTokens(texts);
+  }
+  function scopeCovers(scope, item) {
+    var n = looseNorm([item.name].concat(String(item.aliases || '').split(',')).join(' '));
+    return scope.some(function (t) { return n.indexOf(t) >= 0; });
+  }
+  function inSnapshotScope(o, orderItems) {
+    return !o.scope || orderItems.every(function (it) { return !it.name || scopeCovers(o.scope, it); });
+  }
+  function snapshotObservations(run, opts) {
+    opts = opts || {};
+    var now = opts.now != null ? opts.now : Date.now();
+    var obs = [], rejected = [];
+    ((run && run.searches) || []).forEach(function (s) {
+      var scope = searchScope(s);
+      (s.observations || []).forEach(function (o) {
+        // Same checks as any import (US-only, USD, https platform link, valid
+        // timestamp). A store page that was read but listed nothing like the
+        // order still counts as a checked location, so it is validated with a
+        // placeholder item that is removed again.
+        var none = !(o.items || []).length;
+        var v = validateImport([none ? Object.assign({}, o, { items: [{ name: 'placeholder' }] }) : o], { now: now });
+        if (!v.observations.length) { rejected.push(v.errors.join('; ')); return; }
+        var x = v.observations[0];
+        if (none) x.items = [];
+        x.source = 'snapshot'; x.extraction = str(o.extraction, 200) || 'snapshot'; x.search = str(s.label, 200); x.scope = scope;
+        x.run = str(run.github_run_id, 40) || null; x.run_at = str(run.generated_at, 40) || null;
+        obs.push(x);
+      });
+    });
+    return { obs: obs, rejected: rejected };
+  }
+
   // ---------------------------------------------------------------- demo data (fictional, opt-in)
   function demoObservations(now) {
     var t = new Date(now != null ? now : Date.now()).toISOString();
@@ -1328,6 +1473,9 @@ tr.details td { background: var(--bg); }
     prepareOrder: prepareOrder, prepareItem: prepareItem, matchItem: matchItem, dedupeObservations: dedupeObservations,
     evaluate: evaluate, parseGrubhubUrl: parseGrubhubUrl, parseReceipt: parseReceipt, safeUrl: safeUrl,
     validateImport: validateImport, parseCSV: parseCSV, toCSV: toCSV, CSV_COLUMNS: CSV_COLUMNS,
+    storeIdFromUrl: storeIdFromUrl, parsePriceLines: parsePriceLines, enteredObservation: enteredObservation,
+    looseNorm: looseNorm, searchScope: searchScope, scopeCovers: scopeCovers, inSnapshotScope: inSnapshotScope,
+    snapshotObservations: snapshotObservations,
     demoObservations: demoObservations, demoOrder: demoOrder
   };
 })(typeof window !== 'undefined' ? window : globalThis);
@@ -1394,7 +1542,7 @@ tr.details td { background: var(--bg); }
   var S = {
     backendUrl: defaultBackend(), connected: false, health: null,
     order: { chain: '', chainAliases: '', mode: 'delivery', items: [newItem()] },
-    live: new Map(), imported: [], demo: E.demoObservations(),
+    live: new Map(), imported: [], snapshot: null, demo: E.demoObservations(),
     job: null, barriers: [], log: [], probe: null,
     ui: { rtab: 'verified', sorts: {}, expanded: {}, demoMode: false },
     lastEval: null
@@ -1428,7 +1576,7 @@ tr.details td { background: var(--bg); }
     el.className = 'pill ' + (ok ? 'ok' : 'bad');
     el.textContent = ok ? 'Backend connected' + (S.health && S.health.test_mode ? ' (TEST MODE)' : '') : 'Backend disconnected';
     $('searchBtn').disabled = !ok; $('probeBtn').disabled = !ok; $('resumeBtn').disabled = !ok; $('refreshJobs').disabled = !ok;
-    $('deleteJob').disabled = !ok; $('purgeBtn').disabled = !ok;
+    $('deleteJob').disabled = !ok; $('purgeBtn').disabled = !ok; $('snapServer').disabled = !ok;
     if (S.health && S.health.fetch_modes) {
       Array.prototype.forEach.call($('fetchMode').options, function (o) { if (o.value !== 'http') o.disabled = !S.health.fetch_modes.browser; });
     }
@@ -1798,11 +1946,38 @@ tr.details td { background: var(--bg); }
   // ------------------------------------------------------------------ evaluation & results
   var evalTimer = null;
   function scheduleEval() { clearTimeout(evalTimer); evalTimer = setTimeout(runEval, 120); }
+  function snapshotInScope() {
+    if (!S.snapshot || !$('includeSnapshot').checked) return [];
+    return S.snapshot.obs.filter(function (o) { return E.inSnapshotScope(o, S.order.items); });
+  }
   function currentObservations() {
     if (S.ui.demoMode) return S.demo;
-    return Array.from(S.live.values()).concat(S.imported);
+    return Array.from(S.live.values()).concat(S.imported, snapshotInScope());
+  }
+  function loadSnapshot(data, from) {
+    var run = data && typeof data === 'object' && !Array.isArray(data) ? data : null;
+    if (!run || !Array.isArray(run.searches)) { setKids($('snapMsg'), msg('bad', 'Not a snapshot: expected the JSON written by scripts/snapshot.py (an object with "searches").')); return; }
+    var r = E.snapshotObservations(run);
+    var when = Date.parse(run.generated_at);
+    S.snapshot = { obs: r.obs, run: run.github_run_id || null, at: isFinite(when) ? new Date(when).toISOString() : null,
+                   searches: run.searches.map(function (s) { return String(s.label || '').slice(0, 200); }), rejected: r.rejected, from: from };
+    renderSnapshotMsg();
+    scheduleEval();
+  }
+  function renderSnapshotMsg() {
+    var sn = S.snapshot, rejected = sn && sn.rejected, from = sn && sn.from;
+    if (!sn) { setKids($('snapMsg'), null); return; }
+    var inScope = snapshotInScope().length, other = sn.obs.length - inScope;
+    var hours = sn.at ? Math.round((Date.now() - Date.parse(sn.at)) / 3600000) : null;
+    var lines = sn.searches.slice(0, 12).map(function (l) { return 'Search: ' + l; });
+    if (rejected && rejected.length) lines = lines.concat(rejected.slice(0, 5).map(function (e) { return 'Not used: ' + e; }));
+    setKids($('snapMsg'), msg(sn.obs.length ? 'ok' : 'warn',
+      'Snapshot ' + (sn.run ? 'run ' + sn.run + ' ' : '') + (sn.at ? 'from ' + sn.at + (hours != null ? ' (' + hours + ' h ago)' : '') : '(no time recorded)') + (from ? ', ' + from : '') +
+      ': ' + sn.obs.length + ' checked store page(s). ' + inScope + ' searched for this order\'s items' + (other ? '; ' + other + ' were read only for a different item and are not counted' : '') + '.' +
+      (hours != null && hours > (+$('staleHours').value || 24) ? ' These prices are older than your “Stale after” setting, so they are shown but cannot win until you raise it.' : ''), lines));
   }
   function runEval() {
+    if (S.snapshot) renderSnapshotMsg();
     var lf = localFilters();
     S.lastEval = E.evaluate(S.order, currentObservations(), {
       mode: S.order.mode, platforms: currentPlatforms(), filters: lf, staleHours: +$('staleHours').value || 24,
@@ -1814,6 +1989,7 @@ tr.details td { background: var(--bg); }
   function flagsFor(r) {
     var f = [];
     if (r.source === 'import') f.push(['Imported', '']);
+    if (r.source === 'snapshot') f.push(['Snapshot', '']);
     if (r.source === 'demo') f.push(['DEMO', 'demo']);
     if (r.fromCache) f.push(['Cached', '']);
     if (r.stale) f.push(['Stale', 'warn']);
@@ -1902,7 +2078,7 @@ tr.details td { background: var(--bg); }
       ['Address', [r.address.street, r.city, r.state, r.zip].filter(Boolean).join(', ')],
       ['Platform store ID', r.storeId], ['Order mode', r.orderMode + ' — ' + r.modeBasis], ['Price context', r.priceContext],
       ['Extraction', r.extraction], ['Observed at', r.observedAt + ' (' + rel(r.observedAt) + ')' + (r.stale ? ' — STALE' : '')],
-      ['Source', r.source === 'live' ? (r.fromCache ? 'live scrape (served from cache)' : 'live scrape') : r.source],
+      ['Source', r.source === 'live' ? (r.fromCache ? 'live scrape (served from cache)' : 'live scrape') : r.source === 'snapshot' ? 'live scrape recorded in a past live run (snapshot)' : r.source],
       ['Checkout total', Number.isInteger(r.checkoutTotalCents) ? E.formatCents(r.checkoutTotalCents) + ' (fees for ZIP ' + r.feeDestination + ')' : 'unknown — destination-specific charges not known']];
     return h('div', null,
       h('ul', { class: 'reasons' }, r.reasons.map(function (x) { return h('li', { class: x.level }, x.text); })),
@@ -1990,6 +2166,20 @@ tr.details td { background: var(--bg); }
       r.errors.slice(0, 15).concat(r.errors.length > 15 ? ['… ' + (r.errors.length - 15) + ' more errors'] : []).concat(r.warnings.slice(0, 5))));
     scheduleEval();
   }
+  function addSeen() {
+    var v = function (id) { return $(id).value; };
+    var r = E.enteredObservation({ platform: v('seenPlatform'), order_mode: v('seenMode'), seen_at: v('seenAt'), store_url: v('seenUrl').trim(),
+      store_name: v('seenName'), street: v('seenStreet'), city: v('seenCity'), state: v('seenState'), zip: v('seenZip').trim(), lines: v('seenLines') });
+    var o = r.observations[0];
+    if (!o) { setKids($('seenMsg'), msg('bad', 'Not added. Fix these and try again:', r.errors)); return; }
+    // A second entry for the same store, mode and minute replaces the first.
+    var key = function (x) { return x.platform + '|' + x.store_id + '|' + x.order_mode + '|' + x.observed_at; };
+    S.imported = S.imported.filter(function (x) { return key(x) !== key(o); });
+    S.imported.push(o);
+    setKids($('seenMsg'), msg('ok', 'Added ' + o.items.length + ' price(s) at ' + o.store_name + ', ' + o.address.city + ' ' + o.address.state + ' (' + (o.platform === 'doordash' ? 'DoorDash' : 'Uber Eats') + ', ' + o.order_mode + '), labelled "Imported". Total imported: ' + S.imported.length + '.', r.warnings));
+    $('seenLines').value = '';
+    scheduleEval();
+  }
   function download(name, mime, text) {
     var a = h('a', { href: URL.createObjectURL(new Blob([text], { type: mime })), download: name });
     document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
@@ -2062,6 +2252,21 @@ tr.details td { background: var(--bg); }
       f.text().then(function (t) { importFileText = t; $('importText').value = ''; setKids($('importReport'), msg('', 'Loaded ' + f.name + ' (' + f.size + ' bytes). Click “Validate & import”.')); });
     });
     $('importBtn').addEventListener('click', doImport);
+    $('seenAdd').addEventListener('click', addSeen);
+    $('snapFile').addEventListener('change', function (e) {
+      var f = e.target.files && e.target.files[0]; if (!f) return;
+      if (f.size > 20 * 1024 * 1024) { setKids($('snapMsg'), msg('bad', 'File is larger than 20 MB.')); return; }
+      f.text().then(function (t) {
+        var data; try { data = JSON.parse(t); } catch (err) { setKids($('snapMsg'), msg('bad', 'Invalid JSON: ' + err.message)); return; }
+        loadSnapshot(data, 'from file ' + f.name);
+      });
+    });
+    $('snapServer').addEventListener('click', function () {
+      api('/api/snapshot', { timeout: 30000 }).then(function (d) { loadSnapshot(d, 'from the server'); },
+        function (e) { setKids($('snapMsg'), msg('bad', 'The server has no snapshot to give (' + e.message + '). Run scripts/snapshot.py, or load a snapshot.json file.')); });
+    });
+    $('snapClear').addEventListener('click', function () { S.snapshot = null; $('snapFile').value = ''; setKids($('snapMsg'), msg('ok', 'Snapshot cleared.')); scheduleEval(); });
+    $('includeSnapshot').addEventListener('change', scheduleEval);
     $('importClear').addEventListener('click', function () { S.imported = []; importFileText = null; $('importFile').value = ''; setKids($('importReport'), msg('ok', 'Imported data cleared.')); scheduleEval(); });
     $('demoToggle').addEventListener('change', function (e) {
       S.ui.demoMode = e.target.checked; $('demoBanner').hidden = !S.ui.demoMode; $('demoOrderBtn').disabled = !S.ui.demoMode;

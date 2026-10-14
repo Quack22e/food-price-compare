@@ -301,6 +301,12 @@ test('import validation (JSON and CSV) and safe URLs', () => {
   assert.equal(r.observations[0].source, 'import');
   assert.ok(r.errors.length >= 6, r.errors.join('\n'));
   assert.equal(E.validateImport('{oops', { now: NOW }).errors.length, 1);
+  // ZIP is optional (DoorDash pages publish none) but never malformed.
+  const noZip = E.validateImport([Object.assign({}, good, { address: { street: '1 Main', city: 'Austin', state: 'TX', country: 'US' } })], { now: NOW });
+  assert.equal(noZip.observations.length, 1);
+  assert.equal(noZip.observations[0].address.zip, '');
+  assert.match(noZip.warnings.join(' '), /no ZIP code; a ZIP filter cannot match this store/);
+  assert.match(E.validateImport([Object.assign({}, good, { address: { city: 'Austin', state: 'TX', zip: '7870' } })], { now: NOW }).errors.join(' '), /5-digit US ZIP/);
   const csv = [E.CSV_COLUMNS.join(','),
     'ubereats,abc123xyz,"McDonald\'s, Main St",https://www.ubereats.com/store/mcd/abc123xyz,1 Main,Columbus,OH,43215,US,2026-10-07T09:00:00Z,delivery,USD,"10 pc ""Chicken"" McNuggets",,5.29,available,Sauce: BBQ=0.00; Bacon=1.50,none,Chicken,,,,,,,,,,',
     'ubereats,abc123xyz,"McDonald\'s, Main St",https://www.ubereats.com/store/mcd/abc123xyz,1 Main,Columbus,OH,43215,US,2026-10-07T09:00:00Z,delivery,USD,Fries,Large,4.19,unknown,,,,DashPass 20% off,3.35,Members only,1.99,2.50,0,0.80,43215,,'].join('\r\n');
@@ -351,4 +357,68 @@ test('a $0.00 listing flagged by the backend is never a verified price', () => {
   assert.equal(r.status, 'uncertain');
   assert.equal(r.lineCents, null);
   assert.ok(r.reasons.some(x => /Price not verifiable: published price is \$0\.00/.test(x.text)));
+});
+
+test('prices you saw yourself: store ID from the link, "item $price" lines, same validation as imports', () => {
+  assert.equal(E.storeIdFromUrl('https://www.doordash.com/store/taco-bell-fulton-24633898/?pickup=false', 'doordash'), '24633898');
+  assert.equal(E.storeIdFromUrl('https://www.doordash.com/store/24633898/', 'doordash'), '24633898');
+  assert.equal(E.storeIdFromUrl('https://www.ubereats.com/store/taco-bell-fulton/AbCdEf123456', 'ubereats'), 'AbCdEf123456');
+  assert.equal(E.storeIdFromUrl('https://drd.sh/abc123', 'doordash'), null);                 // short link: not a store page
+  assert.equal(E.storeIdFromUrl('https://www.doordash.com/business/taco-bell-1/', 'doordash'), null);
+  assert.equal(E.storeIdFromUrl('https://www.ubereats.com/store/x/AbCdEf123456', 'doordash'), null);   // wrong platform
+  assert.equal(E.storeIdFromUrl('javascript:alert(1)//www.doordash.com/store/1/', 'doordash'), null);
+
+  const lines = E.parsePriceLines('Crunchwrap Supreme $7.31\n\n10 pc. Chicken McNuggets — $5.19\nChalupa Supreme: US$ 6.70\nno price here\n$4.00');
+  assert.deepEqual(lines.items, [{ name: 'Crunchwrap Supreme', price: '7.31' }, { name: '10 pc. Chicken McNuggets', price: '5.19' },
+    { name: 'Chalupa Supreme', price: '6.70' }]);
+  assert.equal(lines.problems.length, 2);                                                     // no price; no name
+
+  const f = { platform: 'doordash', order_mode: 'pickup', seen_at: '2026-10-07T11:00:00Z', store_url: 'https://www.doordash.com/store/taco-bell-fulton-24633898/',
+    store_name: 'Taco Bell', street: '1 Main St', city: 'Fulton', state: 'MS', zip: '38843', lines: 'Crunchwrap Supreme $6.99' };
+  const r = E.enteredObservation(f, { now: NOW });
+  assert.deepEqual(r.errors, []);
+  const o = r.observations[0];
+  assert.equal(o.source, 'import');
+  assert.equal(o.store_id, '24633898');
+  assert.equal(o.order_mode, 'pickup');
+  assert.equal(o.observed_at, '2026-10-07T11:00:00.000Z');
+  assert.match(o.extraction, /entered by hand from the DoorDash app/);
+  assert.match(o.price_context, /entered by you/);
+  assert.equal(o.items[0].price_cents, 699);
+  // Ranked by the engine like any other record, in its own order mode only.
+  const ev = run(order([{ name: 'Crunchwrap Supreme' }], { chain: 'Taco Bell', mode: 'pickup' }), r.observations, { mode: 'pickup' });
+  assert.equal(ev.winner.row.lineCents, 699);
+  assert.equal(run(order([{ name: 'Crunchwrap Supreme' }], { chain: 'Taco Bell' }), r.observations).winner, null);
+
+  const bad = (over) => E.enteredObservation(Object.assign({}, f, over), { now: NOW }).errors.join(' | ');
+  assert.match(bad({ store_url: 'https://drd.sh/x' }), /Store link must be a www\.doordash\.com store page/);
+  assert.match(bad({ state: 'ON' }), /50 US states or DC/);
+  assert.match(bad({ zip: 'M5V' }), /5-digit US ZIP/);
+  assert.match(bad({ lines: '' }), /at least one line/);
+  assert.match(bad({ seen_at: '2026-10-08T12:00:00Z' }), /in the future/);
+  assert.match(bad({ seen_at: 'yesterday' }), /not a valid date/);
+  assert.match(bad({ platform: 'grubhub' }), /DoorDash or Uber Eats/);
+  assert.doesNotMatch(bad({ state: 'ON' }), /^record 1/);                                      // messages read as form errors
+});
+
+test('the committed real snapshot validates as snapshot observations, scoped per search', () => {
+  const snap = JSON.parse(readFileSync(new URL('../live-verification/snapshot.json', import.meta.url), 'utf8'));
+  const r = E.snapshotObservations(snap, { now: Date.parse(snap.finished_at || snap.generated_at) + 60000 });
+  const total = snap.searches.reduce((n, s) => n + (s.observations || []).length, 0);
+  assert.ok(total > 0, 'the committed snapshot has observations');
+  assert.deepEqual(r.rejected, []);
+  assert.equal(r.obs.length, total);
+  for (const o of r.obs) {
+    assert.equal(o.source, 'snapshot');
+    assert.ok(o.scope.length > 0 && o.search);
+    assert.equal(o.address.country, 'US');
+  }
+  // A store read for McNuggets is not a checked location for a Big Mac.
+  const nug = r.obs.find((o) => /McNuggets/.test(o.search));
+  if (nug) {
+    assert.equal(E.inSnapshotScope(nug, [{ name: '10 pc. Chicken McNuggets' }]), true);
+    assert.equal(E.inSnapshotScope(nug, [{ name: 'Big Mac' }]), false);
+    assert.equal(E.inSnapshotScope(nug, [{ name: 'Big Mac', aliases: 'McNuggets' }]), true);
+  }
+  assert.deepEqual(E.snapshotObservations({ searches: [{ label: 'x', observations: [{ platform: 'ubereats' }] }] }).rejected.length, 1);
 });

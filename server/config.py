@@ -73,6 +73,9 @@ class Config:
     max_page_bytes: int = 15 * 1024 * 1024
     max_chain_pages: int = 5
     data_dir: Path = Path(os.environ.get("FPC_DATA_DIR", str(APP_ROOT / ".fpc-data")))
+    # Real prices recorded by a live run (scripts/snapshot.py); served read-only
+    # at GET /api/snapshot so index.html can use them without searching.
+    snapshot_path: Path = Path(os.environ.get("FPC_SNAPSHOT", str(APP_ROOT / "live-verification" / "snapshot.json")))
     platform_bases: dict = field(default_factory=lambda: dict(DEFAULT_PLATFORM_BASES))
     # Hosts a platform serves its robots.txt-declared sitemaps from. Only
     # sitemap fetches may use them. Observed live (2026-10-08): DoorDash's

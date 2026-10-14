@@ -141,6 +141,11 @@ def make_handler(svc: Service):
                     return self._send(200, svc.health())
                 if path == "/api/jobs":
                     return self._send(200, {"jobs": svc.jobs.list()})
+                if path == "/api/snapshot":
+                    snap = svc.cfg.snapshot_path
+                    if not snap.is_file():
+                        return self._send(404, {"error": "no snapshot file on this server"})
+                    return self._send(200, snap.read_bytes())
                 m = re.match(r"^/api/jobs/([a-f0-9]{16})$", path)
                 if m:
                     job = svc.jobs.get(m.group(1))

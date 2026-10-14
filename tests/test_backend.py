@@ -438,6 +438,7 @@ def test_http_api(sites, tmp_path):
     build_doordash(dd, n_stores=2)
     build_ubereats(ue)
     cfg = make_cfg(tmp_path, {"doordash": dd.base, "ubereats": ue.base})
+    cfg.snapshot_path = tmp_path / "snapshot.json"
     httpd = serve("127.0.0.1", 0, cfg)
     threading.Thread(target=httpd.serve_forever, daemon=True).start()
     base = f"http://127.0.0.1:{httpd.server_address[1]}"
@@ -446,6 +447,11 @@ def test_http_api(sites, tmp_path):
         assert st == 200 and body["ok"] and hd.get("Access-Control-Allow-Origin") == "null"
         st, hd, _ = _req(base + "/api/health", headers={"Origin": "https://evil.example"})
         assert "Access-Control-Allow-Origin" not in hd
+        st, _, body = _req(base + "/api/snapshot")              # read-only, and only the configured file
+        assert st == 404 and "no snapshot" in body["error"]
+        cfg.snapshot_path.write_text(json.dumps({"generated_at": "2026-10-08T18:59:00Z", "searches": []}))
+        st, hd, body = _req(base + "/api/snapshot")
+        assert st == 200 and body["searches"] == [] and hd["Content-Type"] == "application/json"
         st, _, body = _req(base + "/api/jobs", "POST", {"order": {"chain": "", "items": []}})
         assert st == 400 and "chain" in body["error"]
         st, _, body = _req(base + "/api/jobs", "POST", ORDER)
@@ -816,3 +822,59 @@ def test_grubhub_mirrors_can_be_switched_off(monkeypatch):
     assert "menupages.com" not in cfg.allowed_hosts and "www.allmenus.com" not in cfg.allowed_hosts
     monkeypatch.delenv("FPC_DISABLE_GRUBHUB_MIRRORS")
     assert "allmenus" in Config.from_env().platform_bases
+
+
+# The layout of real DoorDash store pages, as recorded from archived captures by
+# scripts/archive_probe.py (live-verification/doordash-archive.json): Restaurant
+# JSON-LD with a PostalAddress that has addressCountry but no postalCode, a menu
+# whose hasMenuSection is a list of lists, offers with no priceCurrency whose
+# price is a display string ("$8.53", "US$12.75", "$13.59+" for a starting
+# price), and the currency stated only in the page's own (escaped) app data.
+def _doordash_like_page(country="US", region="OR", page_currency="USD", restaurant=True):
+    menu = {"@type": "Menu", "hasMenuSection": [[
+        {"@type": "MenuSection", "name": "Most Ordered", "hasMenuItem": [
+            {"@type": "MenuItem", "name": "Crunchwrap Supreme®", "offers": {"@type": "Offer", "price": "8.53"}},
+            {"@type": "MenuItem", "name": "Chicken Quesadilla", "offers": {"@type": "Offer", "price": "8.53"}},
+            {"@type": "MenuItem", "name": "Build Your Own Box"}]}]]}
+    rest = {"@context": "https://schema.org", "@type": "Restaurant", "name": "Taco Bell", "priceRange": "$$",
+            "address": {"@type": "PostalAddress", "streetAddress": "1170 Northwest 185th Avenue",
+                        "addressLocality": "Beaverton", "addressRegion": region, "addressCountry": country},
+            "hasMenu": menu}
+    blocks = ([rest] if restaurant else []) + [{"@context": "https://schema.org", "@type": "Organization", "name": "DoorDash"}, menu]
+    lds = "".join(f'<script type="application/ld+json">{json.dumps(b)}</script>' for b in blocks)
+    app = ('<script>self.__next_f.push([1,"{\\"price\\":{\\"__typename\\":\\"QuickAddMonetaryFields\\",\\"currency\\":\\"'
+           + page_currency + '\\",\\"decimalPlaces\\":2},\\"displayPrice\\":\\"$$8.53\\"}"])</script>') if page_currency else ""
+    return f"<html><head><title>Taco Bell</title>{lds}</head><body>{app}</body></html>"
+
+
+def test_doordash_store_page_layout_from_archived_captures():
+    from server.adapters import build_observation
+    from server.http_client import FetchOutcome
+    ad = DoorDashAdapter("https://www.doordash.com")
+    ref = ad.parse_store_url("https://www.doordash.com/store/taco-bell-1194579/")
+    fetched = FetchOutcome(url=ref["canonical"], ok=True, status=200, fetched_at="2026-10-09T00:00:00Z")
+
+    def observe(html):
+        parsed = parse_store_page(html, ref["canonical"], ref["store_id"])
+        return build_observation(ad, ref, parsed, fetched, "delivery", "requested", {"crunchwrap"})
+
+    status, obs, detail = observe(_doordash_like_page())
+    assert status == "checked", detail
+    assert obs["address"] == {"street": "1170 Northwest 185th Avenue", "city": "Beaverton", "state": "OR", "zip": "",
+                              "country": "US"}
+    assert obs["currency"] == "USD" and obs["menu_item_count"] == 3
+    assert [(i["name"], i["price_cents"], i["currency"]) for i in obs["items"]] == [("Crunchwrap Supreme®", 853, "USD")]
+    assert "omits priceCurrency; the page's own data states currency USD and no other" in obs["price_context"]
+
+    # The page's data names another currency, or none: the prices are not USD.
+    for cur in ("CAD", ""):
+        status, obs, _ = observe(_doordash_like_page(page_currency=cur))
+        assert status == "checked" and obs["currency"] == "?" and "not treated as USD" in obs["price_context"]
+    status, obs, _ = observe(_doordash_like_page(page_currency="USD\\\",\\\"x\\\":{\\\"currency\\\":\\\"CAD"))
+    assert obs["currency"] == "?"                                   # USD and CAD on one page: not USD
+    # Canadian store (seen in the archive: addressCountry CA, page data CAD) is excluded.
+    status, obs, detail = observe(_doordash_like_page(country="CA", region="BC", page_currency="CAD"))
+    assert status == "non_us" and obs is None and "outside the US" in detail
+    # A bare Menu without a Restaurant (also seen) has no address: not extracted.
+    status, obs, detail = observe(_doordash_like_page(restaurant=False))
+    assert status == "no_menu" and "no schema.org Restaurant" in detail

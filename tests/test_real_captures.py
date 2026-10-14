@@ -115,6 +115,9 @@ def test_doordash_reader_on_archived_page(html_path):
     if status == "checked":
         assert obs["address"]["country"] == "US" and obs["address"]["state"]
         assert priced, "a US store page with a menu must yield prices"
+        for i in obs["items"]:
+            if str(i.get("price_raw") or "").endswith("+"):        # a starting price is never an exact one
+                assert i["price_cents"] is None and "starting price" in i["price_note"], i
         if parsed.get("page_currency_codes") == ["USD"]:
             assert obs["currency"] == "USD" and all(i["currency"] == "USD" for i in priced)
             assert "omits priceCurrency" in obs["price_context"]

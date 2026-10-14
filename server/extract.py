@@ -454,6 +454,15 @@ def flag_zero_prices(items: list[dict]) -> list[dict]:
     be verified; they surface as "needs confirmation".
     """
     for it in items:
+        raw = str(it.get("price_raw") or "").strip()
+        if it.get("price_cents") is None and re.fullmatch(r"(?:US)?\$\s*\d[\d,]*(?:\.\d+)?\s*\+", raw):
+            # Observed on archived real DoorDash pages (scripts/archive_probe.py):
+            # "$13.59+" is a starting price, the page shows it the same way, and
+            # options (e.g. size) set the final price.
+            it["price_note"] = (f"published as a starting price ({raw}): options such as size set the final "
+                                "price, which the page does not publish")
+            it["required_options"] = [{"name": "price-setting options (not published)", "required": True}]
+            continue
         if it.get("price_cents") == 0:
             it["price_cents"] = None
             it["price_note"] = ("published price is $0.00, which on this platform means the price is set by "

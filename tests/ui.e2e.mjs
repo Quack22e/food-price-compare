@@ -175,6 +175,71 @@ describe('index.html end-to-end', { timeout: 300000 }, () => {
     await page.fill('#importText', '');
   });
 
+  it('adds prices you saw in the DoorDash app by hand, labelled and validated', async () => {
+    const seen = async (over) => {
+      const f = Object.assign({ seenPlatform: 'doordash', seenMode: 'delivery', seenUrl: 'https://www.doordash.com/store/mcdonalds-reno-777001/',
+        seenName: "McDonald's", seenStreet: '1 Seen St', seenCity: 'Reno', seenState: 'NV', seenZip: '89501', seenLines: '10 pc Chicken McNuggets $3.50' }, over);
+      for (const [id, v] of Object.entries(f)) {
+        if (id === 'seenPlatform' || id === 'seenMode') await page.selectOption('#' + id, v); else await page.fill('#' + id, v);
+      }
+      await page.click('#seenAdd');
+      return text('#seenMsg');
+    };
+    try {
+      assert.match(await seen({ seenUrl: 'https://drd.sh/abc' }), /Not added.*Store link must be a www\.doordash\.com store page/);
+      assert.match(await seen({ seenLines: 'McNuggets about 3.50' }), /Not added.*"item name \$price"/);
+      assert.match(await seen({ seenZip: 'M5V 2T6' }), /Not added.*5-digit US ZIP/);
+      assert.match(await seen({}), /Added 1 price\(s\) at McDonald's, Reno NV \(DoorDash, delivery\), labelled "Imported"/);
+      assert.equal(await page.inputValue('#seenLines'), '');
+      await waitText('#winner', /\$7\.00/);                                   // quantity 2 x $3.50
+      assert.match(await text('#winner'), /DoorDash · McDonald's — 1 Seen St, Reno, NV 89501/);
+      assert.match(await text('#resultBody'), /Imported/);
+      const link = page.locator('#winner a');
+      assert.equal(await link.getAttribute('href'), 'https://www.doordash.com/store/mcdonalds-reno-777001/');
+      await page.locator('#resultBody tbody tr').first().locator('button:has-text("Why?")').click();
+      const det = await page.locator('#resultBody tr.details').first().innerText();
+      assert.match(det, /entered by you from what DoorDash showed you/);
+      assert.match(det, /order mode you selected in the DoorDash app/);
+    } finally {
+      await page.click('#importClear');                                    // never leak into later tests
+    }
+    await waitText('#winner', /\$10\.58/);
+  });
+
+  it('loads a live-run snapshot: one run, labelled, scoped to what each search looked for', async () => {
+    const at = new Date(Date.now() - 2 * 3600e3).toISOString();
+    const ob = (id, name, price) => ({ platform: 'ubereats', store_id: id, store_name: "McDonald's", store_url: 'https://www.ubereats.com/store/mcdonalds-test/' + id,
+      address: { street: id + ' Snap Rd', city: 'Boise', state: 'ID', zip: '83702', country: 'US' }, observed_at: at, order_mode: 'delivery', currency: 'USD',
+      extraction: 'schema.org JSON-LD', items: [{ name, price_cents: price, currency: 'USD' }] });
+    const snap = { generated_at: at, github_run_id: '999', searches: [
+      { label: 'McNuggets search', request: { order: { chain: "McDonald's", items: [{ name: '10 pc. Chicken McNuggets' }] } }, observations: [ob('SnapA1', '10 pc Chicken McNuggets', 425)] },
+      { label: 'Big Mac search', request: { order: { chain: "McDonald's", items: [{ name: 'Big Mac' }] } }, observations: [ob('SnapB2', 'Big Mac', 599)] }] };
+    try {
+      await page.setInputFiles('#snapFile', { name: 'snapshot.json', mimeType: 'application/json', buffer: Buffer.from(JSON.stringify(snap)) });
+      await waitText('#snapMsg', /Snapshot run 999/);
+      const m = await text('#snapMsg');
+      assert.match(m, /2 checked store page\(s\)\. 1 searched for this order's items; 1 were read only for a different item and are not counted/);
+      assert.match(m, /Search: McNuggets search/);
+      await waitText('#winner', /\$8\.50/);                                  // 2 x $4.25 from the snapshot
+      assert.match(await text('#winner'), /Boise, ID 83702/);
+      assert.match(await text('#resultBody'), /Snapshot/);
+      assert.doesNotMatch(await text('#resultBody'), /SnapB2 Snap Rd/);      // the Big Mac store is not a checked location here
+      await page.uncheck('#includeSnapshot');
+      await waitText('#winner', /\$10\.58/);
+      await page.check('#includeSnapshot');
+      await waitText('#winner', /\$8\.50/);
+      // The server's own snapshot file (the committed real one) loads the same way.
+      await page.click('#snapServer');
+      await waitText('#snapMsg', /from the server/);
+      assert.match(await text('#snapMsg'), /Snapshot run \d+ from 20\d\d-.*: [1-9]\d* checked store page\(s\)/);
+      await page.setInputFiles('#snapFile', { name: 'bad.json', mimeType: 'application/json', buffer: Buffer.from('{"observations": []}') });
+      await waitText('#snapMsg', /Not a snapshot/);
+    } finally {
+      await page.click('#snapClear');
+    }
+    await waitText('#winner', /\$10\.58/);
+  });
+
   it('keeps pickup and delivery separate', async () => {
     await page.check('#modePickup');
     await waitText('#winner', /No verified winner yet/);
@@ -314,6 +379,7 @@ describe('index.html end-to-end', { timeout: 300000 }, () => {
     await p2.click('#backendConnect');
     await p2.waitForFunction(() => /Backend disconnected/.test(document.querySelector('#backendStatus').innerText));
     assert.equal(await p2.isDisabled('#searchBtn'), true);
+    assert.equal(await p2.isDisabled('#snapServer'), true);              // a snapshot file still loads without a backend
     assert.match(await p2.locator('#progressArea').innerText(), /Backend disconnected.*Manual entry, receipt parsing, imports, demo mode and export still work/s);
     await p2.fill('#ghUrl', 'https://www.grubhub.com/restaurant/chipotle-mexican-grill-1-a-st/42');
     await p2.click('#ghExtract');

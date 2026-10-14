@@ -89,6 +89,31 @@ test('imports render untrusted text as text, are labelled, and invalid records a
   await page.click('#clearImport');
 });
 
+test('a DoorDash price you saw in the app is ranked with the snapshot, labelled, and validated', async () => {
+  await page.click('#resetOrder');
+  await page.fill('#chain', 'Taco Bell');
+  await page.fill('#it0_name', 'Crunchwrap Supreme');
+  const fill = async (over) => {
+    const f = Object.assign({ seenUrl: 'https://www.doordash.com/store/taco-bell-beaverton-1194579/', seenName: 'Taco Bell', seenStreet: '1170 NW 185th Ave',
+      seenCity: 'Beaverton', seenState: 'OR', seenZip: '', seenLines: 'Crunchwrap Supreme $1.23' }, over);
+    for (const [id, v] of Object.entries(f)) await page.fill('#' + id, v);
+    await page.selectOption('#seenPlatform', 'doordash');
+    await page.click('#seenAdd');
+    return text('#seenMsg');
+  };
+  assert.match(await fill({ seenUrl: 'https://www.doordash.com/business/taco-bell-1/' }), /Not added: Store link must be a www\.doordash\.com store page/);
+  assert.match(await fill({ seenState: 'ON' }), /Not added: .*50 US states or DC/);
+  assert.match(await fill({}), /Added 1 price at Taco Bell, Beaverton OR \(DoorDash, delivery\), labelled Imported/);
+  assert.match(await text('#seenMsg'), /no ZIP code/);
+  await page.waitForFunction(() => /\$1\.23/.test(document.querySelector('#winner').innerText));
+  const w = await text('#winner');
+  assert.match(w, /DoorDash/);
+  assert.match(w, /Imported by you/);
+  assert.match(w, /Lowest verified price among \d+ checked locations/i);
+  await page.click('#clearImport');
+  await page.waitForFunction(() => !/\$1\.23/.test(document.querySelector('#winner').innerText));
+});
+
 test('switching snapshot runs keeps each run separate', async () => {
   // Every price shown for a run must have been observed during that run.
   const n = await page.locator('#runSel option').count();

@@ -16,11 +16,12 @@
       "name": "DoorDash",
       "status": "Blocked for servers",
       "tone": "bad",
-      "summary": "Branch discovery works, but store pages answer datacenter requests with a Cloudflare challenge, so no DoorDash branch price could be read from a server.",
+      "summary": "Branch discovery works, but store pages answer datacenter requests with a Cloudflare challenge, so no current DoorDash branch price could be read from a server. Type the prices you see in the DoorDash app instead (below).",
       "evidence": [
         "69 of 69 store-page requests across 14 live runs returned 403 “Just a moment…”.",
         "131 per-state store sitemaps are readable (California alone lists 106,228 store URLs).",
         "/business/…/menu pages show prices DoorDash labels “estimated based on your predicted location”, so they are not used as branch prices.",
+        "15 archived copies of real store pages (Wayback Machine, Sep 2025 – Oct 2026) show the layout: Restaurant + Menu JSON-LD, prices like “$8.53” or “$13.59+” (a starting price), no currency field and no ZIP. The reader handles it: 9 US stores read with USD prices, 3 Canadian excluded. Archived prices are never used.",
         "In your own browser, the capture bookmarklet below can read a store page you open."
       ]
     },
@@ -110,13 +111,27 @@
         ],
         "how": "Reads the schema.org menu data of the store page you are viewing and gives you JSON to import.",
         "access": "You run it on pages you open.",
-        "branch_prices": "Partly: DoorDash pages may lack JSON-LD or modifiers",
+        "branch_prices": "Yes for fixed prices; DoorDash publishes no options, and “+” prices are starting prices",
         "fit": "user",
         "fit_label": "Built · your action",
-        "fit_note": "DoorDash's terms ban copying its site with scripts, even manually run ones. High terms risk.",
+        "fit_note": "Its DoorDash handling matches the real page layout (checked on archived pages). DoorDash's terms ban copying its site with scripts, even manually run ones. High terms risk.",
         "evidence": [
           "https://help.doordash.com/en-us/consumers/article/storefront-consumer-terms-and-conditions-english"
         ]
+      },
+      {
+        "name": "Prices you saw, typed in",
+        "platforms": [
+          "doordash",
+          "ubereats"
+        ],
+        "how": "You open the store in the DoorDash or Uber Eats app or site as you normally would and type the prices it shows, with the store link for the store ID.",
+        "access": "Your app or browser; no scraping.",
+        "branch_prices": "Yes, for your branch, order mode and account",
+        "fit": "user",
+        "fit_label": "Built · your action",
+        "fit_note": "The scraping-free way to include DoorDash. Entries are validated like any import and labelled Imported.",
+        "evidence": []
       },
       {
         "name": "Your order receipts (paste or upload)",
@@ -163,8 +178,8 @@
         "access": "Your phone.",
         "branch_prices": "Yes, for the branch, address and mode you chose",
         "fit": "user",
-        "fit_label": "Not built · your action",
-        "fit_note": "The main legitimate way to see a DoorDash price at your exact branch; needs your confirmation of every value.",
+        "fit_label": "Not built (typed entry covers it)",
+        "fit_note": "OCR was not built; typing the prices in covers the same need, and you confirm every value either way.",
         "evidence": [
           "https://help.doordash.com/en-us/merchants/article/how-do-i-find-my-store-id"
         ]
@@ -388,8 +403,8 @@
         "access": "Free.",
         "branch_prices": "Historical only",
         "fit": "no",
-        "fit_label": "Historical only",
-        "fit_note": "Never current prices. Wayback is for research, non-commercial use; the Kaggle Uber Eats dump has no store ID, URL or timestamp and is for educational use.",
+        "fit_label": "Historical only · structure evidence",
+        "fit_note": "Never used as prices. Used as evidence of page structure: 15 archived DoorDash store pages verified the DoorDash reader (existing captures only; Common Crawl's index robots.txt disallows the queries, which is honoured). Wayback is for research, non-commercial use; the Kaggle Uber Eats dump has no store ID, URL or timestamp and is for educational use.",
         "evidence": [
           "https://archive.org/help/wayback_api.php",
           "https://commoncrawl.org/common-crawl-url-index/"

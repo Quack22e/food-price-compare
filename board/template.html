@@ -80,9 +80,12 @@ p { margin: 0; }
   background: radial-gradient(circle at 6px 0, transparent 5px, var(--surface) 5.5px) 0 0 / 12px 8px repeat-x; }
 .field { display: grid; gap: 4px; min-width: 0; }
 .field > label, .lbl { font-size: .82rem; font-weight: 700; color: var(--muted); }
-input[type=text], input[type=url], input[type=number], select, textarea {
+input[type=text], input[type=url], input[type=number], input[type=datetime-local], select, textarea {
   width: 100%; min-width: 0; border: 1px solid var(--line); background: var(--bg); border-radius: 4px; padding: 7px 9px; }
 textarea { font-family: var(--mono); font-size: .82rem; min-height: 110px; resize: vertical; }
+textarea.short { min-height: 64px; }
+.panel.seen { display: grid; gap: 10px; margin-bottom: 14px; }
+.panel.seen > h3, .panel.seen > p { margin: 0; }
 .row2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
 .row3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
 .presets { display: flex; flex-wrap: wrap; gap: 6px; }
@@ -289,6 +292,28 @@ tr.details td { background: var(--sunken); }
       <h2 id="addTitle">Add prices you collected</h2>
       <p class="muted">Imported prices are checked against the same rules and labelled “Imported”. Nothing you add leaves this page.</p>
     </header>
+    <div class="panel seen" aria-labelledby="seenTitle">
+      <h3 id="seenTitle">Type prices you saw in the DoorDash or Uber Eats app</h3>
+      <p class="small muted">This is how DoorDash prices get in without any scraping. Open the store in the app or website as you normally would, choose Delivery or Pickup, and type what it shows. Entries are checked like any import and labelled “Imported”.</p>
+      <div class="row2">
+        <div class="field"><label for="seenPlatform">Platform</label><select id="seenPlatform"><option value="doordash">DoorDash</option><option value="ubereats">Uber Eats</option></select></div>
+        <div class="field"><label for="seenMode">Order mode</label><select id="seenMode"><option value="delivery">Delivery</option><option value="pickup">Pickup</option></select></div>
+      </div>
+      <div class="field"><label for="seenUrl">Store link (Share → Copy link in the app, or the browser address)</label><input type="url" id="seenUrl" spellcheck="false" placeholder="https://www.doordash.com/store/…"></div>
+      <div class="row2">
+        <div class="field"><label for="seenName">Store name</label><input type="text" id="seenName" placeholder="Taco Bell"></div>
+        <div class="field"><label for="seenStreet">Street</label><input type="text" id="seenStreet"></div>
+      </div>
+      <div class="row3">
+        <div class="field"><label for="seenCity">City</label><input type="text" id="seenCity"></div>
+        <div class="field"><label for="seenState">State</label><input type="text" id="seenState" maxlength="20" placeholder="IL"></div>
+        <div class="field"><label for="seenZip">ZIP (optional)</label><input type="text" id="seenZip" inputmode="numeric" maxlength="10"></div>
+      </div>
+      <div class="field"><label for="seenAt">Seen at (your local time; blank means now)</label><input type="datetime-local" id="seenAt"></div>
+      <div class="field"><label for="seenLines">Items and prices, one per line</label><textarea id="seenLines" class="short" spellcheck="false" placeholder="Crunchwrap Supreme $7.31"></textarea></div>
+      <div class="btnbar"><button class="btn primary" id="seenAdd" type="button">Add these prices</button></div>
+      <div id="seenMsg"></div>
+    </div>
     <div class="split">
       <div class="panel">
         <h3>Import JSON or CSV</h3>
@@ -377,47 +402,13 @@ tr.details td { background: var(--sunken); }
   // Each live run is one coherent snapshot (menus change through the day, so
   // runs are never merged: a store's newest observation would hide an item it
   // listed at another hour).
-  // Snapshot observations keep only the items whose name contains a word of
-  // the search's item (server/adapters.build_observation prefilter), so a store
-  // counts as checked for an order item only if that item shares such a word.
-  var SIZE_WORDS = { small: 1, medium: 1, large: 1, regular: 1, kids: 1, family: 1, personal: 1, extra: 1, xl: 1 };
-  function looseNorm(x) { return String(x || '').toLowerCase().replace(/['’`]/g, '').replace(/[^a-z0-9]+/g, ' ').trim(); }
-  function scopeTokens(texts) {
-    var t = [];
-    texts.forEach(function (x) { looseNorm(x).split(' ').forEach(function (w) { if (w.length >= 3 && !SIZE_WORDS[w] && !/^\d+$/.test(w) && t.indexOf(w) < 0) t.push(w); }); });
-    return t;
-  }
-  function searchScope(s) {
-    var items = ((s.request || {}).order || {}).items || [];
-    var texts = [];
-    items.forEach(function (it) { texts.push(it.name || ''); (it.aliases || []).forEach(function (a) { texts.push(a); }); if (it.flavor) texts.push(it.flavor); });
-    return scopeTokens(texts);
-  }
-  function covers(scope, item) {
-    var n = looseNorm([item.name].concat(String(item.aliases || '').split(',')).join(' '));
-    return scope.some(function (t) { return n.indexOf(t) >= 0; });
-  }
+  // Scope rules (which order items a snapshot search covers) live in the engine.
   var DATA = readJSON('snapshot-data') || { runs: [] };
   var RUNS = (DATA.runs || []).slice().sort(function (a, b) { return String(b.generated_at).localeCompare(String(a.generated_at)); });
   var SRC = readJSON('sources-data') || {};
   RUNS.forEach(function (run) {
-    run.obs = []; run.rejected = [];
-    (run.searches || []).forEach(function (s) {
-      var scope = searchScope(s);
-      (s.observations || []).forEach(function (o) {
-        // Same checks as any import (US-only, USD, https platform link, valid timestamp).
-        // A store page that was read but listed nothing like the order still
-        // counts as a checked location, so it is validated with a placeholder
-        // item that is removed again.
-        var none = !(o.items || []).length;
-        var v = E.validateImport([none ? Object.assign({}, o, { items: [{ name: 'placeholder' }] }) : o], { now: Date.now() });
-        if (!v.observations.length) { run.rejected.push(v.errors.join('; ')); return; }
-        var x = v.observations[0];
-        if (none) x.items = [];
-        x.source = 'snapshot'; x.extraction = o.extraction || 'snapshot'; x.search = s.label; x.scope = scope;
-        run.obs.push(x);
-      });
-    });
+    var r = E.snapshotObservations(run, { now: Date.now() });
+    run.obs = r.obs; run.rejected = r.rejected;
   });
   var EMPTY_RUN = { obs: [], rejected: [], searches: [], grubhub_menus: [] };
   function RUN() { return RUNS[S.run] || EMPTY_RUN; }
@@ -614,7 +605,7 @@ tr.details td { background: var(--sunken); }
     var pf = Object.keys(S.platforms).filter(function (k) { return S.platforms[k]; });
     var inScope = [], out = {};
     (RUNS[idx] || EMPTY_RUN).obs.forEach(function (o) {
-      if (S.order.items.every(function (it) { return !it.name || covers(o.scope, it); })) inScope.push(o);
+      if (E.inSnapshotScope(o, S.order.items)) inScope.push(o);
       else out[o.search] = (out[o.search] || 0) + 1;
     });
     var ev = E.evaluate(S.order, inScope.concat(S.imported), {
@@ -821,6 +812,19 @@ tr.details td { background: var(--sunken); }
       try { navigator.clipboard.writeText(bm).then(ok, fail); } catch (err) { fail(); }
     });
   }
+  function addSeen() {
+    var v = function (id) { return $(id).value; };
+    var r = E.enteredObservation({ platform: v('seenPlatform'), order_mode: v('seenMode'), seen_at: v('seenAt'), store_url: v('seenUrl').trim(),
+      store_name: v('seenName'), street: v('seenStreet'), city: v('seenCity'), state: v('seenState'), zip: v('seenZip').trim(), lines: v('seenLines') });
+    var o = r.observations[0];
+    if (!o) { setKids($('seenMsg'), h('p', { class: 'msg bad' }, 'Not added: ' + r.errors.slice(0, 6).join(' · '))); return; }
+    S.imported.push(o);
+    setKids($('seenMsg'), [h('p', { class: 'msg ok' }, 'Added ' + o.items.length + ' price' + (o.items.length > 1 ? 's' : '') + ' at ' + o.store_name + ', ' +
+      o.address.city + ' ' + o.address.state + ' (' + PLAT[o.platform] + ', ' + o.order_mode + '), labelled Imported.')]
+      .concat(r.warnings.length ? [h('p', { class: 'msg warn' }, r.warnings.slice(0, 3).join(' · '))] : []));
+    $('seenLines').value = '';
+    evaluate();
+  }
   function doImport(text) {
     var v = E.validateImport(text, { now: Date.now() });
     var added = 0;
@@ -848,6 +852,7 @@ tr.details td { background: var(--sunken); }
     $('ghUrl').addEventListener('keydown', function (e) { if (e.key === 'Enter') ghLookup(); });
     $('tabs').addEventListener('click', function (e) { var b = e.target.closest('button[data-tab]'); if (!b) return; S.tab = b.dataset.tab; renderTabs(); });
     $('importBtn').addEventListener('click', function () { doImport($('importText').value); });
+    $('seenAdd').addEventListener('click', addSeen);
     $('importFile').addEventListener('change', function () {
       var f = this.files && this.files[0]; if (!f) return;
       if (f.size > 8 * 1024 * 1024) { setKids($('importMsg'), h('p', { class: 'msg bad' }, 'That file is over 8 MB.')); return; }

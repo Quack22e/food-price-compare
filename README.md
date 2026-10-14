@@ -2,14 +2,16 @@
 
 Enter a Grubhub item or order. The app looks for the **same item** (same chain, product, size, flavor, piece count, modifiers and quantity) on **DoorDash** and **Uber Eats** at branches anywhere in the 50 US states and DC. It then reports the lowest **verified** price among the locations it actually checked.
 
-* `index.html` is the whole frontend: one file with embedded CSS and vanilla JS, and no build step.
+* `index.html` is the whole frontend: one file with embedded CSS and vanilla JS, and no build step. Without a backend it still ranks real prices from a live-run snapshot (`live-verification/snapshot.json`), prices you type in, and imports.
 * `server/` is a small Python companion service that does the scraping. A browser page cannot read these sites cross-origin, and the service keeps request policy and limits server-side.
 * `board/index.html` is a static **price board**: the same engine over real snapshots from the live runs, with no backend. It opens straight from disk and is also published as a private claude.ai artifact. See [The price board](#the-price-board).
 
 > **Live status (verified 2026-10-08 against the real sites, see [Verification results](#verification-results)).**
 > * **Uber Eats** works end to end. Real store pages publish the schema.org menu JSON-LD the extractor reads, and real sitemaps produce branch discovery. The 18:59 UTC snapshot priced 36 real US branches across three chains, for example "Lowest verified price among 22 checked locations: $5.19, 10 pc. Chicken McNuggets®, McDonald's, Abingdon VA" (the highest was $8.55 in Glendora, CA).
 > * **Menus change by time of day.** At 07:14 UTC, 18 McDonald's branches published breakfast menus with no McNuggets. Each snapshot run is therefore kept separate, never merged.
-> * **DoorDash** branch discovery works. It covers 131 per-state store sitemaps (California alone lists 106,228 store URLs) and chain pages (50 real Chipotle branches). Its store pages answered every request from a datacenter IP with a Cloudflare challenge (HTTP 403; 69 of 69 across 14 runs), which the app reports and does not bypass. Its `/business/…/menu` pages carry prices, but DoorDash labels them on the page as *"estimated based on your predicted location and may vary across store"*, so they are not branch prices. **No verified DoorDash price was obtained.**
+> * **DoorDash** branch discovery works. It covers 131 per-state store sitemaps (California alone lists 106,228 store URLs) and chain pages (50 real Chipotle branches). Its store pages answered every request from a datacenter IP with a Cloudflare challenge (HTTP 403; 69 of 69 across 14 runs), which the app reports and does not bypass. Its `/business/…/menu` pages carry prices, but DoorDash labels them on the page as *"estimated based on your predicted location and may vary across store"*, so they are not branch prices. **No current DoorDash price was obtained by the live runs.**
+>   * **What a DoorDash store page publishes is now known from real pages.** The Wayback Machine holds copies its own crawler captured. 15 of them (Sep 2025 to 7 Oct 2026; Taco Bell, Chipotle, Lou Malnati's, McDonald's and local stores) were read structure-only by `scripts/archive_probe.py`. Each has schema.org `Restaurant` + `Menu` JSON-LD with a street address and `addressCountry`, but **no `priceCurrency`** and **no postal code**. Prices are display strings such as `"$8.53"`, `"US$12.75"` or `"$13.59+"` (a starting price). The page's own app data states `"currency":"USD"` for US stores and `"CAD"` for Canadian ones. The DoorDash reader now handles that layout and was run on all 15 pages: **9 US stores read with USD prices**, 3 Canadian stores excluded, 3 pages without a Restaurant block reported as "no menu data". Archived prices are historical and are never used as prices.
+>   * **To include DoorDash prices now,** type the prices you see in the DoorDash app ("Add prices you saw yourself", in the app and on the board). This involves no scraping at all.
 > * **Grubhub** restaurant pages are a JavaScript shell with no structured data. Grubhub prices now come from two **Grubhub-owned menu sites** that link each page back to its Grubhub listing, and a page is used only when it links to the same Grubhub ID:
 >   * **MenuPages** publishes the menu as JSON-LD. Verified live: Lou Malnati's, 6456 S Cicero Ave, Chicago (ID 434510), 162 priced listings. It covers a subset of Grubhub (28,133 restaurant pages).
 >   * **AllMenus** is the fallback. It shows prices only in its HTML, so they are used only when its 217 HTML item names equal the page's own JSON-LD item names. Verified live: Lou Malnati's, 85 S Buffalo Grove Rd (ID 517712, not on MenuPages), 169 priced listings.
@@ -70,7 +72,11 @@ python -m pytest -q tests/test_real_captures.py -s
 5. **Rank by** item subtotal (the default; before tax, fees, tip and promotions) or by **checkout total**. Checkout totals only exist where every destination-specific charge is known. Unknown charges are never treated as zero.
 6. **Export** CSV or JSON. CSV cells are guarded against spreadsheet formula injection.
 
-**Import** (Data sources panel) adds menus you collected yourself (JSON or CSV, schema below). Imported rows are labeled "Imported" and can be excluded with a checkbox. **Demo mode** is opt-in, shows a banner, uses a fictional chain, and switches the whole results view to demo data, which never mixes with real data.
+**Data sources panel:**
+* **Live-run snapshot:** loads the real prices recorded by a live run (the server's `live-verification/snapshot.json` via **Load the server's snapshot**, or the file itself without a backend). One run at a time, never merged. Rows are labelled "Snapshot". A store counts as checked for an order item only if the snapshot search looked for that item. The "Stale after" setting decides whether its prices can win.
+* **Add prices you saw yourself:** platform, store link (the app's Share → Copy link), store name and address, order mode, time seen, and lines like `Crunchwrap Supreme $7.31`. The store ID comes from the link. The record goes through the same validation as an import and is labelled "Imported", with "entered by you from what DoorDash showed you" as its price context. This is the scraping-free way to include DoorDash.
+
+**Import** adds menus you collected yourself (JSON or CSV, schema below). Imported rows are labeled "Imported" and can be excluded with a checkbox. **Demo mode** is opt-in, shows a banner, uses a fictional chain, and switches the whole results view to demo data, which never mixes with real data.
 
 ### The price board
 
@@ -93,9 +99,11 @@ Each adapter (`server/adapters.py`) relies only on published standards and on wh
 |---|---|---|
 | Permission | `robots.txt` per RFC 9309 (wildcards, longest match, `Crawl-delay`). If robots.txt is unreachable (401/403/429/5xx or network failure), the site is treated as **disallowed**. A representative store path is tested before any crawl. | Standard |
 | Branch discovery | (a) store or chain URLs you paste as seeds; (b) the **sitemaps the site declares in its own robots.txt**, read as sitemap index → urlsets, with gzip support and DTDs rejected; (c) store links on chain/brand pages, following `rel="next"` pagination. Store URLs are filtered by chain-name tokens in the slug. Seeds come first, then chain pages, then sitemaps. Store-, business- and brand-named sitemaps are read first. Non-US country sections (`/ca/`, `/fr-en/`, `/jp/`…) are recorded at discovery and never fetched. | **Verified live.** Uber Eats robots.txt declares gzipped `sitemap-store-*` files: 2 read, 315 McDonald's URLs found, 226 of them non-US. DoorDash declares store, business, `business_menu` and city sitemap indexes. A real DoorDash `/business/` page yielded 50 Chipotle branch links. |
-| Menu + prices | schema.org **JSON-LD**: `Restaurant`/`FoodEstablishment` → `hasMenu` → `MenuSection` → `MenuItem` → `Offer` (also `priceSpecification`, `AggregateOffer` (a range, so never verified), `menuAddOn`, `availability`), and `PostalAddress` for the US check. Text is HTML-unescaped. Identical listings repeated across sections are collapsed. A published `0.00` is never treated as a price. | **Verified live on 6 real Uber Eats store pages** (167–335 items each): `hasMenu.hasMenuSection[].hasMenuItem[].offers.{price,priceCurrency:"USD"}` plus full `PostalAddress`. Uber Eats publishes no `menuAddOn` and no `availability`. DoorDash store pages could not be read (Cloudflare). |
+| Menu + prices | schema.org **JSON-LD**: `Restaurant`/`FoodEstablishment` → `hasMenu` → `MenuSection` → `MenuItem` → `Offer` (also `priceSpecification`, `AggregateOffer` (a range, so never verified), `menuAddOn`, `availability`), and `PostalAddress` for the US check. Text is HTML-unescaped. Identical listings repeated across sections are collapsed. A published `0.00` is never treated as a price. | **Verified live on 6 real Uber Eats store pages** (167–335 items each): `hasMenu.hasMenuSection[].hasMenuItem[].offers.{price,priceCurrency:"USD"}` plus full `PostalAddress`. Uber Eats publishes no `menuAddOn` and no `availability`. DoorDash store pages could not be read live (Cloudflare). **Their layout was verified on 15 archived real pages:** `Restaurant` with `PostalAddress` (no `postalCode`), `hasMenu.hasMenuSection` as a list of lists, `Offer.price` as a display string (`"$8.53"`, `"US$12.75"`, `"$13.59+"`), no `priceCurrency`. |
 | Grubhub prices | **MenuPages** (Grubhub-owned): robots.txt allows restaurant pages and declares `sitemap-index.xml` → `sitemap-restaurants.xml.gz`. A restaurant page has a `Restaurant` JSON-LD block (name, `PostalAddress`) and a separate `Menu` JSON-LD block with USD `Offer` prices, plus a link to `grubhub.com/restaurant/<slug>/<id>`. A page is accepted only if that link carries the same Grubhub ID (`server/grubhub_mirror.py`). | **Verified live** (runs 37741487660 and later): 162 priced listings for Grubhub ID 434510; 28,133 restaurant URLs in the sitemap. |
 | Grubhub prices (fallback) | **AllMenus** (Grubhub-owned): robots.txt allows menu pages and declares `sitemap-index.xml` with 21 `sitemap-restaurants*.xml.gz` files (up to 40,000 URLs each, `/<st>/<city>/<id>-<name>/menu/`, unordered); city pages list no restaurants in their HTML. Its JSON-LD holds item names but no prices, name or address. Prices are read from `li.menu-items > span.item-title + span.item-price`, only when those names equal the JSON-LD names. Name and address come from the `<title>` and meta description, which must agree. The page must link to the same Grubhub ID. | **Verified live** (runs 37743302443–37827940323): 217 = 217 names, 169 priced listings for Grubhub ID 517712; the real-capture test passes on the saved page. |
+| Currency when JSON-LD omits it | DoorDash prices count as USD only when the store's published address is in the US **and** the page's own data states `"currency":"USD"` and no other currency. The basis is written into the observation's `price_context`. Otherwise the prices are not USD and are excluded. The capture bookmarklet applies the same rule. | Archived DoorDash pages: US stores state `USD`, Canadian stores `CAD` |
+| Starting prices | A price published as `"$13.59+"` is a starting price (options such as size set the final price). It is never an exact price: the item gets no price, a note saying why, and a required price-setting option, so it can only "need confirmation". | Archived DoorDash pages (Lou Malnati's deep dish, Taco Bell Chalupa Supreme), and the page shows the same `+` |
 | Lenient JSON-LD | A block that fails strict JSON parsing only because of raw control characters inside strings is re-read with `strict=False`, and the page records that it was. Malformed JSON is still rejected. | AllMenus (Grubhub-owned) emits such a block (char 105,771 of 125 KB). |
 | JS-rendered pages | **Auto** mode re-renders a page with Playwright/Chromium only when it answered normally but carried no structured data. A browser is never used to get past a block or challenge. | |
 | URL shapes | DoorDash `/store/<slug>-<id>/` or `/store/<id>/`, chain pages `/business/<slug>-<id>/`. Uber Eats `/store/<slug>/<id>`, `/<cc>[-<lang>]/store/…`, `/brand/…`. Mode parameters: DoorDash `?pickup=false|true`, Uber Eats `?diningMode=DELIVERY|PICKUP`. | **URL shapes verified live** (real sitemaps and chain pages). Uber Eats pages answered normally with `diningMode=DELIVERY`, but whether the parameter changes the published prices is **unverified**. The same goes for DoorDash's `pickup`. Each observation records the mode basis. |
@@ -171,7 +179,7 @@ JSON is an array of observations, or `{"observations": [...]}`:
 | `platform` | yes | `doordash` or `ubereats` |
 | `store_id`, `store_name` | yes | text |
 | `store_url` | yes | `https://www.doordash.com/...` or `https://www.ubereats.com/...` (must match the platform) |
-| `address.street/city/state/zip/country` | city, state, zip | 50 states + DC (codes or names); 5-digit ZIP; country `US` or omitted |
+| `address.street/city/state/zip/country` | city, state | 50 states + DC (codes or names); ZIP optional (DoorDash pages publish none) but, if given, a 5-digit US ZIP; country `US` or omitted. A store without a ZIP cannot match a ZIP filter. |
 | `observed_at` | yes | ISO-8601; not in the future |
 | `order_mode` | yes | `delivery` or `pickup` |
 | `currency` | — | must be `USD` (default) |
@@ -199,6 +207,7 @@ promo_conditions,delivery_fee,service_fee,small_order_fee,tax,fee_destination_zi
 | `POST /api/inspect` `{url, browser}` | structured-data report for one platform page |
 | `POST /api/jobs` | start a search: `{order:{chain, chain_aliases, items:[{name, aliases, flavor}]}, platforms, order_mode, fetch_mode: http/auto/browser, max_stores_per_platform, seed_urls, prioritize:{city,state}}` |
 | `GET /api/jobs` | saved checkpoints |
+| `GET /api/snapshot` | the live-run snapshot file (`FPC_SNAPSHOT`, default `live-verification/snapshot.json`), read-only; 404 if absent |
 | `GET /api/jobs/<id>?since=N` | summary + incremental events (`observation`, `store`, `barrier`, `platform`, `discovered`, `log`, `job`) |
 | `POST /api/jobs/<id>/cancel`, `POST /api/jobs/<id>/resume`, `DELETE /api/jobs/<id>` | control |
 | `POST /api/purge` | delete all checkpoints and cache |
@@ -215,6 +224,7 @@ Environment variables:
 * `FPC_MAX_STORES_CAP` (500)
 * `FPC_MAX_SITEMAPS_PER_RUN` (60)
 * `FPC_DATA_DIR` (`./.fpc-data`)
+* `FPC_SNAPSHOT` (`./live-verification/snapshot.json`)
 * `FPC_USER_AGENT`
 
 CORS is limited to `null` (file://) and localhost origins.
@@ -228,15 +238,15 @@ It never stores receipts, Grubhub prices, quantities, delivery addresses or loca
 
 ## Verification results
 
-### Local test suites (build sandbox, 2026-10-08)
+### Local test suites (build sandbox, 2026-10-09)
 
 | Suite | Command | Result |
 |---|---|---|
-| Backend (pytest) | `python -m pytest -q` | **28 passed, 2 skipped**. The skipped tests are in `test_real_captures.py`; real captures exist only on the runner, where they **passed 9/9** in run 37827940323. |
-| Engine (Node, runs the exact `<script id="fpc-engine">` from index.html) | `node --test tests/engine.test.mjs` | **21 passed** |
-| Capture bookmarklet | `node --test tests/capture.test.mjs` | **5 passed** |
-| UI end-to-end (Playwright + Chromium, real backend, local fixture sites) | `node --test tests/ui.e2e.mjs` | **19 passed** |
-| Price board (Playwright + Chromium, committed real snapshot) | `node --test tests/board.e2e.mjs` | **8 passed** |
+| Backend (pytest) | `python -m pytest -q` | **40 passed, 3 skipped**. The skipped tests are in `test_real_captures.py`; real pages exist only on the runners, where the live-page tests passed in run 37827940323 and the archived DoorDash pages **passed 15/15** in run 37893861203. |
+| Engine (Node, runs the exact `<script id="fpc-engine">` from index.html) | `node --test tests/engine.test.mjs` | **23 passed** (includes the committed real snapshot) |
+| Capture bookmarklet | `node --test tests/capture.test.mjs` | **6 passed** |
+| UI end-to-end (Playwright + Chromium, real backend, local fixture sites) | `node --test tests/ui.e2e.mjs` | **21 passed** |
+| Price board (Playwright + Chromium, committed real snapshot) | `node --test tests/board.e2e.mjs` | **13 passed** |
 
 The pipeline tests use **synthetic local fixture servers** (`tests/fake_platform.py`). They exercise the mechanics:
 
@@ -245,7 +255,7 @@ The pipeline tests use **synthetic local fixture servers** (`tests/fake_platform
 * **Fetch modes:** cache reuse with the original timestamp; Playwright rendering of a page whose JSON-LD is injected by JavaScript; pickup vs delivery URLs.
 * **Run control:** per-run limit then resume; cancel mid-run, then resume after a simulated server restart, with nothing refetched and nothing lost; circuit breaker on one platform while the other completes.
 * **Grubhub and the API:** Grubhub extraction and its robots-blocked fallback; the MenuPages path (exact slug, the live "-midway" layout with a same-address decoy that links to another Grubhub ID, a wrong-ID page refused, a MenuPages base outside the allowlist refused, a restaurant not listed); HTTP API, CORS and purge.
-* **Real-page quirks:** the regressions for quirks found on real pages (below).
+* **Real-page quirks:** the regressions for quirks found on real pages (below), including the DoorDash store-page layout recorded from archived pages (currency only in the page's data, no ZIP, nested sections, starting prices, Canadian and address-less pages excluded). These tests were mutation-checked.
 
 The engine tests cover:
 
@@ -328,6 +338,9 @@ The sandbox also checked npm and PyPI packages for these platforms (read as data
 | Uber Eats JSON-LD strings contain HTML entities; listings repeat across sections; some prices are `0.00` because options set the price | Real pages (McDonald's "Columbia &amp; 165th St"; Zucker's "Iced Latte" $0.00) | **Verified live**; handled |
 | Uber Eats bot checks arrive as a 307 to `def.uber.com/…/challenge` | Live runs 2 and 3 | **Verified live**; reported as `captcha` |
 | DoorDash store pages are behind Cloudflare for datacenter IPs | all 69 DoorDash store-page requests across 14 runs returned 403 "Just a moment…" | **Verified live** (from GitHub runners) |
+| DoorDash store pages publish `Restaurant` + `Menu` JSON-LD: street address and `addressCountry` but no `postalCode`; prices as display strings (`"$8.53"`, `"US$12.75"`, `"$13.59+"`) without `priceCurrency`; the page's app data states `"currency":"USD"` (US) or `"CAD"` (Canada) | 15 Wayback Machine captures, Sep 2025 – 7 Oct 2026 (`scripts/archive_probe.py`, runs 37892678037, 37893226448, 37893861203; `live-verification/doordash-archive.json`) | **Verified on archived real pages**; reader handles it (9 US stores read with USD prices, 3 Canadian excluded, 3 without a Restaurant block reported as no menu data) |
+| A DoorDash `+` price is a starting price | The same pages display `$$7.31+` for Taco Bell Chalupa Supreme and `$13.59+` for Lou Malnati's deep dish, next to the same JSON-LD string | **Verified on archived pages**; never treated as an exact price |
+| Common Crawl's index for DoorDash store URLs | `index.commoncrawl.org/robots.txt` disallows the index queries for this client | **Honoured**; not read |
 | DoorDash `/business/{slug}-{id}/` is not challenged and lists branch links; its menu is chain-level (`storeId: $undefined`, Next.js stream, no JSON-LD) | Live runs | **Verified live**; used for discovery only |
 | DoorDash sitemaps are served from `cdn.doordash.com/sitemaps/`, with one store sitemap per state (`sitemap-doordash-<st>-stores.xml`, 131 in total) | Live run 37709849182 | **Verified live**; per-state files feed the location filter |
 | DoorDash `/business/{slug}-{id}/menu` prices are not branch prices | The page text: "Prices are estimated based on your predicted location and may vary across store" | **Verified live**; not used for pricing |
@@ -364,7 +377,8 @@ To find other ways to get this data, 24 methods were researched (October 2026). 
 | MenuPages | Grubhub | public; robots.txt allows | yes, for listed restaurants (28,133 pages) | **In use, verified live**. Grubhub terms: personal, non-commercial use. |
 | AllMenus | Grubhub | public; robots.txt allows | partly (undated, sometimes stale) | **In use, verified live**. Used only when HTML and JSON-LD names agree. Same Grubhub terms. |
 | Uber Eats brand-city pages | Uber Eats | public | no (sample prices not tied to a branch) | Discovery only |
-| Capture bookmarklet (your browser) | DoorDash, Uber Eats | your action | partly (DoorDash pages may lack JSON-LD or modifiers) | **Built**. DoorDash's terms ban copying with scripts even when run by hand (high risk). |
+| Capture bookmarklet (your browser) | DoorDash, Uber Eats | your action | yes for fixed prices; DoorDash publishes no modifiers, and `+` prices are starting prices | **Built**. Its DoorDash handling matches the real page layout (verified on archived pages). DoorDash's terms ban copying with scripts even when run by hand (high risk). |
+| Prices you saw, typed in | DoorDash, Uber Eats | your action, your app | yes, for your branch, mode and account | **Built** (app and board). No scraping: you type what the platform shows you, with the store link for the store ID |
 | Your order receipts | all three | your mailbox | no (past orders, no store ID) | **Built** (paste). Historical; good for your Grubhub side. |
 | Personal data downloads ([Uber](https://help.uber.com/riders/article/whats-in-your-data-download?nodeId=3d476006-87a4-4404-ac1e-216825414e05), [DoorDash](https://help.doordash.com/en-us/consumers/article/i-want-to-delete-my-personal-information-data-from-doordash)) | Uber Eats, DoorDash | account holder, 1–3 days | no (no store address or URL) | Not built; your own past orders only |
 | [DoorDash Marketplace API](https://developer.doordash.com/docs/marketplace/overview/about_marketplace) | DoorDash | approved POS/middleware partners, signed agreement | only the partner's own connected stores | Partnership only |
@@ -379,8 +393,8 @@ To find other ways to get this data, 24 methods were researched (October 2026). 
 | DoorDash `/business/…/menu` | DoorDash | public | no ("estimated", verified live) | Discovery only |
 | DoorDash Storefront (order.online) | DoorDash | public | first-party base price, not the DoorDash delivery price | **Not usable**; its terms ban scraping |
 | Yelp menu pages | Grubhub | Places API has only a menu link | unknown | **Not usable**: DoorDash now powers most Yelp ordering; Yelp's terms forbid scraping |
-| Wayback Machine, Common Crawl, Kaggle datasets | all three | free | historical only | Not current. Wayback is for research, non-commercial use; the Kaggle Uber Eats dump has no store ID, URL or timestamp and is for educational use |
-| † Screenshots of the app's menu or cart (OCR, you confirm) | all three | your phone | yes, for your branch and mode | Not built. The main legitimate way to see a DoorDash price at your branch |
+| Wayback Machine, Common Crawl, Kaggle datasets | all three | free | historical only | Not current, so never used as prices. **Used as structure evidence:** 15 archived DoorDash store pages verified the DoorDash reader (`scripts/archive_probe.py`, existing captures only). Common Crawl's index robots.txt disallows the queries (honoured). Wayback is for research, non-commercial use; the Kaggle Uber Eats dump has no store ID, URL or timestamp and is for educational use |
+| † Screenshots of the app's menu or cart (OCR, you confirm) | all three | your phone | yes, for your branch and mode | OCR not built; typing the prices in (row above) covers the same need |
 | † Grubhub page captured in your own browser | Grubhub | your browser | yes (your Grubhub side) | Not built: the rendered Grubhub markup was never observed, so no selectors were written; Grubhub's terms forbid scraping |
 | † [Uber Consumer Delivery APIs](https://developer.uber.com/docs/consumer-delivery/introduction) | Uber Eats | written approval from Uber | yes, if approved | Partnership only; the one official Uber surface that reaches arbitrary stores |
 | † Distribution partnerships (Grubhub/Uber Eats in ChatGPT, Alexa+, Eater …) | all three | bilateral business deal | yes, for partners | Business deal |
@@ -389,13 +403,13 @@ To find other ways to get this data, 24 methods were researched (October 2026). 
 ## Access limitations and dependencies
 
 1. **Network access.** The service needs outbound HTTPS to `www.doordash.com`, `www.ubereats.com` and, for link extraction, `www.grubhub.com`, `menupages.com` and `www.allmenus.com`. The Claude build sandbox is denied all three. A GitHub-hosted runner and ordinary machines are not. Run `python -m server.inspect_page --probe` first.
-2. **DoorDash prices (blocked, verified).** DoorDash store pages served a Cloudflare challenge to every request from GitHub's datacenter IPs (69 of 69 across 14 runs). The app reports `captcha` barriers and its circuit breaker stops the adapter. It does not try to defeat the challenge. From other networks DoorDash may or may not serve the page; the run log shows which. Without readable store pages there are **no DoorDash branch prices**, and the DoorDash chain-page menu is not branch-specific.
+2. **DoorDash prices (blocked, verified).** DoorDash store pages served a Cloudflare challenge to every request from GitHub's datacenter IPs (69 of 69 across 14 runs). The app reports `captcha` barriers and its circuit breaker stops the adapter. It does not try to defeat the challenge. From other networks DoorDash may or may not serve the page; the run log shows which. Without readable store pages there are **no scraped DoorDash branch prices**, and the DoorDash chain-page menu is not branch-specific. When a store page is readable, the reader handles DoorDash's real layout (verified on 15 archived pages, see the evidence log). DoorDash prices you see in the app can always be typed in.
 3. **Uber Eats bot checks (intermittent, verified).** Two of five store fetches in run 3, and two of three in run 2, were redirected to Uber's challenge page. These are reported and skipped. Resume tries the remaining queue later.
 4. **What the published data cannot tell you.**
    * Uber Eats JSON-LD has no add-on, option or availability data. An order with modifiers therefore always "needs confirmation", and the availability of live rows is "unknown".
    * `$0.00` listings are unverifiable.
    * No fees, taxes or account-dependent promotions are published, so checkout totals exist only for imported data that includes all destination charges.
-5. **Order mode.** Live prices come from an anonymous storefront with no address. `mode_basis` states how the mode was requested. Whether pickup prices differ on the public page is unverified.
+5. **Order mode.** Live prices come from an anonymous storefront with no address. `mode_basis` states how the mode was requested. On Uber Eats, 18 of 18 branches read in both modes published identical prices, so the public page may not carry mode-specific prices. DoorDash's archived pages carry the checkout message "Item prices may differ on Delivery and Pickup" among their interface strings, so its two modes can differ; its mode parameter is unverified.
 6. **Grubhub prices.** Real Grubhub restaurant pages publish no structured data in their HTML; the content is rendered by JavaScript. Prices come from MenuPages, then AllMenus. Both are Grubhub-owned and together cover only a subset of Grubhub restaurants, and a page is used only when it links to the same Grubhub ID. AllMenus says its menus may not be current. MenuPages prices are menu prices; option charges and fees are not included, and they may differ from what a signed-in Grubhub checkout shows. Otherwise the extractor yields the restaurant ID and a chain-name guess from the URL, flags the guess, and asks for manual item entry.
 7. **Terms of service.** Robots.txt allowing crawling (verified for all five sites) is not the same as permission, and you are responsible for whether and how you run the scrapers.
    * Grubhub's Terms of Use prohibit automated access without written authorization. The MenuPages terms say Grubhub's sites, MenuPages included, are "made available solely for your personal, non-commercial use" unless Grubhub agrees otherwise in writing, and AllMenus is covered by the same Grubhub terms. Set `FPC_DISABLE_GRUBHUB_MIRRORS=1` to switch both lookups off.
@@ -423,6 +437,7 @@ food-price-compare/
 ├── examples/                  # import format examples (fictional chain)
 ├── board/                     # static price board: template.html, sources.json, built index.html
 ├── scripts/live_verify.py     # bounded live run (used by .github/workflows/fpc-live-verification.yml)
+├── scripts/archive_probe.py   # DoorDash store-page structure from existing archive captures (.github/workflows/fpc-archive-probe.yml)
 ├── scripts/snapshot.py        # bounded live searches → live-verification/snapshot.json (board data)
 ├── scripts/build_board.py     # builds board/index.html from the template, engine and snapshots
 ├── scripts/rank_report.mjs    # rank a live report's real observations with the shipped engine
