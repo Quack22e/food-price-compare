@@ -240,6 +240,34 @@ describe('index.html end-to-end', { timeout: 300000 }, () => {
     await waitText('#winner', /\$10\.58/);
   });
 
+  it('suggests the closest listings when nothing matches exactly, and "Same item" confirms one', async () => {
+    const at = new Date(Date.now() - 3600e3).toISOString();
+    const rec = { platform: 'ubereats', store_id: 'Fry01', store_name: "McDonald's", store_url: 'https://www.ubereats.com/store/mcd/Fry01',
+      address: { street: '5 Fry Rd', city: 'Boise', state: 'ID', zip: '83702', country: 'US' }, observed_at: at, order_mode: 'delivery',
+      items: [{ name: 'World Famous Fries® - Large [320-490 Cals]', price: '4.49' }, { name: 'Fries Meal', price: '8.99' }] };
+    const before = { name: await page.inputValue('#it0_name'), count: await page.inputValue('#it0_count'), qty: await page.inputValue('#it0_qty') };
+    try {
+      await page.fill('#importText', JSON.stringify([rec]));
+      await page.click('#importBtn');
+      await page.fill('#it0_name', 'Large Fries');
+      await page.fill('#it0_count', '');
+      await page.fill('#it0_qty', '1');
+      await waitText('#closest', /No checked store lists "Large Fries" exactly/);
+      assert.match(await text('#closest'), /World Famous Fries® - Large \[320-490 Cals\] · 1 store · \$4\.49 · name differs only by "world famous"/);
+      assert.doesNotMatch(await text('#closest'), /Fries Meal/);
+      assert.doesNotMatch(await text('#winner'), /\$4\.49/);
+      await page.click('#closest button:has-text("Same item")');
+      await waitText('#winner', /\$4\.49/);
+      assert.equal(await page.inputValue('#it0_alias'), 'World Famous Fries® - Large [320-490 Cals]');
+      assert.equal(await page.locator('#closest .closest').count(), 0);
+    } finally {
+      await page.click('#importClear');
+      await page.fill('#it0_alias', '');
+      await page.fill('#it0_name', before.name); await page.fill('#it0_count', before.count); await page.fill('#it0_qty', before.qty);
+    }
+    await waitText('#winner', /\$10\.58/);
+  });
+
   it('keeps pickup and delivery separate', async () => {
     await page.check('#modePickup');
     await waitText('#winner', /No verified winner yet/);

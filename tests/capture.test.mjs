@@ -104,6 +104,20 @@ test('DoorDash layout: a missing currency counts as USD only when the page data 
   }
 });
 
+test('DoorDash price strings: "US$12.75" is a price, "$13.59+" a starting price', async () => {
+  const ld = JSON.parse(JSON.stringify(ddLd));
+  ld.hasMenu.hasMenuSection[0][0].hasMenuItem = [
+    { '@type': 'MenuItem', name: 'Burrito Bowl', offers: { '@type': 'Offer', price: 'US$12.75' } },
+    { '@type': 'MenuItem', name: 'Deep Dish Cheese', offers: { '@type': 'Offer', price: '$13.59+' } }];
+  const res = await runOn('https://www.doordash.com/store/chipotle-mexican-grill-26003435/', ddPage('USD').replace(JSON.stringify(ddLd), JSON.stringify(ld)));
+  assert.equal(res.ok, true, JSON.stringify(res.notes));
+  const [bowl, pie] = res.observation.items;
+  assert.deepEqual([bowl.name, bowl.price_cents, bowl.currency], ['Burrito Bowl', 1275, 'USD']);
+  assert.equal(pie.price_cents, null);
+  assert.match(pie.price_note, /starting price \(\$13\.59\+\)/);
+  assert.equal(pie.required_options[0].required, true);
+});
+
 test('refuses to guess: no structured data, not a store page, Grubhub, other sites', async () => {
   const bare = '<!doctype html><html><body><div>$6.49 Big Mac</div></body></html>';
   let r = await runOn('https://www.doordash.com/store/x-1/', bare);

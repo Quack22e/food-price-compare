@@ -90,9 +90,11 @@ test('flavor handling', () => {
   assert.equal(viaAddon.status, 'exact');
   assert.equal(viaAddon.unitCents, 1349);
   assert.equal(match1({ name: 'Wings', flavor: 'Buffalo', count: '10' }, item('10 pc Wings', 1299)).status, 'uncertain');
+  // No flavor in the order: "Buffalo Wings" may be the same item named with its
+  // sauce, so it needs confirmation; it is never verified on its own.
   const noFlavor = match1({ name: 'Wings' }, item('Buffalo Wings', 1299));
-  assert.equal(noFlavor.status, 'rejected');
-  assert.equal(noFlavor.nearMiss, true);
+  assert.equal(noFlavor.status, 'uncertain');
+  assert.match(noFlavor.reasons.map(r => r.text).join(' '), /Name differs only by "buffalo"/);
 });
 
 test('modifiers, removals, quantities and missing charges', () => {
@@ -418,7 +420,154 @@ test('the committed real snapshot validates as snapshot observations, scoped per
   if (nug) {
     assert.equal(E.inSnapshotScope(nug, [{ name: '10 pc. Chicken McNuggets' }]), true);
     assert.equal(E.inSnapshotScope(nug, [{ name: 'Big Mac' }]), false);
-    assert.equal(E.inSnapshotScope(nug, [{ name: 'Big Mac', aliases: 'McNuggets' }]), true);
+    // Every name variant must carry a searched product word: an alias alone does
+    // not make the store checked for the item's own name, and attribute words
+    // ("pcs", "piece") never count.
+    assert.equal(E.inSnapshotScope(nug, [{ name: 'Big Mac', aliases: 'McNuggets' }]), false);
+    assert.equal(E.inSnapshotScope(nug, [{ name: 'Chicken McNuggets', aliases: 'McNuggets 10 piece' }]), true);
+    assert.equal(E.inSnapshotScope(nug, [{ name: '6 pcs Wings' }]), false);
+    assert.equal(E.inSnapshotScope(Object.assign({}, nug, { scope: ['pcs', 'chicken', 'mcnuggets'] }), [{ name: '6 pcs Wings' }]), false);
   }
   assert.deepEqual(E.snapshotObservations({ searches: [{ label: 'x', observations: [{ platform: 'ubereats' }] }] }).rejected.length, 1);
+});
+
+test('name cleanup: calorie notes are not part of the product name', () => {
+  for (const [a, b] of [['Chalupa Supreme', 'Chalupa Supreme (350 cal.)'], ['Big Mac', 'Big Mac [560.0 Cals]'],
+    ['Crunchwrap Supreme', 'Crunchwrap Supreme 530 Calories'], ['Fries', 'Fries (230-490 kcal)'], ['Cookie', 'Cookie - 160 Cal']]) {
+    assert.equal(match1({ name: a }, item(b, 500)).status, 'exact', b);
+  }
+  // Words that only start like "cal" stay part of the name.
+  assert.equal(E.stripNotes('12 Calzone'), '12 Calzone');
+  assert.equal(match1({ name: 'Calamari' }, item('Calamari', 900)).status, 'exact');
+  assert.notEqual(match1({ name: 'Calzone' }, item('Calamari', 900)).status, 'exact');
+});
+
+test('a bare leading number is the piece count only when it equals the stated count', () => {
+  // Archived DoorDash pages: "10 Chicken McNuggets [490-630 Cals]".
+  const r = match1({ name: '10 pc. Chicken McNuggets' }, item('10 Chicken McNuggets [490-630 Cals]', 549));
+  assert.equal(r.status, 'exact');
+  assert.match(r.reasons.map(x => x.text).join(' '), /Piece count matches \(10\); the listing states it as a leading number/);
+  assert.equal(match1({ name: '10 Chicken McNuggets' }, item('10 pc. Chicken McNuggets®', 549)).status, 'exact');
+  assert.equal(match1({ name: '10 pc. Chicken McNuggets' }, item('20 Chicken McNuggets', 949)).status, 'rejected');
+  assert.equal(match1({ name: '10 Chicken McNuggets' }, item('20 pc. Chicken McNuggets', 949)).status, 'rejected');
+  assert.equal(match1({ name: 'Burrito' }, item('7 Layer Burrito', 449)).status, 'rejected');
+  assert.equal(match1({ name: '7 Layer Burrito' }, item('7 Layer Burrito', 449)).status, 'exact');
+});
+
+test('name differences: variant words reject, other small differences only need confirmation', () => {
+  const st = (o, c) => match1(typeof o === 'string' ? { name: o } : o, item(c, 700));
+  // A word or number that makes another item: never the same.
+  for (const [o, c, w] of [['Crunchwrap Supreme', 'Crunchwrap Supreme Combo', 'combo'], ['10 pc. Chicken McNuggets', '10 pc. Chicken McNuggets® Meal', 'meal'],
+    ['Chalupa', 'Chalupa Supreme', 'supreme'], ['McChicken', 'Spicy McChicken', 'spicy'], ['Big Mac', 'Double Big Mac', 'double'],
+    ['Wings', 'Boneless Wings', 'boneless'], ['Burrito', 'Burrito Bowl', 'bowl'], ['Small - Deep Dish Margherita', 'Small Deep Dish Margherita - GF', 'gf'],
+    ['Taco', '2 Tacos', '2']]) {
+    const r = st(o, c);
+    assert.equal(r.status, 'rejected', c);
+    if (/\d/.test(w)) continue;
+    assert.match(r.reasons.map(x => x.text).join(' '), new RegExp('"' + w + '" makes it a different item'), c);
+  }
+  // One or two other words: needs confirmation, never verified on its own.
+  for (const [o, c, w] of [['Small - Deep Dish Margherita', 'Small Deep Dish Margherita Pizza', 'pizza'], ['Large Fries', 'World Famous Fries® - Large', 'world famous'],
+    ['Burrito Bowl', 'Chicken Burrito Bowl', 'chicken'], ['Small Deep Dish Margherita Pizza', 'Small - Deep Dish Margherita', 'pizza']]) {
+    const r = st(o, c);
+    assert.equal(r.status, 'uncertain', c);
+    assert.equal(r.lineCents, 700);
+    assert.match(r.reasons.map(x => x.text).join(' '), new RegExp('Name differs only by "' + w + '"'), c);
+  }
+  // Still rejected: different words on both sides, more than two extra words,
+  // a soft name difference plus a real attribute conflict, another flavor.
+  assert.equal(st('Cheese Pizza', 'Pepperoni Pizza').status, 'rejected');
+  assert.equal(st('Fries', 'Chili Cheese Bacon Fries').status, 'rejected');
+  assert.equal(st('Small - Deep Dish Margherita', 'Large Deep Dish Margherita Pizza').status, 'rejected');
+  assert.equal(st({ name: 'Wings', flavor: 'Buffalo', count: '10' }, '10 pc Lemon Pepper Wings').status, 'rejected');
+  // In a ranking, a soft difference is never the verified winner.
+  const ev = run(order([{ name: 'Large Fries' }]), [obs({ items: [item('World Famous Fries® - Large', 449)] })]);
+  assert.equal(ev.winner, null);
+  assert.equal(ev.rows.uncertain.length, 1);
+});
+
+test('closest listings: suggestions only, confirmed once as a same-item name', () => {
+  const stores = [obs({ items: [item('World Famous Fries® - Large', 449), item('World Famous Fries® - Medium', 389), item('Fries Meal', 899), item('Large Hash Browns', 299)] }),
+                  obs({ items: [item('World Famous Fries® - Large', 479)] })];
+  const o = order([{ name: 'Large Fries' }]);
+  let ev = run(o, stores);
+  const ls = ev.closest[0].listings;
+  assert.deepEqual(ls.map(l => [l.label, l.stores, l.minCents, l.maxCents]), [['World Famous Fries® - Large', 2, 449, 479]]);
+  assert.match(ls[0].why, /name differs only by "world famous"/);
+  assert.ok(ls[0].score > 0 && ls[0].score <= 1);
+  assert.equal(ev.winner, null);
+  // Medium (size conflict), Meal (variant word) and Hash Browns (no shared product word) are not suggested.
+  o.items[0].aliases = 'World Famous Fries® - Large';
+  ev = run(o, stores);
+  assert.equal(ev.winner.row.lineCents, 449);
+  assert.match(ev.winner.row.reasons.map(x => x.text).join(' '), /via your confirmed alias "World Famous Fries® - Large"/);
+  assert.match(ev.winner.row.reasons.map(x => x.text).join(' '), /Size matches \(large\)/);
+  assert.deepEqual(ev.closest[0].listings, []);                  // an exact listing exists now
+  // Suggestions are per order item, and only for items without an exact listing.
+  const two = run(order([{ name: 'Large Fries' }, { name: 'Fries Meal' }]), stores);
+  assert.equal(two.closest[0].listings.length, 1);
+  assert.deepEqual(two.closest[1].listings, []);
+});
+
+test('review fixes: ZIP-less duplicates by city/state, canonical typed links, warning text', () => {
+  const noZip = (id, city) => obs({ store_id: id, address: { street: '100 Main St', city, state: 'OR', zip: '', country: 'US' }, items: [item('Burrito', 500)] });
+  // Same street in two cities: two branches. Same street, same city: one branch listed twice.
+  assert.equal(E.dedupeObservations([noZip('a', 'Beaverton'), noZip('b', 'Aloha')]).duplicates.length, 0);
+  const d = E.dedupeObservations([noZip('a', 'Beaverton'), noZip('b', 'Beaverton')]);
+  assert.equal(Object.keys(d.addressDuplicateOf).length, 1);
+  const f = { platform: 'doordash', order_mode: 'delivery', seen_at: '2026-10-07T11:00:00Z', store_name: 'Taco Bell', city: 'Fulton', state: 'MS', zip: '',
+    store_url: 'https://www.doordash.com/store/taco-bell-fulton-24633898/?lat=34.27&lng=-88.41&utm_source=share#menu', lines: 'Crunchwrap Supreme $6.99' };
+  const r = E.enteredObservation(f, { now: NOW });
+  assert.equal(r.observations[0].store_url, 'https://www.doordash.com/store/taco-bell-fulton-24633898/');
+  assert.deepEqual(r.warnings, ['no ZIP code; a ZIP filter cannot match this store']);
+});
+
+test('typed entries for one store and mode are merged, keeping the older time', () => {
+  const f = (lines, at) => E.enteredObservation({ platform: 'doordash', order_mode: 'delivery', seen_at: at, store_name: 'Taco Bell', city: 'Fulton', state: 'MS', zip: '38843',
+    store_url: 'https://www.doordash.com/store/taco-bell-fulton-24633898/', lines }, { now: NOW }).observations[0];
+  let list = E.mergeEntered([], f('Crunchwrap Supreme $6.99', '2026-10-07T09:00:00Z')).list;
+  const mg = E.mergeEntered(list, f('Chalupa Supreme $5.49\nCrunchwrap Supreme $7.09', '2026-10-07T11:00:00Z'));
+  assert.equal(mg.merged, true);
+  list = mg.list;
+  assert.equal(list.length, 1);
+  assert.deepEqual(list[0].items.map(i => [i.name, i.price_cents]), [['Chalupa Supreme', 549], ['Crunchwrap Supreme', 709]]);
+  assert.equal(list[0].observed_at, '2026-10-07T09:00:00.000Z');
+  // Both items rank from the one record.
+  const basket = run(order([{ name: 'Crunchwrap Supreme' }, { name: 'Chalupa Supreme' }], { chain: 'Taco Bell' }), list);
+  assert.equal(basket.winner.basket.subtotalCents, 709 + 549);
+  // Another mode, another store, or a plain import is never merged.
+  assert.equal(E.mergeEntered(list, Object.assign(f('Taco $2.00', '2026-10-07T10:00:00Z'), { order_mode: 'pickup' })).merged, false);
+  const imported = Object.assign({}, list[0], { extraction: 'imported record' });
+  assert.equal(E.mergeEntered([imported], f('Taco $2.00', '2026-10-07T10:00:00Z')).merged, false);
+});
+
+test('review fixes: hand-entry lines, non-US links, US evidence, malformed snapshots, excluded imports', () => {
+  const lines = E.parsePriceLines('Nachos $12,99\nDeep Dish Cheese $13.59+\nCrunchwrap Supreme $5.00');
+  assert.deepEqual(lines.items, [{ name: 'Crunchwrap Supreme', price: '5.00' }]);
+  assert.match(lines.problems[0], /"\$12,99" is not a valid US price/);
+  assert.match(lines.problems[1], /starting price/);
+  const f = { platform: 'ubereats', order_mode: 'delivery', seen_at: '2026-10-07T11:00:00Z', store_name: 'Hungry Jacks', city: 'Perth', state: 'WA', zip: '',
+    store_url: 'https://www.ubereats.com/au/store/hj-perth/AbCdEf123456', lines: 'Whopper $12.50' };
+  assert.match(E.enteredObservation(f, { now: NOW }).errors.join(' '), /non-US section/);
+  assert.equal(E.enteredObservation(Object.assign({}, f, { lines: 'Nachos $12,99\nWhopper $12.50' }), { now: NOW }).observations.length, 0);
+  const imp = (over) => E.validateImport([Object.assign({ platform: 'ubereats', store_id: 'x', store_name: 'X', store_url: 'https://www.ubereats.com/store/x/AbCdEf123456',
+    address: { city: 'Perth', state: 'WA' }, observed_at: '2026-10-07T10:00:00Z', order_mode: 'delivery', items: [{ name: 'A', price: '1.00' }] }, over)], { now: NOW });
+  assert.match(imp({}).errors.join(' '), /needs country "US" or a 5-digit ZIP/);
+  assert.equal(imp({ address: { city: 'Seattle', state: 'WA', country: 'US' } }).observations.length, 1);
+  assert.equal(imp({ address: { city: 'Seattle', state: 'WA', zip: '98101' } }).observations.length, 1);
+  assert.match(imp({ store_url: 'https://www.doordash.com/en-CA/store/x-1/', platform: 'doordash', address: { city: 'Seattle', state: 'WA', zip: '98101' } }).errors.join(' '), /non-US section/);
+  assert.equal(imp({ store_url: 'https://www.doordash.com/en-US/store/x-1/', platform: 'doordash', address: { city: 'Seattle', state: 'WA', zip: '98101' } }).observations.length, 1);
+  // Malformed snapshots are reported, never thrown.
+  const bad = { toString: 1 };
+  for (const s of [null, {}, { searches: [null] }, { searches: [{ observations: {} }] }, { searches: [{ observations: [null] }] },
+    { searches: [{ label: bad, request: { order: { items: [null, { name: 'x', aliases: 'a, b' }] } }, observations: [] }], github_run_id: bad }]) {
+    const r = E.snapshotObservations(s);
+    assert.ok(Array.isArray(r.obs) && Array.isArray(r.rejected));
+  }
+  assert.match(E.snapshotObservations({ searches: [{ label: 'Tacos', observations: [{ store_name: 'Taco Bell', platform: 'ubereats' }] }] }).rejected[0], /^Tacos, Taco Bell: store_id is required/);
+  // An excluded import never hides another reading of the same store.
+  const live = obs({ source: 'snapshot', store_id: 'S9', items: [item('Burrito', 599)] });
+  const typed = Object.assign({}, live, { source: 'import', observed_at: T(0.5), items: [item('Burrito', 649)] });
+  assert.equal(run(order([{ name: 'Burrito' }]), [live, typed], { includeImported: false }).winner.row.lineCents, 599);
+  assert.equal(run(order([{ name: 'Burrito' }]), [live, typed], { includeImported: false }).coverage.excluded.imported, 1);
 });
