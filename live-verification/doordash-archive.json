@@ -1,5 +1,5 @@
 {
- "started_at": "2026-10-09T06:30:28Z",
+ "started_at": "2026-10-14T22:47:08Z",
  "user_agent": "FoodPriceCompare/1.0 (structure research; reads existing archive captures only)",
  "note": "Structure evidence only. Archived prices are historical and are not used as current prices.",
  "wayback": {
@@ -37,6 +37,297 @@
    }
   ],
   "pages": [
+   {
+    "group": "taco-bell-",
+    "original": "https://www.doordash.com/store/taco-bell---live-mas-caf%C3%A9-irvine-1168597/",
+    "captured": "20261007071635",
+    "status": 200,
+    "bytes": 3228267,
+    "challenge": false,
+    "challenge_markers": [],
+    "title": "Order Taco Bell - Live Mas Caf\u00e9 - Irvine, CA Menu Delivery [Menu &amp; Prices] | Irvine - DoorDash",
+    "jsonld_types": [
+     "restaurant",
+     "postaladdress",
+     "geocoordinates",
+     "menu",
+     "review",
+     "person",
+     "aggregaterating",
+     "organization",
+     "menuitem",
+     "faqpage",
+     "question",
+     "answer",
+     "breadcrumblist",
+     "listitem"
+    ],
+    "restaurant_found": true,
+    "name": "Taco Bell - Live Mas Caf\u00e9",
+    "us_address": {
+     "city": "Irvine",
+     "state": "CA",
+     "zip": ""
+    },
+    "address_problem": null,
+    "menu_items": 75,
+    "priced_items": 35,
+    "currencies": [
+     "?"
+    ],
+    "sample_items": [
+     {
+      "name": "Chicken Quesadilla",
+      "price_cents": 853,
+      "currency": null
+     },
+     {
+      "name": "Cheese Quesadilla",
+      "price_cents": 731,
+      "currency": null
+     },
+     {
+      "name": "Crunchwrap Supreme\u00ae",
+      "price_cents": 828,
+      "currency": null
+     },
+     {
+      "name": "Nacho Cheese Doritos\u00ae Locos Tacos",
+      "price_cents": 450,
+      "currency": null
+     },
+     {
+      "name": "Beefy 5-Layer Burrito",
+      "price_cents": 633,
+      "currency": null
+     }
+    ],
+    "embedded_json": [
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 35025,
+      "parsed": "json",
+      "price_paths": [
+       {
+        "path": ".priceRange",
+        "sample": "$"
+       },
+       {
+        "path": ".hasMenu.hasMenuSection[][].hasMenuItem[].offers.price",
+        "sample": "$8.53"
+       }
+      ],
+      "menu_paths": [
+       ".hasMenu"
+      ]
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 227,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 32139,
+      "parsed": "json",
+      "price_paths": [
+       {
+        "path": ".hasMenuSection[][].hasMenuItem[].offers.price",
+        "sample": "$8.53"
+       }
+      ],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 1398,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 465,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": [
+       ".itemListElement[].item"
+      ]
+     }
+    ],
+    "counts": {
+     "\"price\"": 182,
+     "\\\"price\\\"": 231,
+     "displayPrice": 230,
+     "__next_f": 64,
+     "__APOLLO_STATE__": 0,
+     "__REACT_QUERY_STATE__": 0,
+     "application/ld+json": 5,
+     "MenuItem": 193,
+     "storeUuid": 0
+    },
+    "phrases": {
+     "estimated based on": "p from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across store, enter address for menu prices at your ne",
+     "prices are estimated": "ry or pickup from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across store, enter address for menu prices",
+     "may vary": "ailStore_schedule_delivery_callout_modal_primary_text\\\":\\\"Got it\\\",\\\"stores_pricing_disclosure_one\\\":\\\"Prices may vary from in-store or elsewhere for this location. Prices for delivery and pickup may vary.\\\",\\\"stores_pri",
+     "prices may differ": "trings_orderCheckInModal_secondaryActionText\\\":\\\"Cancel\\\",\\\"checkoutStrings_itemPriceMayDiffer_title\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\"",
+     "prices vary": "_q10\\\":\\\"How much do popular {{business}} menu items cost?\\\",\\\"seo_faq_business_redesign_a10\\\":\\\"{{business}} prices vary by location. To view the most up-to-date information, check out your nearest {{business}} restaura",
+     "menu prices": "tle\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverSubtitle\\\":\\\"Prices for menus are set directly by th",
+     "service fee": "ble, select store locations will not be awarded 5% credit\\nback in addition to $10 off promo. Fees (including service fee),\\ntaxes, and gratuity apply. $0 delivery fees and 10% off due to\\nreduced service fees only apply"
+    },
+    "price_contexts": [
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": " a Crunchy Taco, a Doritos Locos Taco, Cinnamon Twists, and a Medium Drink (Baja Midnight). (890-1180 cal.)\\\",\\\"displayPrice\\\":\\\"$$10.98\\\",\\\"displayStrikethroughPrice\\\":\\\"\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/im"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "ull,\\\"specialInstructions\\\":\\\"\\\",\\\"quickAddContext\\\":{\\\"__typename\\\":\\\"QuickAddContext\\\",\\\"isEligible\\\":false,\\\"price\\\":{\\\"__typename\\\":\\\"QuickAddMonetaryFields\\\",\\\"currency\\\":\\\"USD\\\",\\\"decimalPlaces\\\":2,\\\"displayString\\"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "ee-cheese blend wrapped inside a warm flour tortilla, with even more three-cheese blend grilled on the top.\\\",\\\"displayPrice\\\":\\\"$$7.67+\\\",\\\"displayStrikethroughPrice\\\":\\\"\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/im"
+     }
+    ],
+    "jsonld_shape": {
+     "blocks": [
+      {
+       "type": "Restaurant",
+       "keys": [
+        "@context",
+        "@type",
+        "address",
+        "aggregateRating",
+        "geo",
+        "hasMenu",
+        "image",
+        "name",
+        "priceRange",
+        "review",
+        "servesCuisine"
+       ],
+       "address": "{\"@type\": \"PostalAddress\", \"streetAddress\": \"4101 Campus Dr\", \"addressLocality\": \"Irvine\", \"addressRegion\": \"CA\", \"addressCountry\": \"US\"}",
+       "menu_where": "Restaurant.hasMenu",
+       "menu_keys": [
+        "@type",
+        "hasMenuSection"
+       ],
+       "section_nesting": "list of lists",
+       "sections": 4,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"Chicken Quesadilla\", \"description\": \"A large flour tortilla filled with a blend of mozzarella, pepperjack, and cheddar cheeses, grilled, marinated all-white-meat chicken, Creamy Jalape\u00f1o sauce, and grilled to perfection. (490 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$8.53\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"Cheese Quesadilla\", \"description\": \"A large flour tortilla filled with a blend of mozzarella, pepperjack, and cheddar cheeses, Creamy Jalape\u00f1o sauce, and grilled to perfection. Item is lacto-ovo, allowing for dairy & egg consumption. Preparation methods may lead to cross contact with meat. See ta.co for full details. (440 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$7.31\"}}"
+       ],
+       "name": "\"Taco Bell - Live Mas Caf\u00e9\"",
+       "servesCuisine": "[\"Coffee\", \"Beverages\", \"Soda\", \"iced coffee\", \"Energy Drinks\", \"Vegetarian\", \"Dinner\", \"Mexican\", \"Dessert\", \"Tex-Mex\", \"Fast Food\", \"Comfort Food\", \"Cafe\", \"L\u2026",
+       "priceRange": "\"$\""
+      },
+      {
+       "type": "Organization",
+       "keys": [
+        "@context",
+        "@type",
+        "name",
+        "sameAs",
+        "url"
+       ],
+       "url": "\"http://www.doordash.com\"",
+       "name": "\"DoorDash\""
+      },
+      {
+       "type": "Menu",
+       "keys": [
+        "@type",
+        "hasMenuSection"
+       ],
+       "menu_where": "top-level Menu block",
+       "menu_keys": [
+        "@type",
+        "hasMenuSection"
+       ],
+       "section_nesting": "list of lists",
+       "sections": 4,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"Chicken Quesadilla\", \"description\": \"A large flour tortilla filled with a blend of mozzarella, pepperjack, and cheddar cheeses, grilled, marinated all-white-meat chicken, Creamy Jalape\u00f1o sauce, and grilled to perfection. (490 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$8.53\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"Cheese Quesadilla\", \"description\": \"A large flour tortilla filled with a blend of mozzarella, pepperjack, and cheddar cheeses, Creamy Jalape\u00f1o sauce, and grilled to perfection. Item is lacto-ovo, allowing for dairy & egg consumption. Preparation methods may lead to cross contact with meat. See ta.co for full details. (440 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$7.31\"}}"
+       ]
+      },
+      {
+       "type": "FAQPage",
+       "keys": [
+        "@context",
+        "@type",
+        "mainEntity"
+       ]
+      },
+      {
+       "type": "BreadcrumbList",
+       "keys": [
+        "@context",
+        "@type",
+        "itemListElement"
+       ]
+      }
+     ],
+     "items_of_interest": [
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Crunchwrap Supreme\u00ae\", \"description\": \"A warm flour tortilla filled with seasoned beef, warm Nacho Cheese sauce, a crispy tostada shell, lettuce, diced tomatoes, and reduced-fat sour cream folded into our signature Crunchwrap form and grilled to go (530 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$8.28\"}}",
+       "displayed": [
+        "$$8.28",
+        "$$8.28",
+        "$$8.28"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Chalupa Supreme\", \"description\": \"Chewy fried chalupa bread filled with seasoned beef, sour cream, crispy lettuce, three-cheese blend and ripe tomatoes.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$7.67+\"}}",
+       "displayed": [
+        "$$7.67+",
+        "$$7.67+",
+        "$$7.67+"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Crunchwrap Supreme\u00ae\", \"description\": \"A warm flour tortilla filled with seasoned beef, warm Nacho Cheese sauce, a crispy tostada shell, lettuce, diced tomatoes, and reduced-fat sour cream folded into our signature Crunchwrap form and grilled to go (530 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$8.28\"}}",
+       "displayed": [
+        "$$8.28",
+        "$$8.28",
+        "$$8.28"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Chalupa Supreme\", \"description\": \"Chewy fried chalupa bread filled with seasoned beef, sour cream, crispy lettuce, three-cheese blend and ripe tomatoes.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$7.67+\"}}",
+       "displayed": [
+        "$$7.67+",
+        "$$7.67+",
+        "$$7.67+"
+       ]
+      }
+     ],
+     "offers": 182,
+     "offers_with_priceCurrency": 0,
+     "priceCurrency_values": [],
+     "currency_mentions": {
+      "\"currency\"": null,
+      "currencycode": ",\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\":{\\\"kind\\\":\\\"Name\\\",\\\"value\\\":\\\"currencyCode\\\"},\\\"arguments\\\":[],\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\"",
+      "usd": " {{senderName}}\\\",\\\"nativeGiftCard_preview_messageSection_amount\\\":\\\"{{amount}} USD\\\",\\\"nativeGiftCard_preview_messageSection_disclaimer\\\":\\\"Terms and Condition"
+     }
+    }
+   },
    {
     "group": "taco-bell-",
     "original": "https://www.doordash.com/store/taco-bell-1194579/",
@@ -630,311 +921,6 @@
        "displayed": [
         "$$7.55",
         "$$7.55"
-       ]
-      }
-     ],
-     "offers": 182,
-     "offers_with_priceCurrency": 0,
-     "priceCurrency_values": [],
-     "currency_mentions": {
-      "\"currency\"": null,
-      "currencycode": ",\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\":{\\\"kind\\\":\\\"Name\\\",\\\"value\\\":\\\"currencyCode\\\"},\\\"arguments\\\":[],\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\"",
-      "usd": " {{senderName}}\\\",\\\"nativeGiftCard_preview_messageSection_amount\\\":\\\"{{amount}} USD\\\",\\\"nativeGiftCard_preview_messageSection_disclaimer\\\":\\\"Terms and Condition"
-     }
-    }
-   },
-   {
-    "group": "taco-bell-",
-    "original": "https://www.doordash.com/store/taco-bell-1193056/",
-    "captured": "20260705164516",
-    "status": 200,
-    "bytes": 3153545,
-    "challenge": false,
-    "challenge_markers": [],
-    "title": "Order Taco Bell - Manhattan, KS Menu Delivery [Menu &amp; Prices] | Manhattan - DoorDash",
-    "jsonld_types": [
-     "restaurant",
-     "postaladdress",
-     "geocoordinates",
-     "menu",
-     "review",
-     "person",
-     "aggregaterating",
-     "organization",
-     "menuitem",
-     "faqpage",
-     "question",
-     "answer",
-     "breadcrumblist",
-     "listitem"
-    ],
-    "restaurant_found": true,
-    "name": "Taco Bell",
-    "us_address": {
-     "city": "Manhattan",
-     "state": "KS",
-     "zip": ""
-    },
-    "address_problem": null,
-    "menu_items": 62,
-    "priced_items": 55,
-    "currencies": [
-     "?"
-    ],
-    "sample_items": [
-     {
-      "name": "Beefy 5-Layer Burrito",
-      "price_cents": 487,
-      "currency": null
-     },
-     {
-      "name": "Chicken Quesadilla",
-      "price_cents": 706,
-      "currency": null
-     },
-     {
-      "name": "Crunchwrap Supreme\u00ae",
-      "price_cents": 694,
-      "currency": null
-     },
-     {
-      "name": "Steak Quesadilla",
-      "price_cents": 731,
-      "currency": null
-     },
-     {
-      "name": "Nachos BellGrande\u00ae",
-      "price_cents": 767,
-      "currency": null
-     }
-    ],
-    "embedded_json": [
-     {
-      "id": "",
-      "type": "application/ld+json",
-      "bytes": 32179,
-      "parsed": "json",
-      "price_paths": [
-       {
-        "path": ".priceRange",
-        "sample": "$$"
-       },
-       {
-        "path": ".hasMenu.hasMenuSection[][].hasMenuItem[].offers.price",
-        "sample": "$4.87"
-       }
-      ],
-      "menu_paths": [
-       ".hasMenu"
-      ]
-     },
-     {
-      "id": "",
-      "type": "application/ld+json",
-      "bytes": 227,
-      "parsed": "json",
-      "price_paths": [],
-      "menu_paths": []
-     },
-     {
-      "id": "",
-      "type": "application/ld+json",
-      "bytes": 29156,
-      "parsed": "json",
-      "price_paths": [
-       {
-        "path": ".hasMenuSection[][].hasMenuItem[].offers.price",
-        "sample": "$4.87"
-       }
-      ],
-      "menu_paths": []
-     },
-     {
-      "id": "",
-      "type": "application/ld+json",
-      "bytes": 1281,
-      "parsed": "json",
-      "price_paths": [],
-      "menu_paths": []
-     },
-     {
-      "id": "",
-      "type": "application/ld+json",
-      "bytes": 447,
-      "parsed": "json",
-      "price_paths": [],
-      "menu_paths": [
-       ".itemListElement[].item"
-      ]
-     }
-    ],
-    "counts": {
-     "\"price\"": 182,
-     "\\\"price\\\"": 255,
-     "displayPrice": 254,
-     "__next_f": 64,
-     "__APOLLO_STATE__": 0,
-     "__REACT_QUERY_STATE__": 0,
-     "application/ld+json": 5,
-     "MenuItem": 199,
-     "storeUuid": 0
-    },
-    "phrases": {
-     "estimated based on": "p from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across store, enter address for menu prices at your ne",
-     "prices are estimated": "ry or pickup from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across store, enter address for menu prices",
-     "may vary": "ailStore_schedule_delivery_callout_modal_primary_text\\\":\\\"Got it\\\",\\\"stores_pricing_disclosure_one\\\":\\\"Prices may vary from in-store or elsewhere for this location. Prices for delivery and pickup may vary.\\\",\\\"stores_pri",
-     "prices may differ": "trings_orderCheckInModal_secondaryActionText\\\":\\\"Cancel\\\",\\\"checkoutStrings_itemPriceMayDiffer_title\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\"",
-     "prices vary": "_q10\\\":\\\"How much do popular {{business}} menu items cost?\\\",\\\"seo_faq_business_redesign_a10\\\":\\\"{{business}} prices vary by location. To view the most up-to-date information, check out your nearest {{business}} restaura",
-     "menu prices": "tle\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverSubtitle\\\":\\\"Prices for menus are set directly by th",
-     "service fee": "ble, select store locations will not be awarded 5% credit\\nback in addition to $10 off promo. Fees (including service fee),\\ntaxes, and gratuity apply. $0 delivery fees and 10% off due to\\nreduced service fees only apply"
-    },
-    "price_contexts": [
-     {
-      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
-      "context": "ta street chalupas, 1 Cheesy Bean and Rice Burrito, 1 Cinnamon Twists, and 1 Medium Drink. (1290-1570 cal.)\\\",\\\"displayPrice\\\":\\\"$$10.98\\\",\\\"displayStrikethroughPrice\\\":\\\"\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/im"
-     },
-     {
-      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
-      "context": "ull,\\\"specialInstructions\\\":\\\"\\\",\\\"quickAddContext\\\":{\\\"__typename\\\":\\\"QuickAddContext\\\",\\\"isEligible\\\":false,\\\"price\\\":{\\\"__typename\\\":\\\"QuickAddMonetaryFields\\\",\\\"currency\\\":\\\"USD\\\",\\\"decimalPlaces\\\":2,\\\"displayString\\"
-     },
-     {
-      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
-      "context": "n\\\":\\\"Chicken Chalupa Supreme, Beefy 5-Layer Burrito, Crunchy Taco, Twists, medium drink. (1150-1430 cal.)\\\",\\\"displayPrice\\\":\\\"$$8.54\\\",\\\"displayStrikethroughPrice\\\":\\\"\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/ima"
-     }
-    ],
-    "jsonld_shape": {
-     "blocks": [
-      {
-       "type": "Restaurant",
-       "keys": [
-        "@context",
-        "@type",
-        "address",
-        "aggregateRating",
-        "geo",
-        "hasMenu",
-        "image",
-        "name",
-        "priceRange",
-        "review",
-        "servesCuisine"
-       ],
-       "address": "{\"@type\": \"PostalAddress\", \"streetAddress\": \"North Pointe Drive\", \"addressLocality\": \"Manhattan\", \"addressRegion\": \"KS\", \"addressCountry\": \"US\"}",
-       "menu_where": "Restaurant.hasMenu",
-       "menu_keys": [
-        "@type",
-        "hasMenuSection"
-       ],
-       "section_nesting": "list of lists",
-       "sections": 7,
-       "first_section_keys": [
-        "hasMenuItem",
-        "name"
-       ],
-       "first_items": [
-        "{\"@type\": \"MenuItem\", \"name\": \"Beefy 5-Layer Burrito\", \"description\": \"A warm flour tortilla filled with seasoned beef, refried beans, reduced-fat sour cream, and shredded cheddar cheese with a layer of warm Nacho Cheese sauce wrapped around it. (490 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$4.87\"}}",
-        "{\"@type\": \"MenuItem\", \"name\": \"Chicken Quesadilla\", \"description\": \"A large flour tortilla filled with a blend of mozzarella, pepperjack, and cheddar cheeses, grilled, marinated all-white-meat chicken, Creamy Jalape\u00f1o sauce, and grilled to perfection. (490 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$7.06\"}}"
-       ],
-       "name": "\"Taco Bell\"",
-       "servesCuisine": "[\"Mexican\", \"Fast Food\", \"Comfort Food\", \"Chicken\", \"Lunch\", \"Tacos\", \"Nachos\", \"Quesadillas\", \"Beef\", \"Spicy\", \"Potato\", \"Soda\", \"Vegetarian\", \"Dinner\", \"Desse\u2026",
-       "priceRange": "\"$$\""
-      },
-      {
-       "type": "Organization",
-       "keys": [
-        "@context",
-        "@type",
-        "name",
-        "sameAs",
-        "url"
-       ],
-       "url": "\"http://www.doordash.com\"",
-       "name": "\"DoorDash\""
-      },
-      {
-       "type": "Menu",
-       "keys": [
-        "@type",
-        "hasMenuSection"
-       ],
-       "menu_where": "top-level Menu block",
-       "menu_keys": [
-        "@type",
-        "hasMenuSection"
-       ],
-       "section_nesting": "list of lists",
-       "sections": 7,
-       "first_section_keys": [
-        "hasMenuItem",
-        "name"
-       ],
-       "first_items": [
-        "{\"@type\": \"MenuItem\", \"name\": \"Beefy 5-Layer Burrito\", \"description\": \"A warm flour tortilla filled with seasoned beef, refried beans, reduced-fat sour cream, and shredded cheddar cheese with a layer of warm Nacho Cheese sauce wrapped around it. (490 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$4.87\"}}",
-        "{\"@type\": \"MenuItem\", \"name\": \"Chicken Quesadilla\", \"description\": \"A large flour tortilla filled with a blend of mozzarella, pepperjack, and cheddar cheeses, grilled, marinated all-white-meat chicken, Creamy Jalape\u00f1o sauce, and grilled to perfection. (490 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$7.06\"}}"
-       ]
-      },
-      {
-       "type": "FAQPage",
-       "keys": [
-        "@context",
-        "@type",
-        "mainEntity"
-       ]
-      },
-      {
-       "type": "BreadcrumbList",
-       "keys": [
-        "@context",
-        "@type",
-        "itemListElement"
-       ]
-      }
-     ],
-     "items_of_interest": [
-      {
-       "item": "{\"@type\": \"MenuItem\", \"name\": \"Crunchwrap Supreme\u00ae\", \"description\": \"A warm flour tortilla filled with seasoned beef, warm Nacho Cheese sauce, a crispy tostada shell, lettuce, diced tomatoes, and reduced-fat sour cream folded into our signature Crunchwrap form and grilled to go (530 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$6.94\"}}",
-       "displayed": [
-        "$$6.94",
-        "$$6.94",
-        "$$6.94"
-       ]
-      },
-      {
-       "item": "{\"@type\": \"MenuItem\", \"name\": \"Chalupa Supreme\", \"description\": \"A warm-and-flaky flatbread shell filled with seasoned beef, lettuce, diced tomaotes, a blend of mozzarella, pepperjack, and cheddar cheeses, and reduced-fat sour cream. (350 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$6.09+\"}}",
-       "displayed": [
-        "$$6.09+",
-        "$$6.09+",
-        "$$6.09+"
-       ]
-      },
-      {
-       "item": "{\"@type\": \"MenuItem\", \"name\": \"Crunchwrap Supreme\u00ae Combo\", \"description\": \"Includes a Crunchwrap Supreme\u00ae, a Crunchy Taco, and a Large fountain drink. (700-1120 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$10.60\"}}",
-       "displayed": [
-        "$$10.60",
-        "$$10.60"
-       ]
-      },
-      {
-       "item": "{\"@type\": \"MenuItem\", \"name\": \"Crunchwrap Supreme\u00ae\", \"description\": \"A warm flour tortilla filled with seasoned beef, warm Nacho Cheese sauce, a crispy tostada shell, lettuce, diced tomatoes, and reduced-fat sour cream folded into our signature Crunchwrap form and grilled to go (530 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$6.94\"}}",
-       "displayed": [
-        "$$6.94",
-        "$$6.94",
-        "$$6.94"
-       ]
-      },
-      {
-       "item": "{\"@type\": \"MenuItem\", \"name\": \"Black Bean Crunchwrap Supreme\u00ae\", \"description\": \"A warm flour tortilla filled with slow-simmered black beans, warm Nacho Cheese sauce, a crispy tostada shell, lettuce, diced tomatoes, and reduced-fat sour cream folded into our signature Crunchwrap form and grilled to go. Item is lacto-ovo, allowing for dairy & egg consumption. Preparation methods may lead to cross contact with meat. See ta.co for full details. (520 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$6.70\"}}",
-       "displayed": [
-        "$$6.70",
-        "$$6.70"
-       ]
-      },
-      {
-       "item": "{\"@type\": \"MenuItem\", \"name\": \"Crunchwrap Supreme\u00ae\", \"description\": \"A warm flour tortilla filled with seasoned beef, warm Nacho Cheese sauce, a crispy tostada shell, lettuce, diced tomatoes, and reduced-fat sour cream folded into our signature Crunchwrap form and grilled to go (530 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$6.94\"}}",
-       "displayed": [
-        "$$6.94",
-        "$$6.94",
-        "$$6.94"
        ]
       }
      ],
@@ -4129,7 +4115,7 @@
   {
    "url": "https://web.archive.org/cdx/search/cdx?url=www.doordash.com%2Fstore%2Ftaco-bell-&matchType=prefix&from=2025&output=json&fl=timestamp,original,statuscode,mimetype,length&filter=statuscode:200&filter=mimetype:text/html&collapse=urlkey&limit=300",
    "status": 200,
-   "bytes": 31441
+   "bytes": 31469
   },
   {
    "url": "https://web.archive.org/cdx/search/cdx?url=www.doordash.com%2Fstore%2Fmcdonalds-&matchType=prefix&from=2025&output=json&fl=timestamp,original,statuscode,mimetype,length&filter=statuscode:200&filter=mimetype:text/html&collapse=urlkey&limit=300",
@@ -4153,13 +4139,13 @@
   },
   {
    "url": "https://web.archive.org/cdx/search/cdx?url=www.doordash.com%2Fstore%2F24633898%2F&output=json&fl=timestamp,original,statuscode,mimetype,length&filter=statuscode:200&filter=mimetype:text/html&limit=20",
-   "status": 503,
-   "bytes": 11832
-  },
-  {
-   "url": "https://web.archive.org/cdx/search/cdx?url=www.doordash.com%2Fstore%2F24633898%2F&output=json&fl=timestamp,original,statuscode,mimetype,length&filter=statuscode:200&filter=mimetype:text/html&limit=20",
    "status": 200,
    "bytes": 150
+  },
+  {
+   "url": "https://web.archive.org/web/20261007071635id_/https://www.doordash.com/store/taco-bell---live-mas-caf%C3%A9-irvine-1168597/",
+   "status": 200,
+   "bytes": 3230443
   },
   {
    "url": "https://web.archive.org/web/20260724233050id_/https://www.doordash.com/store/taco-bell-1194579/",
@@ -4170,11 +4156,6 @@
    "url": "https://web.archive.org/web/20260722012438id_/https://www.doordash.com/store/taco-bell-1194846/",
    "status": 200,
    "bytes": 3131597
-  },
-  {
-   "url": "https://web.archive.org/web/20260705164516id_/https://www.doordash.com/store/taco-bell-1193056/",
-   "status": 200,
-   "bytes": 3155379
   },
   {
    "url": "https://web.archive.org/web/20260726012051id_/https://www.doordash.com/store/mcdonalds-1140158/",
@@ -4258,5 +4239,5 @@
    "skipped": "robots.txt disallows"
   }
  ],
- "finished_at": "2026-10-09T06:32:42Z"
+ "finished_at": "2026-10-14T22:48:57Z"
 }
