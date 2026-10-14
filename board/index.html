@@ -175,6 +175,11 @@ tr.details td { background: var(--sunken); }
 .pcard ul { margin: 0; padding-left: 18px; display: grid; gap: 5px; font-size: .88rem; }
 .alt th:first-child, .alt td:first-child { min-width: 190px; }
 .fit { font-weight: 700; font-size: .78rem; white-space: nowrap; }
+.closest { border: 1px solid var(--line); border-radius: var(--r); padding: 12px 14px; margin: 10px 0; background: var(--surface); }
+.closest-title { margin: 0 0 4px; font-weight: 700; }
+.closest ul { list-style: none; margin: 8px 0 0; padding: 0; }
+.closest li { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; padding: 7px 0; border-top: 1px dashed var(--line); }
+.closest li .what { flex: 1 1 220px; min-width: 0; overflow-wrap: anywhere; }
 .split { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
 @media (max-width: 900px) { .split { grid-template-columns: minmax(0, 1fr); } }
 .panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 16px; display: grid; gap: 10px; align-content: start; }
@@ -267,6 +272,7 @@ tr.details td { background: var(--sunken); }
       </div>
       <div id="winner"></div>
       <p class="coverage" id="coverage"></p>
+      <div id="closest"></div>
       <div class="tabs" role="tablist" id="tabs">
         <button role="tab" data-tab="verified" aria-selected="true">Verified matches<span class="n" id="nVerified">0</span></button>
         <button role="tab" data-tab="uncertain" aria-selected="false">Needs confirmation<span class="n" id="nUncertain">0</span></button>
@@ -668,9 +674,14 @@ tr.details td { background: var(--sunken); }
   ];
   function numKey(n) { return String(Number(n)); }
 
+  // Nutrition notes are not part of a product name: "10 Chicken McNuggets
+  // [490-630 Cals]" (archived DoorDash pages), "Chalupa Supreme (350 cal.)".
+  var CAL_NOTE = /[\[(]\s*\d[\d.,]*(?:\s*[-–—\/]\s*\d[\d.,]*)?\s*(?:k?cals?|calories)\b\.?\s*[\])]|\s[-–—·|]?\s*\d[\d.,]*(?:\s*[-–—\/]\s*\d[\d.,]*)?\s*(?:k?cals?|calories)\b\.?/gi;
+  function stripNotes(s) { return String(s == null ? '' : s).replace(CAL_NOTE, ' '); }
+
   // Pull size / piece-count attributes out of a name; the rest is the product.
   function extractAttrs(s) {
-    var t = ' ' + normText(s) + ' ';
+    var t = ' ' + normText(stripNotes(s)) + ' ';
     var a = { sizeWord: null, oz: null, inch: null, count: null, conflicts: [] };
     function set(k, v) { if (a[k] !== null && a[k] !== v) a.conflicts.push(k + ': ' + a[k] + ' vs ' + v); else a[k] = v; }
     t = t.replace(/\bhalf (?:a )?dozen\b/g, function () { set('count', 6); return ' '; });
@@ -809,6 +820,42 @@ tr.details td { background: var(--sunken); }
   }
   var REMOVAL_RE = /^(no|without|hold|remove|minus)\b/;
 
+  // Words that make a listing another product or another version of it:
+  // bundles and portions, product forms and tiers, additions and removals,
+  // dietary and preparation versions. A name that differs by one of these, or
+  // by a number, is never the same item. A difference of one or two other
+  // words ("Pizza", "World Famous", "Chicken") only needs the user's
+  // confirmation: such a listing is never verified on its own.
+  var VARIANT_WORDS = setOf(('meal meals combo combos bundle bundles box boxes bucket buckets platter platters party catering tray trays ' +
+    'feast sampler deal deals value duo trio double triple quad dbl half mini minis jr junior side sides snack bites slice slices whole ' +
+    'supreme deluxe loaded ultimate premium jumbo big giant bowl salad wrap quesadilla nachos melt ' +
+    'and with add extra no without plus ' +
+    'gf gluten free diet zero decaf vegan veggie vegetarian plant impossible beyond keto lite light low sugar boneless bone ' +
+    'spicy hot mild crispy grilled fried baked blackened breakfast').split(' '));
+  // Character-trigram Dice similarity of two names (0..1), used only to rank
+  // suggestions, never to decide a match.
+  var CLOSEST_MIN = 0.3;
+  function trigrams(x) {
+    var t = '  ' + normText(stripNotes(x)) + ' ', g = {};
+    for (var i = 0; i + 3 <= t.length; i++) { var k = t.substr(i, 3); g[k] = (g[k] || 0) + 1; }
+    return g;
+  }
+  function similarity(a, b) {
+    var ga = trigrams(a), gb = trigrams(b), inter = 0, n = 0, k;
+    for (k in ga) { n += ga[k]; if (gb[k]) inter += Math.min(ga[k], gb[k]); }
+    for (k in gb) n += gb[k];
+    return n ? 2 * inter / n : 0;
+  }
+  function nameDiff(oSet, cSet) {
+    var extra = keys(cSet).filter(function (t) { return !oSet[t]; });
+    var missing = keys(oSet).filter(function (t) { return !cSet[t]; });
+    var shared = keys(cSet).filter(function (t) { return oSet[t] && t.length >= 3; });
+    var diff = extra.concat(missing);
+    var hard = diff.filter(function (t) { return VARIANT_WORDS[t] || /\d/.test(t); });
+    var soft = shared.length > 0 && !(extra.length && missing.length) && diff.length > 0 && diff.length <= 2 && !hard.length;
+    return { extra: extra, missing: missing, shared: shared, hard: hard, soft: soft };
+  }
+
   function matchItem(oi, cand, ctx) {
     ctx = ctx || {};
     var reasons = [];
@@ -823,7 +870,18 @@ tr.details td { background: var(--sunken); }
       oi.size.custom.forEach(function (t) { delete cBase[t]; });
       cAttr.customMatched = true;
     }
-    var names = [{ attrs: oi.nameAttrs, alias: null }].concat(oi.aliases.map(function (a) { return { attrs: extractAttrs(a), alias: a }; }));
+    // A bare leading number ("10 Chicken McNuggets [490-630 Cals]") is a piece
+    // count only when it equals the count the other side states ("7 Layer
+    // Burrito" stays a name).
+    var oCount = oi.count, leadNote = null;
+    var lead = function (toks) { return toks.length > 1 && /^\d{1,3}$/.test(toks[0]) ? +toks[0] : null; };
+    if (cAttr.count === null && oCount !== null && lead(cAttr.tokens) === oCount) {
+      delete cBase[cAttr.tokens[0]]; cAttr.count = oCount; leadNote = 'the listing states it as a leading number';
+    }
+    var oLead = oCount === null && cAttr.count !== null && lead(oi.nameAttrs.tokens) === cAttr.count;
+    if (oLead) { oCount = cAttr.count; leadNote = 'your item name states it as a leading number'; }
+    var names = [{ attrs: oLead ? { tokens: oi.nameAttrs.tokens.slice(1) } : oi.nameAttrs, alias: null }]
+      .concat(oi.aliases.map(function (a) { return { attrs: extractAttrs(a), alias: a }; }));
     var productOk = false, flavorInName = false, usedAlias = null;
     var fT = setOf(oi.flavorTokens);
     for (var i = 0; i < names.length && !productOk; i++) {
@@ -836,15 +894,25 @@ tr.details td { background: var(--sunken); }
         if (eqSet(cBase, u)) { productOk = true; flavorInName = true; usedAlias = names[i].alias; }
       }
     }
-    var result = { status: 'rejected', label: label, reasons: reasons, baseCents: null, modifierCents: null, unitCents: null, lineCents: null, availability: cand.availability || 'unknown', promotions: cand.promotions || [], section: cand.section || null, nearMiss: false };
+    var result = { status: 'rejected', label: label, reasons: reasons, baseCents: null, modifierCents: null, unitCents: null, lineCents: null, availability: cand.availability || 'unknown', promotions: cand.promotions || [], section: cand.section || null, nearMiss: false,
+                   listedCents: Number.isInteger(cand.price_cents) ? cand.price_cents : null, nameDiff: null };
     if (!productOk) {
-      var ob = setOf(oi.nameAttrs.tokens), uu = Object.assign({}, ob, fT);
-      var extra = keys(cBase).filter(function (t) { return !uu[t]; }), missing = keys(ob).filter(function (t) { return !cBase[t]; });
-      result.nearMiss = keys(cBase).some(function (t) { return ob[t]; });
-      fail('Different product name' + (extra.length ? '; candidate adds "' + extra.join(' ') + '"' : '') + (missing.length ? '; candidate lacks "' + missing.join(' ') + '"' : '') + '. Similar names do not prove equivalence.');
-      return result;
-    }
-    add('ok', usedAlias ? 'Product name matches via your confirmed alias "' + usedAlias + '"' : 'Product name matches (case/punctuation normalized)');
+      var ob = setOf(names[0].attrs.tokens), uu = Object.assign({}, ob, fT);
+      // A flavor the order names is part of the comparison: "Lemon Pepper
+      // Wings" is not a wording difference from Wings + flavor Buffalo.
+      var nd = nameDiff(uu, cBase);
+      result.nameDiff = nd;
+      if (!nd.soft) {
+        var extra = keys(cBase).filter(function (t) { return !uu[t]; }), missing = keys(ob).filter(function (t) { return !cBase[t]; });
+        result.nearMiss = keys(cBase).some(function (t) { return ob[t]; });
+        fail('Different product name' + (extra.length ? '; candidate adds "' + extra.join(' ') + '"' : '') + (missing.length ? '; candidate lacks "' + missing.join(' ') + '"' : '') +
+             (nd.hard.length ? '; "' + nd.hard.join('", "') + '" makes it a different item' : '') + '. Similar names do not prove equivalence.');
+        return result;
+      }
+      flavorInName = oi.flavorTokens.length > 0 && oi.flavorTokens.every(function (t) { return cBase[t]; });
+      warn('Name differs only by "' + nd.extra.concat(nd.missing).join(' ') + '" (the listing ' + (nd.extra.length ? 'adds' : 'lacks') +
+           ' it). Confirm it is the same item, or confirm the listing once as a same-item name.');
+    } else add('ok', usedAlias ? 'Product name matches via your confirmed alias "' + usedAlias + '"' : 'Product name matches (case/punctuation normalized)');
 
     var cur = String(cand.currency || ctx.obsCurrency || '').toUpperCase();
     if (!cur || cur === '?') warn('Price currency not published; USD cannot be confirmed');
@@ -852,8 +920,8 @@ tr.details td { background: var(--sunken); }
 
     var sz = compareSize(oi.size, cAttr);
     if (sz.level === 'fail') fail(sz.text); else if (sz.level === 'warn') warn(sz.text); else add('ok', sz.text);
-    var cc = compareCount(oi.count, cAttr.count);
-    if (cc.level === 'fail') fail(cc.text); else if (cc.level === 'warn') warn(cc.text); else add('ok', cc.text);
+    var cc = compareCount(oCount, cAttr.count);
+    if (cc.level === 'fail') fail(cc.text); else if (cc.level === 'warn') warn(cc.text); else add('ok', cc.text + (leadNote ? '; ' + leadNote : ''));
     if (cAttr.conflicts.length) warn('Candidate name has conflicting attributes (' + cAttr.conflicts.join('; ') + ')');
 
     var modCents = 0, modKnown = true, chosen = [];
@@ -984,7 +1052,7 @@ tr.details td { background: var(--sunken); }
         });
         var exact = res.filter(function (r) { return r.status === 'exact'; }).sort(function (a, b) { return a.lineCents - b.lineCents; });
         store.items.push({
-          oi: oi, exact: exact,
+          oi: oi, exact: exact, all: res,
           uncertain: res.filter(function (r) { return r.status === 'uncertain'; }),
           near: res.filter(function (r) { return r.status === 'rejected' && r.nearMiss; }).slice(0, 5)
         });
@@ -1075,6 +1143,36 @@ tr.details td { background: var(--sunken); }
       });
       if (pool.length) winner = { kind: 'item', row: pool[0], ties: pool.filter(function (r) { return (rankKey ? r[rankKey] === pool[0][rankKey] : r.lineCents === pool[0].lineCents); }).length - 1 };
     }
+    // Closest listings for an order item that no checked store lists exactly:
+    // listings whose name differs only in wording (never by a word or number
+    // that makes another item), ranked by text similarity. They are
+    // suggestions: one becomes a match only when the user confirms it as a
+    // same-item name, and size, count, currency and price are still checked.
+    var closest = prep.items.map(function (oi, i) {
+      var out = { orderItemIndex: i, orderItemName: oi.name, listings: [] };
+      if (!oi.name || stores.some(function (s) { return s.items[i].exact.length; })) return out;
+      var by = {};
+      stores.forEach(function (s) {
+        s.items[i].all.forEach(function (r) {
+          var nd = r.nameDiff;
+          if (!nd || nd.hard.length || !nd.shared.length || (nd.soft && r.status === 'rejected')) return;
+          var score = similarity(oi.name, r.label);
+          if (score < CLOSEST_MIN) return;
+          var key = tokens(stripNotes(r.label)).join(' ');
+          var e = by[key] || (by[key] = { label: r.label, score: score, stores: 0, minCents: null, maxCents: null,
+                                          why: nd.soft ? 'name differs only by "' + nd.extra.concat(nd.missing).join(' ') + '"' : 'worded differently' });
+          e.stores++;
+          if (Number.isInteger(r.listedCents)) {
+            e.minCents = e.minCents === null ? r.listedCents : Math.min(e.minCents, r.listedCents);
+            e.maxCents = e.maxCents === null ? r.listedCents : Math.max(e.maxCents, r.listedCents);
+          }
+        });
+      });
+      out.listings = keys(by).map(function (k) { return by[k]; })
+        .sort(function (a, b) { return b.score - a.score || b.stores - a.stores || a.label.localeCompare(b.label); }).slice(0, 5);
+      return out;
+    });
+
     var exhaustive = opts.exhaustiveEvidence === true;
     var byPlatform = {};
     stores.forEach(function (s) {
@@ -1092,7 +1190,7 @@ tr.details td { background: var(--sunken); }
     var staleVerified = (multi ? baskets.filter(function (b) { return b.status === 'complete' && b.stale; }).length
                                : rows.verified.filter(function (r) { return r.stale; }).length);
     return {
-      version: VERSION, mode: mode, multi: multi, prep: prep, rows: rows, baskets: baskets, winner: winner,
+      version: VERSION, mode: mode, multi: multi, prep: prep, rows: rows, baskets: baskets, winner: winner, closest: closest,
       winnerLabel: label, rankBy: rankKey ? 'checkout' : 'subtotal',
       coverage: {
         checkedLocations: checked, byPlatform: byPlatform, excluded: ex, duplicates: dd.duplicates.length,
@@ -1510,6 +1608,7 @@ tr.details td { background: var(--sunken); }
     evaluate: evaluate, parseGrubhubUrl: parseGrubhubUrl, parseReceipt: parseReceipt, safeUrl: safeUrl,
     validateImport: validateImport, parseCSV: parseCSV, toCSV: toCSV, CSV_COLUMNS: CSV_COLUMNS,
     storeIdFromUrl: storeIdFromUrl, parsePriceLines: parsePriceLines, enteredObservation: enteredObservation,
+    stripNotes: stripNotes, nameDiff: nameDiff, similarity: similarity,
     looseNorm: looseNorm, searchScope: searchScope, scopeCovers: scopeCovers, inSnapshotScope: inSnapshotScope,
     snapshotObservations: snapshotObservations,
     demoObservations: demoObservations, demoOrder: demoOrder
@@ -1675,6 +1774,7 @@ tr.details td { background: var(--sunken); }
         h('div', { class: 'row2' },
           inputField('it' + i + '_qty', 'Quantity', it.quantity, upd('quantity'), { inputmode: 'numeric' }),
           inputField('it' + i + '_gh', 'Grubhub item subtotal ($)', it.ghSubtotal, upd('ghSubtotal'), { inputmode: 'decimal', placeholder: 'qty × price' })),
+        inputField('it' + i + '_alias', 'Same item, other names you confirmed (comma-separated)', it.aliases, upd('aliases'), { placeholder: 'Only names you know are the identical item' }),
         hint));
       itemHint(it, i);
     });
@@ -1804,7 +1904,33 @@ tr.details td { background: var(--sunken); }
   }
   function run() {
     if (S.runAuto) { pickRun(); renderMeta(); }
-    EV = evalRun(S.run); renderWinner(); renderTabs();
+    EV = evalRun(S.run); renderWinner(); renderClosest(); renderTabs();
+  }
+  // Listings an order item may mean when no checked store lists it exactly.
+  // Confirming one makes it a same-item name; it is then checked like any
+  // listing (size, count, currency, price).
+  function confirmAlias(idx, label) {
+    var it = S.order.items[idx]; if (!it) return;
+    var name = String(label).replace(/[,;\n]+/g, ' ').replace(/\s+/g, ' ').trim();
+    var have = String(it.aliases || '').split(/[,;\n]/).map(function (x) { return x.trim(); }).filter(Boolean);
+    if (have.indexOf(name) < 0) have.push(name);
+    it.aliases = have.join(', ');
+    var f = $('it' + idx + '_alias'); if (f) f.value = it.aliases;
+    S.preset = null; markPresets(); evaluate();
+  }
+  function renderClosest() {
+    var boxes = (EV.closest || []).filter(function (c) { return c.listings.length; }).map(function (c) {
+      return h('div', { class: 'closest', 'data-item': String(c.orderItemIndex) },
+        h('p', { class: 'closest-title' }, 'No checked store lists “' + c.orderItemName + '” exactly. Closest listings:'),
+        h('p', { class: 'small muted' }, 'Suggestions ranked by name similarity, never matches on their own. If one is the same item, confirm it; it is then checked like any listing (size, count, currency, price).'),
+        h('ul', null, c.listings.map(function (l) {
+          var price = l.minCents === null ? 'no price published' : l.minCents === l.maxCents ? E.formatCents(l.minCents) : E.formatCents(l.minCents) + '–' + E.formatCents(l.maxCents);
+          return h('li', null,
+            h('span', { class: 'what' }, h('strong', null, l.label), ' · ' + l.stores + ' store' + (l.stores === 1 ? '' : 's') + ' · ' + price + ' · ' + l.why),
+            h('button', { class: 'btn', type: 'button', on: { click: function () { confirmAlias(c.orderItemIndex, l.label); } } }, 'Same item'));
+        })));
+    });
+    setKids($('closest'), boxes);
   }
   function renderWinner() {
     var box = $('winner'), ev = EV;

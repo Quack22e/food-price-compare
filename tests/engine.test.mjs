@@ -90,9 +90,11 @@ test('flavor handling', () => {
   assert.equal(viaAddon.status, 'exact');
   assert.equal(viaAddon.unitCents, 1349);
   assert.equal(match1({ name: 'Wings', flavor: 'Buffalo', count: '10' }, item('10 pc Wings', 1299)).status, 'uncertain');
+  // No flavor in the order: "Buffalo Wings" may be the same item named with its
+  // sauce, so it needs confirmation; it is never verified on its own.
   const noFlavor = match1({ name: 'Wings' }, item('Buffalo Wings', 1299));
-  assert.equal(noFlavor.status, 'rejected');
-  assert.equal(noFlavor.nearMiss, true);
+  assert.equal(noFlavor.status, 'uncertain');
+  assert.match(noFlavor.reasons.map(r => r.text).join(' '), /Name differs only by "buffalo"/);
 });
 
 test('modifiers, removals, quantities and missing charges', () => {
@@ -421,4 +423,82 @@ test('the committed real snapshot validates as snapshot observations, scoped per
     assert.equal(E.inSnapshotScope(nug, [{ name: 'Big Mac', aliases: 'McNuggets' }]), true);
   }
   assert.deepEqual(E.snapshotObservations({ searches: [{ label: 'x', observations: [{ platform: 'ubereats' }] }] }).rejected.length, 1);
+});
+
+test('name cleanup: calorie notes are not part of the product name', () => {
+  for (const [a, b] of [['Chalupa Supreme', 'Chalupa Supreme (350 cal.)'], ['Big Mac', 'Big Mac [560.0 Cals]'],
+    ['Crunchwrap Supreme', 'Crunchwrap Supreme 530 Calories'], ['Fries', 'Fries (230-490 kcal)'], ['Cookie', 'Cookie - 160 Cal']]) {
+    assert.equal(match1({ name: a }, item(b, 500)).status, 'exact', b);
+  }
+  // Words that only start like "cal" stay part of the name.
+  assert.equal(E.stripNotes('12 Calzone'), '12 Calzone');
+  assert.equal(match1({ name: 'Calamari' }, item('Calamari', 900)).status, 'exact');
+  assert.notEqual(match1({ name: 'Calzone' }, item('Calamari', 900)).status, 'exact');
+});
+
+test('a bare leading number is the piece count only when it equals the stated count', () => {
+  // Archived DoorDash pages: "10 Chicken McNuggets [490-630 Cals]".
+  const r = match1({ name: '10 pc. Chicken McNuggets' }, item('10 Chicken McNuggets [490-630 Cals]', 549));
+  assert.equal(r.status, 'exact');
+  assert.match(r.reasons.map(x => x.text).join(' '), /Piece count matches \(10\); the listing states it as a leading number/);
+  assert.equal(match1({ name: '10 Chicken McNuggets' }, item('10 pc. Chicken McNuggets®', 549)).status, 'exact');
+  assert.equal(match1({ name: '10 pc. Chicken McNuggets' }, item('20 Chicken McNuggets', 949)).status, 'rejected');
+  assert.equal(match1({ name: '10 Chicken McNuggets' }, item('20 pc. Chicken McNuggets', 949)).status, 'rejected');
+  assert.equal(match1({ name: 'Burrito' }, item('7 Layer Burrito', 449)).status, 'rejected');
+  assert.equal(match1({ name: '7 Layer Burrito' }, item('7 Layer Burrito', 449)).status, 'exact');
+});
+
+test('name differences: variant words reject, other small differences only need confirmation', () => {
+  const st = (o, c) => match1(typeof o === 'string' ? { name: o } : o, item(c, 700));
+  // A word or number that makes another item: never the same.
+  for (const [o, c, w] of [['Crunchwrap Supreme', 'Crunchwrap Supreme Combo', 'combo'], ['10 pc. Chicken McNuggets', '10 pc. Chicken McNuggets® Meal', 'meal'],
+    ['Chalupa', 'Chalupa Supreme', 'supreme'], ['McChicken', 'Spicy McChicken', 'spicy'], ['Big Mac', 'Double Big Mac', 'double'],
+    ['Wings', 'Boneless Wings', 'boneless'], ['Burrito', 'Burrito Bowl', 'bowl'], ['Small - Deep Dish Margherita', 'Small Deep Dish Margherita - GF', 'gf'],
+    ['Taco', '2 Tacos', '2']]) {
+    const r = st(o, c);
+    assert.equal(r.status, 'rejected', c);
+    if (/\d/.test(w)) continue;
+    assert.match(r.reasons.map(x => x.text).join(' '), new RegExp('"' + w + '" makes it a different item'), c);
+  }
+  // One or two other words: needs confirmation, never verified on its own.
+  for (const [o, c, w] of [['Small - Deep Dish Margherita', 'Small Deep Dish Margherita Pizza', 'pizza'], ['Large Fries', 'World Famous Fries® - Large', 'world famous'],
+    ['Burrito Bowl', 'Chicken Burrito Bowl', 'chicken'], ['Small Deep Dish Margherita Pizza', 'Small - Deep Dish Margherita', 'pizza']]) {
+    const r = st(o, c);
+    assert.equal(r.status, 'uncertain', c);
+    assert.equal(r.lineCents, 700);
+    assert.match(r.reasons.map(x => x.text).join(' '), new RegExp('Name differs only by "' + w + '"'), c);
+  }
+  // Still rejected: different words on both sides, more than two extra words,
+  // a soft name difference plus a real attribute conflict, another flavor.
+  assert.equal(st('Cheese Pizza', 'Pepperoni Pizza').status, 'rejected');
+  assert.equal(st('Fries', 'Chili Cheese Bacon Fries').status, 'rejected');
+  assert.equal(st('Small - Deep Dish Margherita', 'Large Deep Dish Margherita Pizza').status, 'rejected');
+  assert.equal(st({ name: 'Wings', flavor: 'Buffalo', count: '10' }, '10 pc Lemon Pepper Wings').status, 'rejected');
+  // In a ranking, a soft difference is never the verified winner.
+  const ev = run(order([{ name: 'Large Fries' }]), [obs({ items: [item('World Famous Fries® - Large', 449)] })]);
+  assert.equal(ev.winner, null);
+  assert.equal(ev.rows.uncertain.length, 1);
+});
+
+test('closest listings: suggestions only, confirmed once as a same-item name', () => {
+  const stores = [obs({ items: [item('World Famous Fries® - Large', 449), item('World Famous Fries® - Medium', 389), item('Fries Meal', 899), item('Large Hash Browns', 299)] }),
+                  obs({ items: [item('World Famous Fries® - Large', 479)] })];
+  const o = order([{ name: 'Large Fries' }]);
+  let ev = run(o, stores);
+  const ls = ev.closest[0].listings;
+  assert.deepEqual(ls.map(l => [l.label, l.stores, l.minCents, l.maxCents]), [['World Famous Fries® - Large', 2, 449, 479]]);
+  assert.match(ls[0].why, /name differs only by "world famous"/);
+  assert.ok(ls[0].score > 0 && ls[0].score <= 1);
+  assert.equal(ev.winner, null);
+  // Medium (size conflict), Meal (variant word) and Hash Browns (no shared product word) are not suggested.
+  o.items[0].aliases = 'World Famous Fries® - Large';
+  ev = run(o, stores);
+  assert.equal(ev.winner.row.lineCents, 449);
+  assert.match(ev.winner.row.reasons.map(x => x.text).join(' '), /via your confirmed alias "World Famous Fries® - Large"/);
+  assert.match(ev.winner.row.reasons.map(x => x.text).join(' '), /Size matches \(large\)/);
+  assert.deepEqual(ev.closest[0].listings, []);                  // an exact listing exists now
+  // Suggestions are per order item, and only for items without an exact listing.
+  const two = run(order([{ name: 'Large Fries' }, { name: 'Fries Meal' }]), stores);
+  assert.equal(two.closest[0].listings.length, 1);
+  assert.deepEqual(two.closest[1].listings, []);
 });

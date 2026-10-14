@@ -114,6 +114,30 @@ test('a DoorDash price you saw in the app is ranked with the snapshot, labelled,
   await page.waitForFunction(() => !/\$1\.23/.test(document.querySelector('#winner').innerText));
 });
 
+test('closest listings: a worded-differently listing is suggested, and "Same item" makes it a checked match', async () => {
+  await page.click('#resetOrder');
+  await page.fill('#chain', "McDonald's");
+  await page.fill('#it0_name', 'Large Fries');
+  const rec = (id, items) => ({ platform: 'ubereats', store_id: id, store_name: "McDonald's", store_url: 'https://www.ubereats.com/store/mcd/' + id,
+    address: { street: id + ' Elm St', city: 'Boise', state: 'ID', zip: '83702', country: 'US' }, observed_at: new Date(Date.now() - 3600e3).toISOString(),
+    order_mode: 'delivery', items: items.map(([name, price]) => ({ name, price })) });
+  await page.fill('#importText', JSON.stringify({ observations: [rec('F1', [['World Famous Fries® - Large', '4.49'], ['World Famous Fries® - Medium', '3.89'], ['Fries Meal', '8.99']]),
+                                                                  rec('F2', [['World Famous Fries® - Large', '4.79']])] }));
+  await page.click('#importBtn');
+  await page.waitForSelector('#closest .closest');
+  const box = await text('#closest');
+  assert.match(box, /No checked store lists “Large Fries” exactly/);
+  assert.match(box, /World Famous Fries® - Large · 2 stores · \$4\.49–\$4\.79 · name differs only by "world famous"/);
+  assert.doesNotMatch(box, /Medium|Meal/);                          // size conflict, variant word: not suggested
+  assert.doesNotMatch(await text('#winner'), /\$4\.49/);           // a suggestion is never a match by itself
+  await page.click('#closest button:has-text("Same item")');
+  await page.waitForFunction(() => /\$4\.49/.test(document.querySelector('#winner').innerText));
+  assert.equal(await page.inputValue('#it0_alias'), 'World Famous Fries® - Large');
+  assert.equal(await page.locator('#closest .closest').count(), 0);
+  await page.click('#clearImport');
+  await page.click('#resetOrder');
+});
+
 test('switching snapshot runs keeps each run separate', async () => {
   // Every price shown for a run must have been observed during that run.
   const n = await page.locator('#runSel option').count();
