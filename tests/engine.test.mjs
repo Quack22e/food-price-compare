@@ -515,3 +515,22 @@ test('review fixes: ZIP-less duplicates by city/state, canonical typed links, wa
   assert.equal(r.observations[0].store_url, 'https://www.doordash.com/store/taco-bell-fulton-24633898/');
   assert.deepEqual(r.warnings, ['no ZIP code; a ZIP filter cannot match this store']);
 });
+
+test('typed entries for one store and mode are merged, keeping the older time', () => {
+  const f = (lines, at) => E.enteredObservation({ platform: 'doordash', order_mode: 'delivery', seen_at: at, store_name: 'Taco Bell', city: 'Fulton', state: 'MS', zip: '38843',
+    store_url: 'https://www.doordash.com/store/taco-bell-fulton-24633898/', lines }, { now: NOW }).observations[0];
+  let list = E.mergeEntered([], f('Crunchwrap Supreme $6.99', '2026-10-07T09:00:00Z')).list;
+  const mg = E.mergeEntered(list, f('Chalupa Supreme $5.49\nCrunchwrap Supreme $7.09', '2026-10-07T11:00:00Z'));
+  assert.equal(mg.merged, true);
+  list = mg.list;
+  assert.equal(list.length, 1);
+  assert.deepEqual(list[0].items.map(i => [i.name, i.price_cents]), [['Chalupa Supreme', 549], ['Crunchwrap Supreme', 709]]);
+  assert.equal(list[0].observed_at, '2026-10-07T09:00:00.000Z');
+  // Both items rank from the one record.
+  const basket = run(order([{ name: 'Crunchwrap Supreme' }, { name: 'Chalupa Supreme' }], { chain: 'Taco Bell' }), list);
+  assert.equal(basket.winner.basket.subtotalCents, 709 + 549);
+  // Another mode, another store, or a plain import is never merged.
+  assert.equal(E.mergeEntered(list, Object.assign(f('Taco $2.00', '2026-10-07T10:00:00Z'), { order_mode: 'pickup' })).merged, false);
+  const imported = Object.assign({}, list[0], { extraction: 'imported record' });
+  assert.equal(E.mergeEntered([imported], f('Taco $2.00', '2026-10-07T10:00:00Z')).merged, false);
+});

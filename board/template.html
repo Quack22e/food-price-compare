@@ -851,9 +851,11 @@ tr.details td { background: var(--sunken); }
       store_name: v('seenName'), street: v('seenStreet'), city: v('seenCity'), state: v('seenState'), zip: v('seenZip').trim(), lines: v('seenLines') });
     var o = r.observations[0];
     if (!o) { setKids($('seenMsg'), h('p', { class: 'msg bad' }, 'Not added: ' + r.errors.slice(0, 6).join(' · '))); return; }
-    S.imported.push(o);
+    var mg = E.mergeEntered(S.imported, o);
+    S.imported = mg.list;
     setKids($('seenMsg'), [h('p', { class: 'msg ok' }, 'Added ' + o.items.length + ' price' + (o.items.length > 1 ? 's' : '') + ' at ' + o.store_name + ', ' +
-      o.address.city + ' ' + o.address.state + ' (' + PLAT[o.platform] + ', ' + o.order_mode + '), labelled Imported.')]
+      o.address.city + ' ' + o.address.state + ' (' + PLAT[o.platform] + ', ' + o.order_mode + '), labelled Imported.' +
+      (mg.merged ? ' Kept with your earlier entry for this store (' + mg.record.items.length + ' prices).' : ''))]
       .concat(r.warnings.length ? [h('p', { class: 'msg warn' }, r.warnings.slice(0, 3).join(' · '))] : []));
     $('seenLines').value = '';
     evaluate();

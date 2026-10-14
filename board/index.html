@@ -380,7 +380,7 @@ tr.details td { background: var(--sunken); }
   function isType(o, list) { return types(o).some(function (t) { return list.indexOf(t) >= 0; }); }
   function cents(v) {
     if (v == null || typeof v === 'boolean') return null;
-    var s = String(v).trim().replace(/^\$\s*/, '').replace(/,(?=\d{3}(\D|$))/g, '');
+    var s = String(v).trim().replace(/^(?:US)?\$\s*/i, '').replace(/,(?=\d{3}(\D|$))/g, '');
     var m = /^(\d{1,7})(?:\.(\d{1,2})0*)?$/.exec(s);
     if (!m) return null;
     return parseInt(m[1], 10) * 100 + parseInt(((m[2] || '') + '00').slice(0, 2), 10);
@@ -435,7 +435,11 @@ tr.details td { background: var(--sunken); }
       if (variant && variant.toLowerCase() === name.toLowerCase()) variant = null;
       var rec = { name: name, variant: variant, section: section || null, price_cents: isType(o, ['aggregateoffer']) ? null : cents(price),
                   currency: (txt(cur) || '').toUpperCase() || null, availability: avail(o.availability), addons: addons, required_options: 'unknown' };
-      if (rec.price_cents === 0) {
+      if (rec.price_cents === null && /^(?:US)?\$\s*\d[\d,]*(?:\.\d+)?\s*\+$/i.test(txt(price))) {
+        // Real DoorDash pages publish "$13.59+": a starting price that options set.
+        rec.price_note = 'published as a starting price (' + txt(price) + '): options such as size set the final price, which the page does not publish';
+        rec.required_options = [{ name: 'price-setting options (not published)', required: true }];
+      } else if (rec.price_cents === 0) {
         // Observed on real Uber Eats pages: 0.00 means the price is set by required options.
         rec.price_cents = null;
         rec.price_note = 'published price is $0.00, which on this platform means the price is set by required options (e.g. size); actual price not published';
@@ -980,7 +984,11 @@ tr.details td { background: var(--sunken); }
 
   // ---------------------------------------------------------------- observations
   function obsKey(o) { return [o.source, o.platform, o.store_id, o.order_mode].join('|'); }
-  function addressKey(o) { var a = o.address || {}; return o.platform + '|' + normText(a.street) + '|' + String(a.zip || '').slice(0, 5); }
+  function addressKey(o) {
+    var a = o.address || {}, zip = String(a.zip || '').slice(0, 5);
+    // DoorDash publishes no ZIP: then city and state tell same-named streets apart.
+    return o.platform + '|' + normText(a.street) + '|' + (zip || normText(a.city) + '|' + (normalizeState(a.state) || ''));
+  }
   // Same platform store ID (e.g. live + imported, or re-observed): keep the
   // newest observation only. Same street address + ZIP under different store
   // IDs on one platform: one physical branch listed twice. Both listings are
@@ -1000,7 +1008,7 @@ tr.details td { background: var(--sunken); }
       var o = byStore[k];
       kept.push(o);
       var a = o.address || {};
-      if (!a.street || !a.zip) return;
+      if (!a.street || !(a.zip || (a.city && normalizeState(a.state)))) return;
       var ak = addressKey(o) + '|' + o.order_mode;
       if (!byAddr[ak]) { byAddr[ak] = o; return; }
       addressDuplicateOf[k] = byAddr[ak].store_id;
@@ -1511,7 +1519,10 @@ tr.details td { background: var(--sunken); }
     var ts = f.seen_at ? Date.parse(f.seen_at) : now;
     if (!isFinite(ts)) errors.push('"Seen at" is not a valid date and time');
     if (errors.length) return { observations: [], errors: errors, warnings: [] };
-    var rec = { platform: platform, store_id: id, store_name: f.store_name, store_url: f.store_url,
+    // Only the store page itself is kept: a shared link's query or fragment can
+    // carry tracking or location parameters.
+    var canon = new URL(safeUrl(f.store_url, platform)); canon = canon.origin + canon.pathname;
+    var rec = { platform: platform, store_id: id, store_name: f.store_name, store_url: canon,
       address: { street: f.street, city: f.city, state: f.state, zip: f.zip, country: 'US' },
       observed_at: new Date(ts).toISOString(), order_mode: f.order_mode, currency: 'USD',
       mode_basis: 'order mode you selected in the ' + label + ' app or site',
@@ -1520,7 +1531,26 @@ tr.details td { background: var(--sunken); }
     var r = validateImport([rec], { now: now });
     r.observations.forEach(function (o) { o.extraction = 'entered by hand from the ' + label + ' app or site'; });
     r.errors = r.errors.map(function (e) { return e.replace(/^record 1: /, ''); });
+    r.warnings = r.warnings.map(function (e) { return e.replace(/^record 1: /, ''); });
     return r;
+  }
+
+  // Typed entries for the same store and order mode are one record: prices of
+  // the same item are replaced, others are kept. (Ranking keeps one record per
+  // store and mode, so a second entry would otherwise hide the first.) The
+  // record keeps the older time, so freshness is never overstated.
+  function mergeEntered(list, o) {
+    var same = function (x) { return x.source === 'import' && /^entered by hand/.test(x.extraction || '') && x.platform === o.platform && x.store_id === o.store_id && x.order_mode === o.order_mode; };
+    var prev = (list || []).filter(same)[0];
+    if (!prev) return { list: (list || []).concat([o]), merged: false };
+    var key = function (it) { return tokens(it.name).join(' ') + '|' + tokens(it.variant || '').join(' '); };
+    var mine = setOf(o.items.map(key));
+    var m = Object.assign({}, o, {
+      items: prev.items.filter(function (it) { return !mine[key(it)]; }).concat(o.items),
+      observed_at: Date.parse(prev.observed_at) < Date.parse(o.observed_at) ? prev.observed_at : o.observed_at
+    });
+    m.menu_item_count = m.items.length;
+    return { list: list.filter(function (x) { return x !== prev; }).concat([m]), merged: true, record: m };
   }
 
   // ---------------------------------------------------------------- live-run snapshots (scripts/snapshot.py)
@@ -1607,7 +1637,7 @@ tr.details td { background: var(--sunken); }
     prepareOrder: prepareOrder, prepareItem: prepareItem, matchItem: matchItem, dedupeObservations: dedupeObservations,
     evaluate: evaluate, parseGrubhubUrl: parseGrubhubUrl, parseReceipt: parseReceipt, safeUrl: safeUrl,
     validateImport: validateImport, parseCSV: parseCSV, toCSV: toCSV, CSV_COLUMNS: CSV_COLUMNS,
-    storeIdFromUrl: storeIdFromUrl, parsePriceLines: parsePriceLines, enteredObservation: enteredObservation,
+    storeIdFromUrl: storeIdFromUrl, parsePriceLines: parsePriceLines, enteredObservation: enteredObservation, mergeEntered: mergeEntered,
     stripNotes: stripNotes, nameDiff: nameDiff, similarity: similarity,
     looseNorm: looseNorm, searchScope: searchScope, scopeCovers: scopeCovers, inSnapshotScope: inSnapshotScope,
     snapshotObservations: snapshotObservations,
@@ -2116,9 +2146,11 @@ tr.details td { background: var(--sunken); }
       store_name: v('seenName'), street: v('seenStreet'), city: v('seenCity'), state: v('seenState'), zip: v('seenZip').trim(), lines: v('seenLines') });
     var o = r.observations[0];
     if (!o) { setKids($('seenMsg'), h('p', { class: 'msg bad' }, 'Not added: ' + r.errors.slice(0, 6).join(' · '))); return; }
-    S.imported.push(o);
+    var mg = E.mergeEntered(S.imported, o);
+    S.imported = mg.list;
     setKids($('seenMsg'), [h('p', { class: 'msg ok' }, 'Added ' + o.items.length + ' price' + (o.items.length > 1 ? 's' : '') + ' at ' + o.store_name + ', ' +
-      o.address.city + ' ' + o.address.state + ' (' + PLAT[o.platform] + ', ' + o.order_mode + '), labelled Imported.')]
+      o.address.city + ' ' + o.address.state + ' (' + PLAT[o.platform] + ', ' + o.order_mode + '), labelled Imported.' +
+      (mg.merged ? ' Kept with your earlier entry for this store (' + mg.record.items.length + ' prices).' : ''))]
       .concat(r.warnings.length ? [h('p', { class: 'msg warn' }, r.warnings.slice(0, 3).join(' · '))] : []));
     $('seenLines').value = '';
     evaluate();

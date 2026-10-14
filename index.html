@@ -1499,6 +1499,24 @@ tr.details td { background: var(--bg); }
     return r;
   }
 
+  // Typed entries for the same store and order mode are one record: prices of
+  // the same item are replaced, others are kept. (Ranking keeps one record per
+  // store and mode, so a second entry would otherwise hide the first.) The
+  // record keeps the older time, so freshness is never overstated.
+  function mergeEntered(list, o) {
+    var same = function (x) { return x.source === 'import' && /^entered by hand/.test(x.extraction || '') && x.platform === o.platform && x.store_id === o.store_id && x.order_mode === o.order_mode; };
+    var prev = (list || []).filter(same)[0];
+    if (!prev) return { list: (list || []).concat([o]), merged: false };
+    var key = function (it) { return tokens(it.name).join(' ') + '|' + tokens(it.variant || '').join(' '); };
+    var mine = setOf(o.items.map(key));
+    var m = Object.assign({}, o, {
+      items: prev.items.filter(function (it) { return !mine[key(it)]; }).concat(o.items),
+      observed_at: Date.parse(prev.observed_at) < Date.parse(o.observed_at) ? prev.observed_at : o.observed_at
+    });
+    m.menu_item_count = m.items.length;
+    return { list: list.filter(function (x) { return x !== prev; }).concat([m]), merged: true, record: m };
+  }
+
   // ---------------------------------------------------------------- live-run snapshots (scripts/snapshot.py)
   // A snapshot is one live run: real public menu observations per search, in
   // the import schema. Runs are never merged: menus change through the day, so
@@ -1583,7 +1601,7 @@ tr.details td { background: var(--bg); }
     prepareOrder: prepareOrder, prepareItem: prepareItem, matchItem: matchItem, dedupeObservations: dedupeObservations,
     evaluate: evaluate, parseGrubhubUrl: parseGrubhubUrl, parseReceipt: parseReceipt, safeUrl: safeUrl,
     validateImport: validateImport, parseCSV: parseCSV, toCSV: toCSV, CSV_COLUMNS: CSV_COLUMNS,
-    storeIdFromUrl: storeIdFromUrl, parsePriceLines: parsePriceLines, enteredObservation: enteredObservation,
+    storeIdFromUrl: storeIdFromUrl, parsePriceLines: parsePriceLines, enteredObservation: enteredObservation, mergeEntered: mergeEntered,
     stripNotes: stripNotes, nameDiff: nameDiff, similarity: similarity,
     looseNorm: looseNorm, searchScope: searchScope, scopeCovers: scopeCovers, inSnapshotScope: inSnapshotScope,
     snapshotObservations: snapshotObservations,
@@ -2309,11 +2327,10 @@ tr.details td { background: var(--bg); }
       store_name: v('seenName'), street: v('seenStreet'), city: v('seenCity'), state: v('seenState'), zip: v('seenZip').trim(), lines: v('seenLines') });
     var o = r.observations[0];
     if (!o) { setKids($('seenMsg'), msg('bad', 'Not added. Fix these and try again:', r.errors)); return; }
-    // A second entry for the same store, mode and minute replaces the first.
-    var key = function (x) { return x.platform + '|' + x.store_id + '|' + x.order_mode + '|' + x.observed_at; };
-    S.imported = S.imported.filter(function (x) { return key(x) !== key(o); });
-    S.imported.push(o);
-    setKids($('seenMsg'), msg('ok', 'Added ' + o.items.length + ' price(s) at ' + o.store_name + ', ' + o.address.city + ' ' + o.address.state + ' (' + (o.platform === 'doordash' ? 'DoorDash' : 'Uber Eats') + ', ' + o.order_mode + '), labelled "Imported". Total imported: ' + S.imported.length + '.', r.warnings));
+    var mg = E.mergeEntered(S.imported, o);
+    S.imported = mg.list;
+    setKids($('seenMsg'), msg('ok', 'Added ' + o.items.length + ' price(s) at ' + o.store_name + ', ' + o.address.city + ' ' + o.address.state + ' (' + (o.platform === 'doordash' ? 'DoorDash' : 'Uber Eats') + ', ' + o.order_mode + '), labelled "Imported".' +
+      (mg.merged ? ' Kept with your earlier entry for this store (' + mg.record.items.length + ' prices, dated ' + mg.record.observed_at + ').' : '') + ' Total imported: ' + S.imported.length + '.', r.warnings));
     $('seenLines').value = '';
     scheduleEval();
   }
