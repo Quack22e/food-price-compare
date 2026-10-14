@@ -878,3 +878,22 @@ def test_doordash_store_page_layout_from_archived_captures():
     # A bare Menu without a Restaurant (also seen) has no address: not extracted.
     status, obs, detail = observe(_doordash_like_page(restaurant=False))
     assert status == "no_menu" and "no schema.org Restaurant" in detail
+
+
+def test_store_currency_counts_every_stated_currency():
+    """A store whose only listings are $0.00 (real Uber Eats pages have these,
+    the price is set by options) still states USD and stays a checked store."""
+    from server.adapters import build_observation
+    from server.http_client import FetchOutcome
+    ad = UberEatsAdapter("https://www.ubereats.com")
+    ref = ad.parse_store_url("https://www.ubereats.com/store/zuckers/AbCdEf123456")
+    ld = {"@context": "https://schema.org", "@type": "Restaurant", "name": "Zucker's",
+          "address": {"@type": "PostalAddress", "streetAddress": "1 A St", "addressLocality": "New York", "addressRegion": "NY",
+                      "postalCode": "10001", "addressCountry": "US"},
+          "hasMenu": {"@type": "Menu", "hasMenuSection": [{"@type": "MenuSection", "name": "Coffee", "hasMenuItem": [
+              {"@type": "MenuItem", "name": "Iced Latte", "offers": {"@type": "Offer", "price": "0.00", "priceCurrency": "USD"}},
+              {"@type": "MenuItem", "name": "Bagel"}]}]}}
+    parsed = parse_store_page(f'<script type="application/ld+json">{json.dumps(ld)}</script>', ref["canonical"], ref["store_id"])
+    fetched = FetchOutcome(url=ref["canonical"], ok=True, status=200, fetched_at="2026-10-14T00:00:00Z")
+    status, obs, _ = build_observation(ad, ref, parsed, fetched, "delivery", "requested", set())
+    assert status == "checked" and obs["currency"] == "USD"

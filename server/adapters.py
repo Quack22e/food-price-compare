@@ -191,8 +191,11 @@ def build_observation(adapter: PlatformAdapter, ref: dict, parsed: dict, fetched
         name_norm = loose_norm(" ".join(filter(None, [it.get("name"), it.get("variant")])))
         if not prefilter or any(t in name_norm for t in prefilter):
             kept.append(it)
-    # Judged on priced items: an item published without an Offer has no currency.
-    currencies = sorted({it.get("currency") or "?" for it in items if it.get("price_cents") is not None}) or ["?"]
+    # Every stated currency counts (a $0.00 Uber Eats listing still states USD);
+    # a priced item without one makes the store's currency unknown. An item
+    # published without an Offer states nothing and is ignored.
+    currencies = sorted({it["currency"] for it in items if it.get("currency")} |
+                        ({"?"} if any(it.get("price_cents") is not None and not it.get("currency") for it in items) else set())) or ["?"]
     obs = {
         "source": "live",
         "platform": adapter.key,

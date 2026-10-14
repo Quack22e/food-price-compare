@@ -343,7 +343,7 @@ tr.details td { background: var(--bg); }
   function isType(o, list) { return types(o).some(function (t) { return list.indexOf(t) >= 0; }); }
   function cents(v) {
     if (v == null || typeof v === 'boolean') return null;
-    var s = String(v).trim().replace(/^\$\s*/, '').replace(/,(?=\d{3}(\D|$))/g, '');
+    var s = String(v).trim().replace(/^(?:US)?\$\s*/i, '').replace(/,(?=\d{3}(\D|$))/g, '');
     var m = /^(\d{1,7})(?:\.(\d{1,2})0*)?$/.exec(s);
     if (!m) return null;
     return parseInt(m[1], 10) * 100 + parseInt(((m[2] || '') + '00').slice(0, 2), 10);
@@ -398,7 +398,11 @@ tr.details td { background: var(--bg); }
       if (variant && variant.toLowerCase() === name.toLowerCase()) variant = null;
       var rec = { name: name, variant: variant, section: section || null, price_cents: isType(o, ['aggregateoffer']) ? null : cents(price),
                   currency: (txt(cur) || '').toUpperCase() || null, availability: avail(o.availability), addons: addons, required_options: 'unknown' };
-      if (rec.price_cents === 0) {
+      if (rec.price_cents === null && /^(?:US)?\$\s*\d[\d,]*(?:\.\d+)?\s*\+$/i.test(txt(price))) {
+        // Real DoorDash pages publish "$13.59+": a starting price that options set.
+        rec.price_note = 'published as a starting price (' + txt(price) + '): options such as size set the final price, which the page does not publish';
+        rec.required_options = [{ name: 'price-setting options (not published)', required: true }];
+      } else if (rec.price_cents === 0) {
         // Observed on real Uber Eats pages: 0.00 means the price is set by required options.
         rec.price_cents = null;
         rec.price_note = 'published price is $0.00, which on this platform means the price is set by required options (e.g. size); actual price not published';
@@ -944,7 +948,11 @@ tr.details td { background: var(--bg); }
 
   // ---------------------------------------------------------------- observations
   function obsKey(o) { return [o.source, o.platform, o.store_id, o.order_mode].join('|'); }
-  function addressKey(o) { var a = o.address || {}; return o.platform + '|' + normText(a.street) + '|' + String(a.zip || '').slice(0, 5); }
+  function addressKey(o) {
+    var a = o.address || {}, zip = String(a.zip || '').slice(0, 5);
+    // DoorDash publishes no ZIP: then city and state tell same-named streets apart.
+    return o.platform + '|' + normText(a.street) + '|' + (zip || normText(a.city) + '|' + (normalizeState(a.state) || ''));
+  }
   // Same platform store ID (e.g. live + imported, or re-observed): keep the
   // newest observation only. Same street address + ZIP under different store
   // IDs on one platform: one physical branch listed twice. Both listings are
@@ -964,7 +972,7 @@ tr.details td { background: var(--bg); }
       var o = byStore[k];
       kept.push(o);
       var a = o.address || {};
-      if (!a.street || !a.zip) return;
+      if (!a.street || !(a.zip || (a.city && normalizeState(a.state)))) return;
       var ak = addressKey(o) + '|' + o.order_mode;
       if (!byAddr[ak]) { byAddr[ak] = o; return; }
       addressDuplicateOf[k] = byAddr[ak].store_id;
@@ -1475,7 +1483,10 @@ tr.details td { background: var(--bg); }
     var ts = f.seen_at ? Date.parse(f.seen_at) : now;
     if (!isFinite(ts)) errors.push('"Seen at" is not a valid date and time');
     if (errors.length) return { observations: [], errors: errors, warnings: [] };
-    var rec = { platform: platform, store_id: id, store_name: f.store_name, store_url: f.store_url,
+    // Only the store page itself is kept: a shared link's query or fragment can
+    // carry tracking or location parameters.
+    var canon = new URL(safeUrl(f.store_url, platform)); canon = canon.origin + canon.pathname;
+    var rec = { platform: platform, store_id: id, store_name: f.store_name, store_url: canon,
       address: { street: f.street, city: f.city, state: f.state, zip: f.zip, country: 'US' },
       observed_at: new Date(ts).toISOString(), order_mode: f.order_mode, currency: 'USD',
       mode_basis: 'order mode you selected in the ' + label + ' app or site',
@@ -1484,6 +1495,7 @@ tr.details td { background: var(--bg); }
     var r = validateImport([rec], { now: now });
     r.observations.forEach(function (o) { o.extraction = 'entered by hand from the ' + label + ' app or site'; });
     r.errors = r.errors.map(function (e) { return e.replace(/^record 1: /, ''); });
+    r.warnings = r.warnings.map(function (e) { return e.replace(/^record 1: /, ''); });
     return r;
   }
 

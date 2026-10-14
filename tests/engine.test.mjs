@@ -502,3 +502,16 @@ test('closest listings: suggestions only, confirmed once as a same-item name', (
   assert.equal(two.closest[0].listings.length, 1);
   assert.deepEqual(two.closest[1].listings, []);
 });
+
+test('review fixes: ZIP-less duplicates by city/state, canonical typed links, warning text', () => {
+  const noZip = (id, city) => obs({ store_id: id, address: { street: '100 Main St', city, state: 'OR', zip: '', country: 'US' }, items: [item('Burrito', 500)] });
+  // Same street in two cities: two branches. Same street, same city: one branch listed twice.
+  assert.equal(E.dedupeObservations([noZip('a', 'Beaverton'), noZip('b', 'Aloha')]).duplicates.length, 0);
+  const d = E.dedupeObservations([noZip('a', 'Beaverton'), noZip('b', 'Beaverton')]);
+  assert.equal(Object.keys(d.addressDuplicateOf).length, 1);
+  const f = { platform: 'doordash', order_mode: 'delivery', seen_at: '2026-10-07T11:00:00Z', store_name: 'Taco Bell', city: 'Fulton', state: 'MS', zip: '',
+    store_url: 'https://www.doordash.com/store/taco-bell-fulton-24633898/?lat=34.27&lng=-88.41&utm_source=share#menu', lines: 'Crunchwrap Supreme $6.99' };
+  const r = E.enteredObservation(f, { now: NOW });
+  assert.equal(r.observations[0].store_url, 'https://www.doordash.com/store/taco-bell-fulton-24633898/');
+  assert.deepEqual(r.warnings, ['no ZIP code; a ZIP filter cannot match this store']);
+});
