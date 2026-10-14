@@ -420,7 +420,13 @@ test('the committed real snapshot validates as snapshot observations, scoped per
   if (nug) {
     assert.equal(E.inSnapshotScope(nug, [{ name: '10 pc. Chicken McNuggets' }]), true);
     assert.equal(E.inSnapshotScope(nug, [{ name: 'Big Mac' }]), false);
-    assert.equal(E.inSnapshotScope(nug, [{ name: 'Big Mac', aliases: 'McNuggets' }]), true);
+    // Every name variant must carry a searched product word: an alias alone does
+    // not make the store checked for the item's own name, and attribute words
+    // ("pcs", "piece") never count.
+    assert.equal(E.inSnapshotScope(nug, [{ name: 'Big Mac', aliases: 'McNuggets' }]), false);
+    assert.equal(E.inSnapshotScope(nug, [{ name: 'Chicken McNuggets', aliases: 'McNuggets 10 piece' }]), true);
+    assert.equal(E.inSnapshotScope(nug, [{ name: '6 pcs Wings' }]), false);
+    assert.equal(E.inSnapshotScope(Object.assign({}, nug, { scope: ['pcs', 'chicken', 'mcnuggets'] }), [{ name: '6 pcs Wings' }]), false);
   }
   assert.deepEqual(E.snapshotObservations({ searches: [{ label: 'x', observations: [{ platform: 'ubereats' }] }] }).rejected.length, 1);
 });
@@ -533,4 +539,35 @@ test('typed entries for one store and mode are merged, keeping the older time', 
   assert.equal(E.mergeEntered(list, Object.assign(f('Taco $2.00', '2026-10-07T10:00:00Z'), { order_mode: 'pickup' })).merged, false);
   const imported = Object.assign({}, list[0], { extraction: 'imported record' });
   assert.equal(E.mergeEntered([imported], f('Taco $2.00', '2026-10-07T10:00:00Z')).merged, false);
+});
+
+test('review fixes: hand-entry lines, non-US links, US evidence, malformed snapshots, excluded imports', () => {
+  const lines = E.parsePriceLines('Nachos $12,99\nDeep Dish Cheese $13.59+\nCrunchwrap Supreme $5.00');
+  assert.deepEqual(lines.items, [{ name: 'Crunchwrap Supreme', price: '5.00' }]);
+  assert.match(lines.problems[0], /"\$12,99" is not a valid US price/);
+  assert.match(lines.problems[1], /starting price/);
+  const f = { platform: 'ubereats', order_mode: 'delivery', seen_at: '2026-10-07T11:00:00Z', store_name: 'Hungry Jacks', city: 'Perth', state: 'WA', zip: '',
+    store_url: 'https://www.ubereats.com/au/store/hj-perth/AbCdEf123456', lines: 'Whopper $12.50' };
+  assert.match(E.enteredObservation(f, { now: NOW }).errors.join(' '), /non-US section/);
+  assert.equal(E.enteredObservation(Object.assign({}, f, { lines: 'Nachos $12,99\nWhopper $12.50' }), { now: NOW }).observations.length, 0);
+  const imp = (over) => E.validateImport([Object.assign({ platform: 'ubereats', store_id: 'x', store_name: 'X', store_url: 'https://www.ubereats.com/store/x/AbCdEf123456',
+    address: { city: 'Perth', state: 'WA' }, observed_at: '2026-10-07T10:00:00Z', order_mode: 'delivery', items: [{ name: 'A', price: '1.00' }] }, over)], { now: NOW });
+  assert.match(imp({}).errors.join(' '), /needs country "US" or a 5-digit ZIP/);
+  assert.equal(imp({ address: { city: 'Seattle', state: 'WA', country: 'US' } }).observations.length, 1);
+  assert.equal(imp({ address: { city: 'Seattle', state: 'WA', zip: '98101' } }).observations.length, 1);
+  assert.match(imp({ store_url: 'https://www.doordash.com/en-CA/store/x-1/', platform: 'doordash', address: { city: 'Seattle', state: 'WA', zip: '98101' } }).errors.join(' '), /non-US section/);
+  assert.equal(imp({ store_url: 'https://www.doordash.com/en-US/store/x-1/', platform: 'doordash', address: { city: 'Seattle', state: 'WA', zip: '98101' } }).observations.length, 1);
+  // Malformed snapshots are reported, never thrown.
+  const bad = { toString: 1 };
+  for (const s of [null, {}, { searches: [null] }, { searches: [{ observations: {} }] }, { searches: [{ observations: [null] }] },
+    { searches: [{ label: bad, request: { order: { items: [null, { name: 'x', aliases: 'a, b' }] } }, observations: [] }], github_run_id: bad }]) {
+    const r = E.snapshotObservations(s);
+    assert.ok(Array.isArray(r.obs) && Array.isArray(r.rejected));
+  }
+  assert.match(E.snapshotObservations({ searches: [{ label: 'Tacos', observations: [{ store_name: 'Taco Bell', platform: 'ubereats' }] }] }).rejected[0], /^Tacos, Taco Bell: store_id is required/);
+  // An excluded import never hides another reading of the same store.
+  const live = obs({ source: 'snapshot', store_id: 'S9', items: [item('Burrito', 599)] });
+  const typed = Object.assign({}, live, { source: 'import', observed_at: T(0.5), items: [item('Burrito', 649)] });
+  assert.equal(run(order([{ name: 'Burrito' }]), [live, typed], { includeImported: false }).winner.row.lineCents, 599);
+  assert.equal(run(order([{ name: 'Burrito' }]), [live, typed], { includeImported: false }).coverage.excluded.imported, 1);
 });

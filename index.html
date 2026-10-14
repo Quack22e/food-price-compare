@@ -1000,12 +1000,15 @@ tr.details td { background: var(--bg); }
     var staleMs = (opts.staleHours != null ? opts.staleHours : 24) * 3600000;
     var platforms = setOf(opts.platforms || ['doordash', 'ubereats']);
     var multi = prep.items.length > 1;
-    var dd = dedupeObservations(observations || []);
-    var ex = { platform: 0, imported: 0, otherMode: 0, location: 0, nonUS: 0, nonUSD: 0, otherChain: 0, duplicate: dd.duplicates.length };
+    // Excluded imports are dropped before de-duplication, so they never hide
+    // another reading (live or snapshot) of the same store.
+    var ex0 = 0;
+    var input = (observations || []).filter(function (o) { if (o.source === 'import' && opts.includeImported === false) { ex0++; return false; } return true; });
+    var dd = dedupeObservations(input);
+    var ex = { platform: 0, imported: ex0, otherMode: 0, location: 0, nonUS: 0, nonUSD: 0, otherChain: 0, duplicate: dd.duplicates.length };
     var stores = [];
     dd.kept.forEach(function (obs) {
       if (!platforms[obs.platform]) { ex.platform++; return; }
-      if (obs.source === 'import' && opts.includeImported === false) { ex.imported++; return; }
       var addr = obs.address || {};
       if (!normalizeState(addr.state) || !isUSCountry(addr.country)) { ex.nonUS++; return; }
       if (obs.currency && obs.currency !== 'USD' && obs.currency !== 'mixed') { ex.nonUSD++; return; }
@@ -1266,7 +1269,11 @@ tr.details td { background: var(--bg); }
       return x.href;
     } catch (e) { return null; }
   }
-  function str(v, max) { if (v == null) return ''; return String(v).replace(/[\u0000-\u001f\u007f]/g, ' ').trim().slice(0, max || 300); }
+  function str(v, max) {
+    // Untrusted input: only strings, numbers and booleans become text.
+    if (typeof v !== 'string' && typeof v !== 'number' && typeof v !== 'boolean') return '';
+    return String(v).replace(/[\u0000-\u001f\u007f]/g, ' ').trim().slice(0, max || 300);
+  }
   function centsField(obj, base) {
     if (obj == null) return { v: null, ok: true };
     if (Number.isInteger(obj[base + '_cents'])) return obj[base + '_cents'] >= 0 ? { v: obj[base + '_cents'], ok: true } : { v: null, ok: false };
@@ -1286,6 +1293,8 @@ tr.details td { background: var(--bg); }
     var storeName = str(o.store_name, 200); if (!storeName) { err('store_name is required'); return null; }
     var url = safeUrl(o.store_url, platform);
     if (!url) { err('store_url must be an https URL on ' + PLATFORM_HOSTS[platform][0]); return null; }
+    var sect = /^\/([a-z]{2})(?:-([a-z]{2}))?\//i.exec(new URL(url).pathname);
+    if (sect && !/^us$/i.test(sect[2] || sect[1])) { err('store_url is in a non-US section of the site (' + sect[0] + ') (excluded)'); return null; }
     var a = o.address || {};
     var state = normalizeState(a.state);
     if (!isUSCountry(a.country)) { err('address.country "' + str(a.country, 40) + '" is outside the US (excluded)'); return null; }
@@ -1295,6 +1304,8 @@ tr.details td { background: var(--bg); }
     // DoorDash store pages publish no postal code (verified on archived real pages).
     if (!zip) warnings.push(where + ': no ZIP code; a ZIP filter cannot match this store');
     var city = str(a.city, 100); if (!city) { err('address.city is required'); return null; }
+    // As in the backend: a US location needs country US or a US ZIP, not a state code alone.
+    if (!str(a.country, 40) && !zip) { err('address needs country "US" or a 5-digit ZIP to show it is in the US'); return null; }
     var ts = Date.parse(o.observed_at);
     if (!o.observed_at || !isFinite(ts)) { err('observed_at must be an ISO-8601 timestamp'); return null; }
     if (ts > now + 5 * 60000) { err('observed_at is in the future'); return null; }
@@ -1463,8 +1474,11 @@ tr.details td { background: var(--bg); }
     var items = [], problems = [];
     String(text || '').split(/\r?\n/).forEach(function (line, i) {
       var t = line.trim(); if (!t) return;
-      var m = /^(.*?)[\s\-–—:·|]*(?:US)?\$\s*(\d[\d,]*(?:\.\d{1,2})?)\s*$/.exec(t);
-      if (!m || !m[1].trim()) { problems.push('line ' + (i + 1) + ' ("' + t.slice(0, 60) + '"): write it as "item name $price"'); return; }
+      var where = 'line ' + (i + 1) + ' ("' + t.slice(0, 60) + '")';
+      if (/(?:US)?\$\s*\d[\d.,]*\s*\+\s*$/.test(t)) { problems.push(where + ': a price with "+" is a starting price. Choose the options in the app, then enter the price it shows'); return; }
+      var m = /^(.*?)[\s\-–—:·|]*(?:US)?\$\s*(\d[\d.,]*)\s*$/.exec(t);
+      if (!m || !m[1].trim()) { problems.push(where + ': write it as "item name $price"'); return; }
+      if (parseMoneyToCents(m[2]) === null) { problems.push(where + ': "$' + m[2] + '" is not a valid US price (use a dot for cents, e.g. $12.99)'); return; }
       items.push({ name: m[1].trim(), price: m[2] });
     });
     return { items: items, problems: problems };
@@ -1493,6 +1507,8 @@ tr.details td { background: var(--bg); }
       price_context: 'entered by you from what ' + label + ' showed you; your account, address and promotions may affect it',
       items: lines.items };
     var r = validateImport([rec], { now: now });
+    // All or nothing: a line that fails validation is never dropped silently.
+    if (r.errors.length) r.observations = [];
     r.observations.forEach(function (o) { o.extraction = 'entered by hand from the ' + label + ' app or site'; });
     r.errors = r.errors.map(function (e) { return e.replace(/^record 1: /, ''); });
     r.warnings = r.warnings.map(function (e) { return e.replace(/^record 1: /, ''); });
@@ -1532,14 +1548,26 @@ tr.details td { background: var(--bg); }
     return t;
   }
   function searchScope(s) {
-    var items = ((s && s.request || {}).order || {}).items || [];
+    var order = s && s.request && s.request.order;
+    var items = order && Array.isArray(order.items) ? order.items : [];
     var texts = [];
-    items.forEach(function (it) { texts.push(it.name || ''); (it.aliases || []).forEach(function (a) { texts.push(a); }); if (it.flavor) texts.push(it.flavor); });
+    items.forEach(function (it) {
+      if (!it || typeof it !== 'object') return;
+      texts.push(str(it.name, 200)); splitList(Array.isArray(it.aliases) ? it.aliases.map(function (a) { return str(a, 200); }) : str(it.aliases, 600)).forEach(function (a) { texts.push(a); });
+      texts.push(str(it.flavor, 100));
+    });
     return scopeTokens(texts);
   }
+  // A listing the order item could match has the item's product words (or an
+  // alias's), so the search kept it only if those words contain a searched
+  // word. Every name variant must, or the store was not checked for the item.
   function scopeCovers(scope, item) {
-    var n = looseNorm([item.name].concat(String(item.aliases || '').split(',')).join(' '));
-    return scope.some(function (t) { return n.indexOf(t) >= 0; });
+    var variants = [str(item.name, 200)].concat(splitList(item.aliases));
+    return variants.every(function (v) {
+      if (!v) return true;
+      var base = extractAttrs(v).tokens.join(' ');
+      return scope.some(function (t) { return base.indexOf(t) >= 0; });
+    });
   }
   function inSnapshotScope(o, orderItems) {
     return !o.scope || orderItems.every(function (it) { return !it.name || scopeCovers(o.scope, it); });
@@ -1548,19 +1576,27 @@ tr.details td { background: var(--bg); }
     opts = opts || {};
     var now = opts.now != null ? opts.now : Date.now();
     var obs = [], rejected = [];
-    ((run && run.searches) || []).forEach(function (s) {
-      var scope = searchScope(s);
-      (s.observations || []).forEach(function (o) {
+    var plain = function (x) { return !!x && typeof x === 'object' && !Array.isArray(x); };
+    if (!plain(run) || !Array.isArray(run.searches)) return { obs: obs, rejected: ['not a snapshot: no "searches" list'] };
+    run.searches.forEach(function (s, si) {
+      if (!plain(s)) { rejected.push('search ' + (si + 1) + ' is not an object'); return; }
+      var scope = searchScope(s), label = str(s.label, 200) || 'search ' + (si + 1);
+      if (s.observations != null && !Array.isArray(s.observations)) { rejected.push(label + ': observations is not a list'); return; }
+      (s.observations || []).forEach(function (o, oi) {
+        if (!plain(o)) { rejected.push(label + ', reading ' + (oi + 1) + ': not an object'); return; }
         // Same checks as any import (US-only, USD, https platform link, valid
         // timestamp). A store page that was read but listed nothing like the
         // order still counts as a checked location, so it is validated with a
         // placeholder item that is removed again.
         var none = !(o.items || []).length;
         var v = validateImport([none ? Object.assign({}, o, { items: [{ name: 'placeholder' }] }) : o], { now: now });
-        if (!v.observations.length) { rejected.push(v.errors.join('; ')); return; }
+        if (!v.observations.length) {
+          rejected.push(label + ', ' + (str(o.store_name, 120) || 'reading ' + (oi + 1)) + ': ' + v.errors.map(function (e) { return e.replace(/^record 1:? ?/, ''); }).join('; '));
+          return;
+        }
         var x = v.observations[0];
         if (none) x.items = [];
-        x.source = 'snapshot'; x.extraction = str(o.extraction, 200) || 'snapshot'; x.search = str(s.label, 200); x.scope = scope;
+        x.source = 'snapshot'; x.extraction = str(o.extraction, 200) || 'snapshot'; x.search = label; x.scope = scope;
         x.run = str(run.github_run_id, 40) || null; x.run_at = str(run.generated_at, 40) || null;
         obs.push(x);
       });
@@ -2086,24 +2122,35 @@ tr.details td { background: var(--bg); }
   function loadSnapshot(data, from) {
     var run = data && typeof data === 'object' && !Array.isArray(data) ? data : null;
     if (!run || !Array.isArray(run.searches)) { setKids($('snapMsg'), msg('bad', 'Not a snapshot: expected the JSON written by scripts/snapshot.py (an object with "searches").')); return; }
-    var r = E.snapshotObservations(run);
-    var when = Date.parse(run.generated_at);
-    S.snapshot = { obs: r.obs, run: run.github_run_id || null, at: isFinite(when) ? new Date(when).toISOString() : null,
-                   searches: run.searches.map(function (s) { return String(s.label || '').slice(0, 200); }), rejected: r.rejected, from: from };
+    var text = function (v, n) { return (typeof v === 'string' || typeof v === 'number') ? String(v).slice(0, n) : ''; };
+    try {
+      var r = E.snapshotObservations(run);
+      var when = Date.parse(text(run.generated_at, 40));
+      S.snapshot = { obs: r.obs, run: text(run.github_run_id, 40) || null, at: isFinite(when) ? new Date(when).toISOString() : null,
+                     searches: run.searches.map(function (s) { return s && typeof s === 'object' ? text(s.label, 200) : ''; }).filter(Boolean), rejected: r.rejected, from: from };
+    } catch (e) {
+      S.snapshot = null;
+      setKids($('snapMsg'), msg('bad', 'This snapshot could not be read: ' + String(e && e.message || e).slice(0, 200)));
+      scheduleEval();
+      return;
+    }
     renderSnapshotMsg();
     scheduleEval();
   }
   function renderSnapshotMsg() {
     var sn = S.snapshot, rejected = sn && sn.rejected, from = sn && sn.from;
     if (!sn) { setKids($('snapMsg'), null); return; }
-    var inScope = snapshotInScope().length, other = sn.obs.length - inScope;
+    // Counted whether or not the snapshot is included in the ranking.
+    var inScope = sn.obs.filter(function (o) { return E.inSnapshotScope(o, S.order.items); }).length, other = sn.obs.length - inScope;
+    var off = !$('includeSnapshot').checked;
     var hours = sn.at ? Math.round((Date.now() - Date.parse(sn.at)) / 3600000) : null;
     var lines = sn.searches.slice(0, 12).map(function (l) { return 'Search: ' + l; });
     if (rejected && rejected.length) lines = lines.concat(rejected.slice(0, 5).map(function (e) { return 'Not used: ' + e; }));
     setKids($('snapMsg'), msg(sn.obs.length ? 'ok' : 'warn',
       'Snapshot ' + (sn.run ? 'run ' + sn.run + ' ' : '') + (sn.at ? 'from ' + sn.at + (hours != null ? ' (' + hours + ' h ago)' : '') : '(no time recorded)') + (from ? ', ' + from : '') +
       ': ' + sn.obs.length + ' checked store page(s). ' + inScope + ' searched for this order\'s items' + (other ? '; ' + other + ' were read only for a different item and are not counted' : '') + '.' +
-      (hours != null && hours > (+$('staleHours').value || 24) ? ' These prices are older than your “Stale after” setting, so they are shown but cannot win until you raise it.' : ''), lines));
+      (off ? ' Not used in the results: “Include snapshot prices” is off.' :
+       hours != null && hours > (+$('staleHours').value || 24) ? ' These prices are older than your “Stale after” setting, so they are shown but cannot win until you raise it.' : ''), lines));
   }
   function runEval() {
     if (S.snapshot) renderSnapshotMsg();
@@ -2351,11 +2398,20 @@ tr.details td { background: var(--bg); }
     if (ev && ev.multi) ev.baskets.forEach(function (b) { rows.push(['basket:' + b.status, b.platform, b.source, b.storeName, b.storeId, b.address.street || '', b.city, b.state, b.zip, b.storeUrl || '', 'ALL ITEMS', b.parts.map(function (p) { return p.candidate; }).join(' + '), '', '', '', '', d(b.subtotalCents), d(b.ghSubtotalCents), d(b.savingsCents), d(b.checkoutTotalCents), b.orderMode, '', '', b.stale ? 'yes' : 'no', b.observedAt, '', b.missing.concat(b.uncertain).join(' | ')]); });
     download('food-price-compare' + (S.ui.demoMode ? '-DEMO' : '') + '.csv', 'text/csv', E.toCSV(head, rows));
   }
+  // Which kinds of data the current results draw on, for the export header.
+  function dataSources() {
+    var seen = {};
+    currentObservations().forEach(function (o) {
+      if (o.source === 'import' && !$('includeImported').checked) return;
+      seen[o.source === 'import' ? (/^entered by hand/.test(o.extraction || '') ? 'typed in by you' : 'imported') : o.source === 'snapshot' ? 'snapshot run ' + (o.run || '?') : o.source] = 1;
+    });
+    return Object.keys(seen).join(' + ') || 'none';
+  }
   function exportJson() {
     var ev = freshEval(); if (!ev) return;
     var prep = ev.prep;
     var out = {
-      generated_at: new Date().toISOString(), engine_version: E.VERSION, data: S.ui.demoMode ? 'DEMO (fictional)' : 'live + imported',
+      generated_at: new Date().toISOString(), engine_version: E.VERSION, data: S.ui.demoMode ? 'DEMO (fictional)' : dataSources(),
       winner_label: ev.winner ? ev.winnerLabel : null, rank_by: ev.rankBy, order_mode: ev.mode,
       order: { chain: prep.chain, items: prep.items.map(function (i) { return { name: i.name, size: (S.order.items[i.index] || {}).size || '', flavor: i.flavor, piece_count: i.count, quantity: i.quantity, modifiers: i.modifiers, grubhub_item_subtotal_cents: i.ghLineCents }; }) },
       coverage: ev.coverage, winner: ev.winner, rows: exportRows(), baskets: ev.baskets, barriers: S.barriers,
@@ -2420,8 +2476,8 @@ tr.details td { background: var(--bg); }
         function (e) { setKids($('snapMsg'), msg('bad', 'The server has no snapshot to give (' + e.message + '). Run scripts/snapshot.py, or load a snapshot.json file.')); });
     });
     $('snapClear').addEventListener('click', function () { S.snapshot = null; $('snapFile').value = ''; setKids($('snapMsg'), msg('ok', 'Snapshot cleared.')); scheduleEval(); });
-    $('includeSnapshot').addEventListener('change', scheduleEval);
-    $('importClear').addEventListener('click', function () { S.imported = []; importFileText = null; $('importFile').value = ''; setKids($('importReport'), msg('ok', 'Imported data cleared.')); scheduleEval(); });
+    $('includeSnapshot').addEventListener('change', function () { renderSnapshotMsg(); scheduleEval(); });
+    $('importClear').addEventListener('click', function () { S.imported = []; importFileText = null; $('importFile').value = ''; setKids($('seenMsg')); setKids($('importReport'), msg('ok', 'Imported and typed-in data cleared.')); scheduleEval(); });
     $('demoToggle').addEventListener('change', function (e) {
       S.ui.demoMode = e.target.checked; $('demoBanner').hidden = !S.ui.demoMode; $('demoOrderBtn').disabled = !S.ui.demoMode;
       document.body.style.outline = S.ui.demoMode ? '4px dashed var(--demo)' : ''; scheduleEval();

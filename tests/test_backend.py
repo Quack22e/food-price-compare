@@ -833,8 +833,9 @@ def test_grubhub_mirrors_can_be_switched_off(monkeypatch):
 def _doordash_like_page(country="US", region="OR", page_currency="USD", restaurant=True):
     menu = {"@type": "Menu", "hasMenuSection": [[
         {"@type": "MenuSection", "name": "Most Ordered", "hasMenuItem": [
-            {"@type": "MenuItem", "name": "Crunchwrap Supreme®", "offers": {"@type": "Offer", "price": "8.53"}},
-            {"@type": "MenuItem", "name": "Chicken Quesadilla", "offers": {"@type": "Offer", "price": "8.53"}},
+            {"@type": "MenuItem", "name": "Crunchwrap Supreme®", "offers": {"@type": "Offer", "price": "$8.53"}},
+            {"@type": "MenuItem", "name": "Chicken Quesadilla", "offers": {"@type": "Offer", "price": "US$8.53"}},
+            {"@type": "MenuItem", "name": "Crunchwrap Supreme Combo", "offers": {"@type": "Offer", "price": "$11.29+"}},
             {"@type": "MenuItem", "name": "Build Your Own Box"}]}]]}
     rest = {"@context": "https://schema.org", "@type": "Restaurant", "name": "Taco Bell", "priceRange": "$$",
             "address": {"@type": "PostalAddress", "streetAddress": "1170 Northwest 185th Avenue",
@@ -862,14 +863,26 @@ def test_doordash_store_page_layout_from_archived_captures():
     assert status == "checked", detail
     assert obs["address"] == {"street": "1170 Northwest 185th Avenue", "city": "Beaverton", "state": "OR", "zip": "",
                               "country": "US"}
-    assert obs["currency"] == "USD" and obs["menu_item_count"] == 3
-    assert [(i["name"], i["price_cents"], i["currency"]) for i in obs["items"]] == [("Crunchwrap Supreme®", 853, "USD")]
+    assert obs["currency"] == "USD" and obs["menu_item_count"] == 4
+    assert [(i["name"], i["price_cents"], i["currency"]) for i in obs["items"]] == [
+        ("Crunchwrap Supreme®", 853, "USD"), ("Crunchwrap Supreme Combo", None, None)]
+    # "$11.29+" is a starting price (options set the final price): never an exact price.
+    combo = obs["items"][1]
+    assert "starting price ($11.29+)" in combo["price_note"] and combo["required_options"][0]["required"]
     assert "omits priceCurrency; the page's own data states currency USD and no other" in obs["price_context"]
 
     # The page's data names another currency, or none: the prices are not USD.
     for cur in ("CAD", ""):
         status, obs, _ = observe(_doordash_like_page(page_currency=cur))
         assert status == "checked" and obs["currency"] == "?" and "not treated as USD" in obs["price_context"]
+    # One item stating USD does not switch the rule off for the others.
+    page = _doordash_like_page().replace('"price": "US$8.53"}', '"price": "US$8.53", "priceCurrency": "USD"}')
+    assert page != _doordash_like_page()
+    status, obs, _ = observe(page)
+    assert obs["currency"] == "USD" and obs["items"][0]["currency"] == "USD"
+    # Another stated currency leaves the store mixed: never USD by inference.
+    status, obs, _ = observe(_doordash_like_page().replace('"price": "US$8.53"}', '"price": "US$8.53", "priceCurrency": "CAD"}'))
+    assert obs["currency"] == "mixed" and obs["items"][0]["currency"] is None
     status, obs, _ = observe(_doordash_like_page(page_currency="USD\\\",\\\"x\\\":{\\\"currency\\\":\\\"CAD"))
     assert obs["currency"] == "?"                                   # USD and CAD on one page: not USD
     # Canadian store (seen in the archive: addressCountry CA, page data CAD) is excluded.

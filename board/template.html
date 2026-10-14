@@ -608,14 +608,14 @@ tr.details td { background: var(--sunken); }
   // ------------------------------------------------------------------ evaluate + results
   var EV = null, timer = null;
   function evaluate() { clearTimeout(timer); timer = setTimeout(run, 60); }
-  function evalRun(idx) {
+  function evalRun(idx, snapshotOnly) {
     var pf = Object.keys(S.platforms).filter(function (k) { return S.platforms[k]; });
     var inScope = [], out = {};
     (RUNS[idx] || EMPTY_RUN).obs.forEach(function (o) {
       if (E.inSnapshotScope(o, S.order.items)) inScope.push(o);
       else out[o.search] = (out[o.search] || 0) + 1;
     });
-    var ev = E.evaluate(S.order, inScope.concat(S.imported), {
+    var ev = E.evaluate(S.order, snapshotOnly ? inScope : inScope.concat(S.imported), {
       mode: S.order.mode, platforms: pf, staleHours: S.staleHours, includeImported: true,
       filters: S.state ? { state: S.state } : null, now: Date.now()
     });
@@ -627,9 +627,11 @@ tr.details td { background: var(--sunken); }
     // when that is not the newest run.
     S.runNote = '';
     var pick = -1;
-    for (var i = 0; i < RUNS.length && pick < 0; i++) if (evalRun(i).winner) pick = i;
+    // Judged on each run's own prices: typed or imported prices are the same
+    // in every run and must not decide which run is shown.
+    for (var i = 0; i < RUNS.length && pick < 0; i++) if (evalRun(i, true).winner) pick = i;
     if (pick > 0) {
-      var first = evalRun(0), n = first.coverage.checkedLocations;
+      var first = evalRun(0, true), n = first.coverage.checkedLocations;
       S.runNote = n ? 'The newest run (' + stamp(RUNS[0].generated_at) + ') found no exact listing for this order at the ' + n + ' store' + (n === 1 ? '' : 's') +
                       ' it checked in your scope; menus can change by time of day. Showing the newest run that did.'
                     : 'The newest run (' + stamp(RUNS[0].generated_at) + ') checked no stores for this order in your scope. Showing the newest run that did.';
@@ -893,7 +895,7 @@ tr.details td { background: var(--sunken); }
       if (f.size > 8 * 1024 * 1024) { setKids($('importMsg'), h('p', { class: 'msg bad' }, 'That file is over 8 MB.')); return; }
       var rd = new FileReader(); rd.onload = function () { doImport(String(rd.result || '')); }; rd.readAsText(f);
     });
-    $('clearImport').addEventListener('click', function () { S.imported = []; setKids($('importMsg'), h('p', { class: 'msg' }, 'Imported prices removed.')); evaluate(); });
+    $('clearImport').addEventListener('click', function () { S.imported = []; setKids($('seenMsg')); setKids($('importMsg'), h('p', { class: 'msg' }, 'Imported and typed prices removed.')); evaluate(); });
     var rs = $('runSel');
     RUNS.forEach(function (r, i) { rs.appendChild(h('option', { value: String(i) }, stamp(r.generated_at) + ' · ' + r.obs.length + ' store menu' + (r.obs.length === 1 ? '' : 's') + (i === 0 ? ' (newest)' : ''))); });
     if (!RUNS.length) rs.appendChild(h('option', { value: '0' }, 'No snapshot'));

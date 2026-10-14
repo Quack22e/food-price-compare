@@ -1036,12 +1036,15 @@ tr.details td { background: var(--sunken); }
     var staleMs = (opts.staleHours != null ? opts.staleHours : 24) * 3600000;
     var platforms = setOf(opts.platforms || ['doordash', 'ubereats']);
     var multi = prep.items.length > 1;
-    var dd = dedupeObservations(observations || []);
-    var ex = { platform: 0, imported: 0, otherMode: 0, location: 0, nonUS: 0, nonUSD: 0, otherChain: 0, duplicate: dd.duplicates.length };
+    // Excluded imports are dropped before de-duplication, so they never hide
+    // another reading (live or snapshot) of the same store.
+    var ex0 = 0;
+    var input = (observations || []).filter(function (o) { if (o.source === 'import' && opts.includeImported === false) { ex0++; return false; } return true; });
+    var dd = dedupeObservations(input);
+    var ex = { platform: 0, imported: ex0, otherMode: 0, location: 0, nonUS: 0, nonUSD: 0, otherChain: 0, duplicate: dd.duplicates.length };
     var stores = [];
     dd.kept.forEach(function (obs) {
       if (!platforms[obs.platform]) { ex.platform++; return; }
-      if (obs.source === 'import' && opts.includeImported === false) { ex.imported++; return; }
       var addr = obs.address || {};
       if (!normalizeState(addr.state) || !isUSCountry(addr.country)) { ex.nonUS++; return; }
       if (obs.currency && obs.currency !== 'USD' && obs.currency !== 'mixed') { ex.nonUSD++; return; }
@@ -1302,7 +1305,11 @@ tr.details td { background: var(--sunken); }
       return x.href;
     } catch (e) { return null; }
   }
-  function str(v, max) { if (v == null) return ''; return String(v).replace(/[\u0000-\u001f\u007f]/g, ' ').trim().slice(0, max || 300); }
+  function str(v, max) {
+    // Untrusted input: only strings, numbers and booleans become text.
+    if (typeof v !== 'string' && typeof v !== 'number' && typeof v !== 'boolean') return '';
+    return String(v).replace(/[\u0000-\u001f\u007f]/g, ' ').trim().slice(0, max || 300);
+  }
   function centsField(obj, base) {
     if (obj == null) return { v: null, ok: true };
     if (Number.isInteger(obj[base + '_cents'])) return obj[base + '_cents'] >= 0 ? { v: obj[base + '_cents'], ok: true } : { v: null, ok: false };
@@ -1322,6 +1329,8 @@ tr.details td { background: var(--sunken); }
     var storeName = str(o.store_name, 200); if (!storeName) { err('store_name is required'); return null; }
     var url = safeUrl(o.store_url, platform);
     if (!url) { err('store_url must be an https URL on ' + PLATFORM_HOSTS[platform][0]); return null; }
+    var sect = /^\/([a-z]{2})(?:-([a-z]{2}))?\//i.exec(new URL(url).pathname);
+    if (sect && !/^us$/i.test(sect[2] || sect[1])) { err('store_url is in a non-US section of the site (' + sect[0] + ') (excluded)'); return null; }
     var a = o.address || {};
     var state = normalizeState(a.state);
     if (!isUSCountry(a.country)) { err('address.country "' + str(a.country, 40) + '" is outside the US (excluded)'); return null; }
@@ -1331,6 +1340,8 @@ tr.details td { background: var(--sunken); }
     // DoorDash store pages publish no postal code (verified on archived real pages).
     if (!zip) warnings.push(where + ': no ZIP code; a ZIP filter cannot match this store');
     var city = str(a.city, 100); if (!city) { err('address.city is required'); return null; }
+    // As in the backend: a US location needs country US or a US ZIP, not a state code alone.
+    if (!str(a.country, 40) && !zip) { err('address needs country "US" or a 5-digit ZIP to show it is in the US'); return null; }
     var ts = Date.parse(o.observed_at);
     if (!o.observed_at || !isFinite(ts)) { err('observed_at must be an ISO-8601 timestamp'); return null; }
     if (ts > now + 5 * 60000) { err('observed_at is in the future'); return null; }
@@ -1499,8 +1510,11 @@ tr.details td { background: var(--sunken); }
     var items = [], problems = [];
     String(text || '').split(/\r?\n/).forEach(function (line, i) {
       var t = line.trim(); if (!t) return;
-      var m = /^(.*?)[\s\-–—:·|]*(?:US)?\$\s*(\d[\d,]*(?:\.\d{1,2})?)\s*$/.exec(t);
-      if (!m || !m[1].trim()) { problems.push('line ' + (i + 1) + ' ("' + t.slice(0, 60) + '"): write it as "item name $price"'); return; }
+      var where = 'line ' + (i + 1) + ' ("' + t.slice(0, 60) + '")';
+      if (/(?:US)?\$\s*\d[\d.,]*\s*\+\s*$/.test(t)) { problems.push(where + ': a price with "+" is a starting price. Choose the options in the app, then enter the price it shows'); return; }
+      var m = /^(.*?)[\s\-–—:·|]*(?:US)?\$\s*(\d[\d.,]*)\s*$/.exec(t);
+      if (!m || !m[1].trim()) { problems.push(where + ': write it as "item name $price"'); return; }
+      if (parseMoneyToCents(m[2]) === null) { problems.push(where + ': "$' + m[2] + '" is not a valid US price (use a dot for cents, e.g. $12.99)'); return; }
       items.push({ name: m[1].trim(), price: m[2] });
     });
     return { items: items, problems: problems };
@@ -1529,6 +1543,8 @@ tr.details td { background: var(--sunken); }
       price_context: 'entered by you from what ' + label + ' showed you; your account, address and promotions may affect it',
       items: lines.items };
     var r = validateImport([rec], { now: now });
+    // All or nothing: a line that fails validation is never dropped silently.
+    if (r.errors.length) r.observations = [];
     r.observations.forEach(function (o) { o.extraction = 'entered by hand from the ' + label + ' app or site'; });
     r.errors = r.errors.map(function (e) { return e.replace(/^record 1: /, ''); });
     r.warnings = r.warnings.map(function (e) { return e.replace(/^record 1: /, ''); });
@@ -1568,14 +1584,26 @@ tr.details td { background: var(--sunken); }
     return t;
   }
   function searchScope(s) {
-    var items = ((s && s.request || {}).order || {}).items || [];
+    var order = s && s.request && s.request.order;
+    var items = order && Array.isArray(order.items) ? order.items : [];
     var texts = [];
-    items.forEach(function (it) { texts.push(it.name || ''); (it.aliases || []).forEach(function (a) { texts.push(a); }); if (it.flavor) texts.push(it.flavor); });
+    items.forEach(function (it) {
+      if (!it || typeof it !== 'object') return;
+      texts.push(str(it.name, 200)); splitList(Array.isArray(it.aliases) ? it.aliases.map(function (a) { return str(a, 200); }) : str(it.aliases, 600)).forEach(function (a) { texts.push(a); });
+      texts.push(str(it.flavor, 100));
+    });
     return scopeTokens(texts);
   }
+  // A listing the order item could match has the item's product words (or an
+  // alias's), so the search kept it only if those words contain a searched
+  // word. Every name variant must, or the store was not checked for the item.
   function scopeCovers(scope, item) {
-    var n = looseNorm([item.name].concat(String(item.aliases || '').split(',')).join(' '));
-    return scope.some(function (t) { return n.indexOf(t) >= 0; });
+    var variants = [str(item.name, 200)].concat(splitList(item.aliases));
+    return variants.every(function (v) {
+      if (!v) return true;
+      var base = extractAttrs(v).tokens.join(' ');
+      return scope.some(function (t) { return base.indexOf(t) >= 0; });
+    });
   }
   function inSnapshotScope(o, orderItems) {
     return !o.scope || orderItems.every(function (it) { return !it.name || scopeCovers(o.scope, it); });
@@ -1584,19 +1612,27 @@ tr.details td { background: var(--sunken); }
     opts = opts || {};
     var now = opts.now != null ? opts.now : Date.now();
     var obs = [], rejected = [];
-    ((run && run.searches) || []).forEach(function (s) {
-      var scope = searchScope(s);
-      (s.observations || []).forEach(function (o) {
+    var plain = function (x) { return !!x && typeof x === 'object' && !Array.isArray(x); };
+    if (!plain(run) || !Array.isArray(run.searches)) return { obs: obs, rejected: ['not a snapshot: no "searches" list'] };
+    run.searches.forEach(function (s, si) {
+      if (!plain(s)) { rejected.push('search ' + (si + 1) + ' is not an object'); return; }
+      var scope = searchScope(s), label = str(s.label, 200) || 'search ' + (si + 1);
+      if (s.observations != null && !Array.isArray(s.observations)) { rejected.push(label + ': observations is not a list'); return; }
+      (s.observations || []).forEach(function (o, oi) {
+        if (!plain(o)) { rejected.push(label + ', reading ' + (oi + 1) + ': not an object'); return; }
         // Same checks as any import (US-only, USD, https platform link, valid
         // timestamp). A store page that was read but listed nothing like the
         // order still counts as a checked location, so it is validated with a
         // placeholder item that is removed again.
         var none = !(o.items || []).length;
         var v = validateImport([none ? Object.assign({}, o, { items: [{ name: 'placeholder' }] }) : o], { now: now });
-        if (!v.observations.length) { rejected.push(v.errors.join('; ')); return; }
+        if (!v.observations.length) {
+          rejected.push(label + ', ' + (str(o.store_name, 120) || 'reading ' + (oi + 1)) + ': ' + v.errors.map(function (e) { return e.replace(/^record 1:? ?/, ''); }).join('; '));
+          return;
+        }
         var x = v.observations[0];
         if (none) x.items = [];
-        x.source = 'snapshot'; x.extraction = str(o.extraction, 200) || 'snapshot'; x.search = str(s.label, 200); x.scope = scope;
+        x.source = 'snapshot'; x.extraction = str(o.extraction, 200) || 'snapshot'; x.search = label; x.scope = scope;
         x.run = str(run.github_run_id, 40) || null; x.run_at = str(run.generated_at, 40) || null;
         obs.push(x);
       });
@@ -1903,14 +1939,14 @@ tr.details td { background: var(--sunken); }
   // ------------------------------------------------------------------ evaluate + results
   var EV = null, timer = null;
   function evaluate() { clearTimeout(timer); timer = setTimeout(run, 60); }
-  function evalRun(idx) {
+  function evalRun(idx, snapshotOnly) {
     var pf = Object.keys(S.platforms).filter(function (k) { return S.platforms[k]; });
     var inScope = [], out = {};
     (RUNS[idx] || EMPTY_RUN).obs.forEach(function (o) {
       if (E.inSnapshotScope(o, S.order.items)) inScope.push(o);
       else out[o.search] = (out[o.search] || 0) + 1;
     });
-    var ev = E.evaluate(S.order, inScope.concat(S.imported), {
+    var ev = E.evaluate(S.order, snapshotOnly ? inScope : inScope.concat(S.imported), {
       mode: S.order.mode, platforms: pf, staleHours: S.staleHours, includeImported: true,
       filters: S.state ? { state: S.state } : null, now: Date.now()
     });
@@ -1922,9 +1958,11 @@ tr.details td { background: var(--sunken); }
     // when that is not the newest run.
     S.runNote = '';
     var pick = -1;
-    for (var i = 0; i < RUNS.length && pick < 0; i++) if (evalRun(i).winner) pick = i;
+    // Judged on each run's own prices: typed or imported prices are the same
+    // in every run and must not decide which run is shown.
+    for (var i = 0; i < RUNS.length && pick < 0; i++) if (evalRun(i, true).winner) pick = i;
     if (pick > 0) {
-      var first = evalRun(0), n = first.coverage.checkedLocations;
+      var first = evalRun(0, true), n = first.coverage.checkedLocations;
       S.runNote = n ? 'The newest run (' + stamp(RUNS[0].generated_at) + ') found no exact listing for this order at the ' + n + ' store' + (n === 1 ? '' : 's') +
                       ' it checked in your scope; menus can change by time of day. Showing the newest run that did.'
                     : 'The newest run (' + stamp(RUNS[0].generated_at) + ') checked no stores for this order in your scope. Showing the newest run that did.';
@@ -2188,7 +2226,7 @@ tr.details td { background: var(--sunken); }
       if (f.size > 8 * 1024 * 1024) { setKids($('importMsg'), h('p', { class: 'msg bad' }, 'That file is over 8 MB.')); return; }
       var rd = new FileReader(); rd.onload = function () { doImport(String(rd.result || '')); }; rd.readAsText(f);
     });
-    $('clearImport').addEventListener('click', function () { S.imported = []; setKids($('importMsg'), h('p', { class: 'msg' }, 'Imported prices removed.')); evaluate(); });
+    $('clearImport').addEventListener('click', function () { S.imported = []; setKids($('seenMsg')); setKids($('importMsg'), h('p', { class: 'msg' }, 'Imported and typed prices removed.')); evaluate(); });
     var rs = $('runSel');
     RUNS.forEach(function (r, i) { rs.appendChild(h('option', { value: String(i) }, stamp(r.generated_at) + ' · ' + r.obs.length + ' store menu' + (r.obs.length === 1 ? '' : 's') + (i === 0 ? ' (newest)' : ''))); });
     if (!RUNS.length) rs.appendChild(h('option', { value: '0' }, 'No snapshot'));
