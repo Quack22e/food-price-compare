@@ -23,7 +23,7 @@ import re
 import sys
 import time
 from pathlib import Path
-from urllib.parse import quote, urlsplit
+from urllib.parse import quote, urljoin, urlsplit
 
 import requests
 
@@ -32,11 +32,14 @@ sys.path.insert(0, str(ROOT))
 
 from server.adapters import parse_store_page  # noqa: E402
 from server.extract import dedupe_items, flag_zero_prices, normalize_us_address, parse_jsonld_blocks, scan_html  # noqa: E402
-from server.http_client import utcnow_iso  # noqa: E402
+from server.http_client import parse_retry_after, utcnow_iso  # noqa: E402
 from server.robots import rules_for_status  # noqa: E402
 from server.structure_probe import probe_structure  # noqa: E402
 
 UA = "FoodPriceCompare/1.0 (structure research; reads existing archive captures only)"
+ARCHIVE_HOSTS = {"web.archive.org", "index.commoncrawl.org", "data.commoncrawl.org"}
+MAX_RETRY_AFTER = 120     # seconds; a host asking for longer is left alone for the rest of the run
+MAX_REDIRECTS = 3
 TOKEN = "FoodPriceCompare"
 MIN_INTERVAL = 3.0
 MAX_PAGES = 15           # captures read per archive
@@ -45,29 +48,37 @@ CAPTURES = ROOT / "tests" / "captures_archive"
 
 
 class Client:
-    """Small polite reader for the archive hosts: robots.txt, one request per
-    host every MIN_INTERVAL seconds, truthful User-Agent, no retries on 4xx."""
+    """Small polite reader for the archive hosts: robots.txt (including
+    Crawl-delay), one request per host every MIN_INTERVAL seconds or longer,
+    truthful User-Agent, Retry-After honoured once (a longer wait, or a second
+    429/503, ends all requests to that host), redirects followed only to the
+    archive hosts and only where robots.txt allows."""
 
     def __init__(self):
         self.s = requests.Session()
         self.s.headers["User-Agent"] = UA
         self.last: dict[str, float] = {}
         self.robots: dict[str, object] = {}
+        self.stopped: dict[str, str] = {}
         self.log: list[dict] = []
 
     def _wait(self, host):
+        rules = self.robots.get(host)
+        interval = max(MIN_INTERVAL, float(getattr(rules, "crawl_delay", None) or 0))
         gap = time.time() - self.last.get(host, 0)
-        if gap < MIN_INTERVAL:
-            time.sleep(MIN_INTERVAL - gap)
+        if gap < interval:
+            time.sleep(interval - gap)
         self.last[host] = time.time()
 
     def allowed(self, url) -> bool:
         p = urlsplit(url)
         host = p.netloc
+        if host not in ARCHIVE_HOSTS:
+            return False
         if host not in self.robots:
             self._wait(host)
             try:
-                r = self.s.get(f"{p.scheme}://{host}/robots.txt", timeout=30)
+                r = self.s.get(f"{p.scheme}://{host}/robots.txt", timeout=30, allow_redirects=False)
                 self.robots[host] = rules_for_status(r.status_code, r.text, TOKEN)
                 self.log.append({"robots": host, "status": r.status_code})
             except requests.RequestException as exc:
@@ -75,18 +86,47 @@ class Client:
                 self.log.append({"robots": host, "error": repr(exc)})
         return self.robots[host].can_fetch(url)
 
-    def get(self, url, **kw):
-        if not self.allowed(url):
-            self.log.append({"url": url, "skipped": "robots.txt disallows"})
+    def _once(self, url, **kw):
+        host = urlsplit(url).netloc
+        if host in self.stopped:
+            self.log.append({"url": url, "skipped": f"{host} asked to stop: {self.stopped[host]}"})
             return None
-        self._wait(urlsplit(url).netloc)
+        if not self.allowed(url):
+            self.log.append({"url": url, "skipped": "robots.txt disallows (or not an archive host)"})
+            return None
+        self._wait(host)
         try:
-            r = self.s.get(url, timeout=60, **kw)
+            r = self.s.get(url, timeout=60, allow_redirects=False, **kw)
         except requests.RequestException as exc:
             self.log.append({"url": url, "error": repr(exc)})
             return None
         self.log.append({"url": url, "status": r.status_code, "bytes": len(r.content)})
         return r
+
+    def get(self, url, **kw):
+        retried = False
+        for _ in range(MAX_REDIRECTS + 2):
+            r = self._once(url, **kw)
+            if r is None:
+                return None
+            if r.status_code in (429, 503):
+                wait = parse_retry_after(r.headers.get("Retry-After"))
+                host = urlsplit(url).netloc
+                if retried or (wait is not None and wait > MAX_RETRY_AFTER):
+                    self.stopped[host] = f"HTTP {r.status_code}, Retry-After {r.headers.get('Retry-After')}"
+                    return r
+                retried = True
+                time.sleep(wait if wait is not None else 30)
+                continue
+            if r.is_redirect and r.headers.get("Location"):
+                url = urljoin(url, r.headers["Location"])        # checked by _once: archive host + robots.txt
+                continue
+            return r
+        return r
+
+
+def status_of(r):
+    return None if r is None else r.status_code
 
 
 def summarize(html: str, url: str) -> dict:
@@ -133,13 +173,8 @@ PER_CHAIN = 3
 
 
 def _cdx(c: Client, query: str, out: dict) -> list[dict]:
-    r = None
-    for wait in (0, 15, 45):                    # the CDX server answers 503 when busy
-        time.sleep(wait)
-        r = c.get(query)
-        if r is None or r.status_code != 503:
-            break
-    rec = {"query": query, "status": r and r.status_code}
+    r = c.get(query)                            # Retry-After / busy answers handled by the client
+    rec = {"query": query, "status": status_of(r)}
     got = []
     if r is not None and r.ok:
         try:
@@ -156,12 +191,12 @@ def wayback(c: Client, known: list[str]) -> dict:
     out = {"source": "Wayback Machine (web.archive.org), existing captures, raw bytes via id_", "queries": [], "pages": []}
     fields = "&output=json&fl=timestamp,original,statuscode,mimetype,length&filter=statuscode:200&filter=mimetype:text/html"
     groups: dict[str, list[dict]] = {}
+    if known:                                   # first, so the page budget never cuts it off
+        groups["seen in live runs"] = _cdx(c, f"https://web.archive.org/cdx/search/cdx?url={quote(known[0], safe='')}{fields}&limit=20", out)
     for prefix in CHAIN_PREFIXES + [""]:
         q = (f"https://web.archive.org/cdx/search/cdx?url={quote('www.doordash.com/store/' + prefix, safe='')}"
              f"&matchType=prefix&from=2025{fields}&collapse=urlkey&limit=300")
         groups[prefix or "any"] = _cdx(c, q, out)
-    if known:
-        groups["seen in live runs"] = _cdx(c, f"https://web.archive.org/cdx/search/cdx?url={quote(known[0], safe='')}{fields}&limit=20", out)
     picks, seen = [], set()
     for name, rows in groups.items():
         newest: dict[str, dict] = {}
@@ -181,7 +216,7 @@ def wayback(c: Client, known: list[str]) -> dict:
     for name, sid, row in picks[:MAX_PAGES]:
         url = f"https://web.archive.org/web/{row['timestamp']}id_/{row['original']}"
         r = c.get(url)
-        rec = {"group": name, "original": row["original"], "captured": row["timestamp"], "status": r and r.status_code}
+        rec = {"group": name, "original": row["original"], "captured": row["timestamp"], "status": status_of(r)}
         if r is not None and r.ok:
             html = r.content.decode(r.encoding or "utf-8", "replace")
             rec.update(summarize(html, row["original"]))
@@ -286,10 +321,10 @@ def jsonld_shape(html: str, url: str) -> dict:
     shape["offers"] = offers_total
     shape["offers_with_priceCurrency"] = offers_with_currency
     shape["priceCurrency_values"] = sorted(currency_values)
-    low = html.lower()
-    for ph in ('"currency"', "currencycode", "usd"):
-        i = low.find(ph)
-        shape.setdefault("currency_mentions", {})[ph] = None if i < 0 else re.sub(r"\s+", " ", html[max(0, i - 80): i + 80])
+    # Also inside escaped JSON (\"currency\":\"USD\"), as real pages carry it.
+    for name, pat in (("currency", r'\\*"currency\\*"\s*:'), ("currencyCode", r"currencyCode"), ("USD", r"USD")):
+        m = re.search(pat, html)
+        shape.setdefault("currency_mentions", {})[name] = None if not m else re.sub(r"\s+", " ", html[max(0, m.start() - 80): m.start() + 80])
     return shape
 
 
@@ -311,7 +346,7 @@ def common_crawl(c: Client) -> dict:
            "pages": []}
     r = c.get("https://index.commoncrawl.org/collinfo.json")
     if r is None or not r.ok:
-        out["error"] = f"collinfo.json: {r and r.status_code}"
+        out["error"] = f"collinfo.json: {status_of(r)}"
         return out
     rows = []
     for coll in r.json()[:3]:
@@ -319,7 +354,7 @@ def common_crawl(c: Client) -> dict:
         q = f"{api}?url={quote('www.doordash.com/store/*', safe='*')}&output=json&limit=60&filter=status:200"
         rr = c.get(q)
         lines = [json.loads(ln) for ln in (rr.text.splitlines() if rr is not None and rr.ok else []) if ln.strip()]
-        out["indexes"].append({"id": coll["id"], "status": rr and rr.status_code, "records": len(lines)})
+        out["indexes"].append({"id": coll["id"], "status": status_of(rr), "records": len(lines)})
         rows += [dict(ln, index=coll["id"]) for ln in lines if "html" in ln.get("mime", "") or "html" in ln.get("mime-detected", "")]
         if len(rows) >= MAX_PAGES * 2:
             break
@@ -333,7 +368,7 @@ def common_crawl(c: Client) -> dict:
             break
         off, ln = int(row["offset"]), int(row["length"])
         rr = c.get("https://data.commoncrawl.org/" + row["filename"], headers={"Range": f"bytes={off}-{off + ln - 1}"})
-        rec = {"original": row["url"], "captured": row.get("timestamp"), "index": row["index"], "status": rr and rr.status_code}
+        rec = {"original": row["url"], "captured": row.get("timestamp"), "index": row["index"], "status": status_of(rr)}
         if rr is not None and rr.status_code in (200, 206):
             try:
                 status, headers, body = _warc_body(rr.content)
@@ -377,7 +412,7 @@ def main() -> None:
         part = rep.get(name) or {}
         print(name, json.dumps([{k: p.get(k) for k in ("original", "captured", "status", "challenge", "jsonld_types",
                                                          "restaurant_found", "menu_items", "priced_items")}
-                                for p in part.get("pages", [])], indent=1), part.get("error"))
+                                for p in part.get("pages", [])], indent=1, default=str), part.get("error"))
 
 
 if __name__ == "__main__":

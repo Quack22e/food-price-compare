@@ -7,11 +7,11 @@ Enter a Grubhub item or order. The app looks for the **same item** (same chain, 
 * `board/index.html` is a static **price board**: the same engine over real snapshots from the live runs, with no backend. It opens straight from disk and is also published as a private claude.ai artifact. See [The price board](#the-price-board).
 
 > **Live status (verified 2026-10-08 against the real sites, see [Verification results](#verification-results)).**
-> * **Uber Eats** works end to end. Real store pages publish the schema.org menu JSON-LD the extractor reads, and real sitemaps produce branch discovery. The newest snapshot (run 38649949281, 2026-10-14 22:51 UTC) read 59 store menus across three chains, for example "Lowest verified price among 20 checked locations: $6.09, 10 pc. Chicken McNuggets®, McDonald's, Belle WV" (18 verified, up to $7.99 in Plantation FL). On 2026-10-08 the same search gave $5.19 in Abingdon VA among 22.
+> * **Uber Eats** works end to end. Real store pages publish the schema.org menu JSON-LD the extractor reads, and real sitemaps produce branch discovery. The newest snapshot (run 38649949281, 2026-10-14 22:51 UTC) took 59 menu readings of 35 branches across three chains (some branches were read in both order modes), for example "Lowest verified price among 20 checked locations: $6.09, 10 pc. Chicken McNuggets®, McDonald's, Belle WV" (18 verified, up to $7.99 in Plantation FL). On 2026-10-08 the same search gave $5.19 in Abingdon VA among 22.
 > * **Menus change by time of day.** At 07:14 UTC, 18 McDonald's branches published breakfast menus with no McNuggets. Each snapshot run is therefore kept separate, never merged.
-> * **DoorDash** branch discovery works. It covers 131 per-state store sitemaps (California alone lists 106,228 store URLs) and chain pages (50 real Chipotle branches). Its store pages answered every request from a datacenter IP with a Cloudflare challenge (HTTP 403; 69 of 69 across 14 runs), which the app reports and does not bypass. Its `/business/…/menu` pages carry prices, but DoorDash labels them on the page as *"estimated based on your predicted location and may vary across store"*, so they are not branch prices. **No current DoorDash price was obtained by the live runs.**
->   * **What a DoorDash store page publishes is now known from real pages.** The Wayback Machine holds copies its own crawler captured. 15 of them (Sep 2025 to 7 Oct 2026; Taco Bell, Chipotle, Lou Malnati's, McDonald's and local stores) were read structure-only by `scripts/archive_probe.py`. Each has schema.org `Restaurant` + `Menu` JSON-LD with a street address and `addressCountry`, but **no `priceCurrency`** and **no postal code**. Prices are display strings such as `"$8.53"`, `"US$12.75"` or `"$13.59+"` (a starting price). The page's own app data states `"currency":"USD"` for US stores and `"CAD"` for Canadian ones. The DoorDash reader now handles that layout and was run on all 15 pages: **9 US stores read with USD prices**, 3 Canadian stores excluded, 3 pages without a Restaurant block reported as "no menu data". Archived prices are historical and are never used as prices.
->   * **To include DoorDash prices now,** type the prices you see in the DoorDash app ("Add prices you saw yourself", in the app and on the board). This involves no scraping at all.
+> * **DoorDash** branch discovery works. It covers 131 per-state store sitemaps (California alone lists 106,228 store URLs) and chain pages (50 real Chipotle branches). Its store pages answered every request from a datacenter IP with a Cloudflare challenge (HTTP 403; 89 of 89 across 18 runs), which the app reports and does not bypass. Its `/business/…/menu` pages carry prices, but DoorDash labels them on the page as *"estimated based on your predicted location and may vary across store"*, so they are not branch prices. **No current DoorDash price was obtained by the live runs.**
+>   * **What a DoorDash store page publishes is now known from real pages.** The Wayback Machine holds copies its own crawler captured. 15 of them (Sep 2025 to 7 Oct 2026; Taco Bell, Chipotle, Lou Malnati's, McDonald's and local stores) were read structure-only by `scripts/archive_probe.py`. 12 of them have schema.org `Restaurant` + `Menu` JSON-LD with a street address and `addressCountry`; the other 3 have only a `Menu` block. None has **`priceCurrency`** or a **postal code**. Prices are display strings such as `"$8.53"`, `"US$12.75"` or `"$13.59+"` (a starting price). The page's own app data states `"currency":"USD"` for US stores and `"CAD"` for Canadian ones. The DoorDash reader now handles that layout and was run on all 15 pages of the latest probe (run 38649946112): **9 US stores read with USD prices** (CA, IA, IL ×2, MA, NC, OR ×2, UT), 3 Canadian stores excluded, 3 pages without a Restaurant block reported as "no menu data". Archived prices are historical and are never used as prices.
+>   * **To include DoorDash prices now,** type the prices you see in the DoorDash app ("Add prices you saw yourself" in the app, "Type prices you saw in the DoorDash or Uber Eats app" on the board). This involves no scraping at all.
 > * **Grubhub** restaurant pages are a JavaScript shell with no structured data. Grubhub prices now come from two **Grubhub-owned menu sites** that link each page back to its Grubhub listing, and a page is used only when it links to the same Grubhub ID:
 >   * **MenuPages** publishes the menu as JSON-LD. Verified live: Lou Malnati's, 6456 S Cicero Ave, Chicago (ID 434510), 162 priced listings. It covers a subset of Grubhub (28,133 restaurant pages).
 >   * **AllMenus** is the fallback. It shows prices only in its HTML, so they are used only when its 217 HTML item names equal the page's own JSON-LD item names. Verified live: Lou Malnati's, 85 S Buffalo Grove Rd (ID 517712, not on MenuPages), 169 priced listings.
@@ -147,8 +147,8 @@ The universe of US branches on a platform is **not known**. Even after every dec
   * A partial name (for example "Chipotle" vs "Chipotle Mexican Grill") needs confirmation, unless you add it as a confirmed alias.
   * A different chain is excluded.
 * **Product:**
-  * Normalization handles only harmless differences: case, punctuation, `&` and `+` vs "and", `'N'` vs "and", `w/` vs "with", and inch marks. Calorie notes such as `[490-630 Cals]` or `(350 cal.)` (seen on archived DoorDash pages) are removed.
-  * A **verified** match needs identical product words once size and piece-count words are extracted. A bare leading number ("10 Chicken McNuggets") counts as the piece count only when it equals the count the other side states, so "7 Layer Burrito" stays a name.
+  * Normalization handles only harmless differences: case, punctuation, `&` and `+` vs "and", `'N'` vs "and", `w/` vs "with", and inch marks. Calorie and serving notes (`[490-630 Cals]`, `(350 cal.)`, `(290 Cal/Slice)`, `(Serves 4)`) and menu numbers (`#1 Big Mac Meal`) are removed. `®`/`™` are dropped before Unicode normalization (which would otherwise turn `™` into the letters "TM"); `w/o` means "without", "gluten free" equals "GF", "Jr." equals "Junior", and `14''` or `16 in.` are inches.
+  * A **verified** match needs the same product words, **counted** (so "Double-Double" is not "Double", and "2 Large 2-Topping Pizzas" is not one), once size and piece-count words are extracted; names that differ only in spacing ("Cheese Burger" / "Cheeseburger") are the same. A bare number at the start or end ("10 Chicken McNuggets", "Fried Chicken Wings (7)") counts as the piece count only when it equals the count the other side states, so "7 Layer Burrito" stays a name.
   * When the names differ:
     * by a **variant word** (meal, combo, bundle, supreme, deluxe, double, jr, spicy, crispy, grilled, gf, vegan, bowl, salad, wrap, with, no, extra …) or by a number: **not equivalent**;
     * by one or two other words, with one name containing the other ("Small Deep Dish Margherita **Pizza**", "**World Famous** Fries - Large", "**Chicken** Burrito Bowl"): **needs confirmation**, with the words shown. Such a listing is never verified on its own;
@@ -157,11 +157,12 @@ The universe of US branches on a platform is **not known**. Even after every dec
   * Aliases are used only when you enter or confirm them, and matches through them are labelled as yours.
   * No embedding model decides a match: one would score "10 pc" vs "20 pc", "Small" vs "Large", or an item vs its Meal as near-identical, which are exactly the differences this app must catch.
 * **Size, count and flavor:**
-  * Sizes are word sizes (small … extra large, kids, regular, tall/grande/venti, footlong), ounces and inches. Piece counts accept pc, piece, ct, pack and dozen.
+  * Sizes are word sizes (small … extra large, X-Lg, kids, regular, tall/grande/venti), ounces and inches; a footlong is 12 inches. Piece counts accept pc, piece, ct, pack and dozen, also when typed in the size field ("12 ct").
+  * Words typed in the size field ("Small Gluten Free", "Deep Dish") must appear in the listing, and a size the order does not state is never assumed: such listings need confirmation.
   * The same attribute stated differently on each side means **not equivalent**. If either side doesn't state it, the match **needs confirmation**.
   * A flavor must appear in the listing name or as a listed add-on.
 * **Modifiers:**
-  * Each modifier must be listed with a known charge.
+  * Each modifier must be listed with a known charge. When the same option is listed in several groups at different charges ("Small Pizza Toppings" / "Large Pizza Toppings", "Left Half" / "Whole"), the group naming the order's size (or "whole") decides; otherwise the match needs confirmation.
   * Removals ("No onions") that aren't listed need confirmation.
   * A mandatory option group needs a priced selection.
   * When the source doesn't say whether paid mandatory options exist, the row shows that caveat.
@@ -170,7 +171,7 @@ The universe of US branches on a platform is **not known**. Even after every dec
 * **Exclusions and staleness:**
   * Unavailable items are shown but excluded from winners.
   * Unknown availability is flagged.
-  * Stale observations (default older than 24 h) are flagged and cannot win.
+  * Stale observations (default older than 24 h) are flagged and cannot win. Prices you typed at different times for one store keep their own times, so a fresh price is never aged by an older one (a basket is as old as its oldest part).
   * Non-US and non-USD data is excluded.
 * **Baskets:** every item must be an exact, purchasable match at one branch on one platform. Different restaurants are never combined.
 
@@ -244,15 +245,15 @@ It never stores receipts, Grubhub prices, quantities, delivery addresses or loca
 
 ## Verification results
 
-### Local test suites (build sandbox, 2026-10-09)
+### Local test suites (build sandbox, 2026-10-15)
 
 | Suite | Command | Result |
 |---|---|---|
-| Backend (pytest) | `python -m pytest -q` | **40 passed, 3 skipped**. The skipped tests are in `test_real_captures.py`; real pages exist only on the runners, where the live-page tests passed in run 37827940323 and the archived DoorDash pages **passed 15/15** in run 37893861203. |
-| Engine (Node, runs the exact `<script id="fpc-engine">` from index.html) | `node --test tests/engine.test.mjs` | **23 passed** (includes the committed real snapshot) |
-| Capture bookmarklet | `node --test tests/capture.test.mjs` | **6 passed** |
-| UI end-to-end (Playwright + Chromium, real backend, local fixture sites) | `node --test tests/ui.e2e.mjs` | **21 passed** |
-| Price board (Playwright + Chromium, committed real snapshot) | `node --test tests/board.e2e.mjs` | **13 passed** |
+| Backend (pytest) | `python -m pytest -q` | **41 passed, 3 skipped**. The skipped tests are in `test_real_captures.py`; real pages exist only on the runners, where the live-page tests passed in run 37827940323 and the archived DoorDash pages **passed 15/15** in runs 37893861203 and 38649946112. |
+| Engine (Node, runs the exact `<script id="fpc-engine">` from index.html) | `node --test tests/engine.test.mjs` | **31 passed** (includes the committed real snapshot and every confirmed red-team case) |
+| Capture bookmarklet | `node --test tests/capture.test.mjs` | **8 passed** |
+| UI end-to-end (Playwright + Chromium, real backend, local fixture sites) | `node --test tests/ui.e2e.mjs` | **22 passed** |
+| Price board (Playwright + Chromium, committed real snapshot) | `node --test tests/board.e2e.mjs` | **14 passed** |
 
 The pipeline tests use **synthetic local fixture servers** (`tests/fake_platform.py`). They exercise the mechanics:
 
@@ -343,9 +344,9 @@ The sandbox also checked npm and PyPI packages for these platforms (read as data
 | Uber Eats store pages publish `Restaurant → hasMenu → MenuSection → MenuItem → Offer{price, priceCurrency}` JSON-LD with `PostalAddress` | 6 real store pages fetched by the live runs | **Verified live** |
 | Uber Eats JSON-LD strings contain HTML entities; listings repeat across sections; some prices are `0.00` because options set the price | Real pages (McDonald's "Columbia &amp; 165th St"; Zucker's "Iced Latte" $0.00) | **Verified live**; handled |
 | Uber Eats bot checks arrive as a 307 to `def.uber.com/…/challenge` | Live runs 2 and 3 | **Verified live**; reported as `captcha` |
-| DoorDash store pages are behind Cloudflare for datacenter IPs | all 69 DoorDash store-page requests across 14 runs returned 403 "Just a moment…" | **Verified live** (from GitHub runners) |
-| DoorDash store pages publish `Restaurant` + `Menu` JSON-LD: street address and `addressCountry` but no `postalCode`; prices as display strings (`"$8.53"`, `"US$12.75"`, `"$13.59+"`) without `priceCurrency`; the page's app data states `"currency":"USD"` (US) or `"CAD"` (Canada) | 15 Wayback Machine captures, Sep 2025 – 7 Oct 2026 (`scripts/archive_probe.py`, runs 37892678037, 37893226448, 37893861203; `live-verification/doordash-archive.json`) | **Verified on archived real pages**; reader handles it (9 US stores read with USD prices, 3 Canadian excluded, 3 without a Restaurant block reported as no menu data) |
-| A DoorDash `+` price is a starting price | The same pages display `$$7.31+` for Taco Bell Chalupa Supreme and `$13.59+` for Lou Malnati's deep dish, next to the same JSON-LD string | **Verified on archived pages**; never treated as an exact price |
+| DoorDash store pages are behind Cloudflare for datacenter IPs | all 89 DoorDash store-page requests across 18 runs (35 inspections, 54 search fetches) returned 403 "Just a moment…" | **Verified live** (from GitHub runners) |
+| DoorDash store pages publish `Restaurant` + `Menu` JSON-LD: street address and `addressCountry` but no `postalCode`; prices as display strings (`"$8.53"`, `"US$12.75"`, `"$13.59+"`) without `priceCurrency`; the page's app data states `"currency":"USD"` (US) or `"CAD"` (Canada) | 15 Wayback Machine captures, Sep 2025 – 7 Oct 2026 (`scripts/archive_probe.py`, runs 37892678037 to 38649946112; the committed `live-verification/doordash-archive.json` and `archive-captures-pytest.txt` are from the latest, 38649946112, which read a newer set of 15 pages and gave the same counts) | **Verified on archived real pages**; reader handles it (9 US stores read with USD prices, 3 Canadian excluded, 3 without a Restaurant block reported as no menu data) |
+| A DoorDash `+` price is a starting price | The same pages' own app data gives the display price `$7.31+` (stored escaped as `$$7.31+`) for Taco Bell Chalupa Supreme and `$13.59+` for Lou Malnati's deep dish, equal to the JSON-LD string | **Verified on archived pages**; never treated as an exact price |
 | Common Crawl's index for DoorDash store URLs | `index.commoncrawl.org/robots.txt` disallows the index queries for this client | **Honoured**; not read |
 | DoorDash `/business/{slug}-{id}/` is not challenged and lists branch links; its menu is chain-level (`storeId: $undefined`, Next.js stream, no JSON-LD) | Live runs | **Verified live**; used for discovery only |
 | DoorDash sitemaps are served from `cdn.doordash.com/sitemaps/`, with one store sitemap per state (`sitemap-doordash-<st>-stores.xml`, 131 in total) | Live run 37709849182 | **Verified live**; per-state files feed the location filter |
@@ -383,7 +384,7 @@ To find other ways to get this data, 24 methods were researched (October 2026). 
 | MenuPages | Grubhub | public; robots.txt allows | yes, for listed restaurants (28,133 pages) | **In use, verified live**. Grubhub terms: personal, non-commercial use. |
 | AllMenus | Grubhub | public; robots.txt allows | partly (undated, sometimes stale) | **In use, verified live**. Used only when HTML and JSON-LD names agree. Same Grubhub terms. |
 | Uber Eats brand-city pages | Uber Eats | public | no (sample prices not tied to a branch) | Discovery only |
-| Capture bookmarklet (your browser) | DoorDash, Uber Eats | your action | yes for fixed prices; DoorDash publishes no modifiers, and `+` prices are starting prices | **Built**. Its DoorDash handling matches the real page layout (verified on archived pages). DoorDash's terms ban copying with scripts even when run by hand (high risk). |
+| Capture bookmarklet (your browser) | DoorDash, Uber Eats | your action | yes for fixed prices on pages with a `Restaurant` block (12 of 15 archived DoorDash pages; the other 3 give nothing); DoorDash publishes no modifiers, and `+` prices are starting prices | **Built**. Its DoorDash handling matches the real page layout (verified on archived pages). DoorDash's terms ban copying with scripts even when run by hand (high risk). |
 | Prices you saw, typed in | DoorDash, Uber Eats | your action, your app | yes, for your branch, mode and account | **Built** (app and board). No scraping: you type what the platform shows you, with the store link for the store ID |
 | Your order receipts | all three | your mailbox | no (past orders, no store ID) | **Built** (paste). Historical; good for your Grubhub side. |
 | Personal data downloads ([Uber](https://help.uber.com/riders/article/whats-in-your-data-download?nodeId=3d476006-87a4-4404-ac1e-216825414e05), [DoorDash](https://help.doordash.com/en-us/consumers/article/i-want-to-delete-my-personal-information-data-from-doordash)) | Uber Eats, DoorDash | account holder, 1–3 days | no (no store address or URL) | Not built; your own past orders only |
@@ -409,7 +410,7 @@ To find other ways to get this data, 24 methods were researched (October 2026). 
 ## Access limitations and dependencies
 
 1. **Network access.** The service needs outbound HTTPS to `www.doordash.com`, `www.ubereats.com` and, for link extraction, `www.grubhub.com`, `menupages.com` and `www.allmenus.com`. The Claude build sandbox is denied all three. A GitHub-hosted runner and ordinary machines are not. Run `python -m server.inspect_page --probe` first.
-2. **DoorDash prices (blocked, verified).** DoorDash store pages served a Cloudflare challenge to every request from GitHub's datacenter IPs (69 of 69 across 14 runs). The app reports `captcha` barriers and its circuit breaker stops the adapter. It does not try to defeat the challenge. From other networks DoorDash may or may not serve the page; the run log shows which. Without readable store pages there are **no scraped DoorDash branch prices**, and the DoorDash chain-page menu is not branch-specific. When a store page is readable, the reader handles DoorDash's real layout (verified on 15 archived pages, see the evidence log). DoorDash prices you see in the app can always be typed in.
+2. **DoorDash prices (blocked, verified).** DoorDash store pages served a Cloudflare challenge to every request from GitHub's datacenter IPs (89 of 89 across 18 runs). The app reports `captcha` barriers and its circuit breaker stops the adapter. It does not try to defeat the challenge. From other networks DoorDash may or may not serve the page; the run log shows which. Without readable store pages there are **no scraped DoorDash branch prices**, and the DoorDash chain-page menu is not branch-specific. When a store page is readable, the reader handles DoorDash's real layout (verified on 15 archived pages, see the evidence log). DoorDash prices you see in the app can always be typed in.
 3. **Uber Eats bot checks (intermittent, verified).** Two of five store fetches in run 3, and two of three in run 2, were redirected to Uber's challenge page. These are reported and skipped. Resume tries the remaining queue later.
 4. **What the published data cannot tell you.**
    * Uber Eats JSON-LD has no add-on, option or availability data. An order with modifiers therefore always "needs confirmation", and the availability of live rows is "unknown".

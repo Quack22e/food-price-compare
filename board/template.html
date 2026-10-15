@@ -648,7 +648,8 @@ tr.details td { background: var(--sunken); }
   // listing (size, count, currency, price).
   function confirmAlias(idx, label) {
     var it = S.order.items[idx]; if (!it) return;
-    var name = String(label).replace(/[,;\n]+/g, ' ').replace(/\s+/g, ' ').trim();
+    // Notes such as "(2,320 Cal)" are dropped first: aliases are comma-separated.
+    var name = E.stripNotes(label).replace(/[,;\n]+/g, ' ').replace(/\s+/g, ' ').trim();
     var have = String(it.aliases || '').split(/[,;\n]/).map(function (x) { return x.trim(); }).filter(Boolean);
     if (have.indexOf(name) < 0) have.push(name);
     it.aliases = have.join(', ');

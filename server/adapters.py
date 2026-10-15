@@ -198,7 +198,14 @@ def build_observation(adapter: PlatformAdapter, ref: dict, parsed: dict, fetched
     # a priced item without one makes the store's currency unknown. An item
     # published without an Offer states nothing and is ignored.
     currencies = sorted({it["currency"] for it in items if it.get("currency")} |
-                        ({"?"} if any(it.get("price_cents") is not None and not it.get("currency") for it in items) else set())) or ["?"]
+                        ({"?"} if any(it.get("price_cents") is not None and not it.get("currency") for it in items) else set()))
+    if not currencies and (parsed.get("page_currency_codes") or []) == ["USD"]:
+        # Nothing has a fixed price (e.g. only "$13.59+" starting prices): the
+        # store is still a checked US store, in the currency its page states.
+        currencies = ["USD"]
+        currency_note = currency_note or ("no listing states a currency in the menu JSON-LD; the page's own data states "
+                                          "currency USD and no other")
+    currencies = currencies or ["?"]
     obs = {
         "source": "live",
         "platform": adapter.key,

@@ -69,7 +69,8 @@ test('size mismatches, matches and missing sizes', () => {
   assert.equal(match1({ name: 'Iced Coffee', size: '16 oz' }, item('Iced Coffee (16oz)', 300)).status, 'exact');
   assert.equal(match1({ name: 'Large Iced Coffee' }, item('Iced Coffee', 300, { variant: 'Large 32 oz' })).status, 'exact');
   assert.equal(match1({ name: 'Iced Coffee', size: '32 oz' }, item('Large Iced Coffee', 300)).status, 'uncertain');
-  assert.equal(match1({ name: 'Turkey Sub', size: '6"' }, item('Turkey Sub Footlong', 999)).status, 'uncertain');
+  assert.equal(match1({ name: 'Turkey Sub', size: '6"' }, item('Turkey Sub Footlong', 999)).status, 'rejected');   // a footlong is 12"
+  assert.equal(match1({ name: 'Turkey Sub', size: '12 inch' }, item('Turkey Sub Footlong', 999)).status, 'exact');
   assert.equal(match1({ name: 'Turkey Sub 6 inch' }, item('6" Turkey Sub', 699)).status, 'exact');
 });
 
@@ -446,7 +447,7 @@ test('a bare leading number is the piece count only when it equals the stated co
   // Archived DoorDash pages: "10 Chicken McNuggets [490-630 Cals]".
   const r = match1({ name: '10 pc. Chicken McNuggets' }, item('10 Chicken McNuggets [490-630 Cals]', 549));
   assert.equal(r.status, 'exact');
-  assert.match(r.reasons.map(x => x.text).join(' '), /Piece count matches \(10\); the listing states it as a leading number/);
+  assert.match(r.reasons.map(x => x.text).join(' '), /Piece count matches \(10\); the listing states it as a bare number/);
   assert.equal(match1({ name: '10 Chicken McNuggets' }, item('10 pc. Chicken McNuggets®', 549)).status, 'exact');
   assert.equal(match1({ name: '10 pc. Chicken McNuggets' }, item('20 Chicken McNuggets', 949)).status, 'rejected');
   assert.equal(match1({ name: '10 Chicken McNuggets' }, item('20 pc. Chicken McNuggets', 949)).status, 'rejected');
@@ -522,23 +523,38 @@ test('review fixes: ZIP-less duplicates by city/state, canonical typed links, wa
   assert.deepEqual(r.warnings, ['no ZIP code; a ZIP filter cannot match this store']);
 });
 
-test('typed entries for one store and mode are merged, keeping the older time', () => {
+test('typed entries for one store and mode are merged; each item keeps its own time', () => {
   const f = (lines, at) => E.enteredObservation({ platform: 'doordash', order_mode: 'delivery', seen_at: at, store_name: 'Taco Bell', city: 'Fulton', state: 'MS', zip: '38843',
     store_url: 'https://www.doordash.com/store/taco-bell-fulton-24633898/', lines }, { now: NOW }).observations[0];
-  let list = E.mergeEntered([], f('Crunchwrap Supreme $6.99', '2026-10-07T09:00:00Z')).list;
-  const mg = E.mergeEntered(list, f('Chalupa Supreme $5.49\nCrunchwrap Supreme $7.09', '2026-10-07T11:00:00Z'));
+  let list = E.mergeEntered([], f('Crunchwrap Supreme $6.99\n10 pc Nuggets $4.00', '2026-10-05T09:00:00Z')).list;
+  // "Crunchwrap Supreme®" and "10 Piece Nuggets" are the same items to the matcher, so they replace the old prices.
+  const mg = E.mergeEntered(list, f('Chalupa Supreme $5.49\nCrunchwrap Supreme® $7.09\n10 Piece Nuggets $4.20', '2026-10-07T11:00:00Z'));
   assert.equal(mg.merged, true);
   list = mg.list;
   assert.equal(list.length, 1);
-  assert.deepEqual(list[0].items.map(i => [i.name, i.price_cents]), [['Chalupa Supreme', 549], ['Crunchwrap Supreme', 709]]);
-  assert.equal(list[0].observed_at, '2026-10-07T09:00:00.000Z');
-  // Both items rank from the one record.
-  const basket = run(order([{ name: 'Crunchwrap Supreme' }, { name: 'Chalupa Supreme' }], { chain: 'Taco Bell' }), list);
-  assert.equal(basket.winner.basket.subtotalCents, 709 + 549);
-  // Another mode, another store, or a plain import is never merged.
+  assert.deepEqual(list[0].items.map(i => [i.name, i.price_cents, i.observed_at]), [
+    ['Chalupa Supreme', 549, '2026-10-07T11:00:00.000Z'], ['Crunchwrap Supreme®', 709, '2026-10-07T11:00:00.000Z'], ['10 Piece Nuggets', 420, '2026-10-07T11:00:00.000Z']]);
+  assert.equal(list[0].observed_at, '2026-10-07T11:00:00.000Z');             // the newest entry
+  // An item kept from an older entry keeps its older time and can go stale on its own.
+  const older = E.mergeEntered([f('Taco $1.99', '2026-10-05T09:00:00Z')], f('Chalupa Supreme $5.49', '2026-10-07T11:00:00Z')).list;
+  assert.deepEqual(older[0].items.map(i => [i.name, i.observed_at]), [['Taco', '2026-10-05T09:00:00.000Z'], ['Chalupa Supreme', '2026-10-07T11:00:00.000Z']]);
+  const taco = run(order([{ name: 'Taco' }], { chain: 'Taco Bell' }), older, { staleHours: 24 });
+  assert.equal(taco.winner, null);
+  assert.equal(taco.rows.verified[0].stale, true);
+  assert.equal(taco.rows.verified[0].observedAt, '2026-10-05T09:00:00.000Z');
+  const chalupa = run(order([{ name: 'Chalupa Supreme' }], { chain: 'Taco Bell' }), older, { staleHours: 24 });
+  assert.equal(chalupa.winner.row.lineCents, 549);                              // the fresh item is not aged by the old one
+  // A basket is as old as its oldest part.
+  const basket = run(order([{ name: 'Taco' }, { name: 'Chalupa Supreme' }], { chain: 'Taco Bell' }), older, { staleHours: 24 });
+  assert.equal(basket.baskets[0].stale, true);
+  assert.equal(basket.winner, null);
+  // Another mode, or a plain import, is never merged.
   assert.equal(E.mergeEntered(list, Object.assign(f('Taco $2.00', '2026-10-07T10:00:00Z'), { order_mode: 'pickup' })).merged, false);
   const imported = Object.assign({}, list[0], { extraction: 'imported record' });
   assert.equal(E.mergeEntered([imported], f('Taco $2.00', '2026-10-07T10:00:00Z')).merged, false);
+  // Item times are validated like record times.
+  const bad = E.validateImport([Object.assign({}, list[0], { items: [{ name: 'Taco', price: '1.00', observed_at: '2030-01-01T00:00:00Z' }] })], { now: NOW });
+  assert.match(bad.errors.join(' '), /observed_at is not a valid past time/);
 });
 
 test('review fixes: hand-entry lines, non-US links, US evidence, malformed snapshots, excluded imports', () => {
@@ -570,4 +586,62 @@ test('review fixes: hand-entry lines, non-US links, US evidence, malformed snaps
   const typed = Object.assign({}, live, { source: 'import', observed_at: T(0.5), items: [item('Burrito', 649)] });
   assert.equal(run(order([{ name: 'Burrito' }]), [live, typed], { includeImported: false }).winner.row.lineCents, 599);
   assert.equal(run(order([{ name: 'Burrito' }]), [live, typed], { includeImported: false }).coverage.excluded.imported, 1);
+});
+
+test('red-team cases: never a false exact, and confirmed aliases work', () => {
+  const st = (o, c, extra = {}) => match1(typeof o === 'string' ? { name: o } : o, item(c, 900, extra)).status;
+  // Repeated words and bundles.
+  assert.equal(st('Double-Double', 'Double'), 'rejected');
+  assert.equal(st('Double', 'Double-Double'), 'rejected');
+  assert.equal(st({ name: 'Large 2-Topping Pizzas', quantity: '2' }, '2 Large 2-Topping Pizzas'), 'rejected');
+  // Menu numbers are not counts, and not product words.
+  assert.equal(st({ name: 'Chicken McNuggets', count: '6' }, '#6 Chicken McNuggets'), 'uncertain');
+  assert.equal(st('Big Mac Meal', '#1 Big Mac® Meal'), 'exact');
+  // Size-field words must be in the listing; a size the order did not state is not assumed.
+  assert.equal(st({ name: 'Deep Dish Cheese', size: 'Small Gluten Free' }, 'Small - Deep Dish Cheese'), 'uncertain');
+  assert.equal(st({ name: 'Pepperoni', size: 'Deep Dish' }, 'Personal - Deep Dish Pepperoni'), 'uncertain');
+  assert.equal(st({ name: '10 pc. Chicken McNuggets', size: 'Large Meal' }, '10 pc. Chicken McNuggets® Meal'), 'uncertain');
+  assert.equal(st({ name: 'Deep Dish Cheese', size: 'Small Deep Dish' }, 'Small - Deep Dish Cheese'), 'exact');
+  // A count typed in the size field is a piece count.
+  assert.equal(st({ name: 'Chick-fil-A Nuggets', size: '12 ct' }, 'Chick-fil-A® Nuggets'), 'uncertain');
+  assert.equal(st({ name: 'Chick-fil-A Nuggets', size: '12 ct' }, 'Chick-fil-A® Nuggets 12 ct'), 'exact');
+  // Normalization: ™ before NFKD, w/o, gluten free, Jr., inch marks, X-Lg, serving notes, trailing counts.
+  assert.equal(st({ name: 'Chick-n-Minis', count: '4' }, 'Chick-n-Minis™', { variant: '4 ct' }), 'exact');
+  assert.equal(st('The Malnati Chicago Classic Deep Dish - GF', 'The Malnati Chicago Classic™ Deep Dish - GF'), 'exact');
+  assert.equal(st('Quarter Pounder w/ Cheese', 'Quarter Pounder w/o Cheese'), 'rejected');
+  assert.equal(st('Cheese Thin Crust - GF', 'Gluten Free Thin Crust Cheese'), 'exact');
+  assert.equal(st('Junior Bacon Cheeseburger', 'Jr. Bacon Cheeseburger'), 'exact');
+  assert.equal(st("Large 14'' Pepperoni Pizza", 'Large 14" Pepperoni Pizza'), 'exact');
+  assert.equal(st('Large 16 in. Cheese Pizza', 'Large 16" Cheese Pizza'), 'exact');
+  assert.equal(st('X-Lg Cheese Pizza', 'XLarge Cheese Pizza'), 'exact');
+  assert.equal(st('Large Cheese Pizza', 'X-Lg Cheese Pizza'), 'rejected');
+  assert.equal(st('40 pc. Chicken McNuggets', '40-piece Chicken McNuggets (Serves 4) [1860-2210 Cals]'), 'exact');
+  assert.equal(st({ name: 'Fried Chicken Wings', count: '7' }, 'Fried Chicken Wings (7)'), 'exact');
+  assert.equal(st({ name: '10 Chicken McNuggets', count: '10' }, '10 Chicken McNuggets [490-630 Cals]'), 'exact');
+  assert.equal(st('Large Pepperoni Pizza', 'Large Pepperoni Pizza (290 Cal/Slice)'), 'exact');
+  assert.equal(st('Cheeseburger', 'Cheese Burger'), 'exact');
+  // Variant words added by the red team.
+  for (const [o, c] of [['Large Cheese Pizza', 'Large Three Cheese Pizza'], ['Small - Deep Dish Pepperoni', 'Small Frozen Deep Dish Pepperoni'],
+    ['Margherita', 'Thin Crust Margherita'], ['McChicken', 'McChicken® Biscuit'], ['Crispy Chicken Crunchwrap', 'Crispy Chicken Crunchwrap Slider'],
+    ['Crunchwrap Supreme', 'Black Bean Crunchwrap Supreme']]) assert.equal(st(o, c), 'rejected', c);
+  assert.equal(st({ name: 'Italian B.M.T.', size: '6 inch' }, 'Italian B.M.T.® Footlong'), 'rejected');
+  // An option in several groups at different charges: the order's size decides, or it is not proven.
+  const A = [{ name: 'Pepperoni', price_cents: 150, group: 'Small Pizza Toppings' }, { name: 'Pepperoni', price_cents: 250, group: 'Large Pizza Toppings' }];
+  const big = match1({ name: 'Create Your Own Pizza', size: 'Large', modifiers: [{ name: 'Pepperoni', price: '2.50' }] }, item('Create Your Own Pizza', 1699, { variant: 'Large', addons: A }));
+  assert.equal(big.status, 'exact'); assert.equal(big.unitCents, 1699 + 250);
+  const H = [{ name: 'Pepperoni', price_cents: 100, group: 'Left Half Toppings' }, { name: 'Pepperoni', price_cents: 200, group: 'Whole Pizza Toppings' }];
+  assert.equal(match1({ name: 'Large Create Your Own Pizza', modifiers: [{ name: 'Pepperoni' }] }, item('Large Create Your Own Pizza', 1499, { addons: H })).unitCents, 1699);
+  const amb = match1({ name: 'Create Your Own Pizza', modifiers: [{ name: 'Pepperoni' }] }, item('Create Your Own Pizza', 999, { addons: A }));
+  assert.equal(amb.status, 'uncertain');
+  assert.match(amb.reasons.map(r => r.text).join(' '), /listed in 2 option groups with different charges/);
+  // Confirming a suggested listing (as the UI stores it) makes it match.
+  for (const [name, listing, extra] of [['10 Piece McNuggets', '10 Chicken McNuggets [490-630 Cals]', {}], ['Large Pepperoni', 'Large Pepperoni Pizza (2,320 Cal)', {}],
+    ['Deep Dish Cheese', 'Small - Deep Dish Cheese', { size: 'Small Deep Dish' }]]) {
+    const alias = E.stripNotes(listing).replace(/[,;\n]+/g, ' ').replace(/\s+/g, ' ').trim();
+    assert.equal(match1(Object.assign({ name, aliases: alias }, extra), item(listing, 519)).status, 'exact', listing);
+  }
+  // Closest listings never suggest a different flavor or topping.
+  const ev = run(order([{ name: 'Large - Thin Crust Pepperoni' }], { chain: "Lou Malnati's" }),
+    [obs({ store_name: "Lou Malnati's", items: [item('Large - Thin Crust Margherita', 2826), item('Large - Thin Crust Pepperonis', 2899)] })]);
+  assert.deepEqual(ev.closest[0].listings.map(l => l.label), ['Large - Thin Crust Pepperonis']);
 });

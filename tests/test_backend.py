@@ -885,6 +885,12 @@ def test_doordash_store_page_layout_from_archived_captures():
     assert obs["currency"] == "mixed" and obs["items"][0]["currency"] is None
     status, obs, _ = observe(_doordash_like_page(page_currency="USD\\\",\\\"x\\\":{\\\"currency\\\":\\\"CAD"))
     assert obs["currency"] == "?"                                   # USD and CAD on one page: not USD
+    # Only starting prices: still a checked US store in the page's currency.
+    only_from = _doordash_like_page().replace('"price": "$8.53"}', '"price": "$8.53+"}').replace('"price": "US$8.53"}', '"price": "US$8.53+"}')
+    assert only_from.count("+\"}") == 6                      # the menu appears twice, as on real pages
+    status, obs, _ = observe(only_from)
+    assert status == "checked" and obs["currency"] == "USD" and all(i["price_cents"] is None for i in obs["items"])
+    assert "no listing states a currency" in obs["price_context"]
     # Canadian store (seen in the archive: addressCountry CA, page data CAD) is excluded.
     status, obs, detail = observe(_doordash_like_page(country="CA", region="BC", page_currency="CAD"))
     assert status == "non_us" and obs is None and "outside the US" in detail

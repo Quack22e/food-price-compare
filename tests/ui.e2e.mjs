@@ -258,7 +258,7 @@ describe('index.html end-to-end', { timeout: 300000 }, () => {
       assert.doesNotMatch(await text('#winner'), /\$4\.49/);
       await page.click('#closest button:has-text("Same item")');
       await waitText('#winner', /\$4\.49/);
-      assert.equal(await page.inputValue('#it0_alias'), 'World Famous Fries® - Large [320-490 Cals]');
+      assert.equal(await page.inputValue('#it0_alias'), 'World Famous Fries® - Large');   // calorie note dropped from the saved name
       assert.equal(await page.locator('#closest .closest').count(), 0);
     } finally {
       await page.click('#importClear');

@@ -118,6 +118,19 @@ test('DoorDash price strings: "US$12.75" is a price, "$13.59+" a starting price'
   assert.equal(pie.required_options[0].required, true);
 });
 
+test('one priced item without a currency does not get the whole store rejected', async () => {
+  const ld = JSON.parse(JSON.stringify(ddLd));
+  ld.hasMenu.hasMenuSection[0][0].hasMenuItem = [
+    { '@type': 'MenuItem', name: 'Crunchwrap Supreme', offers: { '@type': 'Offer', price: '8.53', priceCurrency: 'USD' } },
+    { '@type': 'MenuItem', name: 'Chalupa Supreme', offers: { '@type': 'Offer', price: '6.09' } }];
+  const res = await runOn('https://www.doordash.com/store/taco-bell-1194579/', ddPage(null).replace(JSON.stringify(ddLd), JSON.stringify(ld)));
+  assert.equal(res.observation.currency, 'USD');
+  const v = E.validateImport(JSON.stringify({ observations: [res.observation] }), { now: Date.now() + 1000 });
+  assert.equal(v.observations.length, 1);
+  assert.deepEqual(v.observations[0].items.map(i => i.name), ['Crunchwrap Supreme']);
+  assert.match(v.errors.join(' '), /Chalupa Supreme\): currency UNKNOWN is not USD/);
+});
+
 test('refuses to guess: no structured data, not a store page, Grubhub, other sites', async () => {
   const bare = '<!doctype html><html><body><div>$6.49 Big Mac</div></body></html>';
   let r = await runOn('https://www.doordash.com/store/x-1/', bare);
