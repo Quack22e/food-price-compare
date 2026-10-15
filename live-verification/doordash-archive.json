@@ -1,10 +1,15 @@
 {
- "started_at": "2026-10-14T22:47:08Z",
+ "started_at": "2026-10-15T04:54:11Z",
  "user_agent": "FoodPriceCompare/1.0 (structure research; reads existing archive captures only)",
  "note": "Structure evidence only. Archived prices are historical and are not used as current prices.",
  "wayback": {
   "source": "Wayback Machine (web.archive.org), existing captures, raw bytes via id_",
   "queries": [
+   {
+    "query": "https://web.archive.org/cdx/search/cdx?url=www.doordash.com%2Fstore%2F24633898%2F&output=json&fl=timestamp,original,statuscode,mimetype,length&filter=statuscode:200&filter=mimetype:text/html&limit=20",
+    "status": 200,
+    "captures": 1
+   },
    {
     "query": "https://web.archive.org/cdx/search/cdx?url=www.doordash.com%2Fstore%2Ftaco-bell-&matchType=prefix&from=2025&output=json&fl=timestamp,original,statuscode,mimetype,length&filter=statuscode:200&filter=mimetype:text/html&collapse=urlkey&limit=300",
     "status": 200,
@@ -29,14 +34,72 @@
     "query": "https://web.archive.org/cdx/search/cdx?url=www.doordash.com%2Fstore%2F&matchType=prefix&from=2025&output=json&fl=timestamp,original,statuscode,mimetype,length&filter=statuscode:200&filter=mimetype:text/html&collapse=urlkey&limit=300",
     "status": 200,
     "captures": 300
-   },
-   {
-    "query": "https://web.archive.org/cdx/search/cdx?url=www.doordash.com%2Fstore%2F24633898%2F&output=json&fl=timestamp,original,statuscode,mimetype,length&filter=statuscode:200&filter=mimetype:text/html&limit=20",
-    "status": 200,
-    "captures": 1
    }
   ],
   "pages": [
+   {
+    "group": "seen in live runs",
+    "original": "https://www.doordash.com/store/24633898/",
+    "captured": "20240715181343",
+    "status": 200,
+    "bytes": 1048121,
+    "challenge": false,
+    "challenge_markers": [],
+    "title": "Order Poke Bowl - New York, NY Menu Delivery [Menu &amp; Prices] | New York -  DoorDash",
+    "jsonld_types": [],
+    "restaurant_found": false,
+    "name": "Order Poke Bowl - New York, NY Menu Delivery [Menu & Prices] | New York -  DoorDash",
+    "us_address": null,
+    "address_problem": "no address",
+    "menu_items": 0,
+    "priced_items": 0,
+    "currencies": [],
+    "sample_items": [],
+    "embedded_json": [],
+    "counts": {
+     "\"price\"": 45,
+     "\\\"price\\\"": 0,
+     "displayPrice": 39,
+     "__next_f": 15,
+     "__APOLLO_STATE__": 0,
+     "__REACT_QUERY_STATE__": 0,
+     "application/ld+json": 0,
+     "MenuItem": 6,
+     "storeUuid": 0
+    },
+    "phrases": {
+     "may vary": " in-store or elsewhere for this location. In-store promotions may not apply. \u200b\u200bPrices for delivery and pickup may vary.\",\"Service Fee: This fee goes to DoorDash. The service fee may vary but is 15% of your subtotal for m",
+     "prices may differ": "trings_orderCheckInModal_secondaryActionText\\\":\\\"Cancel\\\",\\\"checkoutStrings_itemPriceMayDiffer_title\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\"",
+     "menu prices": "\"subtitle\":null,\"tooltip\":{\"__typename\":\"FeedStoreModal\",\"title\":\"Pricing \\u0026 Fees\",\"bulletDescriptions\":[\"Menu Prices: This merchant sets prices. Those prices may be higher than prices in-store or elsewhere for this ",
+     "service fee": " elsewhere for this location. In-store promotions may not apply. \u200b\u200bPrices for delivery and pickup may vary.\",\"Service Fee: This fee goes to DoorDash. The service fee may vary but is 15% of your subtotal for most restaura"
+    },
+    "price_contexts": [
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "[{\"__typename\":\"StorePageCarouselItem\",\"id\":\"7702657084\",\"name\":\"Plenty Poke Bowl\",\"description\":\"2 proteins\",\"displayPrice\":\"$14.45\",\"displayStrikethroughPrice\":\"\",\"imgUrl\":\"https://img.cdn4dd.com/cdn-cgi/image/fit=cont"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "\"currency\":null,\"specialInstructions\":\"\",\"quickAddContext\":{\"__typename\":\"QuickAddContext\",\"isEligible\":false,\"price\":{\"__typename\":\"QuickAddMonetaryFields\",\"currency\":null,\"decimalPlaces\":null,\"displayString\":null,\"sign"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "_typename\":\"StorePageCarouselItem\",\"id\":\"7702657085\",\"name\":\"To the Max Poke Bowl\",\"description\":\"3 proteins\",\"displayPrice\":\"$17.45\",\"displayStrikethroughPrice\":\"\",\"imgUrl\":\"https://img.cdn4dd.com/cdn-cgi/image/fit=cont"
+     }
+    ],
+    "jsonld_shape": {
+     "blocks": [],
+     "items_of_interest": [],
+     "offers": 0,
+     "offers_with_priceCurrency": 0,
+     "priceCurrency_values": [],
+     "currency_mentions": {
+      "currency": ",\"displayUnavailableStatus\":\"\",\"unavailableReason\":\"\",\"isStoreInactive\":false}},\"currency\":\"USD\",\"storeBio\":null,\"travelTime\":null,\"distanceBasedPricingLayout\":",
+      "currencyCode": "selectionSet\":null},{\"kind\":\"Field\",\"alias\":null,\"name\":{\"kind\":\"Name\",\"value\":\"currencyCode\"},\"arguments\":[],\"directives\":[],\"selectionSet\":null},{\"kind\":\"Fiel",
+      "USD": "vailableStatus\":\"\",\"unavailableReason\":\"\",\"isStoreInactive\":false}},\"currency\":\"USD\",\"storeBio\":null,\"travelTime\":null,\"distanceBasedPricingLayout\":null,\"pickup"
+     }
+    }
+   },
    {
     "group": "taco-bell-",
     "original": "https://www.doordash.com/store/taco-bell---live-mas-caf%C3%A9-irvine-1168597/",
@@ -322,9 +385,9 @@
      "offers_with_priceCurrency": 0,
      "priceCurrency_values": [],
      "currency_mentions": {
-      "\"currency\"": null,
-      "currencycode": ",\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\":{\\\"kind\\\":\\\"Name\\\",\\\"value\\\":\\\"currencyCode\\\"},\\\"arguments\\\":[],\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\"",
-      "usd": " {{senderName}}\\\",\\\"nativeGiftCard_preview_messageSection_amount\\\":\\\"{{amount}} USD\\\",\\\"nativeGiftCard_preview_messageSection_disclaimer\\\":\\\"Terms and Condition"
+      "currency": "ame\\\":\\\"Snacks\\\",\\\"link\\\":\\\"/snacks-near-me/\\\",\\\"__typename\\\":\\\"BusinessTag\\\"}],\\\"currency\\\":\\\"USD\\\",\\\"coverImgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/image/fit=",
+      "currencyCode": ",\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\":{\\\"kind\\\":\\\"Name\\\",\\\"value\\\":\\\"currencyCode\\\"},\\\"arguments\\\":[],\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\"",
+      "USD": " {{senderName}}\\\",\\\"nativeGiftCard_preview_messageSection_amount\\\":\\\"{{amount}} USD\\\",\\\"nativeGiftCard_preview_messageSection_disclaimer\\\":\\\"Terms and Condition"
      }
     }
    },
@@ -624,9 +687,9 @@
      "offers_with_priceCurrency": 0,
      "priceCurrency_values": [],
      "currency_mentions": {
-      "\"currency\"": null,
-      "currencycode": ",\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\":{\\\"kind\\\":\\\"Name\\\",\\\"value\\\":\\\"currencyCode\\\"},\\\"arguments\\\":[],\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\"",
-      "usd": " {{senderName}}\\\",\\\"nativeGiftCard_preview_messageSection_amount\\\":\\\"{{amount}} USD\\\",\\\"nativeGiftCard_preview_messageSection_disclaimer\\\":\\\"Terms and Condition"
+      "currency": "\"name\\\":\\\"Steak\\\",\\\"link\\\":\\\"/steak-near-me/\\\",\\\"__typename\\\":\\\"BusinessTag\\\"}],\\\"currency\\\":\\\"USD\\\",\\\"coverImgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/image/fit=",
+      "currencyCode": ",\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\":{\\\"kind\\\":\\\"Name\\\",\\\"value\\\":\\\"currencyCode\\\"},\\\"arguments\\\":[],\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\"",
+      "USD": " {{senderName}}\\\",\\\"nativeGiftCard_preview_messageSection_amount\\\":\\\"{{amount}} USD\\\",\\\"nativeGiftCard_preview_messageSection_disclaimer\\\":\\\"Terms and Condition"
      }
     }
    },
@@ -928,9 +991,9 @@
      "offers_with_priceCurrency": 0,
      "priceCurrency_values": [],
      "currency_mentions": {
-      "\"currency\"": null,
-      "currencycode": ",\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\":{\\\"kind\\\":\\\"Name\\\",\\\"value\\\":\\\"currencyCode\\\"},\\\"arguments\\\":[],\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\"",
-      "usd": " {{senderName}}\\\",\\\"nativeGiftCard_preview_messageSection_amount\\\":\\\"{{amount}} USD\\\",\\\"nativeGiftCard_preview_messageSection_disclaimer\\\":\\\"Terms and Condition"
+      "currency": "\"name\\\":\\\"Steak\\\",\\\"link\\\":\\\"/steak-near-me/\\\",\\\"__typename\\\":\\\"BusinessTag\\\"}],\\\"currency\\\":\\\"USD\\\",\\\"coverImgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/image/fit=",
+      "currencyCode": ",\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\":{\\\"kind\\\":\\\"Name\\\",\\\"value\\\":\\\"currencyCode\\\"},\\\"arguments\\\":[],\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\"",
+      "USD": " {{senderName}}\\\",\\\"nativeGiftCard_preview_messageSection_amount\\\":\\\"{{amount}} USD\\\",\\\"nativeGiftCard_preview_messageSection_disclaimer\\\":\\\"Terms and Condition"
      }
     }
    },
@@ -1199,9 +1262,9 @@
      "offers_with_priceCurrency": 0,
      "priceCurrency_values": [],
      "currency_mentions": {
-      "\"currency\"": null,
-      "currencycode": ",\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\":{\\\"kind\\\":\\\"Name\\\",\\\"value\\\":\\\"currencyCode\\\"},\\\"arguments\\\":[],\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\"",
-      "usd": " {{senderName}}\\\",\\\"nativeGiftCard_preview_messageSection_amount\\\":\\\"{{amount}} USD\\\",\\\"nativeGiftCard_preview_messageSection_disclaimer\\\":\\\"Terms and Condition"
+      "currency": "ame\\\":\\\"Coffee\\\",\\\"link\\\":\\\"/coffee-near-me/\\\",\\\"__typename\\\":\\\"BusinessTag\\\"}],\\\"currency\\\":\\\"CAD\\\",\\\"coverImgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/image/fit=",
+      "currencyCode": ",\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\":{\\\"kind\\\":\\\"Name\\\",\\\"value\\\":\\\"currencyCode\\\"},\\\"arguments\\\":[],\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\"",
+      "USD": " {{senderName}}\\\",\\\"nativeGiftCard_preview_messageSection_amount\\\":\\\"{{amount}} USD\\\",\\\"nativeGiftCard_preview_messageSection_disclaimer\\\":\\\"Terms and Condition"
      }
     }
    },
@@ -1425,9 +1488,9 @@
      "offers_with_priceCurrency": 0,
      "priceCurrency_values": [],
      "currency_mentions": {
-      "\"currency\"": null,
-      "currencycode": ",\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\":{\\\"kind\\\":\\\"Name\\\",\\\"value\\\":\\\"currencyCode\\\"},\\\"arguments\\\":[],\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\"",
-      "usd": " {{senderName}}\\\",\\\"nativeGiftCard_preview_messageSection_amount\\\":\\\"{{amount}} USD\\\",\\\"nativeGiftCard_preview_messageSection_disclaimer\\\":\\\"Terms and Condition"
+      "currency": "ame\\\":\\\"Coffee\\\",\\\"link\\\":\\\"/coffee-near-me/\\\",\\\"__typename\\\":\\\"BusinessTag\\\"}],\\\"currency\\\":\\\"CAD\\\",\\\"coverImgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/image/fit=",
+      "currencyCode": ",\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\":{\\\"kind\\\":\\\"Name\\\",\\\"value\\\":\\\"currencyCode\\\"},\\\"arguments\\\":[],\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\"",
+      "USD": " {{senderName}}\\\",\\\"nativeGiftCard_preview_messageSection_amount\\\":\\\"{{amount}} USD\\\",\\\"nativeGiftCard_preview_messageSection_disclaimer\\\":\\\"Terms and Condition"
      }
     }
    },
@@ -1699,9 +1762,9 @@
      "offers_with_priceCurrency": 0,
      "priceCurrency_values": [],
      "currency_mentions": {
-      "\"currency\"": null,
-      "currencycode": ",\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\":{\\\"kind\\\":\\\"Name\\\",\\\"value\\\":\\\"currencyCode\\\"},\\\"arguments\\\":[],\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\"",
-      "usd": " {{senderName}}\\\",\\\"nativeGiftCard_preview_messageSection_amount\\\":\\\"{{amount}} USD\\\",\\\"nativeGiftCard_preview_messageSection_disclaimer\\\":\\\"Terms and Condition"
+      "currency": "ame\\\":\\\"Coffee\\\",\\\"link\\\":\\\"/coffee-near-me/\\\",\\\"__typename\\\":\\\"BusinessTag\\\"}],\\\"currency\\\":\\\"CAD\\\",\\\"coverImgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/image/fit=",
+      "currencyCode": ",\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\":{\\\"kind\\\":\\\"Name\\\",\\\"value\\\":\\\"currencyCode\\\"},\\\"arguments\\\":[],\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\"",
+      "USD": " {{senderName}}\\\",\\\"nativeGiftCard_preview_messageSection_amount\\\":\\\"{{amount}} USD\\\",\\\"nativeGiftCard_preview_messageSection_disclaimer\\\":\\\"Terms and Condition"
      }
     }
    },
@@ -1990,9 +2053,9 @@
      "offers_with_priceCurrency": 0,
      "priceCurrency_values": [],
      "currency_mentions": {
-      "\"currency\"": null,
-      "currencycode": ",\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\":{\\\"kind\\\":\\\"Name\\\",\\\"value\\\":\\\"currencyCode\\\"},\\\"arguments\\\":[],\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\"",
-      "usd": " {{senderName}}\\\",\\\"nativeGiftCard_preview_messageSection_amount\\\":\\\"{{amount}} USD\\\",\\\"nativeGiftCard_preview_messageSection_disclaimer\\\":\\\"Terms and Condition"
+      "currency": "ly Meals\\\",\\\"link\\\":\\\"/family-meals-near-me/\\\",\\\"__typename\\\":\\\"BusinessTag\\\"}],\\\"currency\\\":\\\"USD\\\",\\\"coverImgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/image/fit=",
+      "currencyCode": ",\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\":{\\\"kind\\\":\\\"Name\\\",\\\"value\\\":\\\"currencyCode\\\"},\\\"arguments\\\":[],\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\"",
+      "USD": " {{senderName}}\\\",\\\"nativeGiftCard_preview_messageSection_amount\\\":\\\"{{amount}} USD\\\",\\\"nativeGiftCard_preview_messageSection_disclaimer\\\":\\\"Terms and Condition"
      }
     }
    },
@@ -2281,9 +2344,9 @@
      "offers_with_priceCurrency": 0,
      "priceCurrency_values": [],
      "currency_mentions": {
-      "\"currency\"": null,
-      "currencycode": ",\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\":{\\\"kind\\\":\\\"Name\\\",\\\"value\\\":\\\"currencyCode\\\"},\\\"arguments\\\":[],\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\"",
-      "usd": " {{senderName}}\\\",\\\"nativeGiftCard_preview_messageSection_amount\\\":\\\"{{amount}} USD\\\",\\\"nativeGiftCard_preview_messageSection_disclaimer\\\":\\\"Terms and Condition"
+      "currency": "ly Meals\\\",\\\"link\\\":\\\"/family-meals-near-me/\\\",\\\"__typename\\\":\\\"BusinessTag\\\"}],\\\"currency\\\":\\\"USD\\\",\\\"coverImgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/image/fit=",
+      "currencyCode": ",\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\":{\\\"kind\\\":\\\"Name\\\",\\\"value\\\":\\\"currencyCode\\\"},\\\"arguments\\\":[],\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\"",
+      "USD": " {{senderName}}\\\",\\\"nativeGiftCard_preview_messageSection_amount\\\":\\\"{{amount}} USD\\\",\\\"nativeGiftCard_preview_messageSection_disclaimer\\\":\\\"Terms and Condition"
      }
     }
    },
@@ -2572,9 +2635,9 @@
      "offers_with_priceCurrency": 0,
      "priceCurrency_values": [],
      "currency_mentions": {
-      "\"currency\"": null,
-      "currencycode": ",\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\":{\\\"kind\\\":\\\"Name\\\",\\\"value\\\":\\\"currencyCode\\\"},\\\"arguments\\\":[],\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\"",
-      "usd": " {{senderName}}\\\",\\\"nativeGiftCard_preview_messageSection_amount\\\":\\\"{{amount}} USD\\\",\\\"nativeGiftCard_preview_messageSection_disclaimer\\\":\\\"Terms and Condition"
+      "currency": "\\\"Guacamole\\\",\\\"link\\\":\\\"/guacamole-near-me/\\\",\\\"__typename\\\":\\\"BusinessTag\\\"}],\\\"currency\\\":\\\"USD\\\",\\\"coverImgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/image/fit=",
+      "currencyCode": ",\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\":{\\\"kind\\\":\\\"Name\\\",\\\"value\\\":\\\"currencyCode\\\"},\\\"arguments\\\":[],\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\"",
+      "USD": " {{senderName}}\\\",\\\"nativeGiftCard_preview_messageSection_amount\\\":\\\"{{amount}} USD\\\",\\\"nativeGiftCard_preview_messageSection_disclaimer\\\":\\\"Terms and Condition"
      }
     }
    },
@@ -2879,9 +2942,9 @@
      "offers_with_priceCurrency": 0,
      "priceCurrency_values": [],
      "currency_mentions": {
-      "\"currency\"": null,
-      "currencycode": ",\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\":{\\\"kind\\\":\\\"Name\\\",\\\"value\\\":\\\"currencyCode\\\"},\\\"arguments\\\":[],\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\"",
-      "usd": " {{senderName}}\\\",\\\"nativeGiftCard_preview_messageSection_amount\\\":\\\"{{amount}} USD\\\",\\\"nativeGiftCard_preview_messageSection_disclaimer\\\":\\\"Terms and Condition"
+      "currency": "y\\\",\\\"link\\\":\\\"/vegetarian-friendly-near-me/\\\",\\\"__typename\\\":\\\"BusinessTag\\\"}],\\\"currency\\\":\\\"USD\\\",\\\"coverImgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/image/fit=",
+      "currencyCode": ",\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\":{\\\"kind\\\":\\\"Name\\\",\\\"value\\\":\\\"currencyCode\\\"},\\\"arguments\\\":[],\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\"",
+      "USD": " {{senderName}}\\\",\\\"nativeGiftCard_preview_messageSection_amount\\\":\\\"{{amount}} USD\\\",\\\"nativeGiftCard_preview_messageSection_disclaimer\\\":\\\"Terms and Condition"
      }
     }
    },
@@ -3182,9 +3245,9 @@
      "offers_with_priceCurrency": 0,
      "priceCurrency_values": [],
      "currency_mentions": {
-      "\"currency\"": null,
-      "currencycode": ",\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\":{\\\"kind\\\":\\\"Name\\\",\\\"value\\\":\\\"currencyCode\\\"},\\\"arguments\\\":[],\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\"",
-      "usd": " {{senderName}}\\\",\\\"nativeGiftCard_preview_messageSection_amount\\\":\\\"{{amount}} USD\\\",\\\"nativeGiftCard_preview_messageSection_disclaimer\\\":\\\"Terms and Condition"
+      "currency": "y\\\",\\\"link\\\":\\\"/vegetarian-friendly-near-me/\\\",\\\"__typename\\\":\\\"BusinessTag\\\"}],\\\"currency\\\":\\\"USD\\\",\\\"coverImgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/image/fit=",
+      "currencyCode": ",\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\":{\\\"kind\\\":\\\"Name\\\",\\\"value\\\":\\\"currencyCode\\\"},\\\"arguments\\\":[],\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\"",
+      "USD": " {{senderName}}\\\",\\\"nativeGiftCard_preview_messageSection_amount\\\":\\\"{{amount}} USD\\\",\\\"nativeGiftCard_preview_messageSection_disclaimer\\\":\\\"Terms and Condition"
      }
     }
    },
@@ -3424,9 +3487,9 @@
      "offers_with_priceCurrency": 0,
      "priceCurrency_values": [],
      "currency_mentions": {
-      "\"currency\"": null,
-      "currencycode": ",\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\":{\\\"kind\\\":\\\"Name\\\",\\\"value\\\":\\\"currencyCode\\\"},\\\"arguments\\\":[],\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\"",
-      "usd": " {{senderName}}\\\",\\\"nativeGiftCard_preview_messageSection_amount\\\":\\\"{{amount}} USD\\\",\\\"nativeGiftCard_preview_messageSection_disclaimer\\\":\\\"Terms and Condition"
+      "currency": "y\\\",\\\"link\\\":\\\"/vegetarian-friendly-near-me/\\\",\\\"__typename\\\":\\\"BusinessTag\\\"}],\\\"currency\\\":\\\"USD\\\",\\\"coverImgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/image/fit=",
+      "currencyCode": ",\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\":{\\\"kind\\\":\\\"Name\\\",\\\"value\\\":\\\"currencyCode\\\"},\\\"arguments\\\":[],\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\"",
+      "USD": " {{senderName}}\\\",\\\"nativeGiftCard_preview_messageSection_amount\\\":\\\"{{amount}} USD\\\",\\\"nativeGiftCard_preview_messageSection_disclaimer\\\":\\\"Terms and Condition"
      }
     }
    },
@@ -3618,9 +3681,9 @@
      "offers_with_priceCurrency": 0,
      "priceCurrency_values": [],
      "currency_mentions": {
-      "\"currency\"": null,
-      "currencycode": ",\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\":{\\\"kind\\\":\\\"Name\\\",\\\"value\\\":\\\"currencyCode\\\"},\\\"arguments\\\":[],\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\"",
-      "usd": " {{senderName}}\\\",\\\"nativeGiftCard_preview_messageSection_amount\\\":\\\"{{amount}} USD\\\",\\\"nativeGiftCard_preview_messageSection_disclaimer\\\":\\\"Terms and Condition"
+      "currency": "nt\\\",\\\"link\\\":\\\"/seafood-restaurant-near-me/\\\",\\\"__typename\\\":\\\"BusinessTag\\\"}],\\\"currency\\\":\\\"USD\\\",\\\"coverImgUrl\\\":\\\"\\\",\\\"numRatings\\\":41,\\\"coverSquareImgUrl\\",
+      "currencyCode": ",\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\":{\\\"kind\\\":\\\"Name\\\",\\\"value\\\":\\\"currencyCode\\\"},\\\"arguments\\\":[],\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\"",
+      "USD": " {{senderName}}\\\",\\\"nativeGiftCard_preview_messageSection_amount\\\":\\\"{{amount}} USD\\\",\\\"nativeGiftCard_preview_messageSection_disclaimer\\\":\\\"Terms and Condition"
      }
     }
    },
@@ -3812,278 +3875,20 @@
      "offers_with_priceCurrency": 0,
      "priceCurrency_values": [],
      "currency_mentions": {
-      "\"currency\"": null,
-      "currencycode": ",\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\":{\\\"kind\\\":\\\"Name\\\",\\\"value\\\":\\\"currencyCode\\\"},\\\"arguments\\\":[],\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\"",
-      "usd": " {{senderName}}\\\",\\\"nativeGiftCard_preview_messageSection_amount\\\":\\\"{{amount}} USD\\\",\\\"nativeGiftCard_preview_messageSection_disclaimer\\\":\\\"Terms and Condition"
-     }
-    }
-   },
-   {
-    "group": "any",
-    "original": "https://www.doordash.com/store/%22soi%22-southeast-asian-eatz-charlotte-34203405/",
-    "captured": "20250917153012",
-    "status": 200,
-    "bytes": 2045478,
-    "challenge": false,
-    "challenge_markers": [],
-    "title": "Order &quot;Soi&quot; Southeast Asian Eatz - Charlotte, NC Menu Delivery [Menu &amp; Prices] | Charlotte -  DoorDash",
-    "jsonld_types": [
-     "restaurant",
-     "postaladdress",
-     "geocoordinates",
-     "menu",
-     "review",
-     "person",
-     "aggregaterating",
-     "organization",
-     "menuitem",
-     "faqpage",
-     "question",
-     "answer",
-     "breadcrumblist",
-     "listitem"
-    ],
-    "restaurant_found": true,
-    "name": "\"Soi\" Southeast Asian Eatz",
-    "us_address": {
-     "city": "Charlotte",
-     "state": "NC",
-     "zip": ""
-    },
-    "address_problem": null,
-    "menu_items": 28,
-    "priced_items": 28,
-    "currencies": [
-     "?"
-    ],
-    "sample_items": [
-     {
-      "name": "Egg Rolls (4)",
-      "price_cents": 1095,
-      "currency": null
-     },
-     {
-      "name": "Spring Rolls (4)",
-      "price_cents": 895,
-      "currency": null
-     },
-     {
-      "name": "Fried Chicken Wings (7)",
-      "price_cents": 1599,
-      "currency": null
-     },
-     {
-      "name": "Beef Skewers (4)",
-      "price_cents": 1399,
-      "currency": null
-     },
-     {
-      "name": "Lao Sausage",
-      "price_cents": 1299,
-      "currency": null
-     }
-    ],
-    "embedded_json": [
-     {
-      "id": "",
-      "type": "application/ld+json",
-      "bytes": 10333,
-      "parsed": "json",
-      "price_paths": [
-       {
-        "path": ".priceRange",
-        "sample": ""
-       },
-       {
-        "path": ".hasMenu.hasMenuSection[][].hasMenuItem[].offers.price",
-        "sample": "$10.95"
-       }
-      ],
-      "menu_paths": [
-       ".hasMenu"
-      ]
-     },
-     {
-      "id": "",
-      "type": "application/ld+json",
-      "bytes": 227,
-      "parsed": "json",
-      "price_paths": [],
-      "menu_paths": []
-     },
-     {
-      "id": "",
-      "type": "application/ld+json",
-      "bytes": 7586,
-      "parsed": "json",
-      "price_paths": [
-       {
-        "path": ".hasMenuSection[][].hasMenuItem[].offers.price",
-        "sample": "$10.95"
-       }
-      ],
-      "menu_paths": []
-     },
-     {
-      "id": "",
-      "type": "application/ld+json",
-      "bytes": 1210,
-      "parsed": "json",
-      "price_paths": [],
-      "menu_paths": []
-     },
-     {
-      "id": "",
-      "type": "application/ld+json",
-      "bytes": 512,
-      "parsed": "json",
-      "price_paths": [],
-      "menu_paths": [
-       ".itemListElement[].item"
-      ]
-     }
-    ],
-    "counts": {
-     "\"price\"": 60,
-     "\\\"price\\\"": 57,
-     "displayPrice": 54,
-     "__next_f": 54,
-     "__APOLLO_STATE__": 0,
-     "__REACT_QUERY_STATE__": 0,
-     "application/ld+json": 5,
-     "MenuItem": 75,
-     "storeUuid": 0
-    },
-    "phrases": {
-     "estimated based on": "p from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across store, enter address for menu prices at your ne",
-     "prices are estimated": "ry or pickup from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across store, enter address for menu prices",
-     "may vary": "ailStore_schedule_delivery_callout_modal_primary_text\\\":\\\"Got it\\\",\\\"stores_pricing_disclosure_one\\\":\\\"Prices may vary from in-store or elsewhere for this location. Prices for delivery and pickup may vary.\\\",\\\"stores_pri",
-     "prices may differ": "trings_orderCheckInModal_secondaryActionText\\\":\\\"Cancel\\\",\\\"checkoutStrings_itemPriceMayDiffer_title\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\"",
-     "prices vary": "_q10\\\":\\\"How much do popular {{business}} menu items cost?\\\",\\\"seo_faq_business_redesign_a10\\\":\\\"{{business}} prices vary by location. To view the most up-to-date information, check out your nearest {{business}} restaura",
-     "menu prices": "tle\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverSubtitle\\\":\\\"Prices for menus are set directly by th",
-     "service fee": "ble, select store locations will not be awarded 5% credit\\nback in addition to $10 off promo. Fees (including service fee),\\ntaxes, and gratuity apply. $0 delivery fees and 10% off due to\\nreduced service fees only apply"
-    },
-    "price_contexts": [
-     {
-      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
-      "context": "f southeast asian flavors. Recommended w/sticky rice, papaya salad or choose one of our Jeow dipping sauce.\\\",\\\"displayPrice\\\":\\\"$$13.99\\\",\\\"displayStrikethroughPrice\\\":\\\"\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/im"
-     },
-     {
-      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
-      "context": "null,\\\"specialInstructions\\\":\\\"\\\",\\\"quickAddContext\\\":{\\\"__typename\\\":\\\"QuickAddContext\\\",\\\"isEligible\\\":true,\\\"price\\\":{\\\"__typename\\\":\\\"QuickAddMonetaryFields\\\",\\\"currency\\\":\\\"USD\\\",\\\"decimalPlaces\\\":2,\\\"displayString\\"
-     },
-     {
-      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
-      "context": "me juice, fish sauce and chili. Bold, sweet, and spicy. Great with meat skewers, fried items +sticky rice! \\\",\\\"displayPrice\\\":\\\"$$14.95\\\",\\\"displayStrikethroughPrice\\\":\\\"\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/im"
-     }
-    ],
-    "jsonld_shape": {
-     "blocks": [
-      {
-       "type": "Restaurant",
-       "keys": [
-        "@context",
-        "@type",
-        "address",
-        "aggregateRating",
-        "geo",
-        "hasMenu",
-        "image",
-        "name",
-        "priceRange",
-        "review",
-        "servesCuisine"
-       ],
-       "address": "{\"@type\": \"PostalAddress\", \"streetAddress\": \"500 W Summit Ave\", \"addressLocality\": \"Charlotte\", \"addressRegion\": \"NC\", \"addressCountry\": \"US\"}",
-       "menu_where": "Restaurant.hasMenu",
-       "menu_keys": [
-        "@type",
-        "hasMenuSection"
-       ],
-       "section_nesting": "list of lists",
-       "sections": 6,
-       "first_section_keys": [
-        "hasMenuItem",
-        "name"
-       ],
-       "first_items": [
-        "{\"@type\": \"MenuItem\", \"name\": \"Egg Rolls (4)\", \"description\": \"Classic crispy egg rolls with your choice of pork or chicken filled with cabbage, carrots, glass noodles and spices. Served with Sweet Thai Chili dipping sauce.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$10.95\"}}",
-        "{\"@type\": \"MenuItem\", \"name\": \"Spring Rolls (4)\", \"description\": \"Crsipy golden spring rolls filled with veggies and glass noodls, served with a sweet chili dipping sauce.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$8.95\"}}"
-       ],
-       "name": "\"&quot;Soi&quot; Southeast Asian Eatz\"",
-       "servesCuisine": "[\"Asian Fusion\"]",
-       "priceRange": "\"\""
-      },
-      {
-       "type": "Organization",
-       "keys": [
-        "@context",
-        "@type",
-        "name",
-        "sameAs",
-        "url"
-       ],
-       "url": "\"http://www.doordash.com\"",
-       "name": "\"DoorDash\""
-      },
-      {
-       "type": "Menu",
-       "keys": [
-        "@type",
-        "hasMenuSection"
-       ],
-       "menu_where": "top-level Menu block",
-       "menu_keys": [
-        "@type",
-        "hasMenuSection"
-       ],
-       "section_nesting": "list of lists",
-       "sections": 6,
-       "first_section_keys": [
-        "hasMenuItem",
-        "name"
-       ],
-       "first_items": [
-        "{\"@type\": \"MenuItem\", \"name\": \"Egg Rolls (4)\", \"description\": \"Classic crispy egg rolls with your choice of pork or chicken filled with cabbage, carrots, glass noodles and spices. Served with Sweet Thai Chili dipping sauce.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$10.95\"}}",
-        "{\"@type\": \"MenuItem\", \"name\": \"Spring Rolls (4)\", \"description\": \"Crsipy golden spring rolls filled with veggies and glass noodls, served with a sweet chili dipping sauce.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$8.95\"}}"
-       ]
-      },
-      {
-       "type": "FAQPage",
-       "keys": [
-        "@context",
-        "@type",
-        "mainEntity"
-       ]
-      },
-      {
-       "type": "BreadcrumbList",
-       "keys": [
-        "@context",
-        "@type",
-        "itemListElement"
-       ]
-      }
-     ],
-     "items_of_interest": [],
-     "offers": 60,
-     "offers_with_priceCurrency": 0,
-     "priceCurrency_values": [],
-     "currency_mentions": {
-      "\"currency\"": null,
-      "currencycode": ",\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\":{\\\"kind\\\":\\\"Name\\\",\\\"value\\\":\\\"currencyCode\\\"},\\\"arguments\\\":[],\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\"",
-      "usd": " {{senderName}}\\\",\\\"nativeGiftCard_preview_messageSection_amount\\\":\\\"{{amount}} USD\\\",\\\"nativeGiftCard_preview_messageSection_disclaimer\\\":\\\"Terms and Condition"
+      "currency": "erentialPricingEnabled\\\":false,\\\"__typename\\\":\\\"Business\\\"},\\\"businessTags\\\":[],\\\"currency\\\":\\\"USD\\\",\\\"coverImgUrl\\\":\\\"\\\",\\\"numRatings\\\":0,\\\"coverSquareImgUrl\\\"",
+      "currencyCode": ",\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\":{\\\"kind\\\":\\\"Name\\\",\\\"value\\\":\\\"currencyCode\\\"},\\\"arguments\\\":[],\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\"",
+      "USD": " {{senderName}}\\\",\\\"nativeGiftCard_preview_messageSection_amount\\\":\\\"{{amount}} USD\\\",\\\"nativeGiftCard_preview_messageSection_disclaimer\\\":\\\"Terms and Condition"
      }
     }
    }
   ],
   "distinct_stores_with_captures": {
+   "seen in live runs": 1,
    "taco-bell-": 222,
    "mcdonalds-": 152,
    "chipotle-mexican-grill-": 146,
    "lou-malnatis-pizzeria-": 25,
-   "any": 5,
-   "seen in live runs": 1
+   "any": 5
   }
  },
  "common_crawl": {
@@ -4113,6 +3918,11 @@
    "status": 404
   },
   {
+   "url": "https://web.archive.org/cdx/search/cdx?url=www.doordash.com%2Fstore%2F24633898%2F&output=json&fl=timestamp,original,statuscode,mimetype,length&filter=statuscode:200&filter=mimetype:text/html&limit=20",
+   "status": 200,
+   "bytes": 150
+  },
+  {
    "url": "https://web.archive.org/cdx/search/cdx?url=www.doordash.com%2Fstore%2Ftaco-bell-&matchType=prefix&from=2025&output=json&fl=timestamp,original,statuscode,mimetype,length&filter=statuscode:200&filter=mimetype:text/html&collapse=urlkey&limit=300",
    "status": 200,
    "bytes": 31469
@@ -4138,9 +3948,9 @@
    "bytes": 26440
   },
   {
-   "url": "https://web.archive.org/cdx/search/cdx?url=www.doordash.com%2Fstore%2F24633898%2F&output=json&fl=timestamp,original,statuscode,mimetype,length&filter=statuscode:200&filter=mimetype:text/html&limit=20",
+   "url": "https://web.archive.org/web/20240715181343id_/https://www.doordash.com/store/24633898/",
    "status": 200,
-   "bytes": 150
+   "bytes": 1048576
   },
   {
    "url": "https://web.archive.org/web/20261007071635id_/https://www.doordash.com/store/taco-bell---live-mas-caf%C3%A9-irvine-1168597/",
@@ -4213,11 +4023,6 @@
    "bytes": 2540504
   },
   {
-   "url": "https://web.archive.org/web/20250917153012id_/https://www.doordash.com/store/%22soi%22-southeast-asian-eatz-charlotte-34203405/",
-   "status": 200,
-   "bytes": 2046561
-  },
-  {
    "robots": "index.commoncrawl.org",
    "status": 200
   },
@@ -4228,16 +4033,16 @@
   },
   {
    "url": "https://index.commoncrawl.org/CC-MAIN-2026-39-index?url=www.doordash.com%2Fstore%2F*&output=json&limit=60&filter=status:200",
-   "skipped": "robots.txt disallows"
+   "skipped": "robots.txt disallows (or not an archive host)"
   },
   {
    "url": "https://index.commoncrawl.org/CC-MAIN-2026-34-index?url=www.doordash.com%2Fstore%2F*&output=json&limit=60&filter=status:200",
-   "skipped": "robots.txt disallows"
+   "skipped": "robots.txt disallows (or not an archive host)"
   },
   {
    "url": "https://index.commoncrawl.org/CC-MAIN-2026-30-index?url=www.doordash.com%2Fstore%2F*&output=json&limit=60&filter=status:200",
-   "skipped": "robots.txt disallows"
+   "skipped": "robots.txt disallows (or not an archive host)"
   }
  ],
- "finished_at": "2026-10-14T22:48:57Z"
+ "finished_at": "2026-10-15T04:55:43Z"
 }

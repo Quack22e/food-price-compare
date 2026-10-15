@@ -1,4 +1,4 @@
-{"page": "wayback-20250917153012-34203405.html", "status": "checked", "detail": "28 menu items published; 28 sent as candidates", "page_currency_codes": ["USD"], "currency": "USD", "state": "NC", "priced": 28, "sample": [["Egg Rolls (4)", 1095], ["Spring Rolls (4)", 895], ["Fried Chicken Wings (7)", 1599]]}
+{"page": "wayback-20240715181343-24633898.html", "status": "no_menu", "detail": "no schema.org Restaurant data on page (JSON-LD types: none); menu not extracted rather than guessed", "page_currency_codes": ["USD"], "currency": null, "state": null, "priced": 0, "sample": []}
 .{"page": "wayback-20260222083309-162127.html", "status": "no_menu", "detail": "no schema.org Restaurant data on page (JSON-LD types: organization, menu, menuitem, faqpage, question, answer, breadcrumblist, listitem); menu not extracted rat", "page_currency_codes": ["USD"], "currency": null, "state": null, "priced": 0, "sample": []}
 .{"page": "wayback-20260301062246-35688991.html", "status": "no_menu", "detail": "no schema.org Restaurant data on page (JSON-LD types: organization, menu, menuitem, faqpage, question, answer, breadcrumblist, listitem); menu not extracted rat", "page_currency_codes": ["USD"], "currency": null, "state": null, "priced": 0, "sample": []}
 .{"page": "wayback-20260310162607-100798.html", "status": "checked", "detail": "68 menu items published; 68 sent as candidates", "page_currency_codes": ["USD"], "currency": "USD", "state": "IL", "priced": 38, "sample": [["4 Chocolate Chip Carol's Cookies", 719], ["Small Gluten Free Thin Crust Cheese", 1539], ["Small Gluten Free Deep Dish Mike's Hot Honey\u00ae", 2959]]}
@@ -14,4 +14,4 @@
 .{"page": "wayback-20261007000234-26003435.html", "status": "checked", "detail": "63 menu items published; 63 sent as candidates", "page_currency_codes": ["USD"], "currency": "USD", "state": "IA", "priced": 63, "sample": [["Burrito Bowl", 1275], ["Burrito", 1275], ["Quesadilla", 1345]]}
 .{"page": "wayback-20261007071635-1168597.html", "status": "checked", "detail": "75 menu items published; 75 sent as candidates", "page_currency_codes": ["USD"], "currency": "USD", "state": "CA", "priced": 35, "sample": [["Chicken Quesadilla", 853], ["Cheese Quesadilla", 731], ["Crunchwrap Supreme\u00ae", 828]]}
 .
-15 passed, 2 deselected in 0.74s
+15 passed, 2 deselected in 0.68s
