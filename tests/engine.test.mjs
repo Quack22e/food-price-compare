@@ -645,3 +645,93 @@ test('red-team cases: never a false exact, and confirmed aliases work', () => {
     [obs({ store_name: "Lou Malnati's", items: [item('Large - Thin Crust Margherita', 2826), item('Large - Thin Crust Pepperonis', 2899)] })]);
   assert.deepEqual(ev.closest[0].listings.map(l => l.label), ['Large - Thin Crust Pepperonis']);
 });
+
+test('red-team round 2: part sizes, menu numbers, servings, scripts, aliases, suggestions', () => {
+  const st = (o, c, extra = {}) => match1(typeof o === 'string' ? { name: o } : o, item(c, 900, extra)).status;
+  const chainSt = (chain, o, c, extra = {}) => {
+    const ev = run(order([typeof o === 'string' ? { name: o } : o], { chain }), [obs({ store_name: chain, items: [item(c, 900, extra)] })]);
+    return ev.rows.verified.length ? 'exact' : ev.rows.uncertain.length ? 'uncertain' : 'rejected';
+  };
+  // Which part a size belongs to.
+  assert.equal(st('Large Chips & Guacamole', 'Chips & Large Guacamole'), 'rejected');
+  assert.equal(st('Chips & Large Queso Blanco', 'Large Chips & Queso Blanco'), 'rejected');
+  assert.equal(st('Chips & Large Guacamole', 'Large Chips & Large Guacamole'), 'rejected');
+  assert.equal(st('Small Fries & Large Drink', 'Large Fries & Small Drink'), 'rejected');
+  assert.equal(st('Large Chips & Guacamole', 'Large Chips & Large Guacamole'), 'uncertain');
+  assert.equal(st('Small Fries & Large Drink', 'Small Fries & Large Drink'), 'exact');
+  assert.equal(st('Large Mac & Cheese', 'Mac & Cheese', { variant: 'Large' }), 'exact');
+  // Menu numbers are compared when both sides have one.
+  assert.equal(st('#3 Combo', '#9 Combo'), 'rejected');
+  assert.equal(st('No. 1 Special', '#2 Special'), 'rejected');
+  assert.equal(st('#1 - Big Mac Meal', '#1-Big Mac Meal'), 'exact');
+  assert.equal(st('#3 Combo', 'Combo #3'), 'exact');
+  assert.equal(st('Big Mac Meal', '# 1 Big Mac Meal'), 'exact');
+  // Serving sizes are compared.
+  assert.equal(st('Bagel Pack (Serves 13)', 'Bagel Pack (Serves 6)'), 'rejected');
+  assert.equal(st('Party Pack (Serves 4-6)', 'Party Pack (Serves 10-12)'), 'rejected');
+  assert.equal(st('Family Meal (Serves 4)', 'Family Meal - Serves 4'), 'exact');
+  assert.equal(st('Family Meal (Serves 4)', 'Family Meal (Feeds 4)'), 'exact');
+  assert.equal(st('Party Tray (Serves 10-12)', 'Party Tray (serves 10 to 12 people)'), 'exact');
+  assert.equal(st('Burrito Bar', 'Burrito Bar (Serves 20)'), 'uncertain');
+  // Calorie notes, fractions, decimals, liters, letter sizes, baker's dozen.
+  assert.equal(st({ name: 'Chicken Tenders', count: '3' }, 'Chicken Tenders 5 - 600 Cal'), 'rejected');
+  assert.equal(st({ name: 'Chicken Tenders', count: '3' }, 'Chicken Tenders 3 - 360 Cal'), 'exact');
+  for (const c of ['Big Mac (250 Cal Each)', 'Big Mac (250 Cals/ea)', 'Big Mac (540 & 590 Cal)']) assert.equal(st('Big Mac', c), 'exact', c);
+  assert.equal(st('Cookie', 'Cookie (170 Cal per Cookie)'), 'exact');
+  assert.equal(st('1/2 Chicken', '12 Chicken'), 'rejected');
+  assert.equal(st('1/2 Chicken', 'Half Chicken'), 'exact');
+  assert.equal(st('1/4 Pounder', 'Quarter Pounder'), 'exact');
+  assert.equal(st({ name: 'Donuts', count: '6' }, '1/2 Dozen Donuts'), 'exact');
+  assert.equal(st('½ Dozen Oysters', 'Half Dozen Oysters'), 'exact');
+  assert.equal(st('Sauce .5 oz', 'Sauce 5 oz'), 'rejected');
+  assert.equal(st('Sauce .5 oz', 'Sauce 0.5 oz'), 'exact');
+  assert.equal(st('Coke 2 Liter', 'Coke 2L'), 'exact');
+  assert.equal(st('Coke 2 Liter', 'Coke 20 oz'), 'uncertain');
+  assert.equal(st('Md Fries', 'Medium Fries'), 'exact');
+  assert.equal(st('Fries (M)', 'Medium Fries'), 'exact');
+  assert.equal(st('Md Fries', 'Large Fries'), 'rejected');
+  assert.equal(st({ name: 'Bagels', count: '13' }, "Baker's Dozen Bagels"), 'exact');
+  assert.equal(st('Dozen Bagels', "Baker's Dozen Bagels"), 'rejected');
+  assert.equal(st('Large 14" Pepperoni Pizza', 'Large 14″ Pepperoni Pizza'), 'exact');
+  // Names in other scripts, and emoji, are compared too.
+  assert.equal(st('麻婆豆腐', '宫保鸡丁'), 'rejected');
+  assert.equal(st('麻婆豆腐', '麻婆豆腐'), 'exact');
+  assert.equal(st('Dim Sum 虾饺', 'Dim Sum 烧卖'), 'rejected');
+  assert.equal(st('Шаурма', 'Плов'), 'rejected');
+  assert.notEqual(st('Chicken Sandwich', 'Chicken Sandwich 🌶️'), 'exact');
+  assert.equal(st('Dumplings 🌱', 'Dumplings 🐷'), 'rejected');
+  // Variant words from this round.
+  for (const [o, c] of [['Caffè Latte', 'Iced Caffè Latte'], ['Plate', 'Bigger Plate'], ['Orange Chicken', 'Orange Chicken Plate'], ['Hamburger', 'Little Hamburger'],
+    ['Mocha', 'Mocha Frappe'], ['Baja Blast', 'Baja Blast Freeze'], ['Baconator', 'Baconator Fries'], ['Honey', 'Honey Mustard Sauce'], ['Cheeseburger', 'Bacon Cheeseburger'],
+    ['Grilled Stuft Burrito', 'XXL Grilled Stuft Burrito'], ['Burger with Bacon', 'Burger w/out Bacon'], ['Broccoli Cheddar Soup', 'Broccoli Cheddar Soup Cup'],
+    ['Freshly-Brewed Iced Tea Sweetened', 'Freshly-Brewed Iced Tea Unsweetened']]) assert.equal(st(o, c), 'rejected', c);
+  // Numbers as words, connectors, brand prefixes, flavor as an option.
+  assert.equal(st('You Pick Two', 'You Pick 2'), 'exact');
+  assert.equal(st('Chicken Caesar Salad', 'Caesar Salad with Chicken'), 'uncertain');
+  assert.equal(st('Bacon Gouda Egg Sandwich', 'Bacon, Gouda & Egg Sandwich'), 'uncertain');
+  assert.equal(chainSt('Chick-fil-A', { name: 'Nuggets', count: '8' }, 'Chick-fil-A® Nuggets', { variant: '8 ct' }), 'exact');
+  assert.equal(chainSt('Five Guys', 'Regular Fries', 'Regular Five Guys Style Fries'), 'uncertain');
+  assert.equal(st({ name: 'Wings', flavor: 'Buffalo' }, 'Traditional Wings', { addons: [{ name: 'Buffalo', group: 'Sauce', price_cents: 0 }] }), 'uncertain');
+  assert.equal(st({ name: 'Wings', flavor: 'Buffalo' }, 'Lemon Pepper Wings'), 'rejected');
+  // A confirmed alias carries its count and size, and prices a dropped word as an option.
+  assert.equal(st({ name: '10 Wings', aliases: '10 pc Classic Wings' }, 'Classic Wings'), 'uncertain');
+  assert.equal(st({ name: '10 Wings', aliases: '10 pc Classic Wings' }, '10 pc Classic Wings'), 'exact');
+  assert.equal(st({ name: 'Fries', aliases: 'World Famous Fries® - Small' }, 'World Famous Fries® - Small'), 'exact');
+  assert.equal(st({ name: 'Fries', aliases: 'World Famous Fries® - Small' }, 'World Famous Fries® - Large'), 'rejected');
+  const bowl = match1({ name: 'Steak Burrito Bowl', aliases: 'Burrito Bowl' }, item('Burrito Bowl', 1070, { addons: [{ name: 'Chicken', group: 'Protein', price_cents: 0 }, { name: 'Steak', group: 'Protein', price_cents: 200 }] }));
+  assert.equal(bowl.status, 'exact'); assert.equal(bowl.unitCents, 1270);
+  // Without such an option, your confirmation decides; the row notes the word.
+  const plain = match1({ name: 'Steak Burrito Bowl', aliases: 'Burrito Bowl' }, item('Burrito Bowl', 1070));
+  assert.equal(plain.status, 'exact');
+  assert.match(plain.reasons.map(r => r.text).join(' '), /Your item name also says "steak"; you confirmed this listing as the same item/);
+  assert.equal(st({ name: 'Margherita Pizza', size: 'Small Deep Dish', aliases: 'Small - Deep Dish Margherita' }, 'Small - Deep Dish Margherita'), 'exact');
+  assert.equal(st({ name: 'Broccoli Cheddar Soup', size: 'Bread Bowl', aliases: 'Broccoli Cheddar Soup in a Bread Bowl' }, 'Broccoli Cheddar Soup in a Bread Bowl'), 'exact');
+  // Suggestions: never another word, another size or count, a stale or duplicate listing.
+  const sug = (o, items, more = []) => run(order([typeof o === 'string' ? { name: o } : o]), [obs({ items })].concat(more)).closest[0].listings.map(l => l.label);
+  assert.deepEqual(sug('Blueberry Muffin', [item('Blackberry Muffin', 300)]), []);
+  assert.deepEqual(sug('Onion Rings', [item('Onion Wings', 300)]), []);
+  assert.deepEqual(sug('Small Deep Dish Buffalo Chicken', [item('Large - Deep Dish BuffaLou Chicken', 4470), item('Small - Deep Dish Buffalo Chickens', 2100)]), ['Small - Deep Dish Buffalo Chickens']);
+  assert.deepEqual(sug('Chalupa Supreme', [item('Chalupa Supreme', 549, { availability: 'unknown' })]), []);
+  const staleStore = obs({ observed_at: T(24 * 30), items: [item('Large Fries', 449)] });
+  assert.deepEqual(sug('Large Fries', [item('World Famous Fries® - Large', 459)], [staleStore]), ['World Famous Fries® - Large']);
+});

@@ -147,18 +147,21 @@ The universe of US branches on a platform is **not known**. Even after every dec
   * A partial name (for example "Chipotle" vs "Chipotle Mexican Grill") needs confirmation, unless you add it as a confirmed alias.
   * A different chain is excluded.
 * **Product:**
-  * Normalization handles only harmless differences: case, punctuation, `&` and `+` vs "and", `'N'` vs "and", `w/` vs "with", and inch marks. Calorie and serving notes (`[490-630 Cals]`, `(350 cal.)`, `(290 Cal/Slice)`, `(Serves 4)`) and menu numbers (`#1 Big Mac Meal`) are removed. `®`/`™` are dropped before Unicode normalization (which would otherwise turn `™` into the letters "TM"); `w/o` means "without", "gluten free" equals "GF", "Jr." equals "Junior", and `14''` or `16 in.` are inches.
+  * Normalization handles only harmless differences: case, punctuation, `&` and `+` vs "and", `'N'` vs "and", `w/` vs "with", and inch marks. Calorie notes (`[490-630 Cals]`, `(350 cal.)`, `(250 Cal Each)`, `(90 Cal/Wing)`) are removed; an unbracketed one only from its own number on, so "Chicken Tenders 3 - 360 Cal" keeps its 3. `®`/`™` are dropped before Unicode normalization (which would otherwise turn `™` into the letters "TM"); `w/o` and `w/out` mean "without", "gluten free" equals "GF", "Jr." equals "Junior", number words equal digits ("You Pick Two" / "You Pick 2"), `½` and `1/2` are "half" (so "1/2 Chicken" is never "12 Chicken"), `.5 oz` is 0.5 oz, `14''`, `14″` and `16 in.` are inches, `2L` is 2 liters, `(S)/(M)/(L)` and "Md" are sizes, and a Baker's Dozen is 13. Letters of every script and emoji are compared ("麻婆豆腐" is not "宫保鸡丁").
+  * **Menu numbers** (`#1 Big Mac Meal`, `Combo #3`) and **serving sizes** (`(Serves 4)`, `- Feeds 10-12 people`) are attributes: different numbers or servings on the two sides mean **not equivalent**; one side without them is ignored for menu numbers and needs confirmation for servings (unless the piece counts already agree).
+  * The chain's own name inside a listing ("Chick-fil-A® Nuggets" at Chick-fil-A) is not a product word.
   * A **verified** match needs the same product words, **counted** (so "Double-Double" is not "Double", and "2 Large 2-Topping Pizzas" is not one), once size and piece-count words are extracted; names that differ only in spacing ("Cheese Burger" / "Cheeseburger") are the same. A bare number at the start or end ("10 Chicken McNuggets", "Fried Chicken Wings (7)") counts as the piece count only when it equals the count the other side states, so "7 Layer Burrito" stays a name.
   * When the names differ:
     * by a **variant word** (meal, combo, bundle, supreme, deluxe, double, jr, spicy, crispy, grilled, gf, vegan, bowl, salad, wrap, with, no, extra …) or by a number: **not equivalent**;
-    * by one or two other words, with one name containing the other ("Small Deep Dish Margherita **Pizza**", "**World Famous** Fries - Large", "**Chicken** Burrito Bowl"): **needs confirmation**, with the words shown. Such a listing is never verified on its own;
+    * by one or two other words, with one name containing the other ("Small Deep Dish Margherita **Pizza**", "**World Famous** Fries - Large", "**Chicken** Burrito Bowl"), or only by connecting words and word order ("Caesar Salad **with** Chicken"): **needs confirmation**, with the words shown. Such a listing is never verified on its own;
     * otherwise: **not equivalent**.
-  * **Closest listings:** when no checked store lists an order item exactly, the results show up to five listings it may mean. Each shares a product word, has no variant-word difference, and is ranked by text similarity (character trigrams). These are only suggestions. **Same item** adds the listing to the item's confirmed alternate names (aliases), after which it is checked like any listing: size, piece count, flavor, modifiers, currency and price.
+  * **Closest listings:** when no checked store has a fresh, purchasable exact listing for an order item, the results show up to five listings it may mean: wording differences as above, or a plural of the same word, never another word ("Blueberry" / "Blackberry"), another size or count, a stale listing, or the same branch twice. They are ranked by text similarity (character trigrams) and are only suggestions. **Same item** adds the listing (without calorie notes) to the item's confirmed alternate names (aliases), after which it is checked like any listing. A confirmed name brings its own size and count where your item states none, and a word of your item name it leaves out ("Steak" Burrito Bowl) is priced when the listing sells it as an option.
   * Aliases are used only when you enter or confirm them, and matches through them are labelled as yours.
   * No embedding model decides a match: one would score "10 pc" vs "20 pc", "Small" vs "Large", or an item vs its Meal as near-identical, which are exactly the differences this app must catch.
 * **Size, count and flavor:**
   * Sizes are word sizes (small … extra large, X-Lg, kids, regular, tall/grande/venti), ounces and inches; a footlong is 12 inches. Piece counts accept pc, piece, ct, pack and dozen, also when typed in the size field ("12 ct").
   * Words typed in the size field ("Small Gluten Free", "Deep Dish") must appear in the listing, and a size the order does not state is never assumed: such listings need confirmation.
+  * In a name with parts ("Large Chips & Guacamole"), a size word after "and"/"with" belongs to that part: "Chips & Large Guacamole" is **not equivalent**, and "Large Chips & Large Guacamole" needs confirmation.
   * The same attribute stated differently on each side means **not equivalent**. If either side doesn't state it, the match **needs confirmation**.
   * A flavor must appear in the listing name or as a listed add-on.
 * **Modifiers:**
@@ -245,12 +248,12 @@ It never stores receipts, Grubhub prices, quantities, delivery addresses or loca
 
 ## Verification results
 
-### Local test suites (build sandbox, 2026-10-15)
+### Local test suites (build sandbox, 2026-10-17)
 
 | Suite | Command | Result |
 |---|---|---|
 | Backend (pytest) | `python -m pytest -q` | **41 passed, 3 skipped**. The skipped tests are in `test_real_captures.py`; real pages exist only on the runners, where the live-page tests passed in run 37827940323 and the archived DoorDash pages **passed 15/15** in runs 37893861203 and 38649946112. |
-| Engine (Node, runs the exact `<script id="fpc-engine">` from index.html) | `node --test tests/engine.test.mjs` | **31 passed** (includes the committed real snapshot and every confirmed red-team case) |
+| Engine (Node, runs the exact `<script id="fpc-engine">` from index.html) | `node --test tests/engine.test.mjs` | **32 passed** (includes the committed real snapshot and every confirmed red-team case from two rounds) |
 | Capture bookmarklet | `node --test tests/capture.test.mjs` | **8 passed** |
 | UI end-to-end (Playwright + Chromium, real backend, local fixture sites) | `node --test tests/ui.e2e.mjs` | **22 passed** |
 | Price board (Playwright + Chromium, committed real snapshot) | `node --test tests/board.e2e.mjs` | **14 passed** |
