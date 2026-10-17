@@ -1,0 +1,50 @@
+# Structure evidence for this project's DoorDash reader: reads a few
+# EXISTING public-archive captures of DoorDash store pages (Wayback Machine,
+# Common Crawl) and records what structured data they carry. It never asks an
+# archive to fetch a page. See scripts/archive_probe.py.
+name: fpc-archive-probe
+on:
+  workflow_dispatch: {}   # manual runs only; nothing crawls on a push
+permissions:
+  contents: write
+concurrency:
+  group: fpc-archive-probe
+  cancel-in-progress: false
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install requests pytest
+      - name: Read archived DoorDash store pages (structure only)
+        run: python scripts/archive_probe.py --out live-verification
+      - name: Extractor tests on the archived pages
+        run: python -m pytest -q -rs -s -p no:cacheprovider tests/test_real_captures.py -k archive 2>&1 | tee live-verification/archive-captures-pytest.txt || true
+      - name: Upload raw archived pages (artifact only)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: archive-captures
+          path: |
+            tests/captures_archive/
+            live-verification/doordash-archive.json
+          retention-days: 14
+          if-no-files-found: ignore
+      - name: Commit summary
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add live-verification/doordash-archive.json live-verification/archive-captures-pytest.txt || exit 0
+          git commit -m "DoorDash archive structure probe (run ${{ github.run_id }})" || exit 0
+          for i in 1 2 3 4; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((i * 5))
+          done
+          exit 1
