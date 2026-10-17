@@ -38,7 +38,7 @@ python -m server.app                            # serves http://127.0.0.1:8765/
 
 Open **http://127.0.0.1:8765/**. The backend serves `index.html` from the same origin.
 
-You can also open `index.html` directly (`file://`) and point it at the backend with the URL box at the top right. Without a backend, manual entry, receipt parsing, imports, demo mode and export still work. The page shows a "Backend disconnected" state and disables live search.
+You can also open `index.html` directly (`file://`). Without a backend, manual entry, receipt parsing, imports, demo mode and export still work. The page shows a "Backend disconnected" state and disables live search. A `file://` page sends `Origin: null`, which sandboxed iframes on any website also send, so the backend ignores it by default. To use a running backend from a `file://` page anyway, start it with `FPC_ALLOW_NULL_ORIGIN=1 python -m server.app` and set the URL box at the top right.
 
 Before relying on results, check that your machine can reach the platforms:
 
@@ -86,7 +86,7 @@ python -m pytest -q tests/test_real_captures.py -s
 * **Grubhub link lookup and menu picker** for Grubhub menus read through MenuPages. Picking an item fills the chain, item and Grubhub subtotal, which follows the quantity.
 * **One snapshot run at a time** ("Prices from"). Each run is a coherent moment, because menus change through the day. An example order opens on the newest run in which a checked store listed the item, and says so.
 * Location, freshness (24 h / 7 days / 30 days) and platform filters; verified / needs confirmation / not the same item tabs with the engine's reasons; **coverage and blocks** per search.
-* Platform status cards, the alternative-sources table, JSON/CSV import and the capture bookmarklet.
+* Platform status cards, the alternative-sources table, JSON/CSV import and the capture bookmarklet (Uber Eats pages only).
 * It makes no network requests except optional web fonts.
 
 `scripts/snapshot.py` produces the data. It runs in the live workflow with the app's own `Service` and the same robots.txt, rate limits and barrier handling, and writes `live-verification/snapshot.json` in the import schema with coverage counters and barriers. The builder reads that file and its committed history, plus older `report.json` versions.
@@ -102,7 +102,7 @@ Each adapter (`server/adapters.py`) relies only on published standards and on wh
 | Menu + prices | schema.org **JSON-LD**: `Restaurant`/`FoodEstablishment` → `hasMenu` → `MenuSection` → `MenuItem` → `Offer` (also `priceSpecification`, `AggregateOffer` (a range, so never verified), `menuAddOn`, `availability`), and `PostalAddress` for the US check. Text is HTML-unescaped. Identical listings repeated across sections are collapsed. A published `0.00` is never treated as a price. | **Verified live on 6 real Uber Eats store pages** (167–335 items each): `hasMenu.hasMenuSection[].hasMenuItem[].offers.{price,priceCurrency:"USD"}` plus full `PostalAddress`. Uber Eats publishes no `menuAddOn` and no `availability`. DoorDash store pages could not be read live (Cloudflare). **Their layout was verified on 15 archived real pages:** `Restaurant` with `PostalAddress` (no `postalCode`), `hasMenu.hasMenuSection` as a list of lists, `Offer.price` as a display string (`"$8.53"`, `"US$12.75"`, `"$13.59+"`), no `priceCurrency`. |
 | Grubhub prices | **MenuPages** (Grubhub-owned): robots.txt allows restaurant pages and declares `sitemap-index.xml` → `sitemap-restaurants.xml.gz`. A restaurant page has a `Restaurant` JSON-LD block (name, `PostalAddress`) and a separate `Menu` JSON-LD block with USD `Offer` prices, plus a link to `grubhub.com/restaurant/<slug>/<id>`. A page is accepted only if that link carries the same Grubhub ID (`server/grubhub_mirror.py`). | **Verified live** (runs 37741487660 and later): 162 priced listings for Grubhub ID 434510; 28,133 restaurant URLs in the sitemap. |
 | Grubhub prices (fallback) | **AllMenus** (Grubhub-owned): robots.txt allows menu pages and declares `sitemap-index.xml` with 21 `sitemap-restaurants*.xml.gz` files (up to 40,000 URLs each, `/<st>/<city>/<id>-<name>/menu/`, unordered); city pages list no restaurants in their HTML. Its JSON-LD holds item names but no prices, name or address. Prices are read from `li.menu-items > span.item-title + span.item-price`, only when those names equal the JSON-LD names. Name and address come from the `<title>` and meta description, which must agree. The page must link to the same Grubhub ID. | **Verified live** (runs 37743302443–37827940323): 217 = 217 names, 169 priced listings for Grubhub ID 517712; the real-capture test passes on the saved page. |
-| Currency when JSON-LD omits it | DoorDash prices count as USD only when the store's published address is in the US **and** the page's own data states `"currency":"USD"` and no other currency. The basis is written into the observation's `price_context`. Otherwise the prices are not USD and are excluded. The capture bookmarklet applies the same rule. | Archived DoorDash pages: US stores state `USD`, Canadian stores `CAD` |
+| Currency when JSON-LD omits it | DoorDash prices count as USD only when the store's published address is in the US **and** the page's own data states `"currency":"USD"` and no other currency. The basis is written into the observation's `price_context`. Otherwise the prices are not USD and are excluded. The capture bookmarklet (Uber Eats only) applies the same rule to any page that omits the currency. | Archived DoorDash pages: US stores state `USD`, Canadian stores `CAD` |
 | Starting prices | A price published as `"$13.59+"` is a starting price (options such as size set the final price). It is never an exact price: the item gets no price, a note saying why, and a required price-setting option, so it can only "need confirmation". | Archived DoorDash pages (Lou Malnati's deep dish, Taco Bell Chalupa Supreme), and the page shows the same `+` |
 | Lenient JSON-LD | A block that fails strict JSON parsing only because of raw control characters inside strings is re-read with `strict=False`, and the page records that it was. Malformed JSON is still rejected. | AllMenus (Grubhub-owned) emits such a block (char 105,771 of 125 KB). |
 | JS-rendered pages | **Auto** mode re-renders a page with Playwright/Chromium only when it answered normally but carried no structured data. A browser is never used to get past a block or challenge. | |
@@ -236,8 +236,13 @@ Environment variables:
 * `FPC_DATA_DIR` (`./.fpc-data`)
 * `FPC_SNAPSHOT` (`./live-verification/snapshot.json`)
 * `FPC_USER_AGENT`
+* `FPC_ALLOW_NULL_ORIGIN` (off): answer `Origin: null` (`file://` pages; also sandboxed iframes on any site)
 
-CORS is limited to `null` (file://) and localhost origins.
+**Request checks.** The backend is meant for your own machine:
+* CORS is limited to localhost origins, plus `null` when `FPC_ALLOW_NULL_ORIGIN=1`.
+* `POST` and `DELETE` from any other origin get 403, so another website cannot start, cancel, delete or purge jobs.
+* `POST` needs `Content-Type: application/json` (415 otherwise), which rules out form posts that skip the CORS preflight.
+* When bound to a loopback address (the default), a `Host` header other than `localhost`, `127.0.0.1`, `[::1]` or the bound address gets 403. That defeats DNS rebinding. Binding to `0.0.0.0` turns this check off.
 
 **Privacy.** Receipts are parsed in the browser only. The backend stores only:
 * chain and item names, aliases and flavor (needed to discover branches)
@@ -254,7 +259,7 @@ It never stores receipts, Grubhub prices, quantities, delivery addresses or loca
 |---|---|---|
 | Backend (pytest) | `python -m pytest -q` | **41 passed, 3 skipped**. The skipped tests are in `test_real_captures.py`; real pages exist only on the runners, where the live-page tests passed in run 37827940323 and the archived DoorDash pages **passed 15/15** in runs 37893861203 and 38649946112. |
 | Engine (Node, runs the exact `<script id="fpc-engine">` from index.html) | `node --test tests/engine.test.mjs` | **32 passed** (includes the committed real snapshot and every confirmed red-team case from two rounds) |
-| Capture bookmarklet | `node --test tests/capture.test.mjs` | **8 passed** |
+| Capture bookmarklet | `node --test tests/capture.test.mjs` | **9 passed** |
 | UI end-to-end (Playwright + Chromium, real backend, local fixture sites) | `node --test tests/ui.e2e.mjs` | **22 passed** |
 | Price board (Playwright + Chromium, committed real snapshot) | `node --test tests/board.e2e.mjs` | **14 passed** |
 
@@ -387,7 +392,7 @@ To find other ways to get this data, 24 methods were researched (October 2026). 
 | MenuPages | Grubhub | public; robots.txt allows | yes, for listed restaurants (28,133 pages) | **In use, verified live**. Grubhub terms: personal, non-commercial use. |
 | AllMenus | Grubhub | public; robots.txt allows | partly (undated, sometimes stale) | **In use, verified live**. Used only when HTML and JSON-LD names agree. Same Grubhub terms. |
 | Uber Eats brand-city pages | Uber Eats | public | no (sample prices not tied to a branch) | Discovery only |
-| Capture bookmarklet (your browser) | DoorDash, Uber Eats | your action | yes for fixed prices on pages with a `Restaurant` block (12 of 15 archived DoorDash pages; the other 3 give nothing); DoorDash publishes no modifiers, and `+` prices are starting prices | **Built**. Its DoorDash handling matches the real page layout (verified on archived pages). DoorDash's terms ban copying with scripts even when run by hand (high risk). |
+| Capture bookmarklet (your browser) | Uber Eats | your action | yes for fixed prices; `$0.00` and `+` prices are kept as not published | **Built, Uber Eats only.** On DoorDash pages it stops and points to typed entry, because DoorDash's terms ban copying with scripts even when run by hand. Uber's terms restrict scraping (your call). |
 | Prices you saw, typed in | DoorDash, Uber Eats | your action, your app | yes, for your branch, mode and account | **Built** (app and board). No scraping: you type what the platform shows you, with the store link for the store ID |
 | Your order receipts | all three | your mailbox | no (past orders, no store ID) | **Built** (paste). Historical; good for your Grubhub side. |
 | Personal data downloads ([Uber](https://help.uber.com/riders/article/whats-in-your-data-download?nodeId=3d476006-87a4-4404-ac1e-216825414e05), [DoorDash](https://help.doordash.com/en-us/consumers/article/i-want-to-delete-my-personal-information-data-from-doordash)) | Uber Eats, DoorDash | account holder, 1–3 days | no (no store address or URL) | Not built; your own past orders only |
@@ -424,7 +429,7 @@ To find other ways to get this data, 24 methods were researched (October 2026). 
 7. **Terms of service.** Robots.txt allowing crawling (verified for all five sites) is not the same as permission, and you are responsible for whether and how you run the scrapers.
    * Grubhub's Terms of Use prohibit automated access without written authorization. The MenuPages terms say Grubhub's sites, MenuPages included, are "made available solely for your personal, non-commercial use" unless Grubhub agrees otherwise in writing, and AllMenus is covered by the same Grubhub terms. Set `FPC_DISABLE_GRUBHUB_MIRRORS=1` to switch both lookups off.
    * Uber's terms reportedly bar scripts that scrape or data-mine the service. The US wording was not confirmed.
-   * DoorDash's terms bar accessing its sites "manually or with any robot, spider, script, … to scrape, copy, index, frame, or monitor" them. That covers the capture bookmarklet too, even though you run it yourself in your own browser.
+   * DoorDash's terms bar accessing its sites "manually or with any robot, spider, script, … to scrape, copy, index, frame, or monitor" them. That would cover the capture bookmarklet too, even though you run it yourself, so the bookmarklet is switched off on DoorDash pages. DoorDash prices get in only by typing what the DoorDash app shows you.
    * The import path works with data obtained by other permitted means.
 8. **Coverage.** Nationwide coverage is built up across bounded, resumable runs from seeds, chain pages and declared sitemaps. Uber Eats declares hundreds of sitemap files; DoorDash declares 131 per-state store files of up to ~100k URLs each. It is never exhaustive by construction, and the UI never claims "cheapest in the US".
 

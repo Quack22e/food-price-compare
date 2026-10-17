@@ -32,7 +32,9 @@ from .jobs import MAX_EVENTS_PER_POLL, JobManager
 
 VERSION = "1.0.0"
 MAX_BODY = 1_000_000
-_ALLOWED_ORIGIN_RE = re.compile(r"^(null|https?://(localhost|127\.0\.0\.1|\[::1\])(:\d+)?)$")
+_LOCAL_ORIGIN_RE = re.compile(r"^https?://(localhost|127\.0\.0\.1|\[::1\])(:\d+)?$")
+_LOOPBACK_NAMES = {"localhost", "127.0.0.1", "[::1]"}
+_WILDCARD_BINDS = {"", "0.0.0.0", "::", "[::]"}
 
 
 class Service:
@@ -89,9 +91,44 @@ def make_handler(svc: Service):
         def log_message(self, fmt, *args):  # quieter, no query strings
             sys.stderr.write("%s %s\n" % (self.command, urlsplit(self.path).path))
 
+        def _origin_allowed(self, origin: str | None) -> bool:
+            if origin is None:  # curl, scripts, same-origin GETs
+                return True
+            if origin == "null":
+                return svc.cfg.allow_null_origin
+            return bool(_LOCAL_ORIGIN_RE.match(origin))
+
+        def _host_allowed(self) -> bool:
+            # Defeats DNS rebinding: a page on evil.example re-pointed at
+            # 127.0.0.1 still sends "Host: evil.example".
+            bind = getattr(svc, "bind_host", "127.0.0.1")
+            if bind in _WILDCARD_BINDS:
+                return True
+            host = (self.headers.get("Host") or "").strip().lower()
+            name = host.rsplit(":", 1)[0] if not host.endswith("]") else host
+            return name in _LOOPBACK_NAMES or name == bind.lower()
+
+        def _refuse(self) -> bool:
+            """Answers 403 and returns True when this request must not run."""
+            if not self._host_allowed():
+                self._send(403, {"error": "Host header not allowed; use http://127.0.0.1 or http://localhost"})
+                return True
+            origin = self.headers.get("Origin")
+            if self.command in ("POST", "DELETE") and not self._origin_allowed(origin):
+                why = ("file:// pages send Origin null; open the page from this service instead, "
+                       "or start it with FPC_ALLOW_NULL_ORIGIN=1") if origin == "null" else "only localhost pages may change jobs"
+                self._send(403, {"error": f"Origin {origin} not allowed: {why}"})
+                return True
+            if self.command == "POST":
+                ctype = (self.headers.get("Content-Type") or "").split(";", 1)[0].strip().lower()
+                if ctype != "application/json":
+                    self._send(415, {"error": "Content-Type must be application/json"})
+                    return True
+            return False
+
         def _cors(self):
             origin = self.headers.get("Origin")
-            if origin and _ALLOWED_ORIGIN_RE.match(origin):
+            if origin is not None and self._origin_allowed(origin):
                 self.send_header("Access-Control-Allow-Origin", origin)
                 self.send_header("Vary", "Origin")
                 self.send_header("Access-Control-Allow-Methods", "GET, POST, DELETE, OPTIONS")
@@ -125,6 +162,8 @@ def make_handler(svc: Service):
             self.end_headers()
 
         def do_GET(self):
+            if self._refuse():
+                return
             parts = urlsplit(self.path)
             path = parts.path
             try:
@@ -166,6 +205,8 @@ def make_handler(svc: Service):
                 return self._send(500, {"error": f"{type(exc).__name__}: {exc}"})
 
         def do_DELETE(self):
+            if self._refuse():
+                return
             m = re.match(r"^/api/jobs/([a-f0-9]{16})$", urlsplit(self.path).path)
             if not m:
                 return self._send(404, {"error": "not found"})
@@ -173,6 +214,8 @@ def make_handler(svc: Service):
             return self._send(200 if ok else 404, {"deleted": ok})
 
         def do_POST(self):
+            if self._refuse():
+                return
             path = urlsplit(self.path).path
             try:
                 body = self._body()
@@ -220,6 +263,7 @@ def make_handler(svc: Service):
 
 def serve(host: str, port: int, cfg: Config | None = None) -> ThreadingHTTPServer:
     svc = Service(cfg or Config.from_env())
+    svc.bind_host = host
     httpd = ThreadingHTTPServer((host, port), make_handler(svc))
     httpd.daemon_threads = True
     httpd.service = svc  # type: ignore[attr-defined]

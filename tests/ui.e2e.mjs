@@ -409,6 +409,7 @@ describe('index.html end-to-end', { timeout: 300000 }, () => {
     assert.equal(await p2.isDisabled('#searchBtn'), true);
     assert.equal(await p2.isDisabled('#snapServer'), true);              // a snapshot file still loads without a backend
     assert.match(await p2.locator('#progressArea').innerText(), /Backend disconnected.*Manual entry, receipt parsing, imports, demo mode and export still work/s);
+    assert.match(await p2.locator('#progressArea').innerText(), /FPC_ALLOW_NULL_ORIGIN=1/);  // why a file:// page can't reach a running service
     await p2.fill('#ghUrl', 'https://www.grubhub.com/restaurant/chipotle-mexican-grill-1-a-st/42');
     await p2.click('#ghExtract');
     assert.match(await p2.locator('#ghResult').innerText(), /Backend not connected/);

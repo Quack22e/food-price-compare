@@ -15,12 +15,17 @@ try { pw = require('playwright'); } catch { pw = require(path.join(execSync('npm
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const boardPath = path.join(root, 'board', 'index.html');
 const engineOf = (html) => /<script id="fpc-engine">([\s\S]*?)<\/script>/.exec(html)[1];
+// The board ages prices against the clock, so pin it two hours after the newest
+// embedded run; otherwise these tests would start failing once that run is a day old.
+const embedded = JSON.parse(/<script type="application\/json" id="snapshot-data">([\s\S]*?)<\/script>/.exec(readFileSync(boardPath, 'utf8'))[1]);
+const fixedNow = Math.max(...embedded.runs.map((r) => Date.parse(r.generated_at)).filter(Number.isFinite)) + 2 * 3600e3;
 
 let browser, page;
 const errors = [], hosts = new Set();
 before(async () => {
   browser = await pw.chromium.launch();
   page = await browser.newPage({ viewport: { width: 1280, height: 900 } });
+  await page.clock.setFixedTime(fixedNow);
   page.on('pageerror', (e) => errors.push(String(e)));
   page.on('request', (r) => { const u = new URL(r.url()); if (u.protocol.startsWith('http')) hosts.add(u.hostname); });
   // Fonts are optional; keep the test offline.
@@ -76,7 +81,7 @@ test('imports render untrusted text as text, are labelled, and invalid records a
   await page.fill('#it0_name', 'Test Wrap');
   const rec = (over) => Object.assign({ platform: 'ubereats', store_id: 'x1', store_name: 'Test Chain (<img src=x onerror="window.__pwned=1">)',
     store_url: 'https://www.ubereats.com/store/test/x1', address: { street: '1 Main St', city: 'Springfield', state: 'IL', zip: '62701', country: 'US' },
-    observed_at: new Date(Date.now() - 60000).toISOString(), order_mode: 'delivery', items: [{ name: 'Test Wrap', price: '5.25' }] }, over);
+    observed_at: new Date(fixedNow - 60000).toISOString(), order_mode: 'delivery', items: [{ name: 'Test Wrap', price: '5.25' }] }, over);
   await page.fill('#importText', JSON.stringify({ observations: [rec({}), rec({ store_id: 'x2', address: { city: 'Toronto', state: 'ON', zip: 'M5V', country: 'CA' } })] }));
   await page.click('#importBtn');
   assert.match(await text('#importMsg'), /Added 1 store menu/);
@@ -119,7 +124,7 @@ test('closest listings: a worded-differently listing is suggested, and "Same ite
   await page.fill('#chain', "McDonald's");
   await page.fill('#it0_name', 'Large Fries');
   const rec = (id, items) => ({ platform: 'ubereats', store_id: id, store_name: "McDonald's", store_url: 'https://www.ubereats.com/store/mcd/' + id,
-    address: { street: id + ' Elm St', city: 'Boise', state: 'ID', zip: '83702', country: 'US' }, observed_at: new Date(Date.now() - 3600e3).toISOString(),
+    address: { street: id + ' Elm St', city: 'Boise', state: 'ID', zip: '83702', country: 'US' }, observed_at: new Date(fixedNow - 3600e3).toISOString(),
     order_mode: 'delivery', items: items.map(([name, price]) => ({ name, price })) });
   await page.fill('#importText', JSON.stringify({ observations: [rec('F1', [['World Famous Fries® - Large', '4.49'], ['World Famous Fries® - Medium', '3.89'], ['Fries Meal', '8.99']]),
                                                                   rec('F2', [['World Famous Fries® - Large', '4.79']])] }));
@@ -220,6 +225,7 @@ test('the run note follows the current order and filters', async () => {
 test('no horizontal scroll at phone widths', async () => {
   for (const w of [400, 375, 360]) {
     const p = await browser.newPage({ viewport: { width: w, height: 800 } });
+    await p.clock.setFixedTime(fixedNow);
     await p.route(/^https?:\/\//, (r) => r.abort());
     await p.goto('file://' + boardPath);
     await p.waitForSelector('#winner .label-tag, #winner .label-empty');

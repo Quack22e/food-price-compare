@@ -65,18 +65,26 @@ test('captures an Uber Eats store page into a valid import record', async () => 
   assert.match(ev.winnerLabel, /among 1 checked location/);
 });
 
-test('DoorDash store page: pickup taken from the page address', async () => {
-  const res = await runOn('https://www.doordash.com/store/mcdonalds-columbus-123456/?pickup=true', page(ld));
+test('Uber Eats pickup is taken from the page address', async () => {
+  const res = await runOn('https://www.ubereats.com/store/mcdonalds-main-1st/AbCdEf123456?diningMode=PICKUP', page(ld));
   assert.equal(res.ok, true);
-  assert.equal(res.observation.platform, 'doordash');
-  assert.equal(res.observation.store_id, '123456');
   assert.equal(res.observation.order_mode, 'pickup');
   assert.deepEqual(E.validateImport(JSON.stringify({ observations: [res.observation] }), { now: Date.now() + 1000 }).errors, []);
 });
 
+test('switched off on DoorDash, even when the page publishes a full menu', async () => {
+  const res = await runOn('https://www.doordash.com/store/mcdonalds-columbus-123456/?pickup=true', page(ld));
+  assert.equal(res.ok, false);
+  assert.equal(res.observation, null);
+  assert.match(res.notes.join(' '), /switched off on DoorDash: its terms forbid copying its site with scripts.*Add prices you saw yourself/);
+});
+
 // SYNTHETIC page in the layout of real DoorDash store pages (archived captures,
 // scripts/archive_probe.py): nested section list, offers without priceCurrency,
-// no postalCode, and the currency stated only in the page's own app data.
+// no postalCode, and the currency stated only in the page's own app data. The
+// capture is off on DoorDash, so these run on an Uber Eats address: the same
+// checks guard any page that leaves the currency out.
+const ddUrl = 'https://www.ubereats.com/store/taco-bell-beaverton/TbCdEf123456';
 const ddLd = {
   '@context': 'https://schema.org', '@type': 'Restaurant', name: 'Taco Bell',
   address: { '@type': 'PostalAddress', streetAddress: '1170 Northwest 185th Avenue', addressLocality: 'Beaverton', addressRegion: 'OR', addressCountry: 'US' },
@@ -87,7 +95,7 @@ const ddPage = (cur) => page(ddLd).replace('</body>', cur == null ? '</body>'
   : `<script>self.__next_f.push([1,"{\\"price\\":{\\"currency\\":\\"${cur}\\",\\"decimalPlaces\\":2},\\"displayPrice\\":\\"$$8.53\\"}"])</script></body>`);
 
 test('DoorDash layout: a missing currency counts as USD only when the page data states USD alone', async () => {
-  const url = 'https://www.doordash.com/store/taco-bell-1194579/';
+  const url = ddUrl;
   const ok = await runOn(url, ddPage('USD'));
   assert.equal(ok.ok, true, JSON.stringify(ok.notes));
   assert.equal(ok.observation.currency, 'USD');
@@ -95,7 +103,7 @@ test('DoorDash layout: a missing currency counts as USD only when the page data 
   assert.match(ok.notes.join(' '), /page's own data states USD and no other/);
   const v = E.validateImport(JSON.stringify({ observations: [ok.observation] }), { now: Date.now() + 1000 });
   assert.deepEqual(v.errors, []);
-  assert.equal(v.observations[0].address.zip, '');                     // DoorDash publishes no ZIP
+  assert.equal(v.observations[0].address.zip, '');                     // the layout has no ZIP
   for (const cur of ['CAD', null]) {
     const bad = await runOn(url, ddPage(cur));
     assert.notEqual(bad.observation.currency, 'USD');
@@ -104,12 +112,12 @@ test('DoorDash layout: a missing currency counts as USD only when the page data 
   }
 });
 
-test('DoorDash price strings: "US$12.75" is a price, "$13.59+" a starting price', async () => {
+test('price strings seen on DoorDash: "US$12.75" is a price, "$13.59+" a starting price', async () => {
   const ld = JSON.parse(JSON.stringify(ddLd));
   ld.hasMenu.hasMenuSection[0][0].hasMenuItem = [
     { '@type': 'MenuItem', name: 'Burrito Bowl', offers: { '@type': 'Offer', price: 'US$12.75' } },
     { '@type': 'MenuItem', name: 'Deep Dish Cheese', offers: { '@type': 'Offer', price: '$13.59+' } }];
-  const res = await runOn('https://www.doordash.com/store/chipotle-mexican-grill-26003435/', ddPage('USD').replace(JSON.stringify(ddLd), JSON.stringify(ld)));
+  const res = await runOn(ddUrl, ddPage('USD').replace(JSON.stringify(ddLd), JSON.stringify(ld)));
   assert.equal(res.ok, true, JSON.stringify(res.notes));
   const [bowl, pie] = res.observation.items;
   assert.deepEqual([bowl.name, bowl.price_cents, bowl.currency], ['Burrito Bowl', 1275, 'USD']);
@@ -123,7 +131,7 @@ test('one priced item without a currency does not get the whole store rejected',
   ld.hasMenu.hasMenuSection[0][0].hasMenuItem = [
     { '@type': 'MenuItem', name: 'Crunchwrap Supreme', offers: { '@type': 'Offer', price: '8.53', priceCurrency: 'USD' } },
     { '@type': 'MenuItem', name: 'Chalupa Supreme', offers: { '@type': 'Offer', price: '6.09' } }];
-  const res = await runOn('https://www.doordash.com/store/taco-bell-1194579/', ddPage(null).replace(JSON.stringify(ddLd), JSON.stringify(ld)));
+  const res = await runOn(ddUrl, ddPage(null).replace(JSON.stringify(ddLd), JSON.stringify(ld)));
   assert.equal(res.observation.currency, 'USD');
   const v = E.validateImport(JSON.stringify({ observations: [res.observation] }), { now: Date.now() + 1000 });
   assert.equal(v.observations.length, 1);
@@ -133,7 +141,7 @@ test('one priced item without a currency does not get the whole store rejected',
 
 test('refuses to guess: no structured data, not a store page, Grubhub, other sites', async () => {
   const bare = '<!doctype html><html><body><div>$6.49 Big Mac</div></body></html>';
-  let r = await runOn('https://www.doordash.com/store/x-1/', bare);
+  let r = await runOn('https://www.ubereats.com/store/x/AbCdEf123456', bare);
   assert.equal(r.ok, false);
   assert.match(r.notes.join(' '), /no schema\.org restaurant data/);
   r = await runOn('https://www.ubereats.com/brand/mcdonalds', page(ld));

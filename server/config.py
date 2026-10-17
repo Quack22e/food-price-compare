@@ -84,6 +84,10 @@ class Config:
     # Only the test-suite sets this; it lets plain-http local fixtures stand in
     # for the real hosts.
     test_mode: bool = False
+    # Browsers send "Origin: null" from file:// pages, but also from sandboxed
+    # iframes on any site, so the API answers it only when the operator opts in
+    # (FPC_ALLOW_NULL_ORIGIN=1). Serving index.html from this service avoids it.
+    allow_null_origin: bool = False
 
     @classmethod
     def from_env(cls) -> "Config":
@@ -97,6 +101,7 @@ class Config:
             # non-commercial use; operators can switch both lookups off.
             cfg.platform_bases.pop("menupages", None)
             cfg.platform_bases.pop("allmenus", None)
+        cfg.allow_null_origin = os.environ.get("FPC_ALLOW_NULL_ORIGIN", "").strip().lower() in ("1", "true", "yes")
         return cfg
 
     @property

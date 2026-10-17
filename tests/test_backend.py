@@ -443,10 +443,30 @@ def test_http_api(sites, tmp_path):
     threading.Thread(target=httpd.serve_forever, daemon=True).start()
     base = f"http://127.0.0.1:{httpd.server_address[1]}"
     try:
-        st, hd, body = _req(base + "/api/health", headers={"Origin": "null"})
-        assert st == 200 and body["ok"] and hd.get("Access-Control-Allow-Origin") == "null"
+        st, hd, body = _req(base + "/api/health", headers={"Origin": "http://localhost:8000"})
+        assert st == 200 and body["ok"] and hd.get("Access-Control-Allow-Origin") == "http://localhost:8000"
         st, hd, _ = _req(base + "/api/health", headers={"Origin": "https://evil.example"})
         assert "Access-Control-Allow-Origin" not in hd
+        # Cross-site requests cannot start, cancel, delete or purge jobs.
+        st, _, body = _req(base + "/api/purge", "POST", {}, headers={"Origin": "https://evil.example"})
+        assert st == 403 and "not allowed" in body["error"]
+        st, _, body = _req(base + "/api/jobs/0123456789abcdef", "DELETE", headers={"Origin": "https://evil.example"})
+        assert st == 403
+        st, _, body = _req(base + "/api/purge", "POST", {}, headers={"Content-Type": "text/plain"})  # a no-preflight form post
+        assert st == 415 and "application/json" in body["error"]
+        st, _, body = _req(base + "/api/health", headers={"Host": "evil.example"})     # DNS rebinding
+        assert st == 403 and "Host" in body["error"]
+        # "Origin: null" (file:// pages, sandboxed iframes) is refused unless the operator opts in.
+        st, hd, _ = _req(base + "/api/health", headers={"Origin": "null"})
+        assert st == 200 and "Access-Control-Allow-Origin" not in hd
+        st, _, body = _req(base + "/api/purge", "POST", {}, headers={"Origin": "null"})
+        assert st == 403 and "FPC_ALLOW_NULL_ORIGIN=1" in body["error"]
+        cfg.allow_null_origin = True
+        st, hd, _ = _req(base + "/api/health", headers={"Origin": "null"})
+        assert st == 200 and hd.get("Access-Control-Allow-Origin") == "null"
+        st, _, body = _req(base + "/api/purge", "POST", {}, headers={"Origin": "null"})
+        assert st == 200
+        cfg.allow_null_origin = False
         st, _, body = _req(base + "/api/snapshot")              # read-only, and only the configured file
         assert st == 404 and "no snapshot" in body["error"]
         cfg.snapshot_path.write_text(json.dumps({"generated_at": "2026-10-08T18:59:00Z", "searches": []}))

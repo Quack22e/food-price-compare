@@ -281,7 +281,7 @@ tr.details td { background: var(--bg); }
       <div class="btnbar"><button id="seenAdd" type="button">Add these prices</button></div>
       <div id="seenMsg"></div>
       <h3>Capture from your own browser</h3>
-      <p class="note">For pages this tool cannot read from a server (DoorDash store pages answer servers with a bot check), you can read them yourself: open a DoorDash or Uber Eats store page in your browser, set Delivery or Pickup as you would order, then click the bookmark below. It reads only the menu data the page publishes, shows it, and gives you JSON to paste into Import. It sends nothing anywhere. DoorDash’s terms forbid copying its site with scripts, even ones you run yourself, and Uber’s terms restrict scraping. Use it only if you accept that risk.</p>
+      <p class="note">For Uber Eats stores the search did not reach, you can read the page yourself: open an Uber Eats store page in your browser, set Delivery or Pickup as you would order, then click the bookmark below. It reads only the menu data the page publishes, shows it, and gives you JSON to paste into Import. It sends nothing anywhere. Uber’s terms restrict scraping, so use it only if you accept that risk. It does nothing on DoorDash, whose terms forbid copying its site with scripts even ones you run yourself; type DoorDash prices in above instead.</p>
       <div class="btnbar"><a id="captureBookmarklet" class="bookmarklet" href="#">Capture menu</a><button id="captureCopy" type="button">Copy bookmarklet code</button></div>
       <p class="note">Drag “Capture menu” to your bookmarks bar (or copy the code into a new bookmark’s URL). Captured prices are labelled as captured in your session; your login and delivery address may affect them.</p>
       <div id="captureMsg"></div>
@@ -318,8 +318,9 @@ tr.details td { background: var(--bg); }
 </main>
 
 <script type="text/plain" id="fpc-capture">
-/* FPC browser capture. Runs as a bookmarklet on a DoorDash / Uber Eats page
-   the user is viewing in their own browser. Reads only the page's published
+/* FPC browser capture. Runs as a bookmarklet on an Uber Eats store page
+   the user is viewing in their own browser. Switched off on DoorDash, whose
+   terms forbid copying its site with scripts, even ones the user runs. Reads only the page's published
    schema.org JSON-LD (the extraction path verified on real Uber Eats pages);
    never guesses prices from screen text; sends nothing anywhere. Output is
    JSON in the app's import schema, labelled as a browser capture. */
@@ -399,7 +400,7 @@ tr.details td { background: var(--bg); }
       var rec = { name: name, variant: variant, section: section || null, price_cents: isType(o, ['aggregateoffer']) ? null : cents(price),
                   currency: (txt(cur) || '').toUpperCase() || null, availability: avail(o.availability), addons: addons, required_options: 'unknown' };
       if (rec.price_cents === null && /^(?:US)?\$\s*\d[\d,]*(?:\.\d+)?\s*\+$/i.test(txt(price))) {
-        // Real DoorDash pages publish "$13.59+": a starting price that options set.
+        // Seen on real DoorDash pages ("$13.59+"): a starting price that options set.
         rec.price_note = 'published as a starting price (' + txt(price) + '): options such as size set the final price, which the page does not publish';
         rec.required_options = [{ name: 'price-setting options (not published)', required: true }];
       } else if (rec.price_cents === 0) {
@@ -426,8 +427,9 @@ tr.details td { background: var(--bg); }
     var platform = /(^|\.)doordash\.com$/.test(host) ? 'doordash' : /(^|\.)ubereats\.com$/.test(host) ? 'ubereats' : /(^|\.)grubhub\.com$/.test(host) ? 'grubhub' : null;
     var res = { ok: false, platform: platform, url: loc.origin + loc.pathname, notes: [], observation: null, version: VERSION };
     if (!platform) { res.notes.push('This is not a DoorDash, Uber Eats or Grubhub page. Open a store page there and click the bookmark again.'); return res; }
+    if (platform === 'doordash') { res.notes.push('Capture is switched off on DoorDash: its terms forbid copying its site with scripts, even ones you run yourself. Type the prices you see into “Add prices you saw yourself” in the app instead.'); return res; }
     if (platform === 'grubhub') { res.notes.push('Grubhub restaurant pages publish no structured menu data (checked on a real page), so nothing can be captured reliably here. Enter the Grubhub item and its subtotal in the app.'); return res; }
-    var m = platform === 'doordash' ? /\/store\/(?:[^/]*?-)?(\d+)\/?$/.exec(loc.pathname) : /\/store\/[^/]+\/([A-Za-z0-9_-]{6,})\/?$/.exec(loc.pathname);
+    var m = /\/store\/[^/]+\/([A-Za-z0-9_-]{6,})\/?$/.exec(loc.pathname);
     if (!m) { res.notes.push('This does not look like a single store page (expected a /store/... address). Open one store and try again.'); return res; }
     var objs = [];
     Array.prototype.forEach.call(document.querySelectorAll('script[type*="ld+json"]'), function (s) {
@@ -443,9 +445,9 @@ tr.details td { background: var(--bg); }
     items = dedupe(items);
     if (!items.length) { res.notes.push('Restaurant data found, but no menu items with prices.'); return res; }
     var a = list(r.address)[0] || {};
-    // Real DoorDash pages publish prices without priceCurrency (checked on
-    // archived pages); their own app data states the currency. Missing
-    // currencies count as USD only when that data states USD and no other.
+    // Some pages publish prices without priceCurrency (real DoorDash ones do,
+    // checked on archived pages) and state the currency in their own app data.
+    // Missing currencies count as USD only when that data states USD and no other.
     var codes = {};
     Array.prototype.forEach.call(document.querySelectorAll('script:not([src])'), function (s) {
       var re = /\\*"currency\\*"\s*:\s*\\*"([A-Z]{3})\\*"/g, mm;
@@ -459,7 +461,7 @@ tr.details td { background: var(--bg); }
     var curs = {};
     items.forEach(function (it) { if (it.price_cents != null) curs[it.currency || fill || 'UNKNOWN'] = 1; });
     curs = Object.keys(curs);
-    var pickup = platform === 'doordash' ? loc.searchParams.get('pickup') === 'true' : /^pickup$/i.test(loc.searchParams.get('diningMode') || '');
+    var pickup = /^pickup$/i.test(loc.searchParams.get('diningMode') || '');
     res.observation = {
       platform: platform, store_id: m[1], store_name: txt(r.name), store_url: loc.origin + loc.pathname,
       address: { street: txt(a.streetAddress), city: txt(a.addressLocality), state: txt(a.addressRegion), zip: txt(a.postalCode), country: txt(a.addressCountry) },
@@ -2247,7 +2249,8 @@ tr.details td { background: var(--bg); }
   function renderProgress(errText) {
     var area = $('progressArea'); if (!area) return;
     var kids = [];
-    if (!S.connected) kids.push(msg('bad', 'Backend disconnected (' + S.backendUrl + '). Live search, Grubhub page retrieval, probing and checkpoints are unavailable. Manual entry, receipt parsing, imports, demo mode and export still work. Start the service with: python -m server.app'));
+    if (!S.connected) kids.push(msg('bad', 'Backend disconnected (' + S.backendUrl + '). Live search, Grubhub page retrieval, probing and checkpoints are unavailable. Manual entry, receipt parsing, imports, demo mode and export still work. Start the service with: python -m server.app' +
+      (location.protocol === 'file:' ? ' and open the page it serves (http://127.0.0.1:8765/). The service ignores pages opened as files unless started with FPC_ALLOW_NULL_ORIGIN=1.' : '')));
     if (S.probe) {
       if (S.probe.pending) kids.push(msg('', 'Probing platforms (robots.txt fetch)…'));
       else if (S.probe.error) kids.push(msg('bad', 'Probe failed: ' + S.probe.error));
@@ -2668,7 +2671,7 @@ tr.details td { background: var(--bg); }
     var capSrc = (($('fpc-capture') || {}).textContent || '').replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '').replace(/\n\s+/g, '\n');
     var bm = 'javascript:' + encodeURIComponent('(function(){' + capSrc + '})();void 0');
     $('captureBookmarklet').setAttribute('href', bm);
-    $('captureBookmarklet').addEventListener('click', function (e) { e.preventDefault(); setKids($('captureMsg'), msg('', 'Drag “Capture menu” to your bookmarks bar, then click it while viewing a DoorDash or Uber Eats store page.')); });
+    $('captureBookmarklet').addEventListener('click', function (e) { e.preventDefault(); setKids($('captureMsg'), msg('', 'Drag “Capture menu” to your bookmarks bar, then click it while viewing an Uber Eats store page. For DoorDash, type the prices in above.')); });
     $('captureCopy').addEventListener('click', function () {
       var ok = function () { setKids($('captureMsg'), msg('ok', 'Bookmarklet code copied. Create a bookmark and paste it as the URL.')); };
       var fail = function () { setKids($('captureMsg'), msg('warn', 'Copy was blocked by the browser. Drag the “Capture menu” link to your bookmarks bar instead.')); };
