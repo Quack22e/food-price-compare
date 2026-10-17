@@ -1,0 +1,2689 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src http://127.0.0.1:* http://localhost:* 'self'; img-src data:; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<title>Food Price Compare (US)</title>
+<style>
+:root {
+  /* Same identity as board/index.html: green-grey paper, ink rules, a shelf-label yellow for the winning price. */
+  --bg: #eef1ee; --panel: #ffffff; --ink: #17201c; --muted: #56625c; --line: #cfd7d1;
+  --accent: #1d5f8a; --accent-ink: #ffffff; --ok: #1d7446; --ok-bg: #dcf0e3; --warn: #8a5800; --warn-bg: #fbecc8;
+  --bad: #a3312a; --bad-bg: #f8dedb; --info-bg: #e2ecf4; --demo: #7a2bd1; --demo-bg: #f3eafe; --chip: #e3e8e4;
+  --tag: #ffd84a; --tag-ink: #1a1a12;
+  --radius: 6px; --shadow: none;
+  --mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #111513; --panel: #1a201d; --ink: #e6ece8; --muted: #9aa8a1; --line: #303a35;
+    --accent: #7fb8de; --accent-ink: #0d1a24; --ok: #7fd3a0; --ok-bg: #173325; --warn: #f0c56b; --warn-bg: #3a2d10;
+    --bad: #f1958c; --bad-bg: #3d1d1a; --info-bg: #1b2a36; --demo: #c49bff; --demo-bg: #2a1a40; --chip: #232a26;
+    --tag: #f2cb3a; --tag-ink: #16140a;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #111513; --panel: #1a201d; --ink: #e6ece8; --muted: #9aa8a1; --line: #303a35;
+  --accent: #7fb8de; --accent-ink: #0d1a24; --ok: #7fd3a0; --ok-bg: #173325; --warn: #f0c56b; --warn-bg: #3a2d10;
+  --bad: #f1958c; --bad-bg: #3d1d1a; --info-bg: #1b2a36; --demo: #c49bff; --demo-bg: #2a1a40; --chip: #232a26;
+  --tag: #f2cb3a; --tag-ink: #16140a;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 14px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+h1 { font-size: 20px; margin: 0; font-weight: 800; letter-spacing: -.01em; }
+h2 { font-size: 15px; margin: 0 0 10px; }
+h3 { font-size: 13px; margin: 14px 0 6px; font-variant-caps: all-small-caps; letter-spacing: .03em; color: var(--muted); }
+a { color: var(--accent); }
+button, input, select, textarea { font: inherit; color: inherit; }
+input, select, textarea { background: var(--bg); border: 1px solid var(--line); border-radius: 4px; padding: 6px 8px; min-width: 0; }
+textarea { width: 100%; resize: vertical; }
+select { max-width: 100%; }
+.row input, .row select, .item-card input { width: 100%; }
+input:focus, select:focus, textarea:focus, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+button { border: 1px solid var(--line); background: var(--panel); border-radius: 4px; padding: 6px 12px; cursor: pointer; font-weight: 600; }
+button:hover:not(:disabled) { border-color: var(--ink); }
+button.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
+button.danger { color: var(--bad); }
+button.link { background: none; border: none; color: var(--accent); padding: 2px 4px; text-decoration: underline; }
+button:disabled { opacity: .5; cursor: not-allowed; }
+label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 3px; }
+.topbar { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: space-between; padding: 10px 16px; background: var(--bg); border-bottom: 2px solid var(--ink); position: sticky; top: 0; z-index: 5; }
+.brand { display: flex; gap: 8px; align-items: baseline; }
+.tag { font-size: 11px; background: var(--chip); padding: 2px 6px; border-radius: 99px; color: var(--muted); }
+.backend { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.backend input { width: 220px; }
+.pill { font-size: 12px; padding: 3px 9px; border-radius: 99px; background: var(--chip); white-space: nowrap; }
+.pill.ok { background: var(--ok-bg); color: var(--ok); }
+.pill.bad { background: var(--bad-bg); color: var(--bad); }
+.pill.warn { background: var(--warn-bg); color: var(--warn); }
+.banner { padding: 10px 16px; font-weight: 600; }
+.banner.demo { background: var(--demo-bg); color: var(--demo); border-bottom: 2px dashed var(--demo); }
+.layout { display: grid; grid-template-columns: minmax(340px, 430px) minmax(0, 1fr); gap: 14px; padding: 14px 16px 40px; max-width: 1600px; margin: 0 auto; }
+.col { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 14px; min-width: 0; }
+.row { display: flex; gap: 8px; flex-wrap: wrap; align-items: flex-end; }
+.row > * { flex: 1 1 120px; }
+.row > .grow2 { flex: 2 1 200px; }
+.row > .shrink { flex: 0 0 auto; }
+.tabs { display: flex; gap: 4px; border-bottom: 1px solid var(--line); margin-bottom: 10px; flex-wrap: wrap; }
+.tabs button { border: none; border-bottom: 2px solid transparent; border-radius: 0; background: none; padding: 6px 10px; color: var(--muted); }
+.tabs button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--ink); border-bottom-width: 3px; font-weight: 700; }
+.note { font-size: 12px; color: var(--muted); margin: 6px 0; }
+.msg { font-size: 13px; padding: 8px 10px; border-radius: 7px; margin: 8px 0; background: var(--info-bg); }
+.msg.ok { background: var(--ok-bg); color: var(--ok); }
+.msg.warn { background: var(--warn-bg); color: var(--warn); }
+.msg.bad { background: var(--bad-bg); color: var(--bad); }
+.msg ul { margin: 4px 0 0 16px; padding: 0; }
+.closest { border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; margin: 10px 0; }
+.closest h3 { margin: 0 0 4px; font-size: 14px; }
+.closest ul { list-style: none; margin: 6px 0 0; padding: 0; }
+.closest li { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; padding: 6px 0; border-top: 1px dashed var(--line); }
+.closest li .what { flex: 1 1 220px; min-width: 0; overflow-wrap: anywhere; }
+.item-card { border: 1px solid var(--line); border-radius: 8px; padding: 10px; margin: 10px 0; }
+.item-card header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-weight: 600; }
+.mods .mod { display: flex; gap: 6px; margin-top: 6px; }
+.mods .mod input:first-child { flex: 2; }
+.mods .mod input:nth-child(2) { flex: 1; width: 90px; }
+.hint { font-size: 12px; color: var(--muted); margin-top: 6px; }
+.hint .bad { color: var(--bad); }
+.inline { display: inline-flex; align-items: center; gap: 5px; margin-right: 12px; font-size: 13px; color: var(--ink); }
+.inline input { margin: 0; }
+fieldset { border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; margin: 8px 0; }
+legend { font-size: 12px; color: var(--muted); padding: 0 4px; }
+details summary { cursor: pointer; color: var(--muted); font-size: 13px; margin: 6px 0; }
+.btnbar { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+.progress { height: 8px; background: var(--chip); border-radius: 99px; overflow: hidden; margin: 6px 0 10px; }
+.progress > div { height: 100%; background: var(--accent); width: 0; transition: width .3s; }
+.plat { border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; margin: 8px 0; }
+.plat header { display: flex; justify-content: space-between; align-items: center; gap: 6px; flex-wrap: wrap; }
+.counters { display: grid; grid-template-columns: repeat(auto-fill, minmax(92px, 1fr)); gap: 4px 10px; margin-top: 6px; font-size: 12px; }
+.counters div b { display: block; font-size: 15px; }
+.bookmarklet { display: inline-block; padding: 6px 12px; border-radius: 7px; border: 1px dashed var(--accent); color: var(--accent); text-decoration: none; font-weight: 600; cursor: grab; }
+.winner { background: var(--tag); color: var(--tag-ink); border-radius: 3px; padding: 14px 16px; }
+.winner .note, .winner a { color: var(--tag-ink); }
+.winner.none { background: var(--panel); color: var(--ink); border: 2px dashed var(--line); }
+.winner.none .note { color: var(--muted); }
+.winner .price { font-size: 30px; font-weight: 800; font-variant-numeric: tabular-nums; letter-spacing: -.02em; }
+.winner .label { font-size: 14px; font-variant-caps: all-small-caps; letter-spacing: .06em; font-weight: 700; opacity: .8; }
+.winner.none .label { color: var(--muted); opacity: 1; }
+.flags { display: inline-flex; flex-wrap: wrap; gap: 4px; }
+.flag { font-size: 11px; padding: 1px 6px; border-radius: 99px; background: var(--chip); white-space: nowrap; }
+.flag.warn { background: var(--warn-bg); color: var(--warn); }
+.flag.bad { background: var(--bad-bg); color: var(--bad); }
+.flag.ok { background: var(--ok-bg); color: var(--ok); }
+.flag.demo { background: var(--demo-bg); color: var(--demo); }
+.tablewrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 8px; }
+table { border-collapse: collapse; width: 100%; font-size: 13px; }
+th, td { padding: 7px 8px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+th { background: var(--chip); font-weight: 600; white-space: nowrap; position: sticky; top: 0; }
+th button { all: unset; cursor: pointer; }
+th button:focus-visible { outline: 2px solid var(--accent); }
+td.num, th.num { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+td.num { font-family: var(--mono); font-weight: 600; }
+th { font-variant-caps: all-small-caps; letter-spacing: .05em; font-size: 13px; color: var(--muted); }
+tr.details td { background: var(--bg); }
+.reasons { margin: 0; padding-left: 0; list-style: none; }
+.reasons li { margin: 2px 0; }
+.reasons .ok::before { content: "✓ "; color: var(--ok); }
+.reasons .warn::before { content: "! "; color: var(--warn); font-weight: 700; }
+.reasons .fail::before { content: "✗ "; color: var(--bad); }
+.reasons .info::before { content: "i "; color: var(--muted); }
+.kv { display: grid; grid-template-columns: max-content 1fr; gap: 2px 10px; font-size: 12px; margin-top: 6px; }
+.kv dt { color: var(--muted); }
+.kv dd { margin: 0; word-break: break-word; }
+.log { max-height: 220px; overflow: auto; font: 12px/1.4 ui-monospace, Menlo, Consolas, monospace; background: var(--bg); border-radius: 7px; padding: 6px 8px; }
+.empty { color: var(--muted); padding: 12px; text-align: center; }
+.sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+@media (max-width: 980px) {
+  .layout { grid-template-columns: minmax(0, 1fr); padding: 12px 12px 32px; }
+  .topbar { position: static; }
+  .backend input { width: 160px; flex: 1 1 160px; }
+  .row > .shrink { flex: 1 1 auto; }
+}
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand"><h1>Food Price Compare</h1><span class="tag">US 50 states + DC · USD only</span></div>
+  <div class="backend">
+    <label for="backendUrl" class="sr-only">Backend URL</label>
+    <input id="backendUrl" type="url" spellcheck="false" autocomplete="off">
+    <button id="backendConnect" type="button">Connect</button>
+    <span id="backendStatus" class="pill" role="status" aria-live="polite">Not checked</span>
+    <button id="probeBtn" type="button" title="Check live reachability of each platform from the backend">Probe platforms</button>
+  </div>
+</header>
+<div id="demoBanner" class="banner demo" hidden>DEMO MODE — fictional sample data. These are not real restaurants or prices and are never mixed into real results.</div>
+
+<main class="layout">
+  <div class="col">
+    <section class="panel" aria-labelledby="orderH">
+      <h2 id="orderH">1 · Your Grubhub order</h2>
+      <div class="tabs" role="tablist" id="inputTabs">
+        <button role="tab" aria-selected="true" data-tab="link" type="button">Grubhub link</button>
+        <button role="tab" aria-selected="false" data-tab="paste" type="button">Paste order / receipt</button>
+        <button role="tab" aria-selected="false" data-tab="manual" type="button">Manual entry</button>
+      </div>
+      <div data-pane="link">
+        <label for="ghUrl">Grubhub restaurant or menu-item URL</label>
+        <div class="row"><input id="ghUrl" class="grow2" type="url" placeholder="https://www.grubhub.com/restaurant/…/12345?menuItemId=…" spellcheck="false"><button id="ghExtract" class="shrink" type="button">Extract</button></div>
+        <div id="ghResult"></div>
+        <div id="ghMenu"></div>
+      </div>
+      <div data-pane="paste" hidden>
+        <label for="receiptText">Paste order confirmation / receipt text</label>
+        <textarea id="receiptText" rows="7" placeholder="Your order from McDonald's&#10;1  10 pc. Chicken McNuggets   $6.49&#10;     Sweet 'N Sour Sauce&#10;Subtotal $6.49&#10;Delivery fee $1.99 …"></textarea>
+        <div class="btnbar"><button id="receiptParse" type="button">Parse into fields</button><button id="receiptClear" type="button">Clear text</button></div>
+        <p class="note">Parsed entirely in this browser. Receipt text is never sent to the backend or stored. Fees, tax, tip and totals are ignored; only item subtotals are used for comparison.</p>
+        <div id="receiptResult"></div>
+      </div>
+      <div data-pane="manual" hidden><p class="note">Fill in the fields below. Be specific: size, flavor, piece count and modifiers are all part of an exact match.</p></div>
+
+      <form id="orderForm" autocomplete="off" onsubmit="return false">
+        <div class="row">
+          <div class="grow2"><label for="chain">Restaurant / chain *</label><input id="chain" placeholder="e.g. McDonald's"></div>
+        </div>
+        <div class="row">
+          <div class="grow2"><label for="chainAliases">Confirmed alternate chain names (optional, comma-separated)</label><input id="chainAliases" placeholder="Only names you have confirmed are the same chain"></div>
+        </div>
+        <fieldset><legend>Order mode (prices are compared like-for-like)</legend>
+          <span class="inline"><input type="radio" name="mode" id="modeDelivery" value="delivery" checked><label for="modeDelivery" style="display:inline;margin:0">Delivery menu price</label></span>
+          <span class="inline"><input type="radio" name="mode" id="modePickup" value="pickup"><label for="modePickup" style="display:inline;margin:0">Pickup menu price</label></span>
+        </fieldset>
+        <div id="items"></div>
+        <div class="btnbar"><button id="addItem" type="button">+ Add item</button><button id="resetOrder" type="button" class="danger">Reset order</button></div>
+        <div id="orderIssues"></div>
+      </form>
+    </section>
+
+    <section class="panel" aria-labelledby="scopeH">
+      <h2 id="scopeH">2 · Search scope &amp; live search</h2>
+      <fieldset><legend>Scope</legend>
+        <span class="inline"><input type="radio" name="scope" id="scopeNational" value="nationwide" checked><label for="scopeNational" style="display:inline;margin:0">Nationwide (all US states + DC)</label></span>
+        <span class="inline"><input type="radio" name="scope" id="scopeLocal" value="local"><label for="scopeLocal" style="display:inline;margin:0">Filter by location</label></span>
+        <div class="row" id="localFields" hidden>
+          <div><label for="fState">State</label><select id="fState"><option value="">Any</option></select></div>
+          <div><label for="fCity">City</label><input id="fCity" placeholder="City"></div>
+          <div><label for="fZip">ZIP</label><input id="fZip" inputmode="numeric" maxlength="5" placeholder="5-digit"></div>
+        </div>
+        <p class="note" id="scopeNote">Nationwide menu-price discovery needs no address. A distant branch's price does not mean it delivers to you.</p>
+      </fieldset>
+      <fieldset><legend>Platforms</legend>
+        <span class="inline"><input type="checkbox" id="platDD" checked><label for="platDD" style="display:inline;margin:0">DoorDash</label></span>
+        <span class="inline"><input type="checkbox" id="platUE" checked><label for="platUE" style="display:inline;margin:0">Uber Eats</label></span>
+      </fieldset>
+      <details>
+        <summary>Advanced: discovery seeds, limits, fetch method, freshness</summary>
+        <label for="seedUrls">Seed URLs (one per line): DoorDash/Uber Eats store pages or chain/brand pages</label>
+        <textarea id="seedUrls" rows="3" spellcheck="false" placeholder="https://www.doordash.com/store/…&#10;https://www.ubereats.com/brand/…"></textarea>
+        <div class="row">
+          <div><label for="maxStores">Max branches per platform per run</label><input id="maxStores" type="number" min="1" max="500" value="25"></div>
+          <div><label for="fetchMode">Fetch method</label><select id="fetchMode"><option value="http">HTTP (static page)</option><option value="auto">Auto (render only if page has no data)</option><option value="browser">Browser render (Playwright)</option></select></div>
+          <div><label for="staleHours">Stale after (hours)</label><input id="staleHours" type="number" min="1" max="720" value="24"></div>
+        </div>
+        <p class="note">Discovery uses your seed URLs, chain/brand pages and the sitemaps each site declares in robots.txt. Each run is bounded; use Resume to continue. Access barriers (login walls, CAPTCHA, denials, robots.txt) are reported, never bypassed.</p>
+      </details>
+      <div class="btnbar">
+        <button id="searchBtn" class="primary" type="button">Search live prices</button>
+        <button id="cancelBtn" type="button" disabled>Cancel</button>
+      </div>
+      <div class="row" style="margin-top:10px">
+        <div class="grow2"><label for="resumeSelect">Saved checkpoints</label><select id="resumeSelect"><option value="">— none loaded —</option></select></div>
+        <button id="resumeBtn" class="shrink" type="button">Resume</button>
+        <button id="refreshJobs" class="shrink" type="button">Refresh</button>
+        <button id="deleteJob" class="shrink danger" type="button">Delete</button>
+      </div>
+      <div id="searchMsg"></div>
+      <div id="progressArea" aria-live="polite"></div>
+    </section>
+
+    <section class="panel" aria-labelledby="dataH">
+      <h2 id="dataH">Data sources</h2>
+      <h3>Live-run snapshot (real prices, no backend needed)</h3>
+      <p class="note">Real public menu prices recorded by this project's live runs (<code>scripts/snapshot.py</code> on GitHub Actions, robots.txt-checked). A snapshot is one run, a moment in time; it is never merged with another run. Its prices are as old as the run, so the “Stale after” setting decides whether they can win.</p>
+      <input id="snapFile" type="file" accept=".json,application/json" aria-label="Snapshot file (snapshot.json)">
+      <div class="btnbar"><button id="snapServer" type="button">Load the server's snapshot</button><button id="snapClear" type="button">Clear snapshot</button></div>
+      <span class="inline" style="margin-top:8px"><input type="checkbox" id="includeSnapshot" checked><label for="includeSnapshot" style="display:inline;margin:0">Include snapshot prices (labeled “Snapshot”)</label></span>
+      <div id="snapMsg"></div>
+      <h3>Import collected menus (JSON or CSV)</h3>
+      <input id="importFile" type="file" accept=".json,.csv,application/json,text/csv">
+      <label for="importText" style="margin-top:6px">…or paste JSON / CSV</label>
+      <textarea id="importText" rows="4" spellcheck="false" placeholder='{"observations":[{"platform":"doordash", …}]}'></textarea>
+      <div class="btnbar"><button id="importBtn" type="button">Validate &amp; import</button><button id="importClear" type="button">Clear imported data</button></div>
+      <span class="inline" style="margin-top:8px"><input type="checkbox" id="includeImported" checked><label for="includeImported" style="display:inline;margin:0">Include imported data in rankings (labeled “Imported”)</label></span>
+      <div id="importReport"></div>
+      <h3>Add prices you saw yourself</h3>
+      <p class="note">This is how DoorDash prices get in without any scraping. Open the store in the DoorDash or Uber Eats app or website as you normally would, choose Delivery or Pickup, and type the prices it shows. Nothing is fetched or sent. Entries are labelled “Imported” and record that you typed them, at your account, address and time.</p>
+      <div class="row">
+        <div><label for="seenPlatform">Platform</label><select id="seenPlatform"><option value="doordash">DoorDash</option><option value="ubereats">Uber Eats</option></select></div>
+        <div><label for="seenMode">Order mode</label><select id="seenMode"><option value="delivery">Delivery</option><option value="pickup">Pickup</option></select></div>
+        <div class="grow2"><label for="seenAt">Seen at (your local time)</label><input id="seenAt" type="datetime-local"></div>
+      </div>
+      <label for="seenUrl">Store link (Share → Copy link in the app, or the browser address)</label>
+      <input id="seenUrl" type="url" spellcheck="false" placeholder="https://www.doordash.com/store/…">
+      <div class="row">
+        <div class="grow2"><label for="seenName">Store name</label><input id="seenName" placeholder="Taco Bell"></div>
+        <div class="grow2"><label for="seenStreet">Street</label><input id="seenStreet"></div>
+      </div>
+      <div class="row">
+        <div class="grow2"><label for="seenCity">City</label><input id="seenCity"></div>
+        <div><label for="seenState">State</label><input id="seenState" maxlength="20" placeholder="IL"></div>
+        <div><label for="seenZip">ZIP</label><input id="seenZip" inputmode="numeric" maxlength="10"></div>
+      </div>
+      <label for="seenLines">Items and prices, one per line</label>
+      <textarea id="seenLines" rows="3" spellcheck="false" placeholder="Crunchwrap Supreme $7.31"></textarea>
+      <div class="btnbar"><button id="seenAdd" type="button">Add these prices</button></div>
+      <div id="seenMsg"></div>
+      <h3>Capture from your own browser</h3>
+      <p class="note">For pages this tool cannot read from a server (DoorDash store pages answer servers with a bot check), you can read them yourself: open a DoorDash or Uber Eats store page in your browser, set Delivery or Pickup as you would order, then click the bookmark below. It reads only the menu data the page publishes, shows it, and gives you JSON to paste into Import. It sends nothing anywhere. DoorDash’s terms forbid copying its site with scripts, even ones you run yourself, and Uber’s terms restrict scraping. Use it only if you accept that risk.</p>
+      <div class="btnbar"><a id="captureBookmarklet" class="bookmarklet" href="#">Capture menu</a><button id="captureCopy" type="button">Copy bookmarklet code</button></div>
+      <p class="note">Drag “Capture menu” to your bookmarks bar (or copy the code into a new bookmark’s URL). Captured prices are labelled as captured in your session; your login and delivery address may affect them.</p>
+      <div id="captureMsg"></div>
+      <h3>Demo data</h3>
+      <span class="inline"><input type="checkbox" id="demoToggle"><label for="demoToggle" style="display:inline;margin:0">Demo mode (fictional data, isolated from real results)</label></span>
+      <div class="btnbar"><button id="demoOrderBtn" type="button" disabled>Load demo order</button></div>
+      <h3>Server data</h3>
+      <p class="note">The backend keeps a page cache and job checkpoints (chain/item names, store URLs, public menu observations). It never stores receipts, Grubhub prices or addresses.</p>
+      <button id="purgeBtn" type="button" class="danger">Delete server cache &amp; checkpoints</button>
+      <div id="purgeMsg"></div>
+    </section>
+  </div>
+
+  <div class="col">
+    <section class="panel" aria-labelledby="resultsH">
+      <div class="row" style="align-items:center">
+        <h2 id="resultsH" style="margin:0">3 · Results</h2>
+        <div class="shrink"><label for="rankBy">Rank by</label><select id="rankBy"><option value="subtotal">Item subtotal (before tax, fees, tip)</option><option value="checkout">Checkout total (only where all charges are known)</option></select></div>
+        <div class="shrink btnbar" style="margin:0"><button id="exportCsv" type="button">Export CSV</button><button id="exportJson" type="button">Export JSON</button></div>
+      </div>
+      <div id="winner" style="margin-top:12px"></div>
+      <div id="coverage"></div>
+      <div id="closest"></div>
+      <div class="tabs" role="tablist" id="resultTabs" style="margin-top:12px">
+        <button role="tab" type="button" data-rtab="verified" aria-selected="true">Verified matches</button>
+        <button role="tab" type="button" data-rtab="uncertain" aria-selected="false">Needs confirmation</button>
+        <button role="tab" type="button" data-rtab="rejected" aria-selected="false">Not equivalent</button>
+        <button role="tab" type="button" data-rtab="baskets" aria-selected="false">Same-branch baskets</button>
+        <button role="tab" type="button" data-rtab="barriers" aria-selected="false">Barriers &amp; log</button>
+      </div>
+      <div id="resultBody"></div>
+    </section>
+  </div>
+</main>
+
+<script type="text/plain" id="fpc-capture">
+/* FPC browser capture. Runs as a bookmarklet on a DoorDash / Uber Eats page
+   the user is viewing in their own browser. Reads only the page's published
+   schema.org JSON-LD (the extraction path verified on real Uber Eats pages);
+   never guesses prices from screen text; sends nothing anywhere. Output is
+   JSON in the app's import schema, labelled as a browser capture. */
+(function () {
+  'use strict';
+  var VERSION = '1';
+  var FOOD = ['restaurant', 'foodestablishment', 'fastfoodrestaurant', 'cafeorcoffeeshop', 'bakery', 'barorpub', 'brewery', 'icecreamshop', 'winery', 'distillery'];
+  function txt(v) {
+    if (v == null) return '';
+    if (Array.isArray(v)) return txt(v[0]);
+    if (typeof v === 'object') return txt(v.name || v['@id'] || '');
+    var t = document.createElement('textarea');
+    t.innerHTML = String(v);
+    return t.value.replace(/\s+/g, ' ').trim();
+  }
+  function types(o) {
+    var t = o && o['@type'];
+    return (Array.isArray(t) ? t : [t]).filter(function (x) { return typeof x === 'string'; })
+      .map(function (x) { return x.split('/').pop().split('#').pop().toLowerCase(); });
+  }
+  function isType(o, list) { return types(o).some(function (t) { return list.indexOf(t) >= 0; }); }
+  function cents(v) {
+    if (v == null || typeof v === 'boolean') return null;
+    var s = String(v).trim().replace(/^(?:US)?\$\s*/i, '').replace(/,(?=\d{3}(\D|$))/g, '');
+    var m = /^(\d{1,7})(?:\.(\d{1,2})0*)?$/.exec(s);
+    if (!m) return null;
+    return parseInt(m[1], 10) * 100 + parseInt(((m[2] || '') + '00').slice(0, 2), 10);
+  }
+  function avail(v) {
+    var s = txt(v).split('/').pop().toLowerCase();
+    if (/^(instock|limitedavailability|onlineonly|instoreonly|preorder|presale)$/.test(s)) return 'available';
+    if (/^(outofstock|soldout|discontinued)$/.test(s)) return 'unavailable';
+    return 'unknown';
+  }
+  function list(v) { return v == null ? [] : (Array.isArray(v) ? v : [v]); }
+  function flatten(d, out) {
+    if (Array.isArray(d)) d.forEach(function (x) { flatten(x, out); });
+    else if (d && typeof d === 'object') { if (Array.isArray(d['@graph'])) flatten(d['@graph'], out); else out.push(d); }
+    return out;
+  }
+  function findFood(o, depth, out) {
+    if (depth > 6 || !o || typeof o !== 'object') return;
+    if (Array.isArray(o)) { o.forEach(function (x) { findFood(x, depth + 1, out); }); return; }
+    if (isType(o, FOOD)) { out.push(o); return; }
+    Object.keys(o).forEach(function (k) { if (k !== '@context') findFood(o[k], depth + 1, out); });
+  }
+  function walk(node, section, items, depth) {
+    if (depth > 10 || node == null) return;
+    if (Array.isArray(node)) { node.forEach(function (n) { walk(n, section, items, depth + 1); }); return; }
+    if (typeof node !== 'object') return;
+    if (isType(node, ['menuitem'])) { parseItem(node, section, items); return; }
+    var sec = isType(node, ['menusection']) ? (txt(node.name) || section) : section;
+    walk(node.hasMenuSection, sec, items, depth + 1);
+    walk(node.hasMenuItem, sec, items, depth + 1);
+  }
+  function parseItem(it, section, items) {
+    var name = txt(it.name);
+    if (!name) return;
+    var addons = [];
+    list(it.menuAddOn).forEach(function (sec) {
+      var group = txt(sec && sec.name) || null;
+      list(isType(sec, ['menusection']) ? sec.hasMenuItem : [sec]).forEach(function (a) {
+        var off = list(a && a.offers)[0];
+        addons.push({ name: txt(a && a.name), group: group, price_cents: off ? cents(off.price) : null });
+      });
+    });
+    var offers = list(it.offers);
+    if (!offers.length) offers = [{}];
+    offers.forEach(function (o) {
+      var price = o.price, cur = o.priceCurrency;
+      if (price == null && o.priceSpecification) {
+        var ps = list(o.priceSpecification)[0] || {};
+        price = ps.price; cur = cur || ps.priceCurrency;
+      }
+      var variant = txt(o.name) || null;
+      if (variant && variant.toLowerCase() === name.toLowerCase()) variant = null;
+      var rec = { name: name, variant: variant, section: section || null, price_cents: isType(o, ['aggregateoffer']) ? null : cents(price),
+                  currency: (txt(cur) || '').toUpperCase() || null, availability: avail(o.availability), addons: addons, required_options: 'unknown' };
+      if (rec.price_cents === null && /^(?:US)?\$\s*\d[\d,]*(?:\.\d+)?\s*\+$/i.test(txt(price))) {
+        // Real DoorDash pages publish "$13.59+": a starting price that options set.
+        rec.price_note = 'published as a starting price (' + txt(price) + '): options such as size set the final price, which the page does not publish';
+        rec.required_options = [{ name: 'price-setting options (not published)', required: true }];
+      } else if (rec.price_cents === 0) {
+        // Observed on real Uber Eats pages: 0.00 means the price is set by required options.
+        rec.price_cents = null;
+        rec.price_note = 'published price is $0.00, which on this platform means the price is set by required options (e.g. size); actual price not published';
+        rec.required_options = [{ name: 'price-setting options (not published)', required: true }];
+      }
+      items.push(rec);
+    });
+  }
+  function dedupe(items) {
+    var seen = {}, out = [];
+    items.forEach(function (it) {
+      var k = [it.name, it.variant, it.price_cents, it.currency, it.availability].join('|');
+      if (!seen[k]) { seen[k] = 1; out.push(it); }
+    });
+    return out;
+  }
+
+  function capture() {
+    var loc = new URL(location.href);
+    var host = loc.hostname.toLowerCase();
+    var platform = /(^|\.)doordash\.com$/.test(host) ? 'doordash' : /(^|\.)ubereats\.com$/.test(host) ? 'ubereats' : /(^|\.)grubhub\.com$/.test(host) ? 'grubhub' : null;
+    var res = { ok: false, platform: platform, url: loc.origin + loc.pathname, notes: [], observation: null, version: VERSION };
+    if (!platform) { res.notes.push('This is not a DoorDash, Uber Eats or Grubhub page. Open a store page there and click the bookmark again.'); return res; }
+    if (platform === 'grubhub') { res.notes.push('Grubhub restaurant pages publish no structured menu data (checked on a real page), so nothing can be captured reliably here. Enter the Grubhub item and its subtotal in the app.'); return res; }
+    var m = platform === 'doordash' ? /\/store\/(?:[^/]*?-)?(\d+)\/?$/.exec(loc.pathname) : /\/store\/[^/]+\/([A-Za-z0-9_-]{6,})\/?$/.exec(loc.pathname);
+    if (!m) { res.notes.push('This does not look like a single store page (expected a /store/... address). Open one store and try again.'); return res; }
+    var objs = [];
+    Array.prototype.forEach.call(document.querySelectorAll('script[type*="ld+json"]'), function (s) {
+      try { flatten(JSON.parse(s.textContent), objs); } catch (e) { res.notes.push('One structured-data block could not be read and was skipped.'); }
+    });
+    var foods = [];
+    findFood(objs, 0, foods);
+    var r = foods.filter(function (f) { return f.hasMenu || f.menu; })[0] || foods[0];
+    if (!r) { res.notes.push('This page publishes no schema.org restaurant data, so no prices were captured. Nothing is guessed from the screen.'); return res; }
+    var items = [];
+    walk(r.hasMenu || r.menu, null, items, 0);
+    objs.forEach(function (o) { if (isType(o, ['menu']) && !items.length) walk(o, null, items, 0); });
+    items = dedupe(items);
+    if (!items.length) { res.notes.push('Restaurant data found, but no menu items with prices.'); return res; }
+    var a = list(r.address)[0] || {};
+    // Real DoorDash pages publish prices without priceCurrency (checked on
+    // archived pages); their own app data states the currency. Missing
+    // currencies count as USD only when that data states USD and no other.
+    var codes = {};
+    Array.prototype.forEach.call(document.querySelectorAll('script:not([src])'), function (s) {
+      var re = /\\*"currency\\*"\s*:\s*\\*"([A-Z]{3})\\*"/g, mm;
+      while ((mm = re.exec(s.textContent))) codes[mm[1]] = 1;
+    });
+    codes = Object.keys(codes).sort();
+    var missing = items.filter(function (it) { return it.price_cents != null && !it.currency; }).length;
+    var fill = missing && codes.length === 1 && codes[0] === 'USD' ? 'USD' : null;
+    if (missing) res.notes.push(fill ? missing + ' price(s) have no currency in the structured data; the page\'s own data states USD and no other, so they are taken as USD.'
+                                     : missing + ' price(s) have no currency in the structured data and the page\'s own data states ' + (codes.join(', ') || 'none') + '; they are not taken as USD and the app will reject them.');
+    var curs = {};
+    items.forEach(function (it) { if (it.price_cents != null) curs[it.currency || fill || 'UNKNOWN'] = 1; });
+    curs = Object.keys(curs);
+    var pickup = platform === 'doordash' ? loc.searchParams.get('pickup') === 'true' : /^pickup$/i.test(loc.searchParams.get('diningMode') || '');
+    res.observation = {
+      platform: platform, store_id: m[1], store_name: txt(r.name), store_url: loc.origin + loc.pathname,
+      address: { street: txt(a.streetAddress), city: txt(a.addressLocality), state: txt(a.addressRegion), zip: txt(a.postalCode), country: txt(a.addressCountry) },
+      // USD when any price is USD: an item without a currency is then rejected on
+      // its own by the importer, not the whole store.
+      observed_at: new Date().toISOString(), order_mode: pickup ? 'pickup' : 'delivery', currency: curs.indexOf('USD') >= 0 || !curs.length ? 'USD' : curs[0],
+      mode_basis: pickup ? 'page address requested pickup' : 'page address did not request pickup; assumed delivery - switch if the page shows Pickup',
+      price_context: 'captured from the schema.org data of a page open in the user\'s own browser session (their login and delivery address may affect prices)',
+      items: items.map(function (it) {
+        var o = { name: it.name, variant: it.variant, section: it.section, price_cents: it.price_cents, currency: it.currency || (it.price_cents != null ? fill || 'UNKNOWN' : null), availability: it.availability, addons: it.addons, required_options: it.required_options };
+        if (it.price_note) o.price_note = it.price_note;
+        return o;
+      })
+    };
+    var nonUsd = items.filter(function (it) { return it.currency && it.currency !== 'USD'; }).length;
+    if (nonUsd) res.notes.push(nonUsd + ' item(s) are not priced in USD; the app will reject them.');
+    res.ok = true;
+    return res;
+  }
+
+  function overlay(res) {
+    var old = document.getElementById('fpc-capture-panel');
+    if (old) old.remove();
+    var box = document.createElement('div');
+    box.id = 'fpc-capture-panel';
+    var st = box.style;
+    st.position = 'fixed'; st.top = '16px'; st.right = '16px'; st.zIndex = '2147483647'; st.width = 'min(420px, calc(100vw - 32px))';
+    st.maxHeight = 'calc(100vh - 32px)'; st.overflow = 'auto'; st.background = '#ffffff'; st.color = '#1c2330'; st.border = '1px solid #c9d1dc';
+    st.borderRadius = '10px'; st.boxShadow = '0 8px 30px rgba(0,0,0,.25)'; st.padding = '14px'; st.font = '14px/1.45 system-ui, sans-serif';
+    function line(t, bold) { var d = document.createElement('div'); d.textContent = t; if (bold) d.style.fontWeight = '700'; d.style.margin = '4px 0'; box.appendChild(d); return d; }
+    line('Food Price Compare - menu capture', true);
+    res.notes.forEach(function (n) { line(n); });
+    var json = '';
+    if (res.ok) {
+      var o = res.observation;
+      line(o.store_name + ' - ' + [o.address.street, o.address.city, o.address.state, o.address.zip].filter(Boolean).join(', '));
+      var priced = o.items.filter(function (i) { return i.price_cents != null; }).length;
+      line(o.items.length + ' menu listings (' + priced + ' with a price). Mode: ' + o.order_mode + '.');
+      var modeRow = document.createElement('div');
+      ['delivery', 'pickup'].forEach(function (md) {
+        var b = document.createElement('button');
+        b.type = 'button'; b.textContent = md === o.order_mode ? md + ' (selected)' : 'Switch to ' + md;
+        b.style.marginRight = '6px';
+        b.onclick = function () { o.order_mode = md; o.mode_basis = 'order mode chosen by the user in the capture panel'; overlay(res); };
+        modeRow.appendChild(b);
+      });
+      box.appendChild(modeRow);
+      json = JSON.stringify({ observations: [o] }, null, 1);
+      var ta = document.createElement('textarea');
+      ta.value = json; ta.readOnly = true; ta.rows = 6; ta.style.width = '100%'; ta.style.marginTop = '8px';
+      box.appendChild(ta);
+      var copy = document.createElement('button');
+      copy.type = 'button'; copy.textContent = 'Copy for import';
+      copy.onclick = function () {
+        var done = function () { copy.textContent = 'Copied - paste it into Import in the app'; };
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(json).then(done, function () { ta.select(); copy.textContent = 'Press Ctrl/Cmd+C to copy'; });
+        else { ta.select(); copy.textContent = 'Press Ctrl/Cmd+C to copy'; }
+      };
+      box.appendChild(copy);
+    }
+    var close = document.createElement('button');
+    close.type = 'button'; close.textContent = 'Close'; close.style.marginLeft = '6px';
+    close.onclick = function () { box.remove(); };
+    box.appendChild(close);
+    document.body.appendChild(box);
+    return json;
+  }
+
+  var res = capture();
+  window.__fpcLastCapture = res;
+  if (!window.__fpcNoOverlay) overlay(res);
+  return res;
+})();
+</script>
+
+<script id="fpc-engine">
+/* FPCEngine: matching, money, parsing and validation. Pure functions, no DOM.
+   Executed verbatim by the Node test-suite (tests/engine.test.mjs). */
+(function (root) {
+  'use strict';
+  var VERSION = '1.0.0';
+
+  // ---------------------------------------------------------------- geography
+  var US_STATES = {
+    AL:'Alabama', AK:'Alaska', AZ:'Arizona', AR:'Arkansas', CA:'California', CO:'Colorado', CT:'Connecticut',
+    DE:'Delaware', FL:'Florida', GA:'Georgia', HI:'Hawaii', ID:'Idaho', IL:'Illinois', IN:'Indiana', IA:'Iowa',
+    KS:'Kansas', KY:'Kentucky', LA:'Louisiana', ME:'Maine', MD:'Maryland', MA:'Massachusetts', MI:'Michigan',
+    MN:'Minnesota', MS:'Mississippi', MO:'Missouri', MT:'Montana', NE:'Nebraska', NV:'Nevada', NH:'New Hampshire',
+    NJ:'New Jersey', NM:'New Mexico', NY:'New York', NC:'North Carolina', ND:'North Dakota', OH:'Ohio',
+    OK:'Oklahoma', OR:'Oregon', PA:'Pennsylvania', RI:'Rhode Island', SC:'South Carolina', SD:'South Dakota',
+    TN:'Tennessee', TX:'Texas', UT:'Utah', VT:'Vermont', VA:'Virginia', WA:'Washington', WV:'West Virginia',
+    WI:'Wisconsin', WY:'Wyoming', DC:'District of Columbia'
+  };
+  var STATE_BY_NAME = {};
+  Object.keys(US_STATES).forEach(function (k) { STATE_BY_NAME[US_STATES[k].toLowerCase()] = k; });
+  STATE_BY_NAME['washington dc'] = 'DC'; STATE_BY_NAME['washington d.c'] = 'DC';
+
+  function normalizeState(s) {
+    if (s == null) return null;
+    var t = String(s).trim().replace(/\.$/, '');
+    if (!t) return null;
+    if (Object.prototype.hasOwnProperty.call(US_STATES, t.toUpperCase())) return t.toUpperCase();
+    return STATE_BY_NAME[t.toLowerCase()] || null;
+  }
+  function isUSCountry(c) { return c == null || c === '' || /^(us|usa|u\.s\.a?\.?|united states( of america)?)$/i.test(String(c).trim()); }
+
+  // ---------------------------------------------------------------- money (integer cents only)
+  function parseMoneyToCents(input) {
+    if (input === null || input === undefined || typeof input === 'boolean') return null;
+    var s;
+    if (typeof input === 'number') { if (!isFinite(input) || input < 0) return null; s = String(input); }
+    else s = String(input).trim();
+    if (!s) return null;
+    s = s.replace(/^\+\s*/, '').replace(/^US\s*/i, '').replace(/\s*USD$/i, '').replace(/^\$\s*/, '').trim();
+    s = s.replace(/,(?=\d{3}(?:\D|$))/g, '');
+    var m = /^(\d{1,7})(?:\.(\d+))?$/.exec(s);
+    if (!m) return null;
+    var frac = m[2] || '';
+    if (frac.length > 2) { if (/[^0]/.test(frac.slice(2))) return null; frac = frac.slice(0, 2); }
+    var cents = parseInt(m[1], 10) * 100 + parseInt((frac + '00').slice(0, 2), 10);
+    return Number.isSafeInteger(cents) ? cents : null;
+  }
+  function formatCents(c) {
+    if (c === null || c === undefined || !Number.isInteger(c)) return '—';
+    var neg = c < 0, a = Math.abs(c);
+    var dollars = String(Math.floor(a / 100)).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return (neg ? '-' : '') + '$' + dollars + '.' + String(a % 100).padStart(2, '0');
+  }
+  function mulCents(c, q) {
+    if (!Number.isInteger(c) || !Number.isInteger(q)) throw new TypeError('integer cents and quantity required');
+    var r = c * q;
+    if (!Number.isSafeInteger(r)) throw new RangeError('amount overflow');
+    return r;
+  }
+  function sumCents(list) {
+    var t = 0;
+    for (var i = 0; i < list.length; i++) { if (!Number.isInteger(list[i])) return null; t += list[i]; }
+    return Number.isSafeInteger(t) ? t : null;
+  }
+
+  // ---------------------------------------------------------------- text normalization
+  // Only harmless differences are normalized: case, accents, trademark marks,
+  // punctuation, "&"/"+" vs "and", "'N'" vs "and", "w/" vs "with", inch marks.
+  function normText(s) {
+    if (s == null) return '';
+    // Marks, inch marks and fractions go before NFKD, which would turn "™"
+    // into the letters "TM", "″" into two primes and "½" into "1⁄2".
+    var t = String(s).replace(/[®™©℠]/g, ' ').replace(/[″”]|′′/g, '"')
+      .replace(/½/g, ' half ').replace(/¼/g, ' quarter ').replace(/¾/g, ' three quarter ')
+      .normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase();
+    t = t.replace(/\b1\s*[\/⁄]\s*2\b/g, ' half ').replace(/\b1\s*[\/⁄]\s*4\b/g, ' quarter ').replace(/\b3\s*[\/⁄]\s*4\b/g, ' three quarter ')
+      .replace(/\b(\d+)\s*[\/⁄]\s*(\d+)\b/g, ' $1 over $2 ');                 // "1/2 Chicken" is not "12 Chicken"
+    t = t.replace(/(\d)\s*(?:''|"|-?\s*inch(?:es)?\b|in\.(?=\s|$)|in\b)/g, '$1 inch ');
+    t = t.replace(/['’‘`´]/g, '');
+    t = t.replace(/\bw\/o(?:ut)?\b/g, ' without ').replace(/\bw\//g, ' with ');
+    t = t.replace(/\bgluten[\s-]*free\b/g, ' gf ');
+    t = t.replace(/&/g, ' and ').replace(/\+/g, ' and ');
+    t = t.replace(/(\d),(\d{3})/g, '$1$2');
+    t = t.replace(/(^|[^0-9])\.(\d)/g, '$10.$2');                               // ".5 oz" is 0.5 oz
+    // Letters of any script and emoji are kept: "麻婆豆腐" is not "宫保鸡丁".
+    t = t.replace(/(\p{Extended_Pictographic})/gu, ' $1 ').replace(/[^\p{L}\p{N}\p{Extended_Pictographic}.]+/gu, ' ');
+    t = t.replace(/(^|[^0-9])\.|\.(?![0-9])/g, '$1 ');
+    return t.replace(/\s+/g, ' ').trim();
+  }
+  var TOKEN_MAP = { n: 'and', jr: 'junior', dbl: 'double', one: '1', two: '2', three: '3', four: '4', five: '5', six: '6', seven: '7',
+                    eight: '8', nine: '9', ten: '10', eleven: '11', twelve: '12', twenty: '20' };
+  var STOP = { the: 1 };
+  function mapTokens(words) {
+    var out = [];
+    for (var i = 0; i < words.length; i++) {
+      var w = words[i]; if (!w) continue;
+      w = TOKEN_MAP[w] || w;
+      if (!STOP[w]) out.push(w);
+    }
+    return out;
+  }
+  function tokens(s) { return mapTokens(normText(s).split(' ')); }
+
+  var WORD_SIZES = [
+    [/\b(?:extra large|x large|xlarge|xl|x lg|xlg|ex large|extra lg)\b/g, 'extra large'],
+    [/\b(?:extra small|x small|xs)\b/g, 'extra small'],
+    [/\b(?:small|sm)\b/g, 'small'],
+    [/\b(?:medium|med|md)\b/g, 'medium'],
+    [/\b(?:large|lg|lrg)\b/g, 'large'],
+    [/\b(?:regular|reg)\b/g, 'regular'],
+    [/\b(?:kids|kid|childrens|child)\b/g, 'kids'],
+    [/\bfamily\b/g, 'family'],
+    [/\bpersonal\b/g, 'personal'],
+    [/\b(?:short|tall|grande|venti|trenta)\b/g, null]
+  ];
+  function numKey(n) { return String(Number(n)); }
+
+  // Nutrition notes are not part of a product name: "10 Chicken McNuggets
+  // [490-630 Cals]" (archived DoorDash pages), "Chalupa Supreme (350 cal.)".
+  // A bracketed note with a calorie figure is removed whole ("(250 Cal Each)",
+  // "(90 Cal/Wing)"); an unbracketed one only from its own number on, so
+  // "Chicken Tenders 3 - 360 Cal" keeps its 3.
+  var CAL_NOTE = /[\[(][^\[\]()]*?\d[^\[\]()]*?(?:k?cals?|calories|kcal)\b[^\[\]()]*[\])]|(?:^|\s)[-–—·|]?\s*\d[\d.,]*(?:[-–—\/]\d[\d.,]*)?\s*(?:k?cals?|calories|kcal)\b\.?(?:\s*(?:\/|per)\s*[a-z]+\.?)?/gi;
+  function stripNotes(s) { return String(s == null ? '' : s).replace(CAL_NOTE, ' '); }
+  // Menu numbers ("#1 Big Mac Meal", "Combo #3") and serving sizes ("(Serves 4)",
+  // "- Feeds 10-12 people") are read as attributes and compared, never dropped.
+  var MENU_LEAD = /^\s*(?:#\s*|no\.\s*)(\d{1,3})\b\s*[-.:)]?\s*/i;
+  var MENU_TRAIL = /\s(?:#\s*|no\.\s*)(\d{1,3})\s*$/i;
+  var SERVES = /[\[(]?\s*[-–—]?\s*\b(?:serves|feeds)\s+(\d{1,3})(?:\s*(?:-|–|—|to)\s*(\d{1,3}))?(?:\s*(?:people|persons|guests))?\s*[\])]?/gi;
+  var LETTER_SIZE = { xs: 'extra small', s: 'small', m: 'medium', l: 'large', xl: 'extra large' };
+
+  // Pull size / piece-count attributes out of a name; the rest is the product.
+  function extractAttrs(s) {
+    var a = { sizeWord: null, oz: null, inch: null, liter: null, count: null, menuNo: null, serves: null, conflicts: [], parts: [] };
+    function set(k, v) { if (a[k] !== null && a[k] !== v) a.conflicts.push(k + ': ' + a[k] + ' vs ' + v); else a[k] = v; }
+    var raw = stripNotes(s)
+      .replace(MENU_LEAD, function (m, n) { a.menuNo = +n; return ' '; }).replace(MENU_TRAIL, function (m, n) { a.menuNo = +n; return ' '; })
+      .replace(SERVES, function (m, x, y) { set('serves', y ? x + '-' + y : x); return ' '; })
+      .replace(/\(\s*(xs|s|m|l|xl)\s*\)/gi, function (m, x) { return ' ' + LETTER_SIZE[x.toLowerCase()] + ' '; });
+    var t = ' ' + normText(raw) + ' ';
+    t = t.replace(/\bbakers? dozen\b/g, function () { set('count', 13); return ' '; });
+    t = t.replace(/\bhalf (?:a )?dozen\b/g, function () { set('count', 6); return ' '; });
+    t = t.replace(/\b(?:(\d{1,2}) )?dozen\b/g, function (m, n) { set('count', (n ? +n : 1) * 12); return ' '; });
+    t = t.replace(/\b(\d{1,3}) ?(?:pc|pcs|piece|pieces|ct|count|pk|pack)\b/g, function (m, n) { set('count', +n); return ' '; });
+    t = t.replace(/\b(\d+(?:\.\d+)?) ?(?:fl oz|oz|ounce|ounces)\b/g, function (m, n) { set('oz', numKey(n)); return ' '; });
+    t = t.replace(/\b(\d+(?:\.\d+)?) inch\b/g, function (m, n) { set('inch', numKey(n)); return ' '; });
+    t = t.replace(/\b(?:footlong|foot long)\b/g, function () { set('inch', '12'); return ' '; });
+    t = t.replace(/\b(\d+(?:\.\d+)?) ?(?:l|liters?|litres?)\b/g, function (m, n) { set('liter', numKey(n)); return ' '; });
+    t = t.replace(/\b(\d+(?:\.\d+)?) ?ml\b/g, function (m, n) { set('liter', numKey(+n / 1000)); return ' '; });
+    // Size words are tagged in place so their position can be read: in a
+    // multi-part name ("Large Chips & Large Guacamole") a size word after a
+    // joiner and before a product word sizes that part only.
+    var found = [];
+    WORD_SIZES.forEach(function (pair) {
+      t = t.replace(pair[0], function (m) { found.push(pair[1] || m.trim()); return ' zzsz' + (found.length - 1) + ' '; });
+    });
+    var words = t.split(/\s+/).filter(Boolean), joined = false, rest = [];
+    words.forEach(function (w, i) {
+      var mm = /^zzsz(\d+)$/.exec(w);
+      if (!mm) { if (w === 'and' || w === 'with') joined = true; rest.push(w); return; }
+      var v = found[+mm[1]], next = words.slice(i + 1).filter(function (x) { return !/^zzsz/.test(x) && x !== 'and' && x !== 'with'; })[0];
+      if (joined && next) a.parts.push(v + ' ' + (TOKEN_MAP[next] || next)); else set('sizeWord', v);
+    });
+    a.parts.sort();
+    a.tokens = mapTokens(rest);
+    return a;
+  }
+  function sizeText(a) {
+    var parts = [];
+    if (a.sizeWord) parts.push(a.sizeWord);
+    if (a.oz) parts.push(a.oz + ' oz');
+    if (a.inch) parts.push(a.inch + '"');
+    if (a.liter) parts.push(a.liter + ' L');
+    if (a.custom && a.custom.length) parts.push(a.custom.join(' '));
+    return parts.join(' / ') || 'none';
+  }
+
+  // ---------------------------------------------------------------- chain identity
+  function storeChainName(name) {
+    var s = String(name || '');
+    s = s.replace(/\([^)]*\)/g, ' ').replace(/\[[^\]]*\]/g, ' ');
+    s = s.replace(/\s+[-–—|@]\s+.*$/, '');
+    return tokens(s).join(' ');
+  }
+  function matchChain(orderChain, storeName, aliases) {
+    var o = tokens(orderChain).join(' ');
+    var st = storeChainName(storeName);
+    if (!o) return { status: 'uncertain', text: 'No chain entered in the order' };
+    if (!st) return { status: 'uncertain', text: 'Store name not published' };
+    if (o === st) return { status: 'exact', text: 'Same chain ("' + storeName + '")' };
+    var al = (aliases || []).map(function (x) { return tokens(x).join(' '); }).filter(Boolean);
+    if (al.indexOf(st) >= 0) return { status: 'exact', text: 'Chain matches user-confirmed alias for "' + storeName + '"' };
+    var ow = o.split(' '), sw = st.split(' ');
+    var prefix = function (a, b) { for (var i = 0; i < a.length; i++) if (a[i] !== b[i]) return false; return true; };
+    if ((ow.length < sw.length && prefix(ow, sw)) || (sw.length < ow.length && prefix(sw, ow)))
+      return { status: 'uncertain', text: 'Store name "' + storeName + '" only partly matches "' + orderChain + '"; confirm it is the same chain (or add it as a confirmed alias)' };
+    return { status: 'mismatch', text: 'Different restaurant: "' + storeName + '"' };
+  }
+
+  // ---------------------------------------------------------------- order preparation
+  function splitList(v) {
+    if (Array.isArray(v)) return v.map(function (x) { return String(x).trim(); }).filter(Boolean);
+    return String(v || '').split(/[,;\n]/).map(function (x) { return x.trim(); }).filter(Boolean);
+  }
+  function parseQty(v) {
+    if (v === '' || v == null) return { q: 1, issue: null, assumed: true };
+    var s = String(v).trim();
+    if (!/^\d{1,3}$/.test(s) || +s < 1) return { q: null, issue: 'Quantity must be a whole number from 1 to 999' };
+    return { q: +s, issue: null };
+  }
+  function prepareItem(raw, idx) {
+    var name = String(raw.name || '').trim();
+    var issues = [];
+    var nameAttrs = extractAttrs(name);
+    if (nameAttrs.conflicts.length) issues.push('Item name has conflicting attributes (' + nameAttrs.conflicts.join('; ') + ')');
+    var size = { sizeWord: nameAttrs.sizeWord, oz: nameAttrs.oz, inch: nameAttrs.inch, liter: nameAttrs.liter, custom: [],
+                 parts: nameAttrs.parts, fieldOnly: nameAttrs.sizeWord == null };
+    if (raw.size && String(raw.size).trim()) {
+      var fa = extractAttrs(raw.size);
+      var any = false;
+      ['sizeWord', 'oz', 'inch', 'liter'].forEach(function (d) {
+        if (fa[d] !== null) {
+          any = true;
+          if (size[d] !== null && size[d] !== fa[d]) issues.push('Size field "' + raw.size + '" conflicts with item name (' + size[d] + ')');
+          size[d] = fa[d];
+        }
+      });
+      if ((!any && fa.count === null) || fa.tokens.length) size.custom = fa.tokens.slice();
+    }
+    var count = nameAttrs.count;
+    // A count typed in the size field ("12 ct") is a piece count.
+    var sizeCount = raw.size && String(raw.size).trim() ? extractAttrs(raw.size).count : null;
+    if (sizeCount !== null) {
+      if (count !== null && count !== sizeCount) issues.push('Size field "' + raw.size + '" conflicts with the piece count in the item name (' + count + ')');
+      count = sizeCount;
+    }
+    if (raw.count !== undefined && raw.count !== null && String(raw.count).trim() !== '') {
+      var cs = String(raw.count).trim();
+      var cn = /^\d{1,3}$/.test(cs) ? +cs : extractAttrs(cs).count;
+      if (cn === null || cn < 1) issues.push('Piece count "' + cs + '" is not a whole number');
+      else { if (count !== null && count !== cn) issues.push('Piece count ' + cn + ' conflicts with item name (' + count + ')'); count = cn; }
+    }
+    var qty = parseQty(raw.quantity);
+    if (qty.issue) issues.push(qty.issue);
+    var mods = (raw.modifiers || []).filter(function (m) { return m && String(m.name || '').trim(); }).map(function (m) {
+      var pc = (m.price === '' || m.price == null) ? null : parseMoneyToCents(m.price);
+      if (m.price !== '' && m.price != null && pc === null) issues.push('Modifier "' + m.name + '" has an invalid charge');
+      return { name: String(m.name).trim(), priceCents: pc };
+    });
+    var gh = (raw.ghSubtotal === '' || raw.ghSubtotal == null) ? null : parseMoneyToCents(raw.ghSubtotal);
+    if (raw.ghSubtotal !== '' && raw.ghSubtotal != null && gh === null) issues.push('Grubhub item subtotal is not a valid USD amount');
+    if (!name) issues.push('Item name is required');
+    return {
+      index: idx, name: name, nameAttrs: nameAttrs, size: size, count: count,
+      flavor: String(raw.flavor || '').trim(), flavorTokens: tokens(raw.flavor || ''),
+      quantity: qty.q, quantityAssumed: !!qty.assumed, modifiers: mods, ghLineCents: gh,
+      aliases: splitList(raw.aliases), issues: issues
+    };
+  }
+  function prepareOrder(order) {
+    order = order || {};
+    var items = (order.items || []).map(prepareItem);
+    var problems = [];
+    if (!String(order.chain || '').trim()) problems.push('Restaurant / chain is required');
+    if (!items.length) problems.push('Add at least one item');
+    return { chain: String(order.chain || '').trim(), chainAliases: splitList(order.chainAliases), mode: order.mode === 'pickup' ? 'pickup' : 'delivery', items: items, problems: problems };
+  }
+
+  // ---------------------------------------------------------------- item matching
+  function setOf(arr) { var o = {}; arr.forEach(function (x) { o[x] = 1; }); return o; }
+  function keys(o) { return Object.keys(o); }
+  function eqSet(a, b) { var ka = keys(a), kb = keys(b); if (ka.length !== kb.length) return false; for (var i = 0; i < ka.length; i++) if (!b[ka[i]]) return false; return true; }
+  function modKey(s) { var t = tokens(s); if (t[0] === 'add' || t[0] === 'with') t = t.slice(1); return t.join(' '); }
+  // The same option can be listed in several groups at different charges
+  // ("Small Pizza Toppings" / "Large Pizza Toppings", "Left Half" / "Whole").
+  // The group naming the order's size (or "whole") decides; otherwise the
+  // charge is not proven.
+  function findAddon(addons, name, prefer) {
+    var k = modKey(name);
+    if (!k) return null;
+    var hits = (addons || []).filter(function (a) { return modKey(a.name) === k; });
+    var oneCharge = function (list) { return keys(setOf(list.map(function (a) { return String(a.price_cents); }))).length === 1; };
+    if (hits.length <= 1 || oneCharge(hits)) return hits[0] || null;
+    var pref = hits.filter(function (a) { var g = tokens(a.group || ''); return (prefer || []).some(function (w) { return g.indexOf(w) >= 0; }); });
+    if (pref.length && oneCharge(pref)) return pref[0];
+    return { name: hits[0].name, group: null, price_cents: null, ambiguous: hits.length };
+  }
+  function compareSize(o, c) {
+    var dims = ['sizeWord', 'oz', 'inch', 'liter'];
+    var op = o.parts || [], cp = c.parts || [];
+    if (op.length || cp.length) {
+      var anySize = function (x, p) { return p.length || x.sizeWord != null || x.oz != null || x.inch != null; };
+      if (op.join('|') !== cp.join('|') || o.sizeWord !== c.sizeWord) {
+        if (!anySize(o, op)) return { level: 'warn', text: 'Order does not specify a size; candidate sizes ' + (cp.join(', ') || sizeText(c)) };
+        if (!anySize(c, cp)) return { level: 'warn', text: 'Candidate does not state a size (order: ' + (op.join(', ') || sizeText(o)) + ')' };
+        // A whole-item size (size field, listing variant, or a name with no sized
+        // part) equal to every size the other side states: same size, part not proven.
+        var vals = function (x, p) { return [x.sizeWord].concat(p.map(function (q) { return q.split(' ')[0]; })).filter(Boolean); };
+        var lenient = function (a, ap, b, bp) { return !ap.length && a.sizeWord != null && (b.sizeWord === a.sizeWord || a.fieldOnly) && vals(b, bp).every(function (v) { return v === a.sizeWord; }); };
+        if (lenient(o, op, c, cp) || lenient(c, cp, o, op))
+          return { level: 'warn', text: 'Size "' + (o.sizeWord || c.sizeWord) + '" does not say which part it applies to (order ' + [o.sizeWord].concat(op).filter(Boolean).join(' + ') + ', candidate ' + [c.sizeWord].concat(cp).filter(Boolean).join(' + ') + ')' };
+        return { level: 'fail', text: 'Sized parts differ: order ' + [o.sizeWord].concat(op).filter(Boolean).join(' + ') + ', candidate ' + [c.sizeWord].concat(cp).filter(Boolean).join(' + ') };
+      }
+    }
+    var oHas = dims.filter(function (d) { return o[d] != null; }), cHas = dims.filter(function (d) { return c[d] != null; });
+    var custom = o.custom && o.custom.length ? o.custom.join(' ') : '';
+    // Words typed in the size field ("Gluten Free", "Deep Dish") must appear in the listing.
+    if (custom && !c.customMatched) return { level: 'warn', text: 'Size "' + custom + '" is not stated in the candidate name' };
+    if (!oHas.length && !cHas.length) return { level: 'ok', text: custom ? 'Size "' + custom + '" appears in candidate name' : 'No size stated on either side' };
+    var shared = oHas.filter(function (d) { return cHas.indexOf(d) >= 0; });
+    for (var i = 0; i < shared.length; i++) if (o[shared[i]] !== c[shared[i]]) return { level: 'fail', text: 'Size differs: order ' + sizeText(o) + ', candidate ' + sizeText(c) };
+    var unstated = oHas.filter(function (d) { return cHas.indexOf(d) < 0; });
+    if (shared.length && !unstated.length) return { level: 'ok', text: 'Size matches (' + sizeText(o) + ')' + (cHas.length > shared.length ? '; candidate also lists ' + sizeText(c) : '') };
+    if (shared.length) return { level: 'warn', text: 'Candidate states only part of the size (order ' + sizeText(o) + ', candidate ' + sizeText(c) + ')' };
+    if (!cHas.length) return { level: 'warn', text: 'Candidate does not state a size (order: ' + sizeText(o) + ')' };
+    if (!oHas.length) return { level: 'warn', text: 'Order does not specify a size; candidate is ' + sizeText(c) };
+    return { level: 'warn', text: 'Sizes are stated differently (order ' + sizeText(o) + ', candidate ' + sizeText(c) + '); equivalence not proven' };
+  }
+  function compareCount(o, c) {
+    if (o == null && c == null) return { level: 'ok', text: 'No piece count on either side' };
+    if (o != null && c != null) return o === c ? { level: 'ok', text: 'Piece count matches (' + o + ')' } : { level: 'fail', text: 'Piece count differs: order ' + o + ', candidate ' + c };
+    if (c == null) return { level: 'warn', text: 'Candidate does not state a piece count (order: ' + o + ')' };
+    return { level: 'warn', text: 'Order does not specify a piece count; candidate is ' + c + ' pc' };
+  }
+  var REMOVAL_RE = /^(no|without|hold|remove|minus)\b/;
+
+  // Words that make a listing another product or another version of it:
+  // bundles and portions, product forms and tiers, additions and removals,
+  // dietary and preparation versions. A name that differs by one of these, or
+  // by a number, is never the same item. A difference of one or two other
+  // words ("Pizza", "World Famous", "Chicken") only needs the user's
+  // confirmation: such a listing is never verified on its own.
+  var VARIANT_WORDS = setOf(('meal meals combo combos bundle bundles box boxes bucket buckets platter platters party catering tray trays ' +
+    'feast sampler deal deals value duo trio double triple quad dbl half mini minis jr junior side sides snack bites slice slices whole ' +
+    'supreme deluxe loaded ultimate premium jumbo big giant bowl salad wrap quesadilla nachos melt ' +
+    'and with add extra no without plus ' +
+    'gf gluten free diet zero decaf vegan veggie vegetarian plant impossible beyond keto lite light low sugar boneless bone ' +
+    'spicy hot mild crispy grilled fried baked blackened breakfast ' +
+    'thin deep pan stuffed thick tossed brooklyn frozen bake biscuit slider sliders muffin bagel croissant toast black bean beans ' +
+    'iced nitro skinny frappe freeze cold brew little bigger plate plates xxl cup fries sauce dip dressing shake sundae bacon ' +
+    'sweet sweetened unsweetened unsweet caffeinated decaffeinated salted unsalted dozen').split(' '));
+  // Character-trigram Dice similarity of two names (0..1), used only to rank
+  // suggestions, never to decide a match.
+  var CLOSEST_MIN = 0.3;
+  function trigrams(x) {
+    var t = '  ' + normText(stripNotes(x)) + ' ', g = {};
+    for (var i = 0; i + 3 <= t.length; i++) { var k = t.substr(i, 3); g[k] = (g[k] || 0) + 1; }
+    return g;
+  }
+  function similarity(a, b) {
+    var ga = trigrams(a), gb = trigrams(b), inter = 0, n = 0, k;
+    for (k in ga) { n += ga[k]; if (gb[k]) inter += Math.min(ga[k], gb[k]); }
+    for (k in gb) n += gb[k];
+    return n ? 2 * inter / n : 0;
+  }
+  function nameDiff(oSet, cSet) {
+    var extra = keys(cSet).filter(function (t) { return !oSet[t]; });
+    var missing = keys(oSet).filter(function (t) { return !cSet[t]; });
+    var shared = keys(cSet).filter(function (t) { return oSet[t] && t.length >= 3; });
+    var diff = extra.concat(missing);
+    var hard = diff.filter(function (t) { return VARIANT_WORDS[t] || /\d/.test(t); });
+    var soft = shared.length > 0 && !(extra.length && missing.length) && diff.length > 0 && diff.length <= 2 && !hard.length;
+    return { extra: extra, missing: missing, shared: shared, hard: hard, soft: soft };
+  }
+
+  function matchItem(oi, cand, ctx) {
+    ctx = ctx || {};
+    var reasons = [];
+    var status = 'exact';
+    function add(level, text) { reasons.push({ level: level, text: text }); }
+    function warn(text) { if (status !== 'rejected') status = 'uncertain'; add('warn', text); }
+    function fail(text) { status = 'rejected'; add('fail', text); }
+    var label = String(cand.name || '') + (cand.variant ? ' — ' + cand.variant : '');
+    var cAttr = extractAttrs(label);
+    // The chain's own name in a listing ("Chick-fil-A® Nuggets") is not a product word.
+    var dropChain = function (toks) {
+      var ch = ctx.chainTokens || [];
+      if (!ch.length || toks.length <= ch.length) return toks;
+      for (var k = 0; k + ch.length <= toks.length; k++) {
+        if (ch.every(function (w, j) { return toks[k + j] === w; })) return toks.slice(0, k).concat(toks.slice(k + ch.length));
+      }
+      return toks;
+    };
+    var cAll = dropChain(cAttr.tokens.slice());              // product words, repeats kept ("Double-Double")
+    // Words typed in the order's size field ("Small Deep Dish") are read in the
+    // listing's name too; a name variant that has them itself keeps them.
+    var custom = oi.size.custom || [];
+    cAttr.customMatched = custom.length > 0 && custom.every(function (t) { return cAll.indexOf(t) >= 0; });
+    var forVariant = function (nt) {
+      var c = cAll.slice();
+      if (cAttr.customMatched) custom.forEach(function (t) { if (nt.indexOf(t) < 0 && c.indexOf(t) >= 0) c.splice(c.indexOf(t), 1); });
+      return c;
+    };
+    // A bare number at the start or end ("10 Chicken McNuggets [490-630 Cals]",
+    // "Fried Chicken Wings (7)") is the piece count only when it equals the count
+    // the other side states; "7 Layer Burrito" stays a name.
+    var oCount = oi.count, leadNote = null;
+    var bare = function (toks, n) {
+      if (n === null || n === undefined || toks.length < 2) return -1;
+      if (/^\d{1,3}$/.test(toks[0]) && +toks[0] === n) return 0;
+      var k = toks.length - 1;
+      return /^\d{1,3}$/.test(toks[k]) && +toks[k] === n ? k : -1;
+    };
+    var ci = cAttr.count === null ? bare(cAll, oCount) : -1;
+    if (ci >= 0) { cAll.splice(ci, 1); cAttr.count = oCount; leadNote = 'the listing states it as a bare number'; }
+    var oTok0 = dropChain(oi.nameAttrs.tokens);
+    if (oCount === null && cAttr.count !== null && bare(oTok0, cAttr.count) >= 0) { oCount = cAttr.count; leadNote = 'your item name states it as a bare number'; }
+    var dropCount = function (toks) { var k = bare(toks, oCount); return k >= 0 ? toks.slice(0, k).concat(toks.slice(k + 1)) : toks; };
+    var names = [{ toks: dropCount(oTok0), alias: null, attrs: null }]
+      .concat(oi.aliases.map(function (al) { var at = extractAttrs(al); return { toks: dropCount(dropChain(at.tokens)), alias: al, attrs: at }; }));
+    var bag = function (toks) { var o = {}; toks.forEach(function (t) { o[t] = (o[t] || 0) + 1; }); return o; };
+    var eqBag = function (x, y) { var kx = keys(x); return kx.length === keys(y).length && kx.every(function (t) { return x[t] === y[t]; }); };
+    var noDigits = function (toks) { return toks.every(function (t) { return !/\d/.test(t); }); };
+    var productOk = false, flavorInName = false, used = null, cToks = forVariant(names[0].toks);
+    var fT = setOf(oi.flavorTokens);
+    for (var i = 0; i < names.length && !productOk; i++) {
+      var nt = names[i].toks, cv = forVariant(nt), cvBag = bag(cv);
+      if (!nt.length || !cv.length) continue;                 // an empty name never matches
+      // Same words, or the same letters with different spacing ("Cheese Burger" /
+      // "Cheeseburger"; never with digits, so "1/2 Chicken" is not "12 Chicken").
+      if (eqBag(cvBag, bag(nt)) || (noDigits(cv) && noDigits(nt) && cv.join('') === nt.join(''))) {
+        productOk = true; used = names[i]; cToks = cv;
+        flavorInName = oi.flavorTokens.length > 0 && oi.flavorTokens.every(function (t) { return cv.indexOf(t) >= 0; });
+      } else if (oi.flavorTokens.length) {
+        var withFlavor = nt.concat(oi.flavorTokens.filter(function (t) { return nt.indexOf(t) < 0; }));
+        if (eqBag(cvBag, bag(withFlavor))) { productOk = true; flavorInName = true; used = names[i]; cToks = cv; }
+      }
+    }
+    var usedAlias = used && used.alias;
+    var cBase = setOf(cToks);
+    // A confirmed alias brings its own size, count and serving size where the
+    // order states none ("10 pc Classic Wings" keeps 10).
+    var effSize = oi.size, effServes = oi.nameAttrs.serves;
+    if (used && used.attrs) {
+      effSize = Object.assign({}, oi.size);
+      ['sizeWord', 'oz', 'inch', 'liter'].forEach(function (d) { if (effSize[d] == null && used.attrs[d] != null) effSize[d] = used.attrs[d]; });
+      if (!(effSize.parts || []).length && used.attrs.parts.length) effSize.parts = used.attrs.parts;
+      if (oCount === null && used.attrs.count !== null) oCount = used.attrs.count;
+      if (effServes == null) effServes = used.attrs.serves;
+    }
+    var result = { status: 'rejected', label: label, reasons: reasons, baseCents: null, modifierCents: null, unitCents: null, lineCents: null, availability: cand.availability || 'unknown', promotions: cand.promotions || [], section: cand.section || null, nearMiss: false,
+                   listedCents: Number.isInteger(cand.price_cents) ? cand.price_cents : null, nameDiff: null, attrConflict: false,
+                   itemObservedAt: typeof cand.observed_at === 'string' ? cand.observed_at : null };
+    if (!productOk) {
+      var ob = setOf(names[0].toks), uu = Object.assign({}, ob, fT);
+      // A size or count that already conflicts rules a listing out of suggestions.
+      result.attrConflict = compareSize(oi.size, cAttr).level === 'fail' || compareCount(oCount, cAttr.count).level === 'fail' ||
+        (oi.nameAttrs.menuNo != null && cAttr.menuNo != null && oi.nameAttrs.menuNo !== cAttr.menuNo);
+      // A flavor the order names is part of the comparison ("Lemon Pepper Wings"
+      // is not Wings + flavor Buffalo), unless the listing offers it as an option.
+      var nd = nameDiff(uu, cBase);
+      if (!nd.soft && oi.flavorTokens.length && findAddon(cand.addons, oi.flavor)) { var nd2 = nameDiff(ob, cBase); if (nd2.soft) nd = nd2; }
+      // Only connecting words or word order differ ("Caesar Salad with Chicken").
+      var conn = function (toks) { return toks.filter(function (t) { return t !== 'and' && t !== 'with'; }); };
+      if (!nd.soft && eqBag(bag(conn(names[0].toks)), bag(conn(cToks))) && conn(cToks).length) {
+        nd = { extra: [], missing: [], shared: conn(cToks), hard: [], soft: true, connector: true };
+      }
+      result.nameDiff = nd;
+      if (!nd.soft) {
+        var extra = keys(cBase).filter(function (t) { return !uu[t]; }), missing = keys(ob).filter(function (t) { return !cBase[t]; });
+        result.nearMiss = keys(cBase).some(function (t) { return ob[t]; });
+        fail('Different product name' + (extra.length ? '; candidate adds "' + extra.join(' ') + '"' : '') + (missing.length ? '; candidate lacks "' + missing.join(' ') + '"' : '') +
+             (!extra.length && !missing.length ? '; a word is repeated on one side only' : '') +
+             (nd.hard.length ? '; "' + nd.hard.join('", "') + '" makes it a different item' : '') + '. Similar names do not prove equivalence.');
+        return result;
+      }
+      flavorInName = oi.flavorTokens.length > 0 && oi.flavorTokens.every(function (t) { return cBase[t]; });
+      warn(nd.connector ? 'Name differs only by connecting words ("and", "with") or word order. Confirm it is the same item, or confirm the listing once as a same-item name.'
+        : 'Name differs only by "' + nd.extra.concat(nd.missing).join(' ') + '" (the listing ' + (nd.extra.length ? 'adds' : 'lacks') +
+          ' it). Confirm it is the same item, or confirm the listing once as a same-item name.');
+    } else add('ok', usedAlias ? 'Product name matches via your confirmed alias "' + usedAlias + '"' : 'Product name matches (case/punctuation normalized)');
+
+    // Menu numbers and serving sizes are compared when both sides state them.
+    if (oi.nameAttrs.menuNo != null && cAttr.menuNo != null && oi.nameAttrs.menuNo !== cAttr.menuNo) fail('Menu number differs: order #' + oi.nameAttrs.menuNo + ', candidate #' + cAttr.menuNo);
+    if (effServes != null && cAttr.serves != null && effServes !== cAttr.serves) fail('Serving size differs: order serves ' + effServes + ', candidate serves ' + cAttr.serves);
+    else if (effServes != null && cAttr.serves == null) warn('Candidate does not state the serving size (order: serves ' + effServes + ')');
+    else if (effServes == null && cAttr.serves != null && !(oCount !== null && oCount === cAttr.count)) warn('Order does not specify the serving size; candidate serves ' + cAttr.serves);
+
+    var cur = String(cand.currency || ctx.obsCurrency || '').toUpperCase();
+    if (!cur || cur === '?') warn('Price currency not published; USD cannot be confirmed');
+    else if (cur !== 'USD') fail('Price currency is ' + cur + ', not USD');
+
+    var sz = compareSize(effSize, cAttr);
+    if (sz.level === 'fail') fail(sz.text); else if (sz.level === 'warn') warn(sz.text); else add('ok', sz.text);
+    var cc = compareCount(oCount, cAttr.count);
+    if (cc.level === 'fail') fail(cc.text); else if (cc.level === 'warn') warn(cc.text); else add('ok', cc.text + (leadNote ? '; ' + leadNote : ''));
+    if (cAttr.conflicts.length) warn('Candidate name has conflicting attributes (' + cAttr.conflicts.join('; ') + ')');
+
+    var modCents = 0, modKnown = true, chosen = [];
+    var prefer = [effSize.sizeWord, 'whole'].concat(oi.size.custom || []).filter(Boolean).map(function (w) { return String(w).split(' ')[0]; });
+    if (used && used.alias) {
+      // Words of your item name the confirmed name leaves out ("Steak" Burrito
+      // Bowl vs "Burrito Bowl"): an option of the listing, priced, or unconfirmed.
+      var dropped = dropCount(oTok0).filter(function (t) { return used.toks.indexOf(t) < 0 && t !== 'and' && t !== 'with'; });
+      if (dropped.length) {
+        var da = findAddon(cand.addons, dropped.join(' '), prefer);
+        if (da && Number.isInteger(da.price_cents)) { chosen.push(da); modCents += da.price_cents; add('ok', '"' + dropped.join(' ') + '" from your item name is the listing\'s option "' + da.name + '" (+' + formatCents(da.price_cents) + ')'); }
+        else if (da) { chosen.push(da); modKnown = false; warn('"' + dropped.join(' ') + '" from your item name is a listed option whose charge is not proven'); }
+        else add('info', 'Your item name also says "' + dropped.join(' ') + '"; you confirmed this listing as the same item');
+      }
+    }
+    if (oi.flavorTokens.length) {
+      if (flavorInName) add('ok', 'Flavor "' + oi.flavor + '" is part of the item name');
+      else {
+        var fa = findAddon(cand.addons, oi.flavor, prefer);
+        if (fa && Number.isInteger(fa.price_cents)) { chosen.push(fa); modCents += fa.price_cents; add('ok', 'Flavor "' + oi.flavor + '" offered as option "' + fa.name + '" (+' + formatCents(fa.price_cents) + ')'); }
+        else if (fa) { chosen.push(fa); modKnown = false; warn(fa.ambiguous ? 'Flavor option "' + fa.name + '" is listed in ' + fa.ambiguous + ' option groups with different charges; which one applies is not proven' : 'Flavor option "' + fa.name + '" is listed but its charge is not published'); }
+        else warn('Flavor "' + oi.flavor + '" is not stated in the candidate\'s published data');
+      }
+    }
+    oi.modifiers.forEach(function (m) {
+      var ad = findAddon(cand.addons, m.name, prefer);
+      if (ad && Number.isInteger(ad.price_cents)) { chosen.push(ad); modCents += ad.price_cents; add('ok', 'Modifier "' + m.name + '" listed (+' + formatCents(ad.price_cents) + ')'); }
+      else if (ad) { chosen.push(ad); modKnown = false; warn(ad.ambiguous ? 'Modifier "' + m.name + '" is listed in ' + ad.ambiguous + ' option groups with different charges; which one applies is not proven' : 'Modifier "' + m.name + '" is listed but its charge is not published'); }
+      else if (REMOVAL_RE.test(normText(m.name))) { modKnown = false; warn('Removal "' + m.name + '" is not listed in platform data (often free, but unconfirmed)'); }
+      else { modKnown = false; warn('Modifier "' + m.name + '" not found in platform data; its charge is unknown'); }
+    });
+    var ro = cand.required_options;
+    if (Array.isArray(ro) && ro.length) {
+      ro.forEach(function (g) {
+        if (!g || g.required === false) return;
+        var gname = normText(g.name);
+        var pick = chosen.filter(function (a) { return a.group && normText(a.group) === gname; })[0];
+        if (!pick) warn('Mandatory option "' + g.name + '" must be chosen, and the order does not specify a matching selection');
+        else if (!Number.isInteger(pick.price_cents)) { modKnown = false; warn('Mandatory option "' + g.name + '" charge is not published'); }
+        else add('ok', 'Mandatory option "' + g.name + '" satisfied by "' + pick.name + '"');
+      });
+    } else if (ro === 'none') add('ok', 'Source states the item has no mandatory options');
+    else add('info', 'Source does not say whether mandatory paid options exist; the listed price assumes none');
+
+    if (!Number.isInteger(cand.price_cents)) {
+      warn(cand.price_note ? 'Price not verifiable: ' + cand.price_note : (cand.price_range_cents ? 'Only a price range is published, not a configured price' : 'No price published for this item'));
+    } else {
+      result.baseCents = cand.price_cents;
+    }
+    if (result.availability === 'unavailable') add('warn', 'Listed as unavailable — shown for reference, excluded from purchasable winners');
+    else if (result.availability === 'unknown') add('info', 'Availability not published (unknown)');
+    else add('ok', 'Listed as available');
+    if (oi.quantityAssumed) add('info', 'Quantity not entered; assumed 1');
+    if (oi.issues.length) warn('Order item needs attention: ' + oi.issues.join('; '));
+
+    result.modifierCents = modKnown ? modCents : null;
+    if (Number.isInteger(result.baseCents) && modKnown && Number.isInteger(oi.quantity)) {
+      result.unitCents = result.baseCents + modCents;
+      result.lineCents = mulCents(result.unitCents, oi.quantity);
+    }
+    if (status === 'exact' && result.lineCents === null) status = 'uncertain';
+    result.status = status;
+    // Same product name but a conflicting attribute (size, count, currency):
+    // listed under "Not equivalent" with the reason.
+    if (status === 'rejected') result.nearMiss = true;
+    return result;
+  }
+
+  // ---------------------------------------------------------------- observations
+  function obsKey(o) { return [o.source, o.platform, o.store_id, o.order_mode].join('|'); }
+  function addressKey(o) {
+    var a = o.address || {}, zip = String(a.zip || '').slice(0, 5);
+    // DoorDash publishes no ZIP: then city and state tell same-named streets apart.
+    return o.platform + '|' + normText(a.street) + '|' + (zip || normText(a.city) + '|' + (normalizeState(a.state) || ''));
+  }
+  // Same platform store ID (e.g. live + imported, or re-observed): keep the
+  // newest observation only. Same street address + ZIP under different store
+  // IDs on one platform: one physical branch listed twice. Both listings are
+  // kept (each is separately orderable) but the branch is counted once.
+  function dedupeObservations(list) {
+    var byStore = {}, order = [], duplicates = [];
+    list.forEach(function (o) {
+      var k = [o.platform, o.store_id, o.order_mode].join('|');
+      var prev = byStore[k];
+      if (!prev) { byStore[k] = o; order.push(k); return; }
+      var newer = (Date.parse(o.observed_at) || 0) > (Date.parse(prev.observed_at) || 0);
+      duplicates.push({ kept: newer ? o : prev, dropped: newer ? prev : o, reason: 'same platform store ID; older observation dropped' });
+      if (newer) byStore[k] = o;
+    });
+    var byAddr = {}, kept = [], addressDuplicateOf = {};
+    order.forEach(function (k) {
+      var o = byStore[k];
+      kept.push(o);
+      var a = o.address || {};
+      if (!a.street || !(a.zip || (a.city && normalizeState(a.state)))) return;
+      var ak = addressKey(o) + '|' + o.order_mode;
+      if (!byAddr[ak]) { byAddr[ak] = o; return; }
+      addressDuplicateOf[k] = byAddr[ak].store_id;
+    });
+    return { kept: kept, duplicates: duplicates, addressDuplicateOf: addressDuplicateOf };
+  }
+  function passesLocation(addr, f) {
+    if (!f) return true;
+    if (f.state && normalizeState(addr.state) !== normalizeState(f.state)) return false;
+    if (f.city && normText(addr.city) !== normText(f.city)) return false;
+    if (f.zip && String(addr.zip || '').slice(0, 5) !== String(f.zip).slice(0, 5)) return false;
+    return true;
+  }
+  function feesTotal(fees) {
+    if (!fees) return null;
+    var parts = [fees.delivery_fee_cents, fees.service_fee_cents, fees.small_order_fee_cents, fees.tax_cents];
+    return sumCents(parts);
+  }
+
+  function evaluate(order, observations, opts) {
+    opts = opts || {};
+    var now = opts.now != null ? opts.now : Date.now();
+    var prep = prepareOrder(order);
+    var mode = opts.mode || prep.mode;
+    var staleMs = (opts.staleHours != null ? opts.staleHours : 24) * 3600000;
+    var platforms = setOf(opts.platforms || ['doordash', 'ubereats']);
+    var multi = prep.items.length > 1;
+    // Excluded imports are dropped before de-duplication, so they never hide
+    // another reading (live or snapshot) of the same store.
+    var ex0 = 0;
+    var input = (observations || []).filter(function (o) { if (o.source === 'import' && opts.includeImported === false) { ex0++; return false; } return true; });
+    var dd = dedupeObservations(input);
+    var chainTokens = tokens(prep.chain);
+    var ex = { platform: 0, imported: ex0, otherMode: 0, location: 0, nonUS: 0, nonUSD: 0, otherChain: 0, duplicate: dd.duplicates.length };
+    var stores = [];
+    dd.kept.forEach(function (obs) {
+      if (!platforms[obs.platform]) { ex.platform++; return; }
+      var addr = obs.address || {};
+      if (!normalizeState(addr.state) || !isUSCountry(addr.country)) { ex.nonUS++; return; }
+      if (obs.currency && obs.currency !== 'USD' && obs.currency !== 'mixed') { ex.nonUSD++; return; }
+      if (obs.order_mode !== mode) { ex.otherMode++; return; }
+      if (!passesLocation(addr, opts.filters)) { ex.location++; return; }
+      var chain = matchChain(prep.chain, obs.store_name, prep.chainAliases);
+      if (chain.status === 'mismatch') { ex.otherChain++; return; }
+      var ts = Date.parse(obs.observed_at);
+      var stale = !isFinite(ts) || now - ts > staleMs;
+      var store = { obs: obs, chain: chain, stale: stale, items: [], duplicateOf: dd.addressDuplicateOf[[obs.platform, obs.store_id, obs.order_mode].join('|')] || null };
+      prep.items.forEach(function (oi) {
+        var res = (obs.items || []).map(function (c) { return matchItem(oi, c, { obsCurrency: obs.currency, chainTokens: chainTokens }); });
+        res.forEach(function (r) {
+          var t = r.itemObservedAt ? Date.parse(r.itemObservedAt) : ts;
+          r.observedAt = r.itemObservedAt || obs.observed_at;
+          r.stale = !isFinite(t) || now - t > staleMs;
+          if (r.status === 'exact' && chain.status !== 'exact') { r.status = 'uncertain'; r.reasons.unshift({ level: 'warn', text: chain.text }); }
+          else r.reasons.unshift({ level: chain.status === 'exact' ? 'ok' : 'warn', text: chain.text });
+        });
+        var exact = res.filter(function (r) { return r.status === 'exact'; }).sort(function (a, b) { return a.lineCents - b.lineCents; });
+        store.items.push({
+          oi: oi, exact: exact, all: res,
+          uncertain: res.filter(function (r) { return r.status === 'uncertain'; }),
+          near: res.filter(function (r) { return r.status === 'rejected' && r.nearMiss; }).slice(0, 5)
+        });
+      });
+      stores.push(store);
+    });
+
+    var rows = { verified: [], uncertain: [], rejected: [] };
+    function makeRow(store, ir, r, status) {
+      var o = store.obs, a = o.address || {};
+      var gh = ir.oi.ghLineCents;
+      var fees = feesTotal(o.fees);
+      return {
+        id: [status, o.source, o.platform, o.store_id, ir.oi.index, r.label].join('|'), status: status, platform: o.platform, source: o.source, fromCache: !!o.from_cache,
+        storeName: o.store_name, storeId: o.store_id, storeUrl: o.store_url, address: a,
+        city: a.city || '', state: normalizeState(a.state) || '', zip: a.zip || '',
+        orderItemIndex: ir.oi.index, orderItemName: ir.oi.name, candidate: r.label, section: r.section,
+        baseCents: r.baseCents, modifierCents: r.modifierCents, unitCents: r.unitCents, quantity: ir.oi.quantity,
+        lineCents: r.lineCents, ghLineCents: gh,
+        savingsCents: (Number.isInteger(gh) && Number.isInteger(r.lineCents)) ? gh - r.lineCents : null,
+        observedAt: r.observedAt, stale: r.stale, availability: r.availability, orderMode: o.order_mode,
+        modeBasis: o.mode_basis || '', priceContext: o.price_context || '', extraction: o.extraction || '',
+        chainStatus: store.chain.status, reasons: r.reasons, promotions: r.promotions || [],
+        checkoutTotalCents: (!multi && Number.isInteger(r.lineCents) && fees !== null) ? r.lineCents + fees : null,
+        feeDestination: o.fees && o.fees.destination_zip || null,
+        duplicateOf: store.duplicateOf, extraListings: 0
+      };
+    }
+    stores.forEach(function (store) {
+      store.items.forEach(function (ir) {
+        if (ir.exact.length) {
+          var purch = ir.exact.filter(function (r) { return r.availability !== 'unavailable'; });
+          var best = (purch.length ? purch : ir.exact)[0];
+          var row = makeRow(store, ir, best, 'verified');
+          row.extraListings = ir.exact.length - 1;
+          if (row.extraListings) row.reasons = row.reasons.concat([{ level: 'info', text: ir.exact.length + ' exact listings at this branch; the lowest purchasable one is shown' }]);
+          rows.verified.push(row);
+        }
+        ir.uncertain.slice(0, 5).forEach(function (r) { rows.uncertain.push(makeRow(store, ir, r, 'uncertain')); });
+        ir.near.forEach(function (r) { rows.rejected.push(makeRow(store, ir, r, 'rejected')); });
+      });
+    });
+
+    var baskets = [];
+    if (multi) {
+      stores.forEach(function (store) {
+        var parts = [], missing = [], unsure = [];
+        store.items.forEach(function (ir) {
+          var purch = ir.exact.filter(function (r) { return r.availability !== 'unavailable'; });
+          if (purch.length) parts.push({ name: ir.oi.name, r: purch[0], gh: ir.oi.ghLineCents });
+          else if (ir.exact.length) missing.push(ir.oi.name + ' (unavailable)');
+          else if (ir.uncertain.length) unsure.push(ir.oi.name);
+          else missing.push(ir.oi.name);
+        });
+        var o = store.obs, a = o.address || {};
+        var complete = parts.length === store.items.length;
+        var status = complete ? (store.chain.status === 'exact' ? 'complete' : 'uncertain') : (missing.length ? 'partial' : 'uncertain');
+        var subtotal = complete ? sumCents(parts.map(function (p) { return p.r.lineCents; })) : null;
+        var ghSum = sumCents(store.items.map(function (ir) { return ir.oi.ghLineCents; }));
+        var fees = feesTotal(o.fees);
+        baskets.push({
+          id: ['basket', o.source, o.platform, o.store_id].join('|'), status: status, platform: o.platform, source: o.source, storeName: o.store_name,
+          storeId: o.store_id, storeUrl: o.store_url, city: a.city || '', state: normalizeState(a.state) || '', zip: a.zip || '', address: a,
+          subtotalCents: subtotal, ghSubtotalCents: ghSum, savingsCents: (subtotal !== null && ghSum !== null) ? ghSum - subtotal : null,
+          parts: parts.map(function (p) { return { orderItem: p.name, candidate: p.r.label, lineCents: p.r.lineCents, availability: p.r.availability }; }),
+          missing: missing, uncertain: unsure, orderMode: o.order_mode,
+          // A basket is as old as its oldest part.
+          observedAt: parts.length ? parts.map(function (p) { return p.r.observedAt; }).sort()[0] : o.observed_at,
+          stale: parts.length ? parts.some(function (p) { return p.r.stale; }) : store.stale,
+          anyUnknownAvailability: parts.some(function (p) { return p.r.availability === 'unknown'; }),
+          checkoutTotalCents: (subtotal !== null && fees !== null) ? subtotal + fees : null, chainText: store.chain.text
+        });
+      });
+    }
+
+    var checked = stores.filter(function (s) { return !s.duplicateOf; }).length;
+    var rankKey = opts.rankBy === 'checkout' ? 'checkoutTotalCents' : null;
+    var pool, winner = null;
+    if (multi) {
+      pool = baskets.filter(function (b) { return b.status === 'complete' && !b.stale; });
+      if (rankKey) pool = pool.filter(function (b) { return Number.isInteger(b.checkoutTotalCents); });
+      pool.sort(function (a, b) { return (rankKey ? a[rankKey] - b[rankKey] : a.subtotalCents - b.subtotalCents) || String(b.observedAt).localeCompare(String(a.observedAt)); });
+      if (pool.length) winner = { kind: 'basket', basket: pool[0], ties: pool.filter(function (b) { return (rankKey ? b[rankKey] === pool[0][rankKey] : b.subtotalCents === pool[0].subtotalCents); }).length - 1 };
+    } else {
+      pool = rows.verified.filter(function (r) { return !r.stale && r.availability !== 'unavailable'; });
+      if (rankKey) pool = pool.filter(function (r) { return Number.isInteger(r.checkoutTotalCents); });
+      pool.sort(function (a, b) {
+        return (rankKey ? a[rankKey] - b[rankKey] : a.lineCents - b.lineCents) ||
+          ((a.availability === 'available' ? 0 : 1) - (b.availability === 'available' ? 0 : 1)) ||
+          String(b.observedAt).localeCompare(String(a.observedAt));
+      });
+      if (pool.length) winner = { kind: 'item', row: pool[0], ties: pool.filter(function (r) { return (rankKey ? r[rankKey] === pool[0][rankKey] : r.lineCents === pool[0].lineCents); }).length - 1 };
+    }
+    // Closest listings for an order item that no checked store lists exactly:
+    // listings whose name differs only in wording (never by a word or number
+    // that makes another item), ranked by text similarity. They are
+    // suggestions: one becomes a match only when the user confirms it as a
+    // same-item name, and size, count, currency and price are still checked.
+    var plural = function (x, y) { return x !== y && (x + 's' === y || y + 's' === x || x + 'es' === y || y + 'es' === x); };
+    var closest = prep.items.map(function (oi, i) {
+      var out = { orderItemIndex: i, orderItemName: oi.name, listings: [] };
+      if (!oi.name) return out;
+      // Shown when no fresh, purchasable exact listing exists; not when a listing's
+      // name already matches and only its chain, options or size need confirming.
+      var usable = stores.some(function (s) { return s.items[i].exact.some(function (r) { return !r.stale && r.availability !== 'unavailable'; }); });
+      var named = stores.some(function (s) { return s.items[i].all.some(function (r) { return !r.nameDiff && r.status === 'uncertain' && !r.stale; }); });
+      if (usable || named) return out;
+      var by = {};
+      stores.forEach(function (s) {
+        if (s.duplicateOf) return;                              // one branch listed twice counts once
+        s.items[i].all.forEach(function (r) {
+          var nd = r.nameDiff;
+          if (!nd || r.stale || r.attrConflict || nd.hard.length || !nd.shared.length || (nd.soft && r.status === 'rejected')) return;
+          // Not a wording difference: only a plural of the same word ("Nugget" /
+          // "Nuggets"), never another word ("Blueberry" / "Blackberry").
+          if (!nd.soft && !(nd.extra.length === 1 && nd.missing.length === 1 && plural(nd.extra[0], nd.missing[0]))) return;
+          var score = similarity(oi.name, r.label);
+          if (score < CLOSEST_MIN) return;
+          var key = tokens(stripNotes(r.label)).join(' ');
+          var e = by[key] || (by[key] = { label: r.label, score: score, stores: 0, minCents: null, maxCents: null,
+                                          why: nd.connector ? 'only connecting words or word order differ' : nd.soft ? 'name differs only by "' + nd.extra.concat(nd.missing).join(' ') + '"' : 'spelled differently ("' + nd.missing[0] + '" / "' + nd.extra[0] + '")' });
+          e.stores++;
+          if (Number.isInteger(r.listedCents)) {
+            e.minCents = e.minCents === null ? r.listedCents : Math.min(e.minCents, r.listedCents);
+            e.maxCents = e.maxCents === null ? r.listedCents : Math.max(e.maxCents, r.listedCents);
+          }
+        });
+      });
+      out.listings = keys(by).map(function (k) { return by[k]; })
+        .sort(function (a, b) { return b.score - a.score || b.stores - a.stores || a.label.localeCompare(b.label); }).slice(0, 5);
+      return out;
+    });
+
+    var exhaustive = opts.exhaustiveEvidence === true;
+    var byPlatform = {};
+    stores.forEach(function (s) {
+      if (s.duplicateOf) return;
+      var p = s.obs.platform;
+      byPlatform[p] = byPlatform[p] || { checked: 0, matchedStores: 0, uncertainStores: 0 };
+      byPlatform[p].checked++;
+      var matched = multi ? baskets.some(function (b) { return b.platform === p && b.storeId === s.obs.store_id && b.status === 'complete'; })
+                          : s.items[0] && s.items[0].exact.length > 0 && s.chain.status === 'exact';
+      if (matched) byPlatform[p].matchedStores++;
+      else if (s.items.some(function (ir) { return ir.uncertain.length || ir.exact.length; })) byPlatform[p].uncertainStores++;
+    });
+    var label = exhaustive ? 'Cheapest verified price in the US (exhaustive current coverage evidenced)'
+                           : 'Lowest verified price among ' + checked + ' checked location' + (checked === 1 ? '' : 's');
+    var staleVerified = (multi ? baskets.filter(function (b) { return b.status === 'complete' && b.stale; }).length
+                               : rows.verified.filter(function (r) { return r.stale; }).length);
+    return {
+      version: VERSION, mode: mode, multi: multi, prep: prep, rows: rows, baskets: baskets, winner: winner, closest: closest,
+      winnerLabel: label, rankBy: rankKey ? 'checkout' : 'subtotal',
+      coverage: {
+        checkedLocations: checked, byPlatform: byPlatform, excluded: ex, duplicates: dd.duplicates.length,
+        addressDuplicateListings: keys(dd.addressDuplicateOf).length,
+        exhaustive: exhaustive, staleVerified: staleVerified,
+        statement: exhaustive ? 'Exhaustive current coverage is evidenced for this dataset.'
+          : 'Results cover only the ' + checked + ' location' + (checked === 1 ? '' : 's') + ' of this chain checked so far. The complete set of US branches is not known, so this is not proof of the cheapest price nationwide.'
+      }
+    };
+  }
+
+  // ---------------------------------------------------------------- Grubhub URL & receipt parsing
+  function parseGrubhubUrl(input) {
+    var u;
+    try { u = new URL(String(input || '').trim()); } catch (e) { return { ok: false, error: 'Not a valid URL' }; }
+    if (!/^(www\.)?grubhub\.com$/i.test(u.hostname)) return { ok: false, error: 'Not a grubhub.com URL' };
+    if (u.protocol !== 'https:') return { ok: false, error: 'Only https Grubhub links are accepted' };
+    var m = /^\/restaurant\/([^/]+)\/(\d+)\/?$/i.exec(u.pathname);
+    if (!m) return { ok: false, error: 'Expected a /restaurant/<name>/<id> link' };
+    var words = [];
+    m[1].split('-').some(function (w) { if (/^\d+$/.test(w)) return true; words.push(w); return false; });
+    return {
+      ok: true, restaurantId: m[2], menuItemId: u.searchParams.get('menuItemId'),
+      chainGuess: words.map(function (w) { return w.charAt(0).toUpperCase() + w.slice(1); }).join(' '),
+      note: 'Chain name guessed from the URL slug; check spelling and punctuation.'
+    };
+  }
+
+  // Fee/total lines: a whole-line label (optionally with an amount), or a
+  // line starting with a discount/payment word.
+  var FEE_STRICT = /^(?:items?\s+)?(?:sub\s*-?\s*total|delivery(?:\s+fee)?|service\s+fee|small\s+order\s+fee|(?:driver\s+)?(?:tip|gratuity|benefits)|(?:estimated\s+|sales\s+)?tax(?:es)?|fees?(?:\s*(?:&|and)\s*(?:estimated\s+)?tax(?:es)?)?|(?:order\s+|grand\s+)?total|credits?|perks?|donation|bag\s+fee|amount\s+(?:paid|charged)|payment)\s*(?:\([^)]*\))?\s*:?\s*(?:-?\s*\$?\s*-?\d[\d,]*\.\d{2})?\s*$/i;
+  var FEE_PREFIX = /^(?:discount|promo(?:tion)?|coupon|grubhub\+|card\s+ending|paid\s+with|visa|mastercard|amex|gift\s+card)\b/i;
+  var NOISE_RE = /\b(order|deliver|pick\s?-?up|address|arriv|estimated|thank|receipt|date|time|placed|confirm|track|driver|courier|restaurant|phone|email|www\.|https?:)\b|\d{3,}\s+\w+\s+(st|ave|rd|blvd|dr|ln|way)\b/i;
+  function isFeeLine(t) { return FEE_STRICT.test(t) || FEE_PREFIX.test(t); }
+  function parseReceipt(text) {
+    var out = { chain: '', mode: null, items: [], ignored: [], ambiguities: [] };
+    var lines = String(text || '').split(/\r?\n/);
+    var cur = null;
+    var modes = {};
+    lines.forEach(function (raw) {
+      var line = raw.replace(/\t/g, '    ');
+      var trimmed = line.trim();
+      if (!trimmed) { cur = null; return; }
+      var m;
+      if (!out.chain && (m = /order\s+(?:from|at|with)\s+(.+?)(?:\s*[!,]|\s+(?:is|has|was|will|on)\b|$)/i.exec(trimmed))) { out.chain = m[1].replace(/\.$/, '').trim(); return; }
+      if (!out.chain && (m = /^(?:restaurant|from)\s*:\s*(.+)$/i.exec(trimmed))) { out.chain = m[1].trim(); return; }
+      if (/\b(pick\s?-?up)\b/i.test(trimmed)) modes.pickup = 1;
+      if (/\bdeliver(y|ed)\b/i.test(trimmed) && !isFeeLine(trimmed)) modes.delivery = 1;
+      if (/\bdelivery fee\b/i.test(trimmed)) modes.delivery = 1;
+      if (isFeeLine(trimmed.replace(/^[-•*·]\s*/, ''))) { out.ignored.push(trimmed); cur = null; return; }
+      var indented = /^(\s{2,}|\s*[-•*·+]\s)/.test(line) && cur;
+      var price = /(?:^|\s)(\+?\s?\$\s?\d[\d,]*\.\d{2})\s*$/.exec(trimmed);
+      if (indented) {
+        var mname = trimmed.replace(/^[-•*·+]\s*/, '');
+        var mp = null;
+        if (price) { mname = mname.slice(0, mname.length - price[0].length).trim(); mp = parseMoneyToCents(price[1].replace(/\s/g, '')); }
+        else { var pm = /\(\s*\+?\s*\$\s?(\d[\d,]*\.\d{2})\s*\)\s*$/.exec(mname); if (pm) { mp = parseMoneyToCents(pm[1]); mname = mname.slice(0, pm.index).trim(); } }
+        if (/^(special instructions|note|instructions)\s*:/i.test(mname)) { cur._notes.push('Special instructions present (not compared): "' + mname.slice(0, 80) + '"'); return; }
+        if (/^qty\s*:?\s*(\d+)$/i.test(mname)) { cur.quantity = /(\d+)/.exec(mname)[1]; return; }
+        cur.modifiers.push({ name: mname, price: mp === null ? '' : (mp / 100).toFixed(2) });
+        return;
+      }
+      var qty = null, name = trimmed, amt = null;
+      if (price) { name = trimmed.slice(0, trimmed.length - price[0].length).trim(); amt = parseMoneyToCents(price[1].replace(/[\s+]/g, '')); }
+      if ((m = /^(\d{1,3})\s*[x×]?\s+(.+)$/i.exec(name))) { qty = m[1]; name = m[2]; }
+      else if ((m = /^(.+?)\s*(?:[x×]\s*(\d{1,3})|\(\s*(\d{1,3})\s*\))$/i.exec(name))) { name = m[1]; qty = m[2] || m[3]; }
+      name = name.replace(/\s{2,}/g, ' ').replace(/[.\s]+$/, '').trim();
+      if (!price && !qty) {
+        // Unindented line without price/quantity: only a short, option-like
+        // line directly under an item is treated as a modifier.
+        if (cur && name.length <= 60 && !NOISE_RE.test(name)) cur.modifiers.push({ name: name, price: '' });
+        else out.ignored.push(trimmed);
+        return;
+      }
+      if (!name) { out.ignored.push(trimmed); return; }
+      cur = { name: name, size: '', flavor: '', count: '', quantity: qty || '', ghSubtotal: amt === null ? '' : (amt / 100).toFixed(2), modifiers: [], aliases: '', _notes: [] };
+      if (!qty) cur._notes.push('Quantity not shown; assumed 1 — confirm');
+      if (qty && +qty > 1) cur._notes.push('Leading number read as quantity ' + qty + (amt !== null ? ' and ' + formatCents(amt) + ' as the line subtotal for all ' + qty : '') + ' — confirm');
+      if (amt === null) cur._notes.push('No price on this line; enter the Grubhub item subtotal to compute savings');
+      out.items.push(cur);
+    });
+    if (modes.pickup && !modes.delivery) out.mode = 'pickup';
+    else if (modes.delivery && !modes.pickup) out.mode = 'delivery';
+    else if (modes.pickup && modes.delivery) out.ambiguities.push('Both pickup and delivery are mentioned; choose the order mode');
+    if (!out.chain) out.ambiguities.push('Restaurant name not found; enter it');
+    if (!out.items.length) out.ambiguities.push('No item lines with prices were recognized; enter items manually');
+    out.items.forEach(function (it) {
+      if (it.modifiers.some(function (m) { return m.price === ''; }) && it.modifiers.length) it._notes.push('Some modifiers show no charge; leave blank if free on Grubhub');
+    });
+    return out;
+  }
+
+  // ---------------------------------------------------------------- import validation
+  var PLATFORM_HOSTS = { doordash: ['www.doordash.com', 'doordash.com'], ubereats: ['www.ubereats.com', 'ubereats.com'] };
+  function safeUrl(u, platform) {
+    try {
+      var x = new URL(String(u));
+      if (x.protocol !== 'https:' || x.username || x.password) return null;
+      var hosts = platform ? PLATFORM_HOSTS[platform] : [].concat(PLATFORM_HOSTS.doordash, PLATFORM_HOSTS.ubereats, ['www.grubhub.com', 'grubhub.com', 'menupages.com', 'www.menupages.com', 'allmenus.com', 'www.allmenus.com']);
+      if (!hosts || hosts.indexOf(x.hostname.toLowerCase()) < 0) return null;
+      return x.href;
+    } catch (e) { return null; }
+  }
+  function str(v, max) {
+    // Untrusted input: only strings, numbers and booleans become text.
+    if (typeof v !== 'string' && typeof v !== 'number' && typeof v !== 'boolean') return '';
+    return String(v).replace(/[\u0000-\u001f\u007f]/g, ' ').trim().slice(0, max || 300);
+  }
+  function centsField(obj, base) {
+    if (obj == null) return { v: null, ok: true };
+    if (Number.isInteger(obj[base + '_cents'])) return obj[base + '_cents'] >= 0 ? { v: obj[base + '_cents'], ok: true } : { v: null, ok: false };
+    var raw = obj[base];
+    if (raw === undefined || raw === null || raw === '') return { v: null, ok: true };
+    var c = parseMoneyToCents(raw);
+    return { v: c, ok: c !== null };
+  }
+  function validateObservation(o, idx, now, errors, warnings) {
+    var where = 'record ' + (idx + 1);
+    function err(m) { errors.push(where + ': ' + m); }
+    if (!o || typeof o !== 'object' || Array.isArray(o)) { err('not an object'); return null; }
+    var platform = str(o.platform, 20).toLowerCase().replace(/\s+/g, '');
+    if (platform === 'uber eats' || platform === 'uber') platform = 'ubereats';
+    if (!PLATFORM_HOSTS[platform]) { err('platform must be "doordash" or "ubereats"'); return null; }
+    var storeId = str(o.store_id, 100); if (!storeId) { err('store_id is required'); return null; }
+    var storeName = str(o.store_name, 200); if (!storeName) { err('store_name is required'); return null; }
+    var url = safeUrl(o.store_url, platform);
+    if (!url) { err('store_url must be an https URL on ' + PLATFORM_HOSTS[platform][0]); return null; }
+    var sect = /^\/([a-z]{2})(?:-([a-z]{2}))?\//i.exec(new URL(url).pathname);
+    if (sect && !/^us$/i.test(sect[1]) && !/^us$/i.test(sect[2] || '')) { err('store_url is in a non-US section of the site (' + sect[0] + ') (excluded)'); return null; }
+    var a = o.address || {};
+    var state = normalizeState(a.state);
+    if (!isUSCountry(a.country)) { err('address.country "' + str(a.country, 40) + '" is outside the US (excluded)'); return null; }
+    if (!state) { err('address.state must be one of the 50 US states or DC'); return null; }
+    var zip = str(a.zip || a.postal_code, 10);
+    if (zip && !/^\d{5}(-\d{4})?$/.test(zip)) { err('address.zip must be a 5-digit US ZIP'); return null; }
+    // DoorDash store pages publish no postal code (verified on archived real pages).
+    if (!zip) warnings.push(where + ': no ZIP code; a ZIP filter cannot match this store');
+    var city = str(a.city, 100); if (!city) { err('address.city is required'); return null; }
+    // As in the backend: a US location needs country US or a US ZIP, not a state code alone.
+    if (!str(a.country, 40) && !zip) { err('address needs country "US" or a 5-digit ZIP to show it is in the US'); return null; }
+    var ts = Date.parse(o.observed_at);
+    if (!o.observed_at || !isFinite(ts)) { err('observed_at must be an ISO-8601 timestamp'); return null; }
+    if (ts > now + 5 * 60000) { err('observed_at is in the future'); return null; }
+    var mode = str(o.order_mode, 20).toLowerCase();
+    if (mode !== 'delivery' && mode !== 'pickup') { err('order_mode must be "delivery" or "pickup"'); return null; }
+    var cur = str(o.currency || 'USD', 10).toUpperCase();
+    if (cur !== 'USD') { err('currency ' + cur + ' is not USD (excluded)'); return null; }
+    if (!Array.isArray(o.items) || !o.items.length) { err('items must be a non-empty array'); return null; }
+    var items = [];
+    o.items.slice(0, 2000).forEach(function (it, j) {
+      var w = where + ' item ' + (j + 1);
+      if (!it || typeof it !== 'object') { errors.push(w + ': not an object'); return; }
+      var name = str(it.name, 200); if (!name) { errors.push(w + ': name is required'); return; }
+      var icur = str(it.currency || cur, 10).toUpperCase();
+      if (icur !== 'USD') { errors.push(w + ' (' + name + '): currency ' + icur + ' is not USD (excluded)'); return; }
+      var p = centsField(it, 'price');
+      if (!p.ok) { errors.push(w + ' (' + name + '): price is not a valid USD amount'); return; }
+      if (p.v === null) warnings.push(w + ' (' + name + '): no price; it can only appear as "needs confirmation"');
+      var av = str(it.availability || 'unknown', 20).toLowerCase();
+      if (['available', 'unavailable', 'unknown'].indexOf(av) < 0) { errors.push(w + ': availability must be available, unavailable or unknown'); return; }
+      var addons = [];
+      var bad = false;
+      (Array.isArray(it.addons) ? it.addons : []).slice(0, 200).forEach(function (ad) {
+        var ap = centsField(ad, 'price');
+        if (!ap.ok) { bad = true; return; }
+        addons.push({ name: str(ad && ad.name, 120), group: str(ad && ad.group, 120) || null, price_cents: ap.v });
+      });
+      if (bad) { errors.push(w + ' (' + name + '): an add-on has an invalid price'); return; }
+      var ro = it.required_options;
+      if (ro !== 'none' && !Array.isArray(ro)) ro = 'unknown';
+      if (Array.isArray(ro)) ro = ro.slice(0, 50).map(function (g) { return { name: str(g && g.name, 120), required: !(g && g.required === false) }; });
+      var promos = (Array.isArray(it.promotions) ? it.promotions : []).slice(0, 10).map(function (pr) {
+        var pp = centsField(pr, 'price');
+        return { description: str(pr && pr.description, 200), price_cents: pp.ok ? pp.v : null, conditions: str(pr && pr.conditions, 200) || 'conditions not stated' };
+      });
+      // Optional per-item time (typed entries merged over time); never in the future.
+      var its = null;
+      if (it.observed_at != null && it.observed_at !== '') {
+        var itt = Date.parse(str(it.observed_at, 40));
+        if (!isFinite(itt) || itt > now + 5 * 60000) { errors.push(w + ' (' + name + '): observed_at is not a valid past time'); return; }
+        its = new Date(itt).toISOString();
+      }
+      items.push({ observed_at: its || undefined, item_id: str(it.item_id, 100) || null, name: name, variant: str(it.variant, 100) || null, section: str(it.section, 100) || null,
+                   description: str(it.description, 300) || null, price_cents: p.v, currency: 'USD', availability: av,
+                   addons: addons, required_options: ro, promotions: promos,
+                   price_note: str(it.price_note, 300) || undefined });
+    });
+    if (!items.length) { err('no valid items'); return null; }
+    var f = o.fees || {};
+    var fees = {};
+    var feeOk = true;
+    ['delivery_fee', 'service_fee', 'small_order_fee', 'tax'].forEach(function (k) {
+      var fv = centsField(f, k); if (!fv.ok) feeOk = false; fees[k + '_cents'] = fv.v;
+    });
+    if (!feeOk) { err('fees contain an invalid amount'); return null; }
+    fees.destination_zip = /^\d{5}$/.test(str(f.destination_zip, 10)) ? str(f.destination_zip, 5) : null;
+    if (feesTotal(fees) !== null && !fees.destination_zip) { warnings.push(where + ': fees given without destination_zip; checkout totals disabled for this record'); fees.tax_cents = null; }
+    return {
+      source: 'import', platform: platform, store_id: storeId, store_name: storeName, store_url: url,
+      address: { street: str(a.street, 200), city: city, state: state, zip: zip.slice(0, 5), country: 'US' },
+      observed_at: new Date(ts).toISOString(), order_mode: mode, currency: 'USD',
+      mode_basis: str(o.mode_basis, 300) || 'as stated by the importer', price_context: str(o.price_context, 300) || 'as stated by the importer',
+      extraction: 'imported record', items: items, fees: fees, menu_item_count: items.length
+    };
+  }
+
+  function parseCSV(text) {
+    var rows = [], row = [], field = '', i = 0, q = false;
+    text = String(text || '').replace(/^﻿/, '');
+    while (i < text.length) {
+      var ch = text[i];
+      if (q) {
+        if (ch === '"') { if (text[i + 1] === '"') { field += '"'; i += 2; continue; } q = false; i++; continue; }
+        field += ch; i++; continue;
+      }
+      if (ch === '"' && field === '') { q = true; i++; continue; }
+      if (ch === ',') { row.push(field); field = ''; i++; continue; }
+      if (ch === '\r') { i++; continue; }
+      if (ch === '\n') { row.push(field); rows.push(row); row = []; field = ''; i++; continue; }
+      field += ch; i++;
+    }
+    if (q) throw new Error('Unterminated quoted field in CSV');
+    if (field !== '' || row.length) { row.push(field); rows.push(row); }
+    return rows.filter(function (r) { return r.some(function (c) { return String(c).trim() !== ''; }); });
+  }
+  function csvCell(v) {
+    var s = v == null ? '' : String(v);
+    if (/^[=+\-@\t\r]/.test(s)) s = "'" + s;
+    return /[",\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+  }
+  function toCSV(headers, rows) {
+    return [headers.map(csvCell).join(',')].concat(rows.map(function (r) { return r.map(csvCell).join(','); })).join('\r\n') + '\r\n';
+  }
+  var CSV_COLUMNS = ['platform', 'store_id', 'store_name', 'store_url', 'street', 'city', 'state', 'zip', 'country', 'observed_at',
+    'order_mode', 'currency', 'item_name', 'variant', 'price', 'availability', 'addons', 'required_options', 'section',
+    'promo_description', 'promo_price', 'promo_conditions', 'delivery_fee', 'service_fee', 'small_order_fee', 'tax',
+    'fee_destination_zip', 'mode_basis', 'price_context'];
+  function csvToObservations(rows, errors) {
+    var head = rows[0].map(function (h) { return String(h).trim().toLowerCase(); });
+    ['platform', 'store_id', 'store_name', 'store_url', 'city', 'state', 'zip', 'observed_at', 'order_mode', 'item_name', 'price'].forEach(function (c) {
+      if (head.indexOf(c) < 0) errors.push('CSV header is missing required column "' + c + '"');
+    });
+    if (errors.length) return [];
+    var groups = {}, order = [];
+    rows.slice(1).forEach(function (r, i) {
+      var rec = {}; head.forEach(function (h, j) { rec[h] = r[j] == null ? '' : r[j]; });
+      var key = [rec.platform, rec.store_id, rec.order_mode, rec.observed_at].join('|');
+      if (!groups[key]) {
+        groups[key] = { platform: rec.platform, store_id: rec.store_id, store_name: rec.store_name, store_url: rec.store_url,
+          address: { street: rec.street, city: rec.city, state: rec.state, zip: rec.zip, country: rec.country },
+          observed_at: rec.observed_at, order_mode: rec.order_mode, currency: rec.currency || 'USD', mode_basis: rec.mode_basis, price_context: rec.price_context,
+          fees: { delivery_fee: rec.delivery_fee, service_fee: rec.service_fee, small_order_fee: rec.small_order_fee, tax: rec.tax, destination_zip: rec.fee_destination_zip },
+          items: [], _rows: [] };
+        order.push(key);
+      }
+      // Store-level columns (fees) may appear on any row of the store's group.
+      var g = groups[key].fees;
+      [['delivery_fee', 'delivery_fee'], ['service_fee', 'service_fee'], ['small_order_fee', 'small_order_fee'], ['tax', 'tax'], ['destination_zip', 'fee_destination_zip']].forEach(function (pair) {
+        var v = String(rec[pair[1]] == null ? '' : rec[pair[1]]).trim();
+        if (v === '') return;
+        if (g[pair[0]] == null || String(g[pair[0]]).trim() === '') g[pair[0]] = v;
+        else if (String(g[pair[0]]).trim() !== v) errors.push('CSV row ' + (i + 2) + ': ' + pair[1] + ' "' + v + '" conflicts with "' + g[pair[0]] + '" on an earlier row of the same store');
+      });
+      var addons = String(rec.addons || '').split(';').map(function (s) { return s.trim(); }).filter(Boolean).map(function (s) {
+        var eq = s.lastIndexOf('='); var nm = eq >= 0 ? s.slice(0, eq) : s; var pr = eq >= 0 ? s.slice(eq + 1) : '';
+        var g = null, ci = nm.indexOf(':'); if (ci >= 0) { g = nm.slice(0, ci).trim(); nm = nm.slice(ci + 1); }
+        return { name: nm.trim(), group: g, price: pr.trim() };
+      });
+      groups[key].items.push({ name: rec.item_name, variant: rec.variant, price: rec.price, availability: rec.availability || 'unknown',
+        addons: addons, required_options: rec.required_options === 'none' ? 'none' : 'unknown', section: rec.section, currency: rec.currency || undefined,
+        promotions: rec.promo_description ? [{ description: rec.promo_description, price: rec.promo_price, conditions: rec.promo_conditions }] : [] });
+      groups[key]._rows.push(i + 2);
+    });
+    return order.map(function (k) { return groups[k]; });
+  }
+  function validateImport(input, opts) {
+    opts = opts || {};
+    var now = opts.now != null ? opts.now : Date.now();
+    var errors = [], warnings = [], list = null, format = null;
+    var text = typeof input === 'string' ? input.trim() : null;
+    if (text === '') return { observations: [], errors: ['Nothing to import'], warnings: [], format: null };
+    if (text !== null && (text[0] === '{' || text[0] === '[')) {
+      format = 'json';
+      try { var data = JSON.parse(text); list = Array.isArray(data) ? data : (data && Array.isArray(data.observations) ? data.observations : null); }
+      catch (e) { return { observations: [], errors: ['Invalid JSON: ' + e.message], warnings: [], format: format }; }
+      if (!list) return { observations: [], errors: ['JSON must be an array of observations or {"observations": [...]}'], warnings: [], format: format };
+    } else if (text !== null) {
+      format = 'csv';
+      var rows;
+      try { rows = parseCSV(text); } catch (e) { return { observations: [], errors: [e.message], warnings: [], format: format }; }
+      if (rows.length < 2) return { observations: [], errors: ['CSV needs a header row and at least one data row'], warnings: [], format: format };
+      list = csvToObservations(rows, errors);
+    } else { list = input; format = 'object'; }
+    if (list.length > 5000) { errors.push('Too many records (max 5000)'); list = list.slice(0, 5000); }
+    var out = [];
+    list.forEach(function (o, i) { var v = validateObservation(o, i, now, errors, warnings); if (v) out.push(v); });
+    return { observations: out, errors: errors, warnings: warnings, format: format };
+  }
+
+  // ---------------------------------------------------------------- prices you saw yourself (hand entry)
+  // For stores no server can read (DoorDash answers servers with a bot check):
+  // the user opens the store in the platform's own app or site and types what
+  // it shows. The record goes through the same import validation.
+  var STORE_PATH = { doordash: /^\/(?:[a-z]{2}(?:-[a-z]{2})?\/)?store\/(?:[^\/]*?-)?(\d+)\/?$/i,
+                     ubereats: /^\/(?:[a-z]{2}(?:-[a-z]{2})?\/)?store\/[^\/]+\/([A-Za-z0-9_-]{6,})\/?$/i };
+  var PLATFORM_LABEL = { doordash: 'DoorDash', ubereats: 'Uber Eats' };
+  function storeIdFromUrl(u, platform) {
+    var safe = safeUrl(u, platform);
+    var m = safe && STORE_PATH[platform] && STORE_PATH[platform].exec(new URL(safe).pathname);
+    return m ? m[1] : null;
+  }
+  function parsePriceLines(text) {
+    var items = [], problems = [];
+    String(text || '').split(/\r?\n/).forEach(function (line, i) {
+      var t = line.trim(); if (!t) return;
+      var where = 'line ' + (i + 1) + ' ("' + t.slice(0, 60) + '")';
+      if (/(?:US)?\$\s*\d[\d.,]*\s*\+\s*$/.test(t)) { problems.push(where + ': a price with "+" is a starting price. Choose the options in the app, then enter the price it shows'); return; }
+      var m = /^(.*?)[\s\-–—:·|]*(?:US)?\$\s*(\d[\d.,]*)\s*$/.exec(t);
+      if (!m || !m[1].trim()) { problems.push(where + ': write it as "item name $price"'); return; }
+      if (parseMoneyToCents(m[2]) === null) { problems.push(where + ': "$' + m[2] + '" is not a valid US price (use a dot for cents, e.g. $12.99)'); return; }
+      items.push({ name: m[1].trim(), price: m[2] });
+    });
+    return { items: items, problems: problems };
+  }
+  function enteredObservation(f, opts) {
+    opts = opts || {};
+    var now = opts.now != null ? opts.now : Date.now();
+    var platform = PLATFORM_LABEL[f.platform] ? f.platform : null;
+    if (!platform) return { observations: [], errors: ['Choose DoorDash or Uber Eats'], warnings: [] };
+    var label = PLATFORM_LABEL[platform], errors = [];
+    var id = storeIdFromUrl(f.store_url, platform);
+    if (!id) errors.push('Store link must be a ' + PLATFORM_HOSTS[platform][0] + ' store page (…/store/…). In the app, use Share → Copy link, open it, and copy the full address it opens.');
+    var lines = parsePriceLines(f.lines);
+    errors = errors.concat(lines.problems);
+    if (!lines.items.length && !lines.problems.length) errors.push('Enter at least one line: item name and price, e.g. "Crunchwrap Supreme $7.31"');
+    var ts = f.seen_at ? Date.parse(f.seen_at) : now;
+    if (!isFinite(ts)) errors.push('"Seen at" is not a valid date and time');
+    if (errors.length) return { observations: [], errors: errors, warnings: [] };
+    // Only the store page itself is kept: a shared link's query or fragment can
+    // carry tracking or location parameters.
+    var canon = new URL(safeUrl(f.store_url, platform)); canon = canon.origin + canon.pathname;
+    var rec = { platform: platform, store_id: id, store_name: f.store_name, store_url: canon,
+      address: { street: f.street, city: f.city, state: f.state, zip: f.zip, country: 'US' },
+      observed_at: new Date(ts).toISOString(), order_mode: f.order_mode, currency: 'USD',
+      mode_basis: 'order mode you selected in the ' + label + ' app or site',
+      price_context: 'entered by you from what ' + label + ' showed you; your account, address and promotions may affect it',
+      items: lines.items.map(function (it) { return { name: it.name, price: it.price, observed_at: new Date(ts).toISOString() }; }) };
+    var r = validateImport([rec], { now: now });
+    // All or nothing: a line that fails validation is never dropped silently.
+    if (r.errors.length) r.observations = [];
+    r.observations.forEach(function (o) { o.extraction = 'entered by hand from the ' + label + ' app or site'; });
+    r.errors = r.errors.map(function (e) { return e.replace(/^record 1: /, ''); });
+    r.warnings = r.warnings.map(function (e) { return e.replace(/^record 1: /, ''); });
+    return r;
+  }
+
+  // Typed entries for the same store and order mode are one record: prices of
+  // the same item are replaced, others are kept. (Ranking keeps one record per
+  // store and mode, so a second entry would otherwise hide the first.) Each
+  // item keeps its own time, and staleness is judged per item.
+  function mergeEntered(list, o) {
+    var same = function (x) { return x.source === 'import' && /^entered by hand/.test(x.extraction || '') && x.platform === o.platform && x.store_id === o.store_id && x.order_mode === o.order_mode; };
+    var prev = (list || []).filter(same)[0];
+    if (!prev) return { list: (list || []).concat([o]), merged: false };
+    // The same item as the matcher sees it: product words, count and size.
+    var key = function (it) {
+      var a = extractAttrs(String(it.name || '') + ' ' + String(it.variant || ''));
+      return a.tokens.slice().sort().join(' ') + '|' + [a.count, a.sizeWord, a.oz, a.inch].join('|');
+    };
+    var mine = setOf(o.items.map(key));
+    var stamp = function (it, at) { return it.observed_at ? it : Object.assign({}, it, { observed_at: at }); };
+    // Each item keeps the time it was seen; the record carries the newest.
+    var m = Object.assign({}, o, {
+      items: prev.items.filter(function (it) { return !mine[key(it)]; }).map(function (it) { return stamp(it, prev.observed_at); })
+        .concat(o.items.map(function (it) { return stamp(it, o.observed_at); })),
+      observed_at: Date.parse(prev.observed_at) > Date.parse(o.observed_at) ? prev.observed_at : o.observed_at
+    });
+    m.menu_item_count = m.items.length;
+    return { list: list.filter(function (x) { return x !== prev; }).concat([m]), merged: true, record: m };
+  }
+
+  // ---------------------------------------------------------------- live-run snapshots (scripts/snapshot.py)
+  // A snapshot is one live run: real public menu observations per search, in
+  // the import schema. Runs are never merged: menus change through the day, so
+  // a store's newest observation could hide an item it listed at another hour.
+  // Snapshot observations keep only the items whose name contains a word of
+  // the search's item (server/adapters.build_observation prefilter), so a store
+  // counts as checked for an order item only if that item shares such a word.
+  var SIZE_WORDS = { small: 1, medium: 1, large: 1, regular: 1, kids: 1, family: 1, personal: 1, extra: 1, xl: 1 };
+  function looseNorm(x) { return String(x || '').toLowerCase().replace(/['’`]/g, '').replace(/[^a-z0-9]+/g, ' ').trim(); }
+  function scopeTokens(texts) {
+    var t = [];
+    texts.forEach(function (x) { looseNorm(x).split(' ').forEach(function (w) { if (w.length >= 3 && !SIZE_WORDS[w] && !/^\d+$/.test(w) && t.indexOf(w) < 0) t.push(w); }); });
+    return t;
+  }
+  function searchScope(s) {
+    var order = s && s.request && s.request.order;
+    var items = order && Array.isArray(order.items) ? order.items : [];
+    var texts = [];
+    items.forEach(function (it) {
+      if (!it || typeof it !== 'object') return;
+      texts.push(str(it.name, 200)); splitList(Array.isArray(it.aliases) ? it.aliases.map(function (a) { return str(a, 200); }) : str(it.aliases, 600)).forEach(function (a) { texts.push(a); });
+      texts.push(str(it.flavor, 100));
+    });
+    return scopeTokens(texts);
+  }
+  // A listing the order item could match has the item's product words (or an
+  // alias's), so the search kept it only if those words contain a searched
+  // word. Every name variant must, or the store was not checked for the item.
+  function scopeCovers(scope, item) {
+    var variants = [str(item.name, 200)].concat(splitList(item.aliases));
+    return variants.every(function (v) {
+      if (!v) return true;
+      var base = extractAttrs(v).tokens.join(' ');
+      return scope.some(function (t) { return base.indexOf(t) >= 0; });
+    });
+  }
+  function inSnapshotScope(o, orderItems) {
+    return !o.scope || orderItems.every(function (it) { return !it.name || scopeCovers(o.scope, it); });
+  }
+  function snapshotObservations(run, opts) {
+    opts = opts || {};
+    var now = opts.now != null ? opts.now : Date.now();
+    var obs = [], rejected = [];
+    var plain = function (x) { return !!x && typeof x === 'object' && !Array.isArray(x); };
+    if (!plain(run) || !Array.isArray(run.searches)) return { obs: obs, rejected: ['not a snapshot: no "searches" list'] };
+    run.searches.forEach(function (s, si) {
+      if (!plain(s)) { rejected.push('search ' + (si + 1) + ' is not an object'); return; }
+      var scope = searchScope(s), label = str(s.label, 200) || 'search ' + (si + 1);
+      if (s.observations != null && !Array.isArray(s.observations)) { rejected.push(label + ': observations is not a list'); return; }
+      (s.observations || []).forEach(function (o, oi) {
+        if (!plain(o)) { rejected.push(label + ', reading ' + (oi + 1) + ': not an object'); return; }
+        // Same checks as any import (US-only, USD, https platform link, valid
+        // timestamp). A store page that was read but listed nothing like the
+        // order still counts as a checked location, so it is validated with a
+        // placeholder item that is removed again.
+        var none = !(o.items || []).length;
+        if (String(o.currency || '').toLowerCase() === 'mixed' && Array.isArray(o.items)) {
+          o = Object.assign({}, o, { currency: 'USD', items: o.items.map(function (it) {
+            return it && typeof it === 'object' && !it.currency && it.price_cents != null
+              ? Object.assign({}, it, { price_cents: null, price: null, price_note: 'price published without a currency; not taken as USD' }) : it;
+          }) });
+        }
+        var v = validateImport([none ? Object.assign({}, o, { items: [{ name: 'placeholder' }] }) : o], { now: now });
+        if (!v.observations.length) {
+          rejected.push(label + ', ' + (str(o.store_name, 120) || 'reading ' + (oi + 1)) + ': ' + v.errors.map(function (e) { return e.replace(/^record 1:? ?/, ''); }).join('; '));
+          return;
+        }
+        var x = v.observations[0];
+        if (none) x.items = [];
+        x.source = 'snapshot'; x.extraction = str(o.extraction, 200) || 'snapshot'; x.search = label; x.scope = scope;
+        x.run = str(run.github_run_id, 40) || null; x.run_at = str(run.generated_at, 40) || null;
+        obs.push(x);
+      });
+    });
+    return { obs: obs, rejected: rejected };
+  }
+
+  // ---------------------------------------------------------------- demo data (fictional, opt-in)
+  function demoObservations(now) {
+    var t = new Date(now != null ? now : Date.now()).toISOString();
+    function store(id, platform, city, state, zip, prices) {
+      return { source: 'demo', platform: platform, store_id: 'demo-' + id, store_name: 'Demo Burger Co. (fictional)', store_url: null,
+        address: { street: id + ' Example Ave', city: city, state: state, zip: zip, country: 'US' }, observed_at: t, order_mode: 'delivery', currency: 'USD',
+        mode_basis: 'fictional demo data', price_context: 'fictional demo data — not a real price', extraction: 'demo generator',
+        items: [
+          { name: 'Classic Burger', price_cents: prices[0], currency: 'USD', availability: 'available', addons: [{ name: 'Add Bacon', price_cents: 150 }, { name: 'No Onions', price_cents: 0 }], required_options: 'none' },
+          { name: 'Fries', variant: 'Large', price_cents: prices[1], currency: 'USD', availability: 'available', addons: [], required_options: 'none' },
+          { name: 'Fries', variant: 'Small', price_cents: prices[1] - 100, currency: 'USD', availability: 'available', addons: [], required_options: 'none' },
+          { name: '10 pc Nuggets', price_cents: prices[2], currency: 'USD', availability: prices[3] || 'available', addons: [], required_options: 'unknown' }
+        ], fees: { delivery_fee_cents: null, service_fee_cents: null, small_order_fee_cents: null, tax_cents: null, destination_zip: null } };
+    }
+    return [
+      store(101, 'doordash', 'Demo City', 'OH', '43001', [899, 449, 599]),
+      store(202, 'ubereats', 'Sampleton', 'TX', '75001', [849, 479, 629]),
+      store(303, 'doordash', 'Testville', 'WA', '98001', [929, 399, 549, 'unavailable'])
+    ];
+  }
+  function demoOrder() {
+    return { chain: 'Demo Burger Co.', chainAliases: '', mode: 'delivery', items: [
+      { name: 'Classic Burger', size: '', flavor: '', count: '', quantity: '2', ghSubtotal: '21.98', modifiers: [{ name: 'Add Bacon', price: '1.50' }], aliases: '' }
+    ] };
+  }
+
+  root.FPCEngine = {
+    VERSION: VERSION, US_STATES: US_STATES, normalizeState: normalizeState,
+    parseMoneyToCents: parseMoneyToCents, formatCents: formatCents, mulCents: mulCents, sumCents: sumCents,
+    normText: normText, tokens: tokens, extractAttrs: extractAttrs, matchChain: matchChain, storeChainName: storeChainName,
+    prepareOrder: prepareOrder, prepareItem: prepareItem, matchItem: matchItem, dedupeObservations: dedupeObservations,
+    evaluate: evaluate, parseGrubhubUrl: parseGrubhubUrl, parseReceipt: parseReceipt, safeUrl: safeUrl,
+    validateImport: validateImport, parseCSV: parseCSV, toCSV: toCSV, CSV_COLUMNS: CSV_COLUMNS,
+    storeIdFromUrl: storeIdFromUrl, parsePriceLines: parsePriceLines, enteredObservation: enteredObservation, mergeEntered: mergeEntered,
+    stripNotes: stripNotes, nameDiff: nameDiff, similarity: similarity,
+    looseNorm: looseNorm, searchScope: searchScope, scopeCovers: scopeCovers, inSnapshotScope: inSnapshotScope,
+    snapshotObservations: snapshotObservations,
+    demoObservations: demoObservations, demoOrder: demoOrder
+  };
+})(typeof window !== 'undefined' ? window : globalThis);
+</script>
+
+<script id="fpc-ui">
+(function () {
+  'use strict';
+  var E = window.FPCEngine;
+  var $ = function (id) { return document.getElementById(id); };
+
+  // Safe DOM builder: untrusted text only ever becomes text nodes / attributes.
+  function h(tag, props) {
+    var el = document.createElement(tag);
+    if (props) Object.keys(props).forEach(function (k) {
+      var v = props[k];
+      if (v == null || v === false) return;
+      if (k === 'class') el.className = v;
+      else if (k === 'text') el.textContent = v;
+      else if (k === 'on') Object.keys(v).forEach(function (ev) { el.addEventListener(ev, v[ev]); });
+      else if (k === 'value' || k === 'checked' || k === 'disabled' || k === 'hidden' || k === 'selected') el[k] = v;
+      else el.setAttribute(k, v === true ? '' : String(v));
+    });
+    for (var i = 2; i < arguments.length; i++) append(el, arguments[i]);
+    return el;
+  }
+  function append(el, kid) {
+    if (kid == null || kid === false) return;
+    if (Array.isArray(kid)) { kid.forEach(function (k) { append(el, k); }); return; }
+    el.appendChild(kid instanceof Node ? kid : document.createTextNode(String(kid)));
+  }
+  // Replace an element's children; null/false are skipped and arrays are
+  // flattened (Element.replaceChildren would stringify them).
+  function setKids(el) {
+    while (el.firstChild) el.removeChild(el.firstChild);
+    for (var i = 1; i < arguments.length; i++) append(el, arguments[i]);
+    return el;
+  }
+  function msg(kind, text, list) {
+    return h('div', { class: 'msg ' + (kind || '') }, text, list && list.length ? h('ul', null, list.map(function (x) { return h('li', null, x); })) : null);
+  }
+  function safeLink(url, text) {
+    var u = E.safeUrl(url);
+    return u ? h('a', { href: u, target: '_blank', rel: 'noopener noreferrer nofollow' }, text || 'source') : h('span', { class: 'note' }, text ? text + ' (no link)' : 'no link');
+  }
+  var PLAT = { doordash: 'DoorDash', ubereats: 'Uber Eats' };
+  function rel(iso) {
+    var t = Date.parse(iso); if (!isFinite(t)) return 'unknown time';
+    var d = (Date.now() - t) / 1000;
+    if (d < 90) return 'just now'; if (d < 5400) return Math.round(d / 60) + ' min ago';
+    if (d < 172800) return Math.round(d / 3600) + ' h ago'; return Math.round(d / 86400) + ' days ago';
+  }
+
+  // ------------------------------------------------------------------ state
+  function prefs() { try { return JSON.parse(localStorage.getItem('fpc.prefs') || '{}') || {}; } catch (e) { return {}; } }
+  function savePrefs(p) { try { localStorage.setItem('fpc.prefs', JSON.stringify(Object.assign(prefs(), p))); } catch (e) { /* storage unavailable */ } }
+  function defaultBackend() {
+    var p = prefs().backendUrl;
+    if (p) return p;
+    if (/^https?:$/.test(location.protocol) && /^(127\.0\.0\.1|localhost|\[::1\])$/.test(location.hostname)) return location.origin;
+    return 'http://127.0.0.1:8765';
+  }
+  function newItem() { return { name: '', size: '', flavor: '', count: '', quantity: '1', ghSubtotal: '', modifiers: [], aliases: '', _notes: [] }; }
+  var S = {
+    backendUrl: defaultBackend(), connected: false, health: null,
+    order: { chain: '', chainAliases: '', mode: 'delivery', items: [newItem()] },
+    live: new Map(), imported: [], snapshot: null, demo: E.demoObservations(),
+    job: null, barriers: [], log: [], probe: null,
+    ui: { rtab: 'verified', sorts: {}, expanded: {}, demoMode: false },
+    lastEval: null
+  };
+
+  // ------------------------------------------------------------------ backend
+  function api(path, opts) {
+    opts = opts || {};
+    var ctl = new AbortController();
+    var timer = setTimeout(function () { ctl.abort(); }, opts.timeout || 20000);
+    return fetch(S.backendUrl.replace(/\/+$/, '') + path, {
+      method: opts.method || 'GET', headers: opts.body ? { 'Content-Type': 'application/json' } : {},
+      body: opts.body ? JSON.stringify(opts.body) : undefined, signal: ctl.signal, credentials: 'omit', cache: 'no-store'
+    }).then(function (r) {
+      clearTimeout(timer);
+      return r.json().catch(function () { return {}; }).then(function (data) {
+        if (!r.ok) { var e = new Error(data.error || ('HTTP ' + r.status)); e.status = r.status; throw e; }
+        if (!S.connected) setConnected(true, S.health);
+        return data;
+      });
+    }, function (err) {
+      clearTimeout(timer);
+      setConnected(false);
+      var e = new Error(err.name === 'AbortError' ? 'backend request timed out' : 'backend unreachable at ' + S.backendUrl);
+      e.network = true; throw e;
+    });
+  }
+  function setConnected(ok, health) {
+    S.connected = ok; if (health) S.health = health;
+    var el = $('backendStatus');
+    el.className = 'pill ' + (ok ? 'ok' : 'bad');
+    el.textContent = ok ? 'Backend connected' + (S.health && S.health.test_mode ? ' (TEST MODE)' : '') : 'Backend disconnected';
+    $('searchBtn').disabled = !ok; $('probeBtn').disabled = !ok; $('resumeBtn').disabled = !ok; $('refreshJobs').disabled = !ok;
+    $('deleteJob').disabled = !ok; $('purgeBtn').disabled = !ok; $('snapServer').disabled = !ok;
+    if (S.health && S.health.fetch_modes) {
+      Array.prototype.forEach.call($('fetchMode').options, function (o) { if (o.value !== 'http') o.disabled = !S.health.fetch_modes.browser; });
+    }
+    renderProgress();
+  }
+  function connect() {
+    var url = $('backendUrl').value.trim();
+    try { var u = new URL(url); if (!/^https?:$/.test(u.protocol)) throw new Error(); } catch (e) { $('backendStatus').textContent = 'Invalid URL'; $('backendStatus').className = 'pill bad'; return; }
+    S.backendUrl = u.origin; $('backendUrl').value = u.origin; savePrefs({ backendUrl: u.origin });
+    $('backendStatus').textContent = 'Connecting…'; $('backendStatus').className = 'pill warn';
+    api('/api/health', { timeout: 5000 }).then(function (hd) { setConnected(true, hd); refreshJobs(); }, function () { setConnected(false); });
+  }
+
+  // ------------------------------------------------------------------ order panel
+  function renderOrder() {
+    $('chain').value = S.order.chain; $('chainAliases').value = S.order.chainAliases;
+    $(S.order.mode === 'pickup' ? 'modePickup' : 'modeDelivery').checked = true;
+    var box = $('items'); setKids(box);
+    S.order.items.forEach(function (it, i) { box.appendChild(itemCard(it, i)); });
+    refreshMenuTarget();
+    renderOrderIssues(); scheduleEval();
+  }
+  function refreshMenuTarget() {
+    var t = $('ghMenuTarget'); if (!t) return;
+    var keep = Math.min(+t.value || 0, S.order.items.length - 1);
+    setKids(t, S.order.items.map(function (it, i) { return h('option', { value: String(i) }, 'Fill item ' + (i + 1) + (it.name ? ': ' + it.name : '')); }));
+    t.value = String(Math.max(0, keep));
+  }
+  function field(label, id, value, onInput, attrs) {
+    return h('div', null, h('label', { for: id }, label), h('input', Object.assign({ id: id, value: value, on: { input: function (e) { onInput(e.target.value); } } }, attrs || {})));
+  }
+  function itemCard(it, i) {
+    var p = 'it' + i + '_';
+    var hint = h('div', { class: 'hint', id: p + 'hint' });
+    function upd(k) {
+      return function (v) {
+        it[k] = v;
+        if (it._ghUnit && k === 'quantity') {
+          // Price picked from a Grubhub menu: keep the subtotal in step with the quantity.
+          applyGhUnit(it);
+          var g = $(p + 'gh'); if (g) g.value = it.ghSubtotal;
+        } else if (it._ghUnit && (k === 'ghSubtotal' || k === 'name' || k === 'size' || k === 'flavor' || k === 'count')) {
+          it._ghUnit = null;   // edited by hand: the menu price no longer describes this item
+          it._notes = (it._notes || []).filter(function (n) { return n.indexOf('(Grubhub-owned)') < 0; });
+        }
+        updateHint(it, i); renderOrderIssues(); scheduleEval();
+      };
+    }
+    var mods = h('div', { class: 'mods' });
+    it.modifiers.forEach(function (m, j) {
+      mods.appendChild(h('div', { class: 'mod' },
+        h('input', { 'aria-label': 'Modifier name', placeholder: 'Modifier (e.g. Add Bacon, No Onions)', value: m.name, on: { input: function (e) { m.name = e.target.value; renderOrderIssues(); scheduleEval(); } } }),
+        h('input', { 'aria-label': 'Modifier charge on Grubhub', placeholder: '+$ (optional)', value: m.price, inputmode: 'decimal', on: { input: function (e) { m.price = e.target.value; renderOrderIssues(); scheduleEval(); } } }),
+        h('button', { type: 'button', title: 'Remove modifier', 'aria-label': 'Remove modifier', on: { click: function () { it.modifiers.splice(j, 1); renderOrder(); } } }, '×')));
+    });
+    var card = h('div', { class: 'item-card' },
+      h('header', null, h('span', null, 'Item ' + (i + 1)),
+        h('button', { type: 'button', class: 'link', disabled: S.order.items.length < 2, on: { click: function () { S.order.items.splice(i, 1); renderOrder(); } } }, 'Remove item')),
+      h('div', { class: 'row' }, h('div', { class: 'grow2' }, field('Item name *', p + 'name', it.name, upd('name'), { placeholder: 'e.g. Chicken McNuggets' }))),
+      h('div', { class: 'row' },
+        field('Size', p + 'size', it.size, upd('size'), { placeholder: 'e.g. Large, 16 oz' }),
+        field('Flavor', p + 'flavor', it.flavor, upd('flavor'), { placeholder: 'e.g. Buffalo' }),
+        field('Piece count', p + 'count', it.count, upd('count'), { placeholder: 'e.g. 10', inputmode: 'numeric' })),
+      h('div', { class: 'row' },
+        field('Quantity', p + 'qty', it.quantity, upd('quantity'), { inputmode: 'numeric' }),
+        field('Grubhub item subtotal ($)', p + 'gh', it.ghSubtotal, upd('ghSubtotal'), { placeholder: 'qty × configured price', inputmode: 'decimal' })),
+      h('label', { style: 'margin-top:8px' }, 'Modifiers / options (with Grubhub charge if any)'), mods,
+      h('button', { type: 'button', class: 'link', on: { click: function () { it.modifiers.push({ name: '', price: '' }); renderOrder(); } } }, '+ Add modifier'),
+      h('div', null, field('Confirmed alternate item names (optional, comma-separated)', p + 'alias', it.aliases, upd('aliases'), { placeholder: 'Only names you know are the identical product' })),
+      hint);
+    updateHint(it, i, hint);
+    return card;
+  }
+  function updateHint(it, i, el) {
+    el = el || $('it' + i + '_hint'); if (!el) return;
+    var p = E.prepareItem(it, i);
+    var a = p.nameAttrs, det = [];
+    if (a.sizeWord || a.oz || a.inch) det.push('size ' + [a.sizeWord, a.oz && a.oz + ' oz', a.inch && a.inch + '"'].filter(Boolean).join(' / '));
+    if (a.count) det.push(a.count + ' pc');
+    setKids(el, 
+      det.length ? h('div', null, 'Detected in name: ' + det.join(', ')) : null,
+      (it._notes || []).map(function (n) { return h('div', null, '• ' + n); }),
+      p.issues.map(function (x) { return h('div', { class: 'bad' }, '⚠ ' + x); }));
+  }
+  function renderOrderIssues() {
+    var prep = E.prepareOrder(S.order);
+    var list = prep.problems.slice();
+    prep.items.forEach(function (it) { it.issues.forEach(function (x) { list.push('Item ' + (it.index + 1) + ': ' + x); }); });
+    setKids($('orderIssues'), list.length ? msg('warn', 'Needs attention before results can be verified:', list) : null);
+  }
+
+  // ------------------------------------------------------------------ input tabs
+  function selectTab(groupId, attr, value) {
+    Array.prototype.forEach.call($(groupId).querySelectorAll('button'), function (b) { b.setAttribute('aria-selected', String(b.dataset[attr] === value)); });
+  }
+  function initInputTabs() {
+    $('inputTabs').addEventListener('click', function (e) {
+      var b = e.target.closest('button[data-tab]'); if (!b) return;
+      selectTab('inputTabs', 'tab', b.dataset.tab);
+      Array.prototype.forEach.call(document.querySelectorAll('[data-pane]'), function (p) { p.hidden = p.dataset.pane !== b.dataset.tab; });
+    });
+  }
+  function applyFields(f, src) {
+    if (f.chain) S.order.chain = f.chain;
+    var it = S.order.items[0] || (S.order.items[0] = newItem());
+    if (f.item) it.name = f.item;
+    if (f.size) it.size = f.size;
+    it._notes = (it._notes || []).filter(function (n) { return n.indexOf('Grubhub base price') < 0; });
+    if (Number.isInteger(f.unit_price_cents)) {
+      it._notes.push('Grubhub base price ' + E.formatCents(f.unit_price_cents) + ' (before options). Enter the item subtotal for your configured item and quantity.');
+    }
+    renderOrder();
+  }
+  function ghExtract() {
+    var url = $('ghUrl').value.trim();
+    var out = $('ghResult');
+    setKids($('ghMenu'));   // a previous restaurant's menu must never fill this order
+    var local = E.parseGrubhubUrl(url);
+    if (!local.ok) { setKids(out, msg('bad', local.error + '. Use “Paste order” or “Manual entry” instead.')); return; }
+    if (!S.connected) {
+      applyFields({ chain: local.chainGuess });
+      setKids(out, msg('warn', 'Backend not connected, so the Grubhub page was not retrieved. Chain guessed from the URL (“' + local.chainGuess + '”); enter the item details manually.'));
+      return;
+    }
+    $('ghExtract').disabled = true;
+    setKids(out, msg('', 'Retrieving the Grubhub page through the backend (robots.txt-checked)…'));
+    setKids($('ghMenu'));
+    api('/api/grubhub/extract', { method: 'POST', body: { url: url }, timeout: 120000 }).then(function (r) {
+      applyFields(r.fields || {});
+      renderGrubhubMenu(r.grubhub_menu);
+      var notes = (r.notes || []).slice();
+      (r.barriers || []).forEach(function (b) { notes.unshift('Barrier: ' + b.kind + ' — ' + b.detail); });
+      Object.keys(r.field_sources || {}).forEach(function (k) { notes.push(k + ': ' + r.field_sources[k]); });
+      setKids(out, msg(r.barriers && r.barriers.length ? 'warn' : (r.ok ? 'ok' : 'warn'),
+        r.barriers && r.barriers.length ? 'Grubhub page not retrieved — URL-derived fields applied; please complete the order manually.' : (r.ok ? 'Fields extracted. Review and complete them below.' : 'Partial extraction. Complete the fields below.'), notes));
+    }, function (e) {
+      applyFields({ chain: local.chainGuess });
+      setKids(out, msg('bad', 'Extraction failed (' + e.message + '). Chain guessed from the URL; enter the item manually.'));
+    }).then(function () { $('ghExtract').disabled = false; });
+  }
+  function applyGhUnit(item) {
+    var u = item._ghUnit, q = /^\d{1,3}$/.test(String(item.quantity || '').trim()) && +item.quantity > 0 ? +item.quantity : 1;
+    item.ghSubtotal = (E.mulCents(u.cents, q) / 100).toFixed(2);
+    item._notes = (item._notes || []).filter(function (n) { return n.indexOf('(Grubhub-owned)') < 0; });
+    item._notes.push('Grubhub price ' + E.formatCents(u.cents) + ' × ' + q + ' from ' + u.site + ' (Grubhub-owned), observed ' + rel(u.observed) + '. It excludes option charges; add them if you chose options. Published menu prices can lag the live Grubhub menu, so check your cart or receipt.');
+  }
+  function mirrorName(url) {
+    var host = '';
+    try { host = new URL(url).hostname.replace(/^www\./, ''); } catch (e) { /* not a URL */ }
+    return host === 'allmenus.com' ? 'AllMenus' : 'MenuPages';
+  }
+  function renderGrubhubMenu(menu) {
+    var box = $('ghMenu');
+    var site = (menu && menu.site) || mirrorName(menu && menu.source_url);
+    if (!menu || !menu.items || !menu.items.length) { setKids(box); return; }
+    var sel = h('select', { id: 'ghMenuSelect' }, h('option', { value: '' }, 'Choose your item (' + menu.items.length + ' listings)'),
+      menu.items.map(function (it, i) {
+        return h('option', { value: String(i) }, it.name + (it.variant ? ' — ' + it.variant : '') + ' · ' +
+          (Number.isInteger(it.price_cents) ? E.formatCents(it.price_cents) : 'no usable price') + (it.section ? '  (' + it.section + ')' : ''));
+      }));
+    var target = h('select', { id: 'ghMenuTarget', 'aria-label': 'Order item to fill' }, S.order.items.map(function (it, i) {
+      return h('option', { value: String(i) }, 'Fill item ' + (i + 1) + (it.name ? ': ' + it.name : ''));
+    }));
+    sel.addEventListener('change', function () {
+      if (sel.value === '') return;
+      var it = menu.items[+sel.value];
+      sel.value = '';   // reset, so the same listing can be picked again
+      if (!it) return;
+      var idx = Math.max(0, Math.min(+target.value || 0, S.order.items.length - 1));
+      // A different product: only the quantity carries over from the slot.
+      var item = newItem();
+      item.quantity = (S.order.items[idx] && S.order.items[idx].quantity) || '1';
+      S.order.items[idx] = item;
+      item.name = it.name; item.size = it.variant || '';
+      if (Number.isInteger(it.price_cents)) {
+        item._ghUnit = { cents: it.price_cents, site: site, observed: menu.observed_at };
+        applyGhUnit(item);
+      } else {
+        item.ghSubtotal = '';
+        item._notes.push(site + ' publishes no usable price for this item' + (it.price_note ? ' (' + it.price_note + ')' : '') + '; enter your Grubhub item subtotal.');
+      }
+      renderOrder();
+    });
+    setKids(box, h('div', { class: 'msg ok' },
+      h('label', { for: 'ghMenuSelect' }, 'Grubhub menu for ' + (menu.restaurant_name || 'this restaurant') + (menu.address ? ', ' + [menu.address.street, menu.address.city, menu.address.state].filter(Boolean).join(', ') : '')),
+      h('div', { class: 'row' }, h('div', { class: 'grow2' }, sel), h('div', null, target)),
+      h('div', { class: 'note' }, 'Read from ' + site + ', a Grubhub-owned site, which links to this exact Grubhub listing. Prices exclude option charges and fees. Grubhub’s terms limit this site to personal, non-commercial use. ', safeLink(menu.source_url, 'Source page'))));
+  }
+  function receiptParse() {
+    var r = E.parseReceipt($('receiptText').value);
+    if (r.chain) S.order.chain = r.chain;
+    if (r.mode) S.order.mode = r.mode;
+    if (r.items.length) S.order.items = r.items;
+    renderOrder();
+    var notes = r.ambiguities.slice();
+    if (r.ignored.length) notes.push('Ignored ' + r.ignored.length + ' fee/tax/tip/total line(s); receipt totals are never used for savings.');
+    setKids($('receiptResult'), msg(r.items.length ? (r.ambiguities.length ? 'warn' : 'ok') : 'bad',
+      r.items.length ? 'Parsed ' + r.items.length + ' item(s). Check every field — size, flavor, count and modifiers decide exact matches.' : 'Could not find items.', notes));
+  }
+
+  // ------------------------------------------------------------------ search / jobs
+  function currentPlatforms() { var p = []; if ($('platDD').checked) p.push('doordash'); if ($('platUE').checked) p.push('ubereats'); return p; }
+  function localFilters() {
+    if (!$('scopeLocal').checked) return null;
+    return { state: $('fState').value, city: $('fCity').value.trim(), zip: $('fZip').value.trim() };
+  }
+  function orderForBackend() {
+    var prep = E.prepareOrder(S.order);
+    return { chain: prep.chain, chain_aliases: prep.chainAliases,
+             items: prep.items.filter(function (i) { return i.name; }).map(function (i) { return { name: i.name, aliases: i.aliases, flavor: i.flavor }; }) };
+  }
+  function startSearch() {
+    var prep = E.prepareOrder(S.order);
+    var errs = prep.problems.slice();
+    if (!currentPlatforms().length) errs.push('Select at least one platform');
+    if (!S.connected) errs.push('Backend is not connected');
+    var max = parseInt($('maxStores').value, 10);
+    if (!(max >= 1 && max <= 500)) errs.push('Max branches must be 1–500');
+    var lf = localFilters();
+    if (lf && lf.zip && !/^\d{5}$/.test(lf.zip)) errs.push('ZIP filter must be 5 digits');
+    if (errs.length) { setKids($('searchMsg'), msg('bad', 'Cannot start search:', errs)); return; }
+    var seeds = $('seedUrls').value.split(/\s+/).filter(Boolean);
+    var badSeeds = seeds.filter(function (s) { return !E.safeUrl(s, 'doordash') && !E.safeUrl(s, 'ubereats'); });
+    if (badSeeds.length && !(S.health && S.health.test_mode)) { setKids($('searchMsg'), msg('bad', 'Seed URLs must be https DoorDash or Uber Eats pages:', badSeeds.slice(0, 5))); return; }
+    setKids($('searchMsg'), msg('', 'Starting…'));
+    $('searchBtn').disabled = true;
+    api('/api/jobs', { method: 'POST', body: {
+      order: orderForBackend(), platforms: currentPlatforms(), order_mode: S.order.mode, fetch_mode: $('fetchMode').value,
+      max_stores_per_platform: max, seed_urls: seeds, prioritize: lf ? { city: lf.city, state: lf.state } : {}
+    } }).then(function (r) {
+      S.live.clear(); S.barriers = []; S.log = [];
+      setKids($('searchMsg'));
+      attachJob(r.job.id);
+      refreshJobs();
+    }, function (e) { setKids($('searchMsg'), msg('bad', 'Search not started: ' + e.message)); })
+      .then(function () { $('searchBtn').disabled = !S.connected; });
+  }
+  function attachJob(id) {
+    if (S.job && S.job.timer) clearTimeout(S.job.timer);
+    S.job = { id: id, since: 0, summary: null, failures: 0, timer: null };
+    poll();
+  }
+  function obsMapKey(o) { return o.platform + '|' + o.store_id + '|' + o.order_mode; }
+  function poll() {
+    var job = S.job; if (!job) return;
+    api('/api/jobs/' + job.id + '?since=' + job.since).then(function (r) {
+      if (S.job !== job) return;
+      job.failures = 0; job.summary = r.job; job.since = r.next_since;
+      r.events.forEach(function (ev) {
+        if (ev.type === 'observation') S.live.set(obsMapKey(ev.observation), ev.observation);
+        else if (ev.type === 'barrier') S.barriers.push(Object.assign({ platform: ev.platform }, ev.barrier));
+        else if (ev.type === 'log' || ev.type === 'platform' || ev.type === 'job' || ev.type === 'store' || ev.type === 'discovered') S.log.push(ev);
+      });
+      if (S.log.length > 600) S.log = S.log.slice(-600);
+      if (S.barriers.length > 200) S.barriers = S.barriers.slice(-200);
+      renderProgress(); scheduleEval();
+      var st = r.job.status;
+      if (r.more) job.timer = setTimeout(poll, 30);
+      else if (st === 'running' || st === 'cancelling' || st === 'queued') job.timer = setTimeout(poll, 1000);
+      else refreshJobs();
+    }, function (e) {
+      if (S.job !== job) return;
+      job.failures++;
+      renderProgress(e.message);
+      if (e.status === 404) return;
+      if (job.failures < 40) job.timer = setTimeout(poll, Math.min(15000, 1000 * Math.pow(1.5, job.failures)));
+    });
+  }
+  function cancelJob() {
+    if (!S.job) return;
+    $('cancelBtn').disabled = true;
+    api('/api/jobs/' + S.job.id + '/cancel', { method: 'POST', body: {} }).then(function () { poll(); }, function (e) { setKids($('searchMsg'), msg('bad', 'Cancel failed: ' + e.message)); });
+  }
+  function refreshJobs() {
+    if (!S.connected) return Promise.resolve();
+    return api('/api/jobs').then(function (r) {
+      var sel = $('resumeSelect'), cur = sel.value || (S.job && S.job.id);
+      setKids(sel, h('option', { value: '' }, r.jobs.length ? '— choose a checkpoint —' : '— no checkpoints —'));
+      r.jobs.forEach(function (j) {
+        var c = Object.keys(j.platforms).map(function (p) { var k = j.platforms[p]; return PLAT[p] + ' ' + (k.checked + k.no_menu + k.non_us + k.blocked + k.failed + k.duplicate) + '/' + k.discovered; }).join(', ');
+        sel.appendChild(h('option', { value: j.id, selected: j.id === cur }, j.chain + ' — ' + j.items.join(' + ') + ' · ' + j.order_mode + ' · ' + j.status + ' · ' + c + ' · ' + rel(j.updated_at)));
+      });
+    }, function (e) { setKids($('searchMsg'), msg('bad', 'Could not list checkpoints: ' + e.message)); });
+  }
+  function resumeJob() {
+    var id = $('resumeSelect').value;
+    if (!id) { setKids($('searchMsg'), msg('warn', 'Choose a checkpoint to resume.')); return; }
+    var lf = localFilters();
+    api('/api/jobs/' + id + '/resume', { method: 'POST', body: { prioritize: lf ? { city: lf.city, state: lf.state } : {} } }).then(function (r) {
+      var req = r.job.request;
+      if (!S.job || S.job.id !== id) { S.live.clear(); S.barriers = []; S.log = []; }
+      if (!S.order.chain.trim()) {
+        S.order.chain = req.order.chain;
+        S.order.items = req.order.items.map(function (i) { var n = newItem(); n.name = i.name; n.flavor = i.flavor; n.aliases = (i.aliases || []).join(', '); return n; });
+        S.order.mode = req.order_mode; renderOrder();
+        setKids($('searchMsg'), msg('warn', 'Order names loaded from the checkpoint. Re-enter size, count, quantity, modifiers and Grubhub subtotals (not stored server-side).'));
+      } else if (E.tokens(S.order.chain).join(' ') !== E.tokens(req.order.chain).join(' ')) {
+        setKids($('searchMsg'), msg('warn', 'Resumed checkpoint is for “' + req.order.chain + '”, but the order panel says “' + S.order.chain + '”. Results are matched against the order panel.'));
+      } else setKids($('searchMsg'), msg('ok', 'Resumed.'));
+      attachJob(id);
+    }, function (e) { setKids($('searchMsg'), msg('bad', 'Resume failed: ' + e.message)); });
+  }
+  function deleteJob() {
+    var id = $('resumeSelect').value;
+    if (!id) { setKids($('searchMsg'), msg('warn', 'Choose a checkpoint to delete.')); return; }
+    if (!confirm('Delete this checkpoint and its saved observations from the server?')) return;
+    api('/api/jobs/' + id, { method: 'DELETE' }).then(function () {
+      if (S.job && S.job.id === id) { clearTimeout(S.job.timer); S.job = null; S.live.clear(); renderProgress(); scheduleEval(); }
+      refreshJobs(); setKids($('searchMsg'), msg('ok', 'Checkpoint deleted.'));
+    }, function (e) { setKids($('searchMsg'), msg('bad', 'Delete failed: ' + e.message)); });
+  }
+  function probe() {
+    $('probeBtn').disabled = true;
+    S.probe = { pending: true };
+    renderProgress();
+    api('/api/probe', { method: 'POST', body: { platforms: ['doordash', 'ubereats', 'grubhub'] }, timeout: 120000 }).then(function (r) {
+      S.probe = r.probe;
+    }, function (e) { S.probe = { error: e.message }; }).then(function () { $('probeBtn').disabled = !S.connected; renderProgress(); });
+  }
+
+  // ------------------------------------------------------------------ progress
+  var STATE_LABEL = { pending: 'pending', discovering: 'discovering branches', fetching: 'checking menus', done: 'finished', stopped: 'stopped', cancelled: 'cancelled', paused_limit: 'paused (run limit reached)' };
+  function renderProgress(errText) {
+    var area = $('progressArea'); if (!area) return;
+    var kids = [];
+    if (!S.connected) kids.push(msg('bad', 'Backend disconnected (' + S.backendUrl + '). Live search, Grubhub page retrieval, probing and checkpoints are unavailable. Manual entry, receipt parsing, imports, demo mode and export still work. Start the service with: python -m server.app'));
+    if (S.probe) {
+      if (S.probe.pending) kids.push(msg('', 'Probing platforms (robots.txt fetch)…'));
+      else if (S.probe.error) kids.push(msg('bad', 'Probe failed: ' + S.probe.error));
+      else kids.push(msg(Object.keys(S.probe).every(function (k) { return S.probe[k].reachable && S.probe[k].crawling_allowed; }) ? 'ok' : 'warn', 'Live probe results:',
+        Object.keys(S.probe).map(function (k) {
+          var p = S.probe[k];
+          return (PLAT[k] || 'Grubhub') + ': ' + (p.reachable ? 'reachable' : 'NOT reachable') + '; ' + (p.crawling_allowed ? 'robots.txt permits crawling' : 'crawling not permitted') +
+            (p.barrier ? ' — ' + p.barrier.kind + ': ' + p.barrier.detail : '') + (p.declared_sitemaps && p.declared_sitemaps.length ? ' — ' + p.declared_sitemaps.length + ' sitemap(s) declared' : '') + ' (' + rel(p.checked_at) + ')';
+        })));
+    }
+    var job = S.job;
+    if (job) {
+      var s = job.summary;
+      if (errText) kids.push(msg('bad', 'Lost contact with the job (' + errText + '); retrying. Results so far are kept; use Resume later if needed.'));
+      if (s) {
+        var running = s.status === 'running' || s.status === 'cancelling';
+        $('cancelBtn').disabled = !running;
+        kids.push(h('div', { class: 'note' }, 'Job ' + s.id + ' · status: ', h('b', null, s.status), ' · mode: ' + s.request.order_mode + ' · method: ' + s.request.fetch_mode));
+        var tot = 0, done = 0;
+        Object.keys(s.platforms).forEach(function (p) { var c = s.platforms[p].counters; tot += c.discovered; done += c.discovered - c.remaining; });
+        kids.push(h('div', { class: 'progress', role: 'progressbar', 'aria-valuemin': 0, 'aria-valuemax': tot, 'aria-valuenow': done }, h('div', { style: 'width:' + (tot ? Math.round(100 * done / tot) : (running ? 3 : 0)) + '%' })));
+        var cov = S.lastEval ? S.lastEval.coverage.byPlatform : {};
+        Object.keys(s.platforms).forEach(function (p) {
+          var ps = s.platforms[p], c = ps.counters, m = cov[p] || {};
+          var chipKind = ps.state === 'stopped' ? 'bad' : (ps.state === 'done' ? 'ok' : 'warn');
+          kids.push(h('div', { class: 'plat' },
+            h('header', null, h('b', null, PLAT[p]), h('span', { class: 'pill ' + chipKind }, STATE_LABEL[ps.state] || ps.state)),
+            ps.stop_reason ? msg('bad', 'Stopped — ' + ps.stop_reason.kind + ': ' + ps.stop_reason.detail) : null,
+            h('div', { class: 'counters' },
+              [['Discovered', c.discovered], ['Remaining', c.remaining], ['Checked', c.checked], ['Matched (exact)', m.matchedStores || 0], ['Needs confirm', m.uncertainStores || 0],
+               ['Blocked', c.blocked], ['Failed', c.failed], ['No menu data', c.no_menu], ['Non-US', c.non_us], ['Duplicates', c.duplicate],
+               ['Unsearched', running ? '—' : c.remaining], ['Sitemaps read', c.sitemaps_done + '/' + (c.sitemaps_done + c.sitemaps_pending + c.sitemaps_failed)]].map(function (kv) { return h('div', null, h('b', null, String(kv[1])), kv[0]); })),
+            h('div', { class: 'note' }, c.sitemap_enumeration_complete ? 'All declared sitemaps were read; branches not listed in them are still unknown.' : 'Store universe not fully enumerated; unsearched branches may exist.')));
+        });
+        kids.push(h('p', { class: 'note' }, s.coverage_note));
+      } else kids.push(msg('', 'Waiting for job status…'));
+    } else $('cancelBtn').disabled = true;
+    setKids(area, kids);
+  }
+
+  // ------------------------------------------------------------------ evaluation & results
+  var evalTimer = null;
+  function scheduleEval() { clearTimeout(evalTimer); evalTimer = setTimeout(runEval, 120); }
+  function snapshotInScope() {
+    if (!S.snapshot || !$('includeSnapshot').checked) return [];
+    return S.snapshot.obs.filter(function (o) { return E.inSnapshotScope(o, S.order.items); });
+  }
+  function currentObservations() {
+    if (S.ui.demoMode) return S.demo;
+    return Array.from(S.live.values()).concat(S.imported, snapshotInScope());
+  }
+  function loadSnapshot(data, from) {
+    var run = data && typeof data === 'object' && !Array.isArray(data) ? data : null;
+    if (!run || !Array.isArray(run.searches)) { setKids($('snapMsg'), msg('bad', 'Not a snapshot: expected the JSON written by scripts/snapshot.py (an object with "searches").')); return; }
+    var text = function (v, n) { return (typeof v === 'string' || typeof v === 'number') ? String(v).slice(0, n) : ''; };
+    try {
+      var r = E.snapshotObservations(run);
+      var when = Date.parse(text(run.generated_at, 40));
+      S.snapshot = { obs: r.obs, run: text(run.github_run_id, 40) || null, at: isFinite(when) ? new Date(when).toISOString() : null,
+                     searches: run.searches.map(function (s) { return s && typeof s === 'object' ? text(s.label, 200) : ''; }).filter(Boolean), rejected: r.rejected, from: from };
+    } catch (e) {
+      S.snapshot = null;
+      setKids($('snapMsg'), msg('bad', 'This snapshot could not be read: ' + String(e && e.message || e).slice(0, 200)));
+      scheduleEval();
+      return;
+    }
+    renderSnapshotMsg();
+    scheduleEval();
+  }
+  function renderSnapshotMsg() {
+    var sn = S.snapshot, rejected = sn && sn.rejected, from = sn && sn.from;
+    if (!sn) { setKids($('snapMsg'), null); return; }
+    // Counted whether or not the snapshot is included in the ranking.
+    var inScope = sn.obs.filter(function (o) { return E.inSnapshotScope(o, S.order.items); }).length, other = sn.obs.length - inScope;
+    var off = !$('includeSnapshot').checked;
+    var hours = sn.at ? Math.round((Date.now() - Date.parse(sn.at)) / 3600000) : null;
+    var lines = sn.searches.slice(0, 12).map(function (l) { return 'Search: ' + l; });
+    if (rejected && rejected.length) lines = lines.concat(rejected.slice(0, 5).map(function (e) { return 'Not used: ' + e; }));
+    setKids($('snapMsg'), msg(sn.obs.length ? 'ok' : 'warn',
+      'Snapshot ' + (sn.run ? 'run ' + sn.run + ' ' : '') + (sn.at ? 'from ' + sn.at + (hours != null ? ' (' + hours + ' h ago)' : '') : '(no time recorded)') + (from ? ', ' + from : '') +
+      ': ' + sn.obs.length + ' checked store page(s). ' + inScope + ' searched for this order\'s items' + (other ? '; ' + other + ' were read only for a different item and are not counted' : '') + '.' +
+      (off ? ' Not used in the results: “Include snapshot prices” is off.' :
+       hours != null && hours > (+$('staleHours').value || 24) ? ' These prices are older than your “Stale after” setting, so they are shown but cannot win until you raise it.' : ''), lines));
+  }
+  function runEval() {
+    if (S.snapshot) renderSnapshotMsg();
+    var lf = localFilters();
+    S.lastEval = E.evaluate(S.order, currentObservations(), {
+      mode: S.order.mode, platforms: currentPlatforms(), filters: lf, staleHours: +$('staleHours').value || 24,
+      includeImported: $('includeImported').checked, rankBy: $('rankBy').value
+    });
+    renderResults();
+    if (S.job) renderProgress();
+  }
+  function flagsFor(r) {
+    var f = [];
+    if (r.source === 'import') f.push(['Imported', '']);
+    if (r.source === 'snapshot') f.push(['Snapshot', '']);
+    if (r.source === 'demo') f.push(['DEMO', 'demo']);
+    if (r.fromCache) f.push(['Cached', '']);
+    if (r.stale) f.push(['Stale', 'warn']);
+    if (r.availability === 'unavailable') f.push(['Unavailable', 'bad']);
+    else if (r.availability === 'unknown') f.push(['Availability unknown', 'warn']);
+    if (r.promotions && r.promotions.length) f.push(['Promo (conditional)', '']);
+    if (r.extraListings) f.push(['+' + r.extraListings + ' listing(s)', '']);
+    if (r.duplicateOf) f.push(['Duplicate listing of store ' + r.duplicateOf, 'warn']);
+    return h('span', { class: 'flags' }, f.map(function (x) { return h('span', { class: 'flag ' + x[1] }, x[0]); }));
+  }
+  function renderWinner(ev) {
+    var box = $('winner');
+    var w = ev.winner;
+    var scopeNote = $('scopeLocal').checked ? 'Location filter applied. Delivery to your address is still not verified unless fees for your ZIP are known.' : 'Nationwide menu price. This branch may not deliver to you — national results are informational, not a local delivery offer.';
+    if (!w) {
+      var why = [];
+      var total = ev.rows.verified.length + ev.rows.uncertain.length;
+      if (!currentObservations().length) why.push(S.ui.demoMode ? 'Load the demo order to see demo results.' : 'No menu data yet. Run a live search, resume a checkpoint, or import collected menus.');
+      else if (ev.rankBy === 'checkout') why.push('No verified result has all destination-specific charges (delivery, service, small-order fees and tax) known. Unknown charges are never treated as zero.');
+      else if (ev.coverage.staleVerified) why.push(ev.coverage.staleVerified + ' verified result(s) are stale; refresh them or raise the stale threshold.');
+      else if (total) why.push('Candidates exist but none is a verified exact match. See “Needs confirmation”.');
+      else if (ev.coverage.checkedLocations) why.push('No matching items at the ' + ev.coverage.checkedLocations + ' checked location(s).');
+      setKids(box, h('div', { class: 'winner none' }, h('div', { class: 'label' }, 'No verified winner yet'), why.map(function (x) { return h('p', null, x); })));
+      return;
+    }
+    var isB = w.kind === 'basket', r = isB ? w.basket : w.row;
+    var price = ev.rankBy === 'checkout' ? r.checkoutTotalCents : (isB ? r.subtotalCents : r.lineCents);
+    var sav = r.savingsCents;
+    var gh = isB ? r.ghSubtotalCents : r.ghLineCents;
+    setKids(box, h('div', { class: 'winner' },
+      h('div', { class: 'label' }, ev.winnerLabel + (S.ui.demoMode ? ' — DEMO DATA' : '')),
+      h('div', { class: 'price' }, E.formatCents(price), h('span', { class: 'note', style: 'font-size:13px;font-weight:400' }, ev.rankBy === 'checkout' ? '  checkout total (all charges known)' : '  item subtotal before tax, fees and tip')),
+      h('div', null, h('b', null, PLAT[r.platform] + ' · ' + r.storeName), ' — ' + [r.address && r.address.street, r.city, r.state + ' ' + r.zip].filter(Boolean).join(', ')),
+      isB ? h('div', { class: 'note' }, 'All ' + r.parts.length + ' items at this one branch: ' + r.parts.map(function (p) { return p.candidate + ' ' + E.formatCents(p.lineCents); }).join(' · '))
+          : h('div', { class: 'note' }, r.candidate + ' × ' + r.quantity + ' (unit ' + E.formatCents(r.unitCents) + (r.modifierCents ? ', incl. ' + E.formatCents(r.modifierCents) + ' options' : '') + ')'),
+      h('div', null, Number.isInteger(sav) ? (sav > 0 ? 'Saves ' + E.formatCents(sav) + ' vs your Grubhub item subtotal ' + E.formatCents(gh) : (sav === 0 ? 'Same as your Grubhub item subtotal' : 'Costs ' + E.formatCents(-sav) + ' more than your Grubhub item subtotal ' + E.formatCents(gh))) : 'Enter the Grubhub item subtotal to compute savings.'),
+      h('div', { class: 'note' }, 'Observed ' + rel(r.observedAt) + ' (' + r.observedAt + ') · ' + r.orderMode + ' price · ', r.storeUrl ? safeLink(r.storeUrl, 'source page') : (r.source === 'demo' ? 'fictional' : 'no link')),
+      w.ties ? h('div', { class: 'note' }, w.ties + ' other location(s) have the same price.') : null,
+      !isB && r.availability === 'unknown' || isB && r.anyUnknownAvailability ? h('div', { class: 'note' }, 'Availability was not published for this listing; it may not be orderable right now.') : null,
+      h('div', { class: 'note' }, scopeNote)));
+  }
+  function renderCoverage(ev) {
+    var c = ev.coverage, x = c.excluded;
+    var parts = [];
+    if (x.otherMode) parts.push(x.otherMode + ' in the other order mode');
+    if (x.location) parts.push(x.location + ' outside the location filter');
+    if (x.platform) parts.push(x.platform + ' on deselected platforms');
+    if (x.imported) parts.push(x.imported + ' imported (excluded)');
+    if (x.otherChain) parts.push(x.otherChain + ' other restaurants');
+    if (x.nonUS) parts.push(x.nonUS + ' outside the 50 states/DC');
+    if (x.duplicate) parts.push(x.duplicate + ' repeat observation(s) of the same store ID merged');
+    if (c.addressDuplicateListings) parts.push(c.addressDuplicateListings + ' extra listing(s) at an already-counted address (shown, flagged, counted once)');
+    setKids($('coverage'), h('p', { class: 'note' }, c.statement + (parts.length ? ' Not counted: ' + parts.join('; ') + '.' : '')));
+  }
+  function sortRows(name, rows, cols) {
+    var s = S.ui.sorts[name]; if (!s) return rows;
+    var col = cols.filter(function (c) { return c.key === s.key; })[0]; if (!col || !col.sort) return rows;
+    return rows.slice().sort(function (a, b) {
+      var va = col.sort(a), vb = col.sort(b);
+      var na = va == null || va === '', nb = vb == null || vb === '';
+      if (na || nb) return na === nb ? 0 : (na ? 1 : -1);
+      return (va < vb ? -1 : va > vb ? 1 : 0) * (s.dir === 'desc' ? -1 : 1);
+    });
+  }
+  function table(name, rows, cols, detailFn) {
+    if (!rows.length) return h('div', { class: 'empty' }, 'Nothing here yet.');
+    var s = S.ui.sorts[name] || {};
+    var thead = h('tr', null, cols.map(function (c) {
+      var arrow = s.key === c.key ? (s.dir === 'desc' ? ' ▼' : ' ▲') : '';
+      return h('th', { class: c.num ? 'num' : null, 'aria-sort': s.key === c.key ? (s.dir === 'desc' ? 'descending' : 'ascending') : null },
+        c.sort ? h('button', { type: 'button', on: { click: function () { S.ui.sorts[name] = { key: c.key, dir: s.key === c.key && s.dir === 'asc' ? 'desc' : 'asc' }; renderResults(); } } }, c.label + arrow) : c.label);
+    }));
+    var body = h('tbody');
+    sortRows(name, rows, cols).forEach(function (r) {
+      body.appendChild(h('tr', null, cols.map(function (c) { return h('td', { class: c.num ? 'num' : null }, c.cell(r)); })));
+      if (detailFn && S.ui.expanded[r.id]) body.appendChild(h('tr', { class: 'details' }, h('td', { colspan: cols.length }, detailFn(r))));
+    });
+    return h('div', { class: 'tablewrap' }, h('table', null, h('thead', null, thead), body));
+  }
+  function whyBtn(r) {
+    return h('button', { type: 'button', class: 'link', 'aria-expanded': String(!!S.ui.expanded[r.id]), on: { click: function () { S.ui.expanded[r.id] = !S.ui.expanded[r.id]; renderResults(); } } }, S.ui.expanded[r.id] ? 'Hide' : 'Why?');
+  }
+  function rowDetails(r) {
+    var kv = [['Order item', r.orderItemName], ['Candidate listing', r.candidate + (r.section ? ' (section: ' + r.section + ')' : '')],
+      ['Price build-up', E.formatCents(r.baseCents) + ' base' + (r.modifierCents != null ? ' + ' + E.formatCents(r.modifierCents) + ' options' : ' + unknown option charges') + ' × ' + r.quantity + ' = ' + E.formatCents(r.lineCents)],
+      ['Address', [r.address.street, r.city, r.state, r.zip].filter(Boolean).join(', ')],
+      ['Platform store ID', r.storeId], ['Order mode', r.orderMode + ' — ' + r.modeBasis], ['Price context', r.priceContext],
+      ['Extraction', r.extraction], ['Observed at', r.observedAt + ' (' + rel(r.observedAt) + ')' + (r.stale ? ' — STALE' : '')],
+      ['Source', r.source === 'live' ? (r.fromCache ? 'live scrape (served from cache)' : 'live scrape') : r.source === 'snapshot' ? 'live scrape recorded in a past live run (snapshot)' : r.source],
+      ['Checkout total', Number.isInteger(r.checkoutTotalCents) ? E.formatCents(r.checkoutTotalCents) + ' (fees for ZIP ' + r.feeDestination + ')' : 'unknown — destination-specific charges not known']];
+    return h('div', null,
+      h('ul', { class: 'reasons' }, r.reasons.map(function (x) { return h('li', { class: x.level }, x.text); })),
+      r.promotions && r.promotions.length ? msg('', 'Conditional promotions (not used in ranking):', r.promotions.map(function (p) { return p.description + (Number.isInteger(p.price_cents) ? ' — ' + E.formatCents(p.price_cents) : '') + ' — eligibility: ' + p.conditions; })) : null,
+      h('dl', { class: 'kv' }, kv.map(function (x) { return [h('dt', null, x[0]), h('dd', null, x[1] == null ? '—' : x[1])]; })),
+      h('div', { style: 'margin-top:6px' }, r.storeUrl ? safeLink(r.storeUrl, 'Open source page') : null));
+  }
+  var STORE_COL = { key: 'store', label: 'Store', sort: function (r) { return (r.storeName || '').toLowerCase(); }, cell: function (r) { return [h('div', null, r.storeName), r.storeUrl ? safeLink(r.storeUrl, 'source') : h('span', { class: 'note' }, r.source === 'demo' ? 'fictional' : '')]; } };
+  var PLAT_COL = { key: 'platform', label: 'Platform', sort: function (r) { return r.platform; }, cell: function (r) { return PLAT[r.platform]; } };
+  var LOC_COL = { key: 'loc', label: 'Location', sort: function (r) { return r.state + r.city; }, cell: function (r) { return r.city + ', ' + r.state + ' ' + r.zip; } };
+  var OBS_COL = { key: 'obs', label: 'Observed', sort: function (r) { return r.observedAt; }, cell: function (r) { return h('span', { title: r.observedAt }, rel(r.observedAt)); } };
+  function priceCols(withSavings) {
+    var c = [PLAT_COL, STORE_COL, LOC_COL,
+      { key: 'item', label: 'Listing', sort: function (r) { return r.candidate.toLowerCase(); }, cell: function (r) { return [h('div', null, r.candidate), S.lastEval && S.lastEval.multi ? h('div', { class: 'note' }, 'for: ' + r.orderItemName) : null]; } },
+      { key: 'qty', label: 'Qty', num: true, cell: function (r) { return String(r.quantity == null ? '—' : r.quantity); } },
+      { key: 'unit', label: 'Unit (configured)', num: true, sort: function (r) { return r.unitCents; }, cell: function (r) { return E.formatCents(r.unitCents); } },
+      { key: 'line', label: 'Item subtotal', num: true, sort: function (r) { return r.lineCents; }, cell: function (r) { return h('b', null, E.formatCents(r.lineCents)); } }];
+    if (withSavings) c.push({ key: 'sav', label: 'vs Grubhub', num: true, sort: function (r) { return r.savingsCents; }, cell: function (r) { return Number.isInteger(r.savingsCents) ? (r.savingsCents >= 0 ? '−' + E.formatCents(r.savingsCents) : '+' + E.formatCents(-r.savingsCents)) : '—'; } });
+    c.push({ key: 'checkout', label: 'Checkout total', num: true, sort: function (r) { return r.checkoutTotalCents; }, cell: function (r) { return Number.isInteger(r.checkoutTotalCents) ? E.formatCents(r.checkoutTotalCents) : 'unknown'; } });
+    c.push(OBS_COL, { key: 'flags', label: 'Flags', cell: flagsFor }, { key: 'why', label: '', cell: whyBtn });
+    return c;
+  }
+  // Listings an order item may mean when no checked store lists it exactly.
+  // Confirming one adds it to the item's confirmed alternate names; it is then
+  // checked like any listing (size, count, currency, price).
+  function confirmAlias(idx, label) {
+    var it = S.order.items[idx]; if (!it) return;
+    // Notes such as "(2,320 Cal)" are dropped first: aliases are comma-separated.
+    var name = E.stripNotes(label).replace(/[,;\n]+/g, ' ').replace(/\s+/g, ' ').trim();
+    var have = String(it.aliases || '').split(/[,;\n]/).map(function (x) { return x.trim(); }).filter(Boolean);
+    if (have.indexOf(name) < 0) have.push(name);
+    it.aliases = have.join(', ');
+    var f = $('it' + idx + '_alias'); if (f) f.value = it.aliases;
+    scheduleEval();
+  }
+  function renderClosest(ev) {
+    var boxes = (ev.closest || []).filter(function (c) { return c.listings.length; }).map(function (c) {
+      return h('div', { class: 'closest', 'data-item': String(c.orderItemIndex) },
+        h('h3', null, 'No checked store lists "' + c.orderItemName + '" exactly. Closest listings:'),
+        h('p', { class: 'note' }, 'Suggestions ranked by name similarity, never matches on their own. If one is the same item, confirm it: it becomes a confirmed alternate name and is then checked like any listing (size, count, currency, price).'),
+        h('ul', null, c.listings.map(function (l) {
+          var price = l.minCents === null ? 'no price published' : l.minCents === l.maxCents ? E.formatCents(l.minCents) : E.formatCents(l.minCents) + '–' + E.formatCents(l.maxCents);
+          return h('li', null,
+            h('span', { class: 'what' }, h('strong', null, l.label), ' · ' + l.stores + ' store' + (l.stores === 1 ? '' : 's') + ' · ' + price + ' · ' + l.why),
+            h('button', { type: 'button', on: { click: function () { confirmAlias(c.orderItemIndex, l.label); } } }, 'Same item'));
+        })));
+    });
+    setKids($('closest'), boxes.length ? boxes : null);
+  }
+  function renderResults() {
+    var ev = S.lastEval; if (!ev) return;
+    renderWinner(ev); renderCoverage(ev); renderClosest(ev);
+    var counts = { verified: ev.rows.verified.length, uncertain: ev.rows.uncertain.length, rejected: ev.rows.rejected.length, baskets: ev.baskets.length, barriers: S.barriers.length };
+    Array.prototype.forEach.call($('resultTabs').querySelectorAll('button'), function (b) {
+      var base = { verified: 'Verified matches', uncertain: 'Needs confirmation', rejected: 'Not equivalent', baskets: 'Same-branch baskets', barriers: 'Barriers & log' }[b.dataset.rtab];
+      b.textContent = base + ' (' + counts[b.dataset.rtab] + ')';
+      b.setAttribute('aria-selected', String(b.dataset.rtab === S.ui.rtab));
+      if (b.dataset.rtab === 'baskets') b.hidden = !ev.multi;
+    });
+    if (S.ui.rtab === 'baskets' && !ev.multi) S.ui.rtab = 'verified';
+    var body = $('resultBody'), t = S.ui.rtab, out;
+    if (t === 'verified') {
+      if (!S.ui.sorts.verified) S.ui.sorts.verified = { key: ev.rankBy === 'checkout' ? 'checkout' : 'line', dir: 'asc' };
+      out = [h('p', { class: 'note' }, 'Exact matches: same chain, product, size, flavor, piece count, modifiers and quantity, priced in USD for the ' + ev.mode + ' order mode. Prices exclude tax, fees, tip and promotions.'),
+        table('verified', ev.rows.verified, priceCols(true), rowDetails)];
+    } else if (t === 'uncertain') {
+      out = [h('p', { class: 'note' }, 'Same product name, but something needed for an exact match is missing or unconfirmed (size, flavor, count, modifier charges, currency, chain identity). Never used for the winner. Fill in the missing details or add confirmed aliases.'),
+        table('uncertain', ev.rows.uncertain, priceCols(false), rowDetails)];
+    } else if (t === 'rejected') {
+      out = [h('p', { class: 'note' }, 'Similar-looking listings that are NOT the same item (different words, size, count or currency).'),
+        table('rejected', ev.rows.rejected, [PLAT_COL, STORE_COL, LOC_COL,
+          { key: 'item', label: 'Listing', sort: function (r) { return r.candidate.toLowerCase(); }, cell: function (r) { return r.candidate; } },
+          { key: 'line', label: 'Listed price', num: true, sort: function (r) { return r.baseCents; }, cell: function (r) { return E.formatCents(r.baseCents); } },
+          { key: 'reason', label: 'Why not equivalent', cell: function (r) { return r.reasons.filter(function (x) { return x.level === 'fail'; }).map(function (x) { return x.text; }).join(' '); } }])];
+    } else if (t === 'baskets') {
+      out = [h('p', { class: 'note' }, 'Every requested item must be an exact, purchasable match at the same branch on the same platform. Items from different restaurants are never combined.'),
+        table('baskets', ev.baskets, [PLAT_COL, STORE_COL, LOC_COL,
+          { key: 'status', label: 'Status', sort: function (b) { return b.status; }, cell: function (b) { return h('span', { class: 'flag ' + (b.status === 'complete' ? 'ok' : b.status === 'partial' ? 'bad' : 'warn') }, b.status === 'complete' ? 'all items exact' : b.status); } },
+          { key: 'sub', label: 'Basket subtotal', num: true, sort: function (b) { return b.subtotalCents; }, cell: function (b) { return h('b', null, E.formatCents(b.subtotalCents)); } },
+          { key: 'sav', label: 'vs Grubhub', num: true, sort: function (b) { return b.savingsCents; }, cell: function (b) { return Number.isInteger(b.savingsCents) ? (b.savingsCents >= 0 ? '−' + E.formatCents(b.savingsCents) : '+' + E.formatCents(-b.savingsCents)) : '—'; } },
+          { key: 'items', label: 'Items', cell: function (b) { return [b.parts.map(function (p) { return h('div', null, p.candidate + ' ' + E.formatCents(p.lineCents)); }), b.missing.map(function (m) { return h('div', { class: 'note' }, 'missing: ' + m); }), b.uncertain.map(function (m) { return h('div', { class: 'note' }, 'unconfirmed: ' + m); })]; } },
+          { key: 'checkout', label: 'Checkout total', num: true, sort: function (b) { return b.checkoutTotalCents; }, cell: function (b) { return Number.isInteger(b.checkoutTotalCents) ? E.formatCents(b.checkoutTotalCents) : 'unknown'; } },
+          OBS_COL, { key: 'flags', label: 'Flags', cell: function (b) { return flagsFor({ source: b.source, stale: b.stale, availability: b.anyUnknownAvailability ? 'unknown' : 'available' }); } }])];
+    } else {
+      out = [h('h3', null, 'Access barriers (reported, not bypassed)'),
+        S.barriers.length ? table('barriers', S.barriers.map(function (b, i) { return Object.assign({ id: 'x' + i }, b); }), [
+          { key: 'p', label: 'Platform', sort: function (b) { return b.platform; }, cell: function (b) { return PLAT[b.platform] || b.platform; } },
+          { key: 'k', label: 'Kind', sort: function (b) { return b.kind; }, cell: function (b) { return b.kind; } },
+          { key: 'd', label: 'Detail', cell: function (b) { return b.detail; } },
+          { key: 'u', label: 'URL', cell: function (b) { return b.url; } },
+          { key: 't', label: 'When', sort: function (b) { return b.observed_at; }, cell: function (b) { return rel(b.observed_at); } }]) : h('div', { class: 'empty' }, 'No barriers recorded in this session.'),
+        h('h3', null, 'Job log'),
+        h('div', { class: 'log' }, S.log.length ? S.log.slice(-200).map(function (e) {
+          var t = e.type === 'store' ? e.status + ' ' + (e.url || '') + (e.detail ? ' — ' + e.detail : '') : e.type === 'discovered' ? 'discovered ' + e.count + ' via ' + e.source + ' ' + (e.url || '') : e.type === 'platform' ? 'platform → ' + e.state + (e.reason ? ' (' + e.reason.kind + ': ' + e.reason.detail + ')' : '') : e.type === 'job' ? 'job → ' + e.status : (e.message || '');
+          return h('div', null, (e.ts || '').slice(11, 19) + ' ' + (e.platform ? '[' + (PLAT[e.platform] || e.platform) + '] ' : '') + t);
+        }) : 'No log entries.')];
+    }
+    setKids(body, out);
+  }
+
+  // ------------------------------------------------------------------ import / demo / export / purge
+  var importFileText = null;
+  function doImport() {
+    var text = $('importText').value.trim() || importFileText || '';
+    var r = E.validateImport(text);
+    var key = function (o) { return o.platform + '|' + o.store_id + '|' + o.order_mode + '|' + o.observed_at; };
+    var have = {}; S.imported.forEach(function (o) { have[key(o)] = 1; });
+    var added = 0;
+    r.observations.forEach(function (o) { if (!have[key(o)]) { S.imported.push(o); have[key(o)] = 1; added++; } });
+    var kind = r.errors.length ? (added ? 'warn' : 'bad') : 'ok';
+    setKids($('importReport'), msg(kind, 'Imported ' + added + ' store observation(s)' + (r.observations.length - added ? ' (' + (r.observations.length - added) + ' already present)' : '') + (r.format ? ' from ' + r.format.toUpperCase() : '') + '. ' + r.errors.length + ' error(s), ' + r.warnings.length + ' warning(s). Total imported: ' + S.imported.length + '.',
+      r.errors.slice(0, 15).concat(r.errors.length > 15 ? ['… ' + (r.errors.length - 15) + ' more errors'] : []).concat(r.warnings.slice(0, 5))));
+    scheduleEval();
+  }
+  function addSeen() {
+    var v = function (id) { return $(id).value; };
+    var r = E.enteredObservation({ platform: v('seenPlatform'), order_mode: v('seenMode'), seen_at: v('seenAt'), store_url: v('seenUrl').trim(),
+      store_name: v('seenName'), street: v('seenStreet'), city: v('seenCity'), state: v('seenState'), zip: v('seenZip').trim(), lines: v('seenLines') });
+    var o = r.observations[0];
+    if (!o) { setKids($('seenMsg'), msg('bad', 'Not added. Fix these and try again:', r.errors)); return; }
+    var mg = E.mergeEntered(S.imported, o);
+    S.imported = mg.list;
+    setKids($('seenMsg'), msg('ok', 'Added ' + o.items.length + ' price(s) at ' + o.store_name + ', ' + o.address.city + ' ' + o.address.state + ' (' + (o.platform === 'doordash' ? 'DoorDash' : 'Uber Eats') + ', ' + o.order_mode + '), labelled "Imported".' +
+      (mg.merged ? ' Kept with your earlier entry for this store (' + mg.record.items.length + ' prices, dated ' + mg.record.observed_at + ').' : '') + ' Total imported: ' + S.imported.length + '.', r.warnings));
+    $('seenLines').value = '';
+    scheduleEval();
+  }
+  function download(name, mime, text) {
+    var a = h('a', { href: URL.createObjectURL(new Blob([text], { type: mime })), download: name });
+    document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+  }
+  function exportRows() {
+    var ev = S.lastEval; if (!ev) return [];
+    return ev.rows.verified.concat(ev.rows.uncertain, ev.rows.rejected);
+  }
+  function freshEval() { clearTimeout(evalTimer); runEval(); return S.lastEval; }
+  function exportCsv() {
+    var ev = freshEval();
+    var head = ['match_status', 'platform', 'data_source', 'store_name', 'platform_store_id', 'street', 'city', 'state', 'zip', 'source_url', 'order_item', 'listing', 'quantity', 'base_price_usd', 'option_charges_usd', 'unit_price_usd', 'item_subtotal_usd', 'grubhub_item_subtotal_usd', 'savings_usd', 'checkout_total_usd', 'order_mode', 'mode_basis', 'availability', 'stale', 'observed_at', 'price_context', 'reasons'];
+    var d = function (c) { return Number.isInteger(c) ? (c < 0 ? '-' : '') + Math.floor(Math.abs(c) / 100) + '.' + String(Math.abs(c) % 100).padStart(2, '0') : ''; };
+    var rows = exportRows().map(function (r) { return [r.status, r.platform, r.source, r.storeName, r.storeId, r.address.street || '', r.city, r.state, r.zip, r.storeUrl || '', r.orderItemName, r.candidate, r.quantity, d(r.baseCents), d(r.modifierCents), d(r.unitCents), d(r.lineCents), d(r.ghLineCents), d(r.savingsCents), d(r.checkoutTotalCents), r.orderMode, r.modeBasis, r.availability, r.stale ? 'yes' : 'no', r.observedAt, r.priceContext, r.reasons.map(function (x) { return x.level + ': ' + x.text; }).join(' | ')]; });
+    if (ev && ev.multi) ev.baskets.forEach(function (b) { rows.push(['basket:' + b.status, b.platform, b.source, b.storeName, b.storeId, b.address.street || '', b.city, b.state, b.zip, b.storeUrl || '', 'ALL ITEMS', b.parts.map(function (p) { return p.candidate; }).join(' + '), '', '', '', '', d(b.subtotalCents), d(b.ghSubtotalCents), d(b.savingsCents), d(b.checkoutTotalCents), b.orderMode, '', '', b.stale ? 'yes' : 'no', b.observedAt, '', b.missing.concat(b.uncertain).join(' | ')]); });
+    download('food-price-compare' + (S.ui.demoMode ? '-DEMO' : '') + '.csv', 'text/csv', E.toCSV(head, rows));
+  }
+  // Which kinds of data the current results draw on, for the export header.
+  function dataSources() {
+    var seen = {};
+    currentObservations().forEach(function (o) {
+      if (o.source === 'import' && !$('includeImported').checked) return;
+      seen[o.source === 'import' ? (/^entered by hand/.test(o.extraction || '') ? 'typed in by you' : 'imported') : o.source === 'snapshot' ? 'snapshot run ' + (o.run || '?') : o.source] = 1;
+    });
+    return Object.keys(seen).join(' + ') || 'none';
+  }
+  function exportJson() {
+    var ev = freshEval(); if (!ev) return;
+    var prep = ev.prep;
+    var out = {
+      generated_at: new Date().toISOString(), engine_version: E.VERSION, data: S.ui.demoMode ? 'DEMO (fictional)' : dataSources(),
+      winner_label: ev.winner ? ev.winnerLabel : null, rank_by: ev.rankBy, order_mode: ev.mode,
+      order: { chain: prep.chain, items: prep.items.map(function (i) { return { name: i.name, size: (S.order.items[i.index] || {}).size || '', flavor: i.flavor, piece_count: i.count, quantity: i.quantity, modifiers: i.modifiers, grubhub_item_subtotal_cents: i.ghLineCents }; }) },
+      coverage: ev.coverage, winner: ev.winner, rows: exportRows(), baskets: ev.baskets, barriers: S.barriers,
+      job: S.job && S.job.summary ? { id: S.job.id, status: S.job.summary.status, platforms: S.job.summary.platforms } : null
+    };
+    download('food-price-compare' + (S.ui.demoMode ? '-DEMO' : '') + '.json', 'application/json', JSON.stringify(out, null, 2));
+  }
+  function purge() {
+    if (!confirm('Delete all server-side cache files and job checkpoints?')) return;
+    api('/api/purge', { method: 'POST', body: {} }).then(function (r) {
+      setKids($('purgeMsg'), msg('ok', 'Deleted ' + r.jobs_deleted + ' checkpoint file(s) and ' + r.cache_files_deleted + ' cache file(s).'));
+      if (S.job) { clearTimeout(S.job.timer); S.job = null; }
+      refreshJobs(); renderProgress();
+    }, function (e) { setKids($('purgeMsg'), msg('bad', 'Purge failed: ' + e.message)); });
+  }
+
+  // ------------------------------------------------------------------ wiring
+  function init() {
+    var sel = $('fState');
+    Object.keys(E.US_STATES).sort(function (a, b) { return E.US_STATES[a].localeCompare(E.US_STATES[b]); }).forEach(function (k) { sel.appendChild(h('option', { value: k }, E.US_STATES[k] + ' (' + k + ')')); });
+    $('backendUrl').value = S.backendUrl;
+    initInputTabs();
+    $('backendConnect').addEventListener('click', connect);
+    $('backendUrl').addEventListener('keydown', function (e) { if (e.key === 'Enter') connect(); });
+    $('probeBtn').addEventListener('click', probe);
+    $('ghExtract').addEventListener('click', ghExtract);
+    $('receiptParse').addEventListener('click', receiptParse);
+    $('receiptClear').addEventListener('click', function () { $('receiptText').value = ''; setKids($('receiptResult')); });
+    $('chain').addEventListener('input', function (e) { S.order.chain = e.target.value; renderOrderIssues(); scheduleEval(); });
+    $('chainAliases').addEventListener('input', function (e) { S.order.chainAliases = e.target.value; scheduleEval(); });
+    ['modeDelivery', 'modePickup'].forEach(function (id) { $(id).addEventListener('change', function (e) { S.order.mode = e.target.value; scheduleEval(); }); });
+    $('addItem').addEventListener('click', function () { S.order.items.push(newItem()); renderOrder(); });
+    $('resetOrder').addEventListener('click', function () { S.order = { chain: '', chainAliases: '', mode: 'delivery', items: [newItem()] }; renderOrder(); });
+    ['scopeNational', 'scopeLocal'].forEach(function (id) { $(id).addEventListener('change', function () {
+      $('localFields').hidden = !$('scopeLocal').checked;
+      $('scopeNote').textContent = $('scopeLocal').checked ? 'Results are limited to branches in this state/city/ZIP. Being nearby still does not prove a branch delivers to your address.' : 'Nationwide menu-price discovery needs no address. A distant branch’s price does not mean it delivers to you.';
+      scheduleEval(); }); });
+    ['fState', 'fCity', 'fZip', 'platDD', 'platUE', 'staleHours', 'includeImported', 'rankBy'].forEach(function (id) { $(id).addEventListener(id === 'fCity' || id === 'fZip' || id === 'staleHours' ? 'input' : 'change', scheduleEval); });
+    $('rankBy').addEventListener('change', function () { delete S.ui.sorts.verified; });
+    $('searchBtn').addEventListener('click', startSearch);
+    $('cancelBtn').addEventListener('click', cancelJob);
+    $('resumeBtn').addEventListener('click', resumeJob);
+    $('refreshJobs').addEventListener('click', refreshJobs);
+    $('deleteJob').addEventListener('click', deleteJob);
+    $('importFile').addEventListener('change', function (e) {
+      var f = e.target.files && e.target.files[0]; if (!f) return;
+      if (f.size > 20 * 1024 * 1024) { setKids($('importReport'), msg('bad', 'File is larger than 20 MB.')); return; }
+      f.text().then(function (t) { importFileText = t; $('importText').value = ''; setKids($('importReport'), msg('', 'Loaded ' + f.name + ' (' + f.size + ' bytes). Click “Validate & import”.')); });
+    });
+    $('importBtn').addEventListener('click', doImport);
+    $('seenAdd').addEventListener('click', addSeen);
+    $('snapFile').addEventListener('change', function (e) {
+      var f = e.target.files && e.target.files[0]; if (!f) return;
+      if (f.size > 20 * 1024 * 1024) { setKids($('snapMsg'), msg('bad', 'File is larger than 20 MB.')); return; }
+      f.text().then(function (t) {
+        var data; try { data = JSON.parse(t); } catch (err) { setKids($('snapMsg'), msg('bad', 'Invalid JSON: ' + err.message)); return; }
+        loadSnapshot(data, 'from file ' + f.name);
+      });
+    });
+    $('snapServer').addEventListener('click', function () {
+      api('/api/snapshot', { timeout: 30000 }).then(function (d) { loadSnapshot(d, 'from the server'); },
+        function (e) { setKids($('snapMsg'), msg('bad', 'The server has no snapshot to give (' + e.message + '). Run scripts/snapshot.py, or load a snapshot.json file.')); });
+    });
+    $('snapClear').addEventListener('click', function () { S.snapshot = null; $('snapFile').value = ''; setKids($('snapMsg'), msg('ok', 'Snapshot cleared.')); scheduleEval(); });
+    $('includeSnapshot').addEventListener('change', function () { renderSnapshotMsg(); scheduleEval(); });
+    $('importClear').addEventListener('click', function () { S.imported = []; importFileText = null; $('importFile').value = ''; setKids($('seenMsg')); setKids($('importReport'), msg('ok', 'Imported and typed-in data cleared.')); scheduleEval(); });
+    $('demoToggle').addEventListener('change', function (e) {
+      S.ui.demoMode = e.target.checked; $('demoBanner').hidden = !S.ui.demoMode; $('demoOrderBtn').disabled = !S.ui.demoMode;
+      document.body.style.outline = S.ui.demoMode ? '4px dashed var(--demo)' : ''; scheduleEval();
+    });
+    $('demoOrderBtn').addEventListener('click', function () { if (S.ui.demoMode) { S.order = E.demoOrder(); S.order.items.forEach(function (i) { i._notes = []; }); renderOrder(); } });
+    $('purgeBtn').addEventListener('click', purge);
+    var capSrc = (($('fpc-capture') || {}).textContent || '').replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '').replace(/\n\s+/g, '\n');
+    var bm = 'javascript:' + encodeURIComponent('(function(){' + capSrc + '})();void 0');
+    $('captureBookmarklet').setAttribute('href', bm);
+    $('captureBookmarklet').addEventListener('click', function (e) { e.preventDefault(); setKids($('captureMsg'), msg('', 'Drag “Capture menu” to your bookmarks bar, then click it while viewing a DoorDash or Uber Eats store page.')); });
+    $('captureCopy').addEventListener('click', function () {
+      var ok = function () { setKids($('captureMsg'), msg('ok', 'Bookmarklet code copied. Create a bookmark and paste it as the URL.')); };
+      var fail = function () { setKids($('captureMsg'), msg('warn', 'Copy was blocked by the browser. Drag the “Capture menu” link to your bookmarks bar instead.')); };
+      try { navigator.clipboard.writeText(bm).then(ok, fail); } catch (err) { fail(); }
+    });
+    $('exportCsv').addEventListener('click', exportCsv);
+    $('exportJson').addEventListener('click', exportJson);
+    $('resultTabs').addEventListener('click', function (e) { var b = e.target.closest('button[data-rtab]'); if (!b) return; S.ui.rtab = b.dataset.rtab; renderResults(); });
+    renderOrder();
+    setConnected(false);
+    $('backendStatus').textContent = 'Connecting…'; $('backendStatus').className = 'pill warn';
+    api('/api/health', { timeout: 4000 }).then(function (hd) { setConnected(true, hd); refreshJobs(); }, function () { setConnected(false); });
+  }
+  init();
+})();
+</script>
+</body>
+</html>

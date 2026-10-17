@@ -1,0 +1,4048 @@
+{
+ "started_at": "2026-10-15T04:54:11Z",
+ "user_agent": "FoodPriceCompare/1.0 (structure research; reads existing archive captures only)",
+ "note": "Structure evidence only. Archived prices are historical and are not used as current prices.",
+ "wayback": {
+  "source": "Wayback Machine (web.archive.org), existing captures, raw bytes via id_",
+  "queries": [
+   {
+    "query": "https://web.archive.org/cdx/search/cdx?url=www.doordash.com%2Fstore%2F24633898%2F&output=json&fl=timestamp,original,statuscode,mimetype,length&filter=statuscode:200&filter=mimetype:text/html&limit=20",
+    "status": 200,
+    "captures": 1
+   },
+   {
+    "query": "https://web.archive.org/cdx/search/cdx?url=www.doordash.com%2Fstore%2Ftaco-bell-&matchType=prefix&from=2025&output=json&fl=timestamp,original,statuscode,mimetype,length&filter=statuscode:200&filter=mimetype:text/html&collapse=urlkey&limit=300",
+    "status": 200,
+    "captures": 300
+   },
+   {
+    "query": "https://web.archive.org/cdx/search/cdx?url=www.doordash.com%2Fstore%2Fmcdonalds-&matchType=prefix&from=2025&output=json&fl=timestamp,original,statuscode,mimetype,length&filter=statuscode:200&filter=mimetype:text/html&collapse=urlkey&limit=300",
+    "status": 200,
+    "captures": 300
+   },
+   {
+    "query": "https://web.archive.org/cdx/search/cdx?url=www.doordash.com%2Fstore%2Fchipotle-mexican-grill-&matchType=prefix&from=2025&output=json&fl=timestamp,original,statuscode,mimetype,length&filter=statuscode:200&filter=mimetype:text/html&collapse=urlkey&limit=300",
+    "status": 200,
+    "captures": 300
+   },
+   {
+    "query": "https://web.archive.org/cdx/search/cdx?url=www.doordash.com%2Fstore%2Flou-malnatis-pizzeria-&matchType=prefix&from=2025&output=json&fl=timestamp,original,statuscode,mimetype,length&filter=statuscode:200&filter=mimetype:text/html&collapse=urlkey&limit=300",
+    "status": 200,
+    "captures": 32
+   },
+   {
+    "query": "https://web.archive.org/cdx/search/cdx?url=www.doordash.com%2Fstore%2F&matchType=prefix&from=2025&output=json&fl=timestamp,original,statuscode,mimetype,length&filter=statuscode:200&filter=mimetype:text/html&collapse=urlkey&limit=300",
+    "status": 200,
+    "captures": 300
+   }
+  ],
+  "pages": [
+   {
+    "group": "seen in live runs",
+    "original": "https://www.doordash.com/store/24633898/",
+    "captured": "20240715181343",
+    "status": 200,
+    "bytes": 1048121,
+    "challenge": false,
+    "challenge_markers": [],
+    "title": "Order Poke Bowl - New York, NY Menu Delivery [Menu &amp; Prices] | New York -  DoorDash",
+    "jsonld_types": [],
+    "restaurant_found": false,
+    "name": "Order Poke Bowl - New York, NY Menu Delivery [Menu & Prices] | New York -  DoorDash",
+    "us_address": null,
+    "address_problem": "no address",
+    "menu_items": 0,
+    "priced_items": 0,
+    "currencies": [],
+    "sample_items": [],
+    "embedded_json": [],
+    "counts": {
+     "\"price\"": 45,
+     "\\\"price\\\"": 0,
+     "displayPrice": 39,
+     "__next_f": 15,
+     "__APOLLO_STATE__": 0,
+     "__REACT_QUERY_STATE__": 0,
+     "application/ld+json": 0,
+     "MenuItem": 6,
+     "storeUuid": 0
+    },
+    "phrases": {
+     "may vary": " in-store or elsewhere for this location. In-store promotions may not apply. \u200b\u200bPrices for delivery and pickup may vary.\",\"Service Fee: This fee goes to DoorDash. The service fee may vary but is 15% of your subtotal for m",
+     "prices may differ": "trings_orderCheckInModal_secondaryActionText\\\":\\\"Cancel\\\",\\\"checkoutStrings_itemPriceMayDiffer_title\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\"",
+     "menu prices": "\"subtitle\":null,\"tooltip\":{\"__typename\":\"FeedStoreModal\",\"title\":\"Pricing \\u0026 Fees\",\"bulletDescriptions\":[\"Menu Prices: This merchant sets prices. Those prices may be higher than prices in-store or elsewhere for this ",
+     "service fee": " elsewhere for this location. In-store promotions may not apply. \u200b\u200bPrices for delivery and pickup may vary.\",\"Service Fee: This fee goes to DoorDash. The service fee may vary but is 15% of your subtotal for most restaura"
+    },
+    "price_contexts": [
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "[{\"__typename\":\"StorePageCarouselItem\",\"id\":\"7702657084\",\"name\":\"Plenty Poke Bowl\",\"description\":\"2 proteins\",\"displayPrice\":\"$14.45\",\"displayStrikethroughPrice\":\"\",\"imgUrl\":\"https://img.cdn4dd.com/cdn-cgi/image/fit=cont"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "\"currency\":null,\"specialInstructions\":\"\",\"quickAddContext\":{\"__typename\":\"QuickAddContext\",\"isEligible\":false,\"price\":{\"__typename\":\"QuickAddMonetaryFields\",\"currency\":null,\"decimalPlaces\":null,\"displayString\":null,\"sign"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "_typename\":\"StorePageCarouselItem\",\"id\":\"7702657085\",\"name\":\"To the Max Poke Bowl\",\"description\":\"3 proteins\",\"displayPrice\":\"$17.45\",\"displayStrikethroughPrice\":\"\",\"imgUrl\":\"https://img.cdn4dd.com/cdn-cgi/image/fit=cont"
+     }
+    ],
+    "jsonld_shape": {
+     "blocks": [],
+     "items_of_interest": [],
+     "offers": 0,
+     "offers_with_priceCurrency": 0,
+     "priceCurrency_values": [],
+     "currency_mentions": {
+      "currency": ",\"displayUnavailableStatus\":\"\",\"unavailableReason\":\"\",\"isStoreInactive\":false}},\"currency\":\"USD\",\"storeBio\":null,\"travelTime\":null,\"distanceBasedPricingLayout\":",
+      "currencyCode": "selectionSet\":null},{\"kind\":\"Field\",\"alias\":null,\"name\":{\"kind\":\"Name\",\"value\":\"currencyCode\"},\"arguments\":[],\"directives\":[],\"selectionSet\":null},{\"kind\":\"Fiel",
+      "USD": "vailableStatus\":\"\",\"unavailableReason\":\"\",\"isStoreInactive\":false}},\"currency\":\"USD\",\"storeBio\":null,\"travelTime\":null,\"distanceBasedPricingLayout\":null,\"pickup"
+     }
+    }
+   },
+   {
+    "group": "taco-bell-",
+    "original": "https://www.doordash.com/store/taco-bell---live-mas-caf%C3%A9-irvine-1168597/",
+    "captured": "20261007071635",
+    "status": 200,
+    "bytes": 3228267,
+    "challenge": false,
+    "challenge_markers": [],
+    "title": "Order Taco Bell - Live Mas Caf\u00e9 - Irvine, CA Menu Delivery [Menu &amp; Prices] | Irvine - DoorDash",
+    "jsonld_types": [
+     "restaurant",
+     "postaladdress",
+     "geocoordinates",
+     "menu",
+     "review",
+     "person",
+     "aggregaterating",
+     "organization",
+     "menuitem",
+     "faqpage",
+     "question",
+     "answer",
+     "breadcrumblist",
+     "listitem"
+    ],
+    "restaurant_found": true,
+    "name": "Taco Bell - Live Mas Caf\u00e9",
+    "us_address": {
+     "city": "Irvine",
+     "state": "CA",
+     "zip": ""
+    },
+    "address_problem": null,
+    "menu_items": 75,
+    "priced_items": 35,
+    "currencies": [
+     "?"
+    ],
+    "sample_items": [
+     {
+      "name": "Chicken Quesadilla",
+      "price_cents": 853,
+      "currency": null
+     },
+     {
+      "name": "Cheese Quesadilla",
+      "price_cents": 731,
+      "currency": null
+     },
+     {
+      "name": "Crunchwrap Supreme\u00ae",
+      "price_cents": 828,
+      "currency": null
+     },
+     {
+      "name": "Nacho Cheese Doritos\u00ae Locos Tacos",
+      "price_cents": 450,
+      "currency": null
+     },
+     {
+      "name": "Beefy 5-Layer Burrito",
+      "price_cents": 633,
+      "currency": null
+     }
+    ],
+    "embedded_json": [
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 35025,
+      "parsed": "json",
+      "price_paths": [
+       {
+        "path": ".priceRange",
+        "sample": "$"
+       },
+       {
+        "path": ".hasMenu.hasMenuSection[][].hasMenuItem[].offers.price",
+        "sample": "$8.53"
+       }
+      ],
+      "menu_paths": [
+       ".hasMenu"
+      ]
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 227,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 32139,
+      "parsed": "json",
+      "price_paths": [
+       {
+        "path": ".hasMenuSection[][].hasMenuItem[].offers.price",
+        "sample": "$8.53"
+       }
+      ],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 1398,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 465,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": [
+       ".itemListElement[].item"
+      ]
+     }
+    ],
+    "counts": {
+     "\"price\"": 182,
+     "\\\"price\\\"": 231,
+     "displayPrice": 230,
+     "__next_f": 64,
+     "__APOLLO_STATE__": 0,
+     "__REACT_QUERY_STATE__": 0,
+     "application/ld+json": 5,
+     "MenuItem": 193,
+     "storeUuid": 0
+    },
+    "phrases": {
+     "estimated based on": "p from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across store, enter address for menu prices at your ne",
+     "prices are estimated": "ry or pickup from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across store, enter address for menu prices",
+     "may vary": "ailStore_schedule_delivery_callout_modal_primary_text\\\":\\\"Got it\\\",\\\"stores_pricing_disclosure_one\\\":\\\"Prices may vary from in-store or elsewhere for this location. Prices for delivery and pickup may vary.\\\",\\\"stores_pri",
+     "prices may differ": "trings_orderCheckInModal_secondaryActionText\\\":\\\"Cancel\\\",\\\"checkoutStrings_itemPriceMayDiffer_title\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\"",
+     "prices vary": "_q10\\\":\\\"How much do popular {{business}} menu items cost?\\\",\\\"seo_faq_business_redesign_a10\\\":\\\"{{business}} prices vary by location. To view the most up-to-date information, check out your nearest {{business}} restaura",
+     "menu prices": "tle\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverSubtitle\\\":\\\"Prices for menus are set directly by th",
+     "service fee": "ble, select store locations will not be awarded 5% credit\\nback in addition to $10 off promo. Fees (including service fee),\\ntaxes, and gratuity apply. $0 delivery fees and 10% off due to\\nreduced service fees only apply"
+    },
+    "price_contexts": [
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": " a Crunchy Taco, a Doritos Locos Taco, Cinnamon Twists, and a Medium Drink (Baja Midnight). (890-1180 cal.)\\\",\\\"displayPrice\\\":\\\"$$10.98\\\",\\\"displayStrikethroughPrice\\\":\\\"\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/im"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "ull,\\\"specialInstructions\\\":\\\"\\\",\\\"quickAddContext\\\":{\\\"__typename\\\":\\\"QuickAddContext\\\",\\\"isEligible\\\":false,\\\"price\\\":{\\\"__typename\\\":\\\"QuickAddMonetaryFields\\\",\\\"currency\\\":\\\"USD\\\",\\\"decimalPlaces\\\":2,\\\"displayString\\"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "ee-cheese blend wrapped inside a warm flour tortilla, with even more three-cheese blend grilled on the top.\\\",\\\"displayPrice\\\":\\\"$$7.67+\\\",\\\"displayStrikethroughPrice\\\":\\\"\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/im"
+     }
+    ],
+    "jsonld_shape": {
+     "blocks": [
+      {
+       "type": "Restaurant",
+       "keys": [
+        "@context",
+        "@type",
+        "address",
+        "aggregateRating",
+        "geo",
+        "hasMenu",
+        "image",
+        "name",
+        "priceRange",
+        "review",
+        "servesCuisine"
+       ],
+       "address": "{\"@type\": \"PostalAddress\", \"streetAddress\": \"4101 Campus Dr\", \"addressLocality\": \"Irvine\", \"addressRegion\": \"CA\", \"addressCountry\": \"US\"}",
+       "menu_where": "Restaurant.hasMenu",
+       "menu_keys": [
+        "@type",
+        "hasMenuSection"
+       ],
+       "section_nesting": "list of lists",
+       "sections": 4,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"Chicken Quesadilla\", \"description\": \"A large flour tortilla filled with a blend of mozzarella, pepperjack, and cheddar cheeses, grilled, marinated all-white-meat chicken, Creamy Jalape\u00f1o sauce, and grilled to perfection. (490 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$8.53\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"Cheese Quesadilla\", \"description\": \"A large flour tortilla filled with a blend of mozzarella, pepperjack, and cheddar cheeses, Creamy Jalape\u00f1o sauce, and grilled to perfection. Item is lacto-ovo, allowing for dairy & egg consumption. Preparation methods may lead to cross contact with meat. See ta.co for full details. (440 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$7.31\"}}"
+       ],
+       "name": "\"Taco Bell - Live Mas Caf\u00e9\"",
+       "servesCuisine": "[\"Coffee\", \"Beverages\", \"Soda\", \"iced coffee\", \"Energy Drinks\", \"Vegetarian\", \"Dinner\", \"Mexican\", \"Dessert\", \"Tex-Mex\", \"Fast Food\", \"Comfort Food\", \"Cafe\", \"L\u2026",
+       "priceRange": "\"$\""
+      },
+      {
+       "type": "Organization",
+       "keys": [
+        "@context",
+        "@type",
+        "name",
+        "sameAs",
+        "url"
+       ],
+       "url": "\"http://www.doordash.com\"",
+       "name": "\"DoorDash\""
+      },
+      {
+       "type": "Menu",
+       "keys": [
+        "@type",
+        "hasMenuSection"
+       ],
+       "menu_where": "top-level Menu block",
+       "menu_keys": [
+        "@type",
+        "hasMenuSection"
+       ],
+       "section_nesting": "list of lists",
+       "sections": 4,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"Chicken Quesadilla\", \"description\": \"A large flour tortilla filled with a blend of mozzarella, pepperjack, and cheddar cheeses, grilled, marinated all-white-meat chicken, Creamy Jalape\u00f1o sauce, and grilled to perfection. (490 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$8.53\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"Cheese Quesadilla\", \"description\": \"A large flour tortilla filled with a blend of mozzarella, pepperjack, and cheddar cheeses, Creamy Jalape\u00f1o sauce, and grilled to perfection. Item is lacto-ovo, allowing for dairy & egg consumption. Preparation methods may lead to cross contact with meat. See ta.co for full details. (440 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$7.31\"}}"
+       ]
+      },
+      {
+       "type": "FAQPage",
+       "keys": [
+        "@context",
+        "@type",
+        "mainEntity"
+       ]
+      },
+      {
+       "type": "BreadcrumbList",
+       "keys": [
+        "@context",
+        "@type",
+        "itemListElement"
+       ]
+      }
+     ],
+     "items_of_interest": [
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Crunchwrap Supreme\u00ae\", \"description\": \"A warm flour tortilla filled with seasoned beef, warm Nacho Cheese sauce, a crispy tostada shell, lettuce, diced tomatoes, and reduced-fat sour cream folded into our signature Crunchwrap form and grilled to go (530 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$8.28\"}}",
+       "displayed": [
+        "$$8.28",
+        "$$8.28",
+        "$$8.28"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Chalupa Supreme\", \"description\": \"Chewy fried chalupa bread filled with seasoned beef, sour cream, crispy lettuce, three-cheese blend and ripe tomatoes.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$7.67+\"}}",
+       "displayed": [
+        "$$7.67+",
+        "$$7.67+",
+        "$$7.67+"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Crunchwrap Supreme\u00ae\", \"description\": \"A warm flour tortilla filled with seasoned beef, warm Nacho Cheese sauce, a crispy tostada shell, lettuce, diced tomatoes, and reduced-fat sour cream folded into our signature Crunchwrap form and grilled to go (530 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$8.28\"}}",
+       "displayed": [
+        "$$8.28",
+        "$$8.28",
+        "$$8.28"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Chalupa Supreme\", \"description\": \"Chewy fried chalupa bread filled with seasoned beef, sour cream, crispy lettuce, three-cheese blend and ripe tomatoes.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$7.67+\"}}",
+       "displayed": [
+        "$$7.67+",
+        "$$7.67+",
+        "$$7.67+"
+       ]
+      }
+     ],
+     "offers": 182,
+     "offers_with_priceCurrency": 0,
+     "priceCurrency_values": [],
+     "currency_mentions": {
+      "currency": "ame\\\":\\\"Snacks\\\",\\\"link\\\":\\\"/snacks-near-me/\\\",\\\"__typename\\\":\\\"BusinessTag\\\"}],\\\"currency\\\":\\\"USD\\\",\\\"coverImgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/image/fit=",
+      "currencyCode": ",\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\":{\\\"kind\\\":\\\"Name\\\",\\\"value\\\":\\\"currencyCode\\\"},\\\"arguments\\\":[],\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\"",
+      "USD": " {{senderName}}\\\",\\\"nativeGiftCard_preview_messageSection_amount\\\":\\\"{{amount}} USD\\\",\\\"nativeGiftCard_preview_messageSection_disclaimer\\\":\\\"Terms and Condition"
+     }
+    }
+   },
+   {
+    "group": "taco-bell-",
+    "original": "https://www.doordash.com/store/taco-bell-1194579/",
+    "captured": "20260724233050",
+    "status": 200,
+    "bytes": 3097870,
+    "challenge": false,
+    "challenge_markers": [],
+    "title": "Order Taco Bell - Beaverton, OR Menu Delivery [Menu &amp; Prices] | Beaverton - DoorDash",
+    "jsonld_types": [
+     "restaurant",
+     "postaladdress",
+     "geocoordinates",
+     "menu",
+     "review",
+     "person",
+     "aggregaterating",
+     "organization",
+     "menuitem",
+     "faqpage",
+     "question",
+     "answer",
+     "breadcrumblist",
+     "listitem"
+    ],
+    "restaurant_found": true,
+    "name": "Taco Bell",
+    "us_address": {
+     "city": "Beaverton",
+     "state": "OR",
+     "zip": ""
+    },
+    "address_problem": null,
+    "menu_items": 63,
+    "priced_items": 59,
+    "currencies": [
+     "?"
+    ],
+    "sample_items": [
+     {
+      "name": "Nachos BellGrande\u00ae",
+      "price_cents": 841,
+      "currency": null
+     },
+     {
+      "name": "Chicken Quesadilla",
+      "price_cents": 853,
+      "currency": null
+     },
+     {
+      "name": "Beefy 5-Layer Burrito",
+      "price_cents": 633,
+      "currency": null
+     },
+     {
+      "name": "Crunchwrap Supreme\u00ae",
+      "price_cents": 853,
+      "currency": null
+     },
+     {
+      "name": "Nacho Cheese Doritos\u00ae Locos Tacos",
+      "price_cents": 389,
+      "currency": null
+     }
+    ],
+    "embedded_json": [
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 31846,
+      "parsed": "json",
+      "price_paths": [
+       {
+        "path": ".priceRange",
+        "sample": "$$"
+       },
+       {
+        "path": ".hasMenu.hasMenuSection[][].hasMenuItem[].offers.price",
+        "sample": "$8.41"
+       }
+      ],
+      "menu_paths": [
+       ".hasMenu"
+      ]
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 227,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 28872,
+      "parsed": "json",
+      "price_paths": [
+       {
+        "path": ".hasMenuSection[][].hasMenuItem[].offers.price",
+        "sample": "$8.41"
+       }
+      ],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 1274,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 407,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": [
+       ".itemListElement[].item"
+      ]
+     }
+    ],
+    "counts": {
+     "\"price\"": 182,
+     "\\\"price\\\"": 228,
+     "displayPrice": 227,
+     "__next_f": 63,
+     "__APOLLO_STATE__": 0,
+     "__REACT_QUERY_STATE__": 0,
+     "application/ld+json": 5,
+     "MenuItem": 201,
+     "storeUuid": 0
+    },
+    "phrases": {
+     "estimated based on": "p from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across store, enter address for menu prices at your ne",
+     "prices are estimated": "ry or pickup from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across store, enter address for menu prices",
+     "may vary": "ailStore_schedule_delivery_callout_modal_primary_text\\\":\\\"Got it\\\",\\\"stores_pricing_disclosure_one\\\":\\\"Prices may vary from in-store or elsewhere for this location. Prices for delivery and pickup may vary.\\\",\\\"stores_pri",
+     "prices may differ": "trings_orderCheckInModal_secondaryActionText\\\":\\\"Cancel\\\",\\\"checkoutStrings_itemPriceMayDiffer_title\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\"",
+     "prices vary": "_q10\\\":\\\"How much do popular {{business}} menu items cost?\\\",\\\"seo_faq_business_redesign_a10\\\":\\\"{{business}} prices vary by location. To view the most up-to-date information, check out your nearest {{business}} restaura",
+     "menu prices": "tle\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverSubtitle\\\":\\\"Prices for menus are set directly by th",
+     "service fee": "ble, select store locations will not be awarded 5% credit\\nback in addition to $10 off promo. Fees (including service fee),\\ntaxes, and gratuity apply. $0 delivery fees and 10% off due to\\nreduced service fees only apply"
+    },
+    "price_contexts": [
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "aja Blast\u00ae. MTN DEW\u00ae Baja Blast\u00ae Freeze - Regular (150 cal.) MTN DEW\u00ae Baja Blast\u00ae Freeze - Large (190 cal.)\\\",\\\"displayPrice\\\":\\\"$$4.87+\\\",\\\"displayStrikethroughPrice\\\":\\\"\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/im"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "ull,\\\"specialInstructions\\\":\\\"\\\",\\\"quickAddContext\\\":{\\\"__typename\\\":\\\"QuickAddContext\\\",\\\"isEligible\\\":false,\\\"price\\\":{\\\"__typename\\\":\\\"QuickAddMonetaryFields\\\",\\\"currency\\\":\\\"USD\\\",\\\"decimalPlaces\\\":2,\\\"displayString\\"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "AST\u00ae dirty soda Freeze - Large (230 cal.) MOUNTAIN DEW \u00ae BAJA BLAST\u00ae dirty soda Freeze - Regular (190 cal.)\\\",\\\"displayPrice\\\":\\\"$$5.23+\\\",\\\"displayStrikethroughPrice\\\":\\\"\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/im"
+     }
+    ],
+    "jsonld_shape": {
+     "blocks": [
+      {
+       "type": "Restaurant",
+       "keys": [
+        "@context",
+        "@type",
+        "address",
+        "aggregateRating",
+        "geo",
+        "hasMenu",
+        "image",
+        "name",
+        "priceRange",
+        "review",
+        "servesCuisine"
+       ],
+       "address": "{\"@type\": \"PostalAddress\", \"streetAddress\": \"1170 Northwest 185th Avenue\", \"addressLocality\": \"Beaverton\", \"addressRegion\": \"OR\", \"addressCountry\": \"US\"}",
+       "menu_where": "Restaurant.hasMenu",
+       "menu_keys": [
+        "@type",
+        "hasMenuSection"
+       ],
+       "section_nesting": "list of lists",
+       "sections": 8,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"Nachos BellGrande\u00ae\", \"description\": \"Warm-and-crispy tortilla chips with seasoned beef, refried beans, diced tomatoes, warm Nacho Cheese sauce, and reduced-fat sour cream. (730 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$8.41\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"Chicken Quesadilla\", \"description\": \"A large flour tortilla filled with a blend of mozzarella, pepperjack, and cheddar cheeses, grilled, marinated all-white-meat chicken, Creamy Jalape\u00f1o sauce, and grilled to perfection. (490 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$8.53\"}}"
+       ],
+       "name": "\"Taco Bell\"",
+       "servesCuisine": "[\"Mexican\", \"Fast Food\", \"Comfort Food\", \"Chicken\", \"Lunch\", \"Tacos\", \"Nachos\", \"Quesadillas\", \"Beef\", \"Spicy\", \"Potato\", \"Soda\", \"Vegetarian\", \"Dinner\", \"Desse\u2026",
+       "priceRange": "\"$$\""
+      },
+      {
+       "type": "Organization",
+       "keys": [
+        "@context",
+        "@type",
+        "name",
+        "sameAs",
+        "url"
+       ],
+       "url": "\"http://www.doordash.com\"",
+       "name": "\"DoorDash\""
+      },
+      {
+       "type": "Menu",
+       "keys": [
+        "@type",
+        "hasMenuSection"
+       ],
+       "menu_where": "top-level Menu block",
+       "menu_keys": [
+        "@type",
+        "hasMenuSection"
+       ],
+       "section_nesting": "list of lists",
+       "sections": 8,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"Nachos BellGrande\u00ae\", \"description\": \"Warm-and-crispy tortilla chips with seasoned beef, refried beans, diced tomatoes, warm Nacho Cheese sauce, and reduced-fat sour cream. (730 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$8.41\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"Chicken Quesadilla\", \"description\": \"A large flour tortilla filled with a blend of mozzarella, pepperjack, and cheddar cheeses, grilled, marinated all-white-meat chicken, Creamy Jalape\u00f1o sauce, and grilled to perfection. (490 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$8.53\"}}"
+       ]
+      },
+      {
+       "type": "FAQPage",
+       "keys": [
+        "@context",
+        "@type",
+        "mainEntity"
+       ]
+      },
+      {
+       "type": "BreadcrumbList",
+       "keys": [
+        "@context",
+        "@type",
+        "itemListElement"
+       ]
+      }
+     ],
+     "items_of_interest": [
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Crunchwrap Supreme\u00ae\", \"description\": \"A warm flour tortilla filled with seasoned beef, warm Nacho Cheese sauce, a crispy tostada shell, lettuce, diced tomatoes, and reduced-fat sour cream folded into our signature Crunchwrap form and grilled to go (530 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$8.53\"}}",
+       "displayed": [
+        "$$8.53",
+        "$$8.53",
+        "$$8.53"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Chalupa Supreme\", \"description\": \"A warm-and-flaky flatbread shell filled with seasoned beef, lettuce, diced tomaotes, a blend of mozzarella, pepperjack, and cheddar cheeses, and reduced-fat sour cream. (350 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$7.31+\"}}",
+       "displayed": [
+        "$$7.31+",
+        "$$7.31+",
+        "$$7.31+"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Crunchwrap Supreme\u00ae Combo\", \"description\": \"Includes a Crunchwrap Supreme\u00ae, a Crunchy Taco, and a Large fountain drink. (700-1120 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$12.55\"}}",
+       "displayed": [
+        "$$12.55",
+        "$$12.55"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Crunchwrap Supreme\u00ae\", \"description\": \"A warm flour tortilla filled with seasoned beef, warm Nacho Cheese sauce, a crispy tostada shell, lettuce, diced tomatoes, and reduced-fat sour cream folded into our signature Crunchwrap form and grilled to go (530 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$8.53\"}}",
+       "displayed": [
+        "$$8.53",
+        "$$8.53",
+        "$$8.53"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Black Bean Crunchwrap Supreme\u00ae\", \"description\": \"A warm flour tortilla filled with slow-simmered black beans, warm Nacho Cheese sauce, a crispy tostada shell, lettuce, diced tomatoes, and reduced-fat sour cream folded into our signature Crunchwrap form and grilled to go. Item is lacto-ovo, allowing for dairy & egg consumption. Preparation methods may lead to cross contact with meat. See ta.co for full details. (520 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$7.55\"}}",
+       "displayed": [
+        "$$7.55"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Black Bean Chalupa Supreme\", \"description\": \"A warm-and-flaky flatbread shell filled with slow-simmered black beans, lettuce, diced tomatoes, a blend of mozzarella, pepperjack, and cheddar cheeses, and reduced-fat sour cream. Item is lacto-ovo, allowing for dairy & egg consumption. Preparation methods may lead to cross contact with meat. See ta.co for full details. (340 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$6.94\"}}",
+       "displayed": [
+        "$$6.94"
+       ]
+      }
+     ],
+     "offers": 182,
+     "offers_with_priceCurrency": 0,
+     "priceCurrency_values": [],
+     "currency_mentions": {
+      "currency": "\"name\\\":\\\"Steak\\\",\\\"link\\\":\\\"/steak-near-me/\\\",\\\"__typename\\\":\\\"BusinessTag\\\"}],\\\"currency\\\":\\\"USD\\\",\\\"coverImgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/image/fit=",
+      "currencyCode": ",\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\":{\\\"kind\\\":\\\"Name\\\",\\\"value\\\":\\\"currencyCode\\\"},\\\"arguments\\\":[],\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\"",
+      "USD": " {{senderName}}\\\",\\\"nativeGiftCard_preview_messageSection_amount\\\":\\\"{{amount}} USD\\\",\\\"nativeGiftCard_preview_messageSection_disclaimer\\\":\\\"Terms and Condition"
+     }
+    }
+   },
+   {
+    "group": "taco-bell-",
+    "original": "https://www.doordash.com/store/taco-bell-1194846/",
+    "captured": "20260722012438",
+    "status": 200,
+    "bytes": 3129612,
+    "challenge": false,
+    "challenge_markers": [],
+    "title": "Order Taco Bell - Aloha, OR Menu Delivery [Menu &amp; Prices] | Aloha - DoorDash",
+    "jsonld_types": [
+     "restaurant",
+     "postaladdress",
+     "geocoordinates",
+     "menu",
+     "review",
+     "person",
+     "aggregaterating",
+     "organization",
+     "menuitem",
+     "faqpage",
+     "question",
+     "answer",
+     "breadcrumblist",
+     "listitem"
+    ],
+    "restaurant_found": true,
+    "name": "Taco Bell",
+    "us_address": {
+     "city": "Aloha",
+     "state": "OR",
+     "zip": ""
+    },
+    "address_problem": null,
+    "menu_items": 68,
+    "priced_items": 60,
+    "currencies": [
+     "?"
+    ],
+    "sample_items": [
+     {
+      "name": "Chicken Quesadilla",
+      "price_cents": 853,
+      "currency": null
+     },
+     {
+      "name": "Beefy 5-Layer Burrito",
+      "price_cents": 633,
+      "currency": null
+     },
+     {
+      "name": "Crunchwrap Supreme\u00ae",
+      "price_cents": 853,
+      "currency": null
+     },
+     {
+      "name": "Nachos BellGrande\u00ae",
+      "price_cents": 841,
+      "currency": null
+     },
+     {
+      "name": "Cheesy Gordita Crunch",
+      "price_cents": 767,
+      "currency": null
+     }
+    ],
+    "embedded_json": [
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 31990,
+      "parsed": "json",
+      "price_paths": [
+       {
+        "path": ".priceRange",
+        "sample": "$$"
+       },
+       {
+        "path": ".hasMenu.hasMenuSection[][].hasMenuItem[].offers.price",
+        "sample": "$8.53"
+       }
+      ],
+      "menu_paths": [
+       ".hasMenu"
+      ]
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 227,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 29039,
+      "parsed": "json",
+      "price_paths": [
+       {
+        "path": ".hasMenuSection[][].hasMenuItem[].offers.price",
+        "sample": "$8.53"
+       }
+      ],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 1282,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 403,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": [
+       ".itemListElement[].item"
+      ]
+     }
+    ],
+    "counts": {
+     "\"price\"": 182,
+     "\\\"price\\\"": 244,
+     "displayPrice": 243,
+     "__next_f": 64,
+     "__APOLLO_STATE__": 0,
+     "__REACT_QUERY_STATE__": 0,
+     "application/ld+json": 5,
+     "MenuItem": 201,
+     "storeUuid": 0
+    },
+    "phrases": {
+     "estimated based on": "p from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across store, enter address for menu prices at your ne",
+     "prices are estimated": "ry or pickup from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across store, enter address for menu prices",
+     "may vary": "ailStore_schedule_delivery_callout_modal_primary_text\\\":\\\"Got it\\\",\\\"stores_pricing_disclosure_one\\\":\\\"Prices may vary from in-store or elsewhere for this location. Prices for delivery and pickup may vary.\\\",\\\"stores_pri",
+     "prices may differ": "trings_orderCheckInModal_secondaryActionText\\\":\\\"Cancel\\\",\\\"checkoutStrings_itemPriceMayDiffer_title\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\"",
+     "prices vary": "_q10\\\":\\\"How much do popular {{business}} menu items cost?\\\",\\\"seo_faq_business_redesign_a10\\\":\\\"{{business}} prices vary by location. To view the most up-to-date information, check out your nearest {{business}} restaura",
+     "menu prices": "tle\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverSubtitle\\\":\\\"Prices for menus are set directly by th",
+     "service fee": "ble, select store locations will not be awarded 5% credit\\nback in addition to $10 off promo. Fees (including service fee),\\ntaxes, and gratuity apply. $0 delivery fees and 10% off due to\\nreduced service fees only apply"
+    },
+    "price_contexts": [
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "a blend of mozzarella, pepperjack, and cheddar cheeses with even more cheese grilled on the top. (690 cal.)\\\",\\\"displayPrice\\\":\\\"$$7.92+\\\",\\\"displayStrikethroughPrice\\\":\\\"\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/im"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "ull,\\\"specialInstructions\\\":\\\"\\\",\\\"quickAddContext\\\":{\\\"__typename\\\":\\\"QuickAddContext\\\",\\\"isEligible\\\":false,\\\"price\\\":{\\\"__typename\\\":\\\"QuickAddMonetaryFields\\\",\\\"currency\\\":\\\"USD\\\",\\\"decimalPlaces\\\":2,\\\"displayString\\"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "tomatoes, and reduced-fat sour cream folded into our signature Crunchwrap form and grilled to go (530 cal.)\\\",\\\"displayPrice\\\":\\\"$$8.53\\\",\\\"displayStrikethroughPrice\\\":\\\"\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/ima"
+     }
+    ],
+    "jsonld_shape": {
+     "blocks": [
+      {
+       "type": "Restaurant",
+       "keys": [
+        "@context",
+        "@type",
+        "address",
+        "aggregateRating",
+        "geo",
+        "hasMenu",
+        "image",
+        "name",
+        "priceRange",
+        "review",
+        "servesCuisine"
+       ],
+       "address": "{\"@type\": \"PostalAddress\", \"streetAddress\": \"19275 Southwest Tualatin Valley Highway\", \"addressLocality\": \"Aloha\", \"addressRegion\": \"OR\", \"addressCountry\": \"US\"}",
+       "menu_where": "Restaurant.hasMenu",
+       "menu_keys": [
+        "@type",
+        "hasMenuSection"
+       ],
+       "section_nesting": "list of lists",
+       "sections": 8,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"Chicken Quesadilla\", \"description\": \"A large flour tortilla filled with a blend of mozzarella, pepperjack, and cheddar cheeses, grilled, marinated all-white-meat chicken, Creamy Jalape\u00f1o sauce, and grilled to perfection. (490 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$8.53\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"Beefy 5-Layer Burrito\", \"description\": \"A warm flour tortilla filled with seasoned beef, refried beans, reduced-fat sour cream, and shredded cheddar cheese with a layer of warm Nacho Cheese sauce wrapped around it. (490 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$6.33\"}}"
+       ],
+       "name": "\"Taco Bell\"",
+       "servesCuisine": "[\"Mexican\", \"Fast Food\", \"Comfort Food\", \"Chicken\", \"Lunch\", \"Tacos\", \"Nachos\", \"Quesadillas\", \"Beef\", \"Spicy\", \"Potato\", \"Soda\", \"Vegetarian\", \"Dinner\", \"Desse\u2026",
+       "priceRange": "\"$$\""
+      },
+      {
+       "type": "Organization",
+       "keys": [
+        "@context",
+        "@type",
+        "name",
+        "sameAs",
+        "url"
+       ],
+       "url": "\"http://www.doordash.com\"",
+       "name": "\"DoorDash\""
+      },
+      {
+       "type": "Menu",
+       "keys": [
+        "@type",
+        "hasMenuSection"
+       ],
+       "menu_where": "top-level Menu block",
+       "menu_keys": [
+        "@type",
+        "hasMenuSection"
+       ],
+       "section_nesting": "list of lists",
+       "sections": 8,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"Chicken Quesadilla\", \"description\": \"A large flour tortilla filled with a blend of mozzarella, pepperjack, and cheddar cheeses, grilled, marinated all-white-meat chicken, Creamy Jalape\u00f1o sauce, and grilled to perfection. (490 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$8.53\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"Beefy 5-Layer Burrito\", \"description\": \"A warm flour tortilla filled with seasoned beef, refried beans, reduced-fat sour cream, and shredded cheddar cheese with a layer of warm Nacho Cheese sauce wrapped around it. (490 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$6.33\"}}"
+       ]
+      },
+      {
+       "type": "FAQPage",
+       "keys": [
+        "@context",
+        "@type",
+        "mainEntity"
+       ]
+      },
+      {
+       "type": "BreadcrumbList",
+       "keys": [
+        "@context",
+        "@type",
+        "itemListElement"
+       ]
+      }
+     ],
+     "items_of_interest": [
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Crunchwrap Supreme\u00ae\", \"description\": \"A warm flour tortilla filled with seasoned beef, warm Nacho Cheese sauce, a crispy tostada shell, lettuce, diced tomatoes, and reduced-fat sour cream folded into our signature Crunchwrap form and grilled to go (530 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$8.53\"}}",
+       "displayed": [
+        "$$8.53",
+        "$$8.53",
+        "$$8.53"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Chalupa Supreme\", \"description\": \"A warm-and-flaky flatbread shell filled with seasoned beef, lettuce, diced tomaotes, a blend of mozzarella, pepperjack, and cheddar cheeses, and reduced-fat sour cream. (350 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$7.31+\"}}",
+       "displayed": [
+        "$$7.31+",
+        "$$7.31+",
+        "$$7.31+"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Crunchwrap Supreme\u00ae Combo\", \"description\": \"Includes a Crunchwrap Supreme\u00ae, a Crunchy Taco, and a Large fountain drink. (700-1120 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$12.55\"}}",
+       "displayed": [
+        "$$12.55",
+        "$$12.55"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Crunchwrap Supreme\u00ae\", \"description\": \"A warm flour tortilla filled with seasoned beef, warm Nacho Cheese sauce, a crispy tostada shell, lettuce, diced tomatoes, and reduced-fat sour cream folded into our signature Crunchwrap form and grilled to go (530 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$8.53\"}}",
+       "displayed": [
+        "$$8.53",
+        "$$8.53",
+        "$$8.53"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Black Bean Crunchwrap Supreme\u00ae\", \"description\": \"A warm flour tortilla filled with slow-simmered black beans, warm Nacho Cheese sauce, a crispy tostada shell, lettuce, diced tomatoes, and reduced-fat sour cream folded into our signature Crunchwrap form and grilled to go. Item is lacto-ovo, allowing for dairy & egg consumption. Preparation methods may lead to cross contact with meat. See ta.co for full details. (520 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$7.55\"}}",
+       "displayed": [
+        "$$7.55",
+        "$$7.55"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Black Bean Crunchwrap Supreme\u00ae\", \"description\": \"A warm flour tortilla filled with slow-simmered black beans, warm Nacho Cheese sauce, a crispy tostada shell, lettuce, diced tomatoes, and reduced-fat sour cream folded into our signature Crunchwrap form and grilled to go. Item is lacto-ovo, allowing for dairy & egg consumption. Preparation methods may lead to cross contact with meat. See ta.co for full details. (520 cal.)\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$7.55\"}}",
+       "displayed": [
+        "$$7.55",
+        "$$7.55"
+       ]
+      }
+     ],
+     "offers": 182,
+     "offers_with_priceCurrency": 0,
+     "priceCurrency_values": [],
+     "currency_mentions": {
+      "currency": "\"name\\\":\\\"Steak\\\",\\\"link\\\":\\\"/steak-near-me/\\\",\\\"__typename\\\":\\\"BusinessTag\\\"}],\\\"currency\\\":\\\"USD\\\",\\\"coverImgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/image/fit=",
+      "currencyCode": ",\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\":{\\\"kind\\\":\\\"Name\\\",\\\"value\\\":\\\"currencyCode\\\"},\\\"arguments\\\":[],\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\"",
+      "USD": " {{senderName}}\\\",\\\"nativeGiftCard_preview_messageSection_amount\\\":\\\"{{amount}} USD\\\",\\\"nativeGiftCard_preview_messageSection_disclaimer\\\":\\\"Terms and Condition"
+     }
+    }
+   },
+   {
+    "group": "mcdonalds-",
+    "original": "https://www.doordash.com/store/mcdonalds-1140158/",
+    "captured": "20260726012051",
+    "status": 200,
+    "bytes": 3333719,
+    "challenge": false,
+    "challenge_markers": [],
+    "title": "Order McDonald&#x27;s - Vancouver, BC Menu Delivery [Menu &amp; Prices] | Vancouver - DoorDash",
+    "jsonld_types": [
+     "restaurant",
+     "postaladdress",
+     "geocoordinates",
+     "menu",
+     "review",
+     "person",
+     "aggregaterating",
+     "organization",
+     "menuitem",
+     "faqpage",
+     "question",
+     "answer",
+     "breadcrumblist",
+     "listitem"
+    ],
+    "restaurant_found": true,
+    "name": "McDonald's",
+    "us_address": null,
+    "address_problem": "country 'ca' is outside the US",
+    "menu_items": 75,
+    "priced_items": 0,
+    "currencies": [],
+    "sample_items": [],
+    "embedded_json": [
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 16773,
+      "parsed": "json",
+      "price_paths": [
+       {
+        "path": ".priceRange",
+        "sample": "$$"
+       },
+       {
+        "path": ".hasMenu.hasMenuSection[][].hasMenuItem[].offers.price",
+        "sample": "CA$3.59"
+       }
+      ],
+      "menu_paths": [
+       ".hasMenu"
+      ]
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 227,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 13357,
+      "parsed": "json",
+      "price_paths": [
+       {
+        "path": ".hasMenuSection[][].hasMenuItem[].offers.price",
+        "sample": "CA$3.59"
+       }
+      ],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 1375,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 409,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": [
+       ".itemListElement[].item"
+      ]
+     }
+    ],
+    "counts": {
+     "\"price\"": 182,
+     "\\\"price\\\"": 329,
+     "displayPrice": 328,
+     "__next_f": 63,
+     "__APOLLO_STATE__": 0,
+     "__REACT_QUERY_STATE__": 0,
+     "application/ld+json": 5,
+     "MenuItem": 199,
+     "storeUuid": 0
+    },
+    "phrases": {
+     "estimated based on": "p from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across store, enter address for menu prices at your ne",
+     "prices are estimated": "ry or pickup from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across store, enter address for menu prices",
+     "may vary": "ailStore_schedule_delivery_callout_modal_primary_text\\\":\\\"Got it\\\",\\\"stores_pricing_disclosure_one\\\":\\\"Prices may vary from in-store or elsewhere for this location. Prices for delivery and pickup may vary.\\\",\\\"stores_pri",
+     "prices may differ": "trings_orderCheckInModal_secondaryActionText\\\":\\\"Cancel\\\",\\\"checkoutStrings_itemPriceMayDiffer_title\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\"",
+     "prices vary": "_q10\\\":\\\"How much do popular {{business}} menu items cost?\\\",\\\"seo_faq_business_redesign_a10\\\":\\\"{{business}} prices vary by location. To view the most up-to-date information, check out your nearest {{business}} restaura",
+     "menu prices": "tle\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverSubtitle\\\":\\\"Prices for menus are set directly by th",
+     "service fee": "ble, select store locations will not be awarded 5% credit\\nback in addition to $10 off promo. Fees (including service fee),\\ntaxes, and gratuity apply. $0 delivery fees and 10% off due to\\nreduced service fees only apply"
+    },
+    "price_contexts": [
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "name\\\":\\\"StorePageCarouselItem\\\",\\\"id\\\":\\\"8505956775\\\",\\\"name\\\":\\\"Big Mac [560.0 Cals]\\\",\\\"description\\\":\\\"\\\",\\\"displayPrice\\\":\\\"CA$9.29\\\",\\\"displayStrikethroughPrice\\\":\\\"\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/im"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "ull,\\\"specialInstructions\\\":\\\"\\\",\\\"quickAddContext\\\":{\\\"__typename\\\":\\\"QuickAddContext\\\",\\\"isEligible\\\":false,\\\"price\\\":{\\\"__typename\\\":\\\"QuickAddMonetaryFields\\\",\\\"currency\\\":\\\"CAD\\\",\\\"decimalPlaces\\\":2,\\\"displayString\\"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "lItem\\\",\\\"id\\\":\\\"6598978007\\\",\\\"name\\\":\\\"10 McNuggets Extra Value Meal [840-1190 Cals]\\\",\\\"description\\\":\\\"\\\",\\\"displayPrice\\\":\\\"CA$18.19\\\",\\\"displayStrikethroughPrice\\\":\\\"\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/i"
+     }
+    ],
+    "jsonld_shape": {
+     "blocks": [
+      {
+       "type": "Restaurant",
+       "keys": [
+        "@context",
+        "@type",
+        "address",
+        "aggregateRating",
+        "geo",
+        "hasMenu",
+        "image",
+        "name",
+        "priceRange",
+        "review",
+        "servesCuisine"
+       ],
+       "address": "{\"@type\": \"PostalAddress\", \"streetAddress\": \"891 Granville Street\", \"addressLocality\": \"Vancouver\", \"addressRegion\": \"BC\", \"addressCountry\": \"CA\"}",
+       "menu_where": "Restaurant.hasMenu",
+       "menu_keys": [
+        "@type",
+        "hasMenuSection"
+       ],
+       "section_nesting": "list of lists",
+       "sections": 7,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"World Famous Fries [240.0 Cals]\", \"description\": \"\", \"offers\": {\"@type\": \"Offer\", \"price\": \"CA$3.59\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"Big Mac Extra Value Meal [710-1140 Cals]\", \"description\": \"\", \"offers\": {\"@type\": \"Offer\", \"price\": \"CA$16.29\"}}"
+       ],
+       "name": "\"McDonald's\"",
+       "servesCuisine": "[\"Burgers\", \"Chicken\", \"Wraps\", \"Breakfast\", \"Fish\", \"Coffee\"]",
+       "priceRange": "\"$$\""
+      },
+      {
+       "type": "Organization",
+       "keys": [
+        "@context",
+        "@type",
+        "name",
+        "sameAs",
+        "url"
+       ],
+       "url": "\"http://www.doordash.com\"",
+       "name": "\"DoorDash\""
+      },
+      {
+       "type": "Menu",
+       "keys": [
+        "@type",
+        "hasMenuSection"
+       ],
+       "menu_where": "top-level Menu block",
+       "menu_keys": [
+        "@type",
+        "hasMenuSection"
+       ],
+       "section_nesting": "list of lists",
+       "sections": 7,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"World Famous Fries [240.0 Cals]\", \"description\": \"\", \"offers\": {\"@type\": \"Offer\", \"price\": \"CA$3.59\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"Big Mac Extra Value Meal [710-1140 Cals]\", \"description\": \"\", \"offers\": {\"@type\": \"Offer\", \"price\": \"CA$16.29\"}}"
+       ]
+      },
+      {
+       "type": "FAQPage",
+       "keys": [
+        "@context",
+        "@type",
+        "mainEntity"
+       ]
+      },
+      {
+       "type": "BreadcrumbList",
+       "keys": [
+        "@context",
+        "@type",
+        "itemListElement"
+       ]
+      }
+     ],
+     "items_of_interest": [
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"6 Chicken McNuggets [290-360 Cals]\", \"description\": \"\", \"offers\": {\"@type\": \"Offer\", \"price\": \"CA$7.69\"}}",
+       "displayed": [
+        "CA$7.69",
+        "CA$7.69"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"10 Chicken McNuggets [490-630 Cals]\", \"description\": \"\", \"offers\": {\"@type\": \"Offer\", \"price\": \"CA$11.19\"}}",
+       "displayed": [
+        "CA$11.19",
+        "CA$11.19",
+        "CA$11.19"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"10 McNuggets Extra Value Meal [840-1190 Cals]\", \"description\": \"\", \"offers\": {\"@type\": \"Offer\", \"price\": \"CA$18.19\"}}",
+       "displayed": [
+        "CA$18.19",
+        "CA$18.19",
+        "CA$18.19"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"6 McNuggets Extra Value Meal [640-920 Cals]\", \"description\": \"\", \"offers\": {\"@type\": \"Offer\", \"price\": \"CA$14.69\"}}",
+       "displayed": [
+        "CA$14.69",
+        "CA$14.69",
+        "CA$14.69"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"40-piece Chicken McNuggets (Serves 4) [1860-2210 Cals]\", \"description\": \"\", \"offers\": {\"@type\": \"Offer\", \"price\": \"CA$35.29\"}}",
+       "displayed": [
+        "CA$35.29",
+        "CA$35.29"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"20-piece Chicken McNuggets Meal (Serves 2) [1650-2280 Cals]\", \"description\": \"\", \"offers\": {\"@type\": \"Offer\", \"price\": \"CA$32.99\"}}",
+       "displayed": [
+        "CA$32.99"
+       ]
+      }
+     ],
+     "offers": 182,
+     "offers_with_priceCurrency": 0,
+     "priceCurrency_values": [],
+     "currency_mentions": {
+      "currency": "ame\\\":\\\"Coffee\\\",\\\"link\\\":\\\"/coffee-near-me/\\\",\\\"__typename\\\":\\\"BusinessTag\\\"}],\\\"currency\\\":\\\"CAD\\\",\\\"coverImgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/image/fit=",
+      "currencyCode": ",\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\":{\\\"kind\\\":\\\"Name\\\",\\\"value\\\":\\\"currencyCode\\\"},\\\"arguments\\\":[],\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\"",
+      "USD": " {{senderName}}\\\",\\\"nativeGiftCard_preview_messageSection_amount\\\":\\\"{{amount}} USD\\\",\\\"nativeGiftCard_preview_messageSection_disclaimer\\\":\\\"Terms and Condition"
+     }
+    }
+   },
+   {
+    "group": "mcdonalds-",
+    "original": "https://www.doordash.com/store/mcdonalds-1139987/",
+    "captured": "20260704075532",
+    "status": 200,
+    "bytes": 3015721,
+    "challenge": false,
+    "challenge_markers": [],
+    "title": "Order McDonald&#x27;s - Toronto, ON Menu Delivery [Menu &amp; Prices] | Toronto - DoorDash",
+    "jsonld_types": [
+     "restaurant",
+     "postaladdress",
+     "geocoordinates",
+     "menu",
+     "review",
+     "person",
+     "aggregaterating",
+     "organization",
+     "menuitem",
+     "faqpage",
+     "question",
+     "answer",
+     "breadcrumblist",
+     "listitem"
+    ],
+    "restaurant_found": true,
+    "name": "McDonald's",
+    "us_address": null,
+    "address_problem": "country 'ca' is outside the US",
+    "menu_items": 82,
+    "priced_items": 0,
+    "currencies": [],
+    "sample_items": [],
+    "embedded_json": [
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 15255,
+      "parsed": "json",
+      "price_paths": [
+       {
+        "path": ".priceRange",
+        "sample": "$$"
+       },
+       {
+        "path": ".hasMenu.hasMenuSection[][].hasMenuItem[].offers.price",
+        "sample": "CA$10.89"
+       }
+      ],
+      "menu_paths": [
+       ".hasMenu"
+      ]
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 227,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 12696,
+      "parsed": "json",
+      "price_paths": [
+       {
+        "path": ".hasMenuSection[][].hasMenuItem[].offers.price",
+        "sample": "CA$10.89"
+       }
+      ],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 1398,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 407,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": [
+       ".itemListElement[].item"
+      ]
+     }
+    ],
+    "counts": {
+     "\"price\"": 182,
+     "\\\"price\\\"": 243,
+     "displayPrice": 242,
+     "__next_f": 64,
+     "__APOLLO_STATE__": 0,
+     "__REACT_QUERY_STATE__": 0,
+     "application/ld+json": 5,
+     "MenuItem": 203,
+     "storeUuid": 0
+    },
+    "phrases": {
+     "estimated based on": "p from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across store, enter address for menu prices at your ne",
+     "prices are estimated": "ry or pickup from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across store, enter address for menu prices",
+     "may vary": "ailStore_schedule_delivery_callout_modal_primary_text\\\":\\\"Got it\\\",\\\"stores_pricing_disclosure_one\\\":\\\"Prices may vary from in-store or elsewhere for this location. Prices for delivery and pickup may vary.\\\",\\\"stores_pri",
+     "prices may differ": "trings_orderCheckInModal_secondaryActionText\\\":\\\"Cancel\\\",\\\"checkoutStrings_itemPriceMayDiffer_title\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\"",
+     "prices vary": "_q10\\\":\\\"How much do popular {{business}} menu items cost?\\\",\\\"seo_faq_business_redesign_a10\\\":\\\"{{business}} prices vary by location. To view the most up-to-date information, check out your nearest {{business}} restaura",
+     "menu prices": "tle\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverSubtitle\\\":\\\"Prices for menus are set directly by th",
+     "service fee": "ble, select store locations will not be awarded 5% credit\\nback in addition to $10 off promo. Fees (including service fee),\\ntaxes, and gratuity apply. $0 delivery fees and 10% off due to\\nreduced service fees only apply"
+    },
+    "price_contexts": [
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "\",\\\"id\\\":\\\"26384010124\\\",\\\"name\\\":\\\"Breakfast Bundle for 4 (Serves 4) [1810-2410 Cals]\\\",\\\"description\\\":\\\"\\\",\\\"displayPrice\\\":\\\"CA$36.39\\\",\\\"displayStrikethroughPrice\\\":\\\"\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/i"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "ull,\\\"specialInstructions\\\":\\\"\\\",\\\"quickAddContext\\\":{\\\"__typename\\\":\\\"QuickAddContext\\\",\\\"isEligible\\\":false,\\\"price\\\":{\\\"__typename\\\":\\\"QuickAddMonetaryFields\\\",\\\"currency\\\":\\\"CAD\\\",\\\"decimalPlaces\\\":2,\\\"displayString\\"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "\",\\\"id\\\":\\\"42175066382\\\",\\\"name\\\":\\\"Sesame Egg BLT Bagel Extra Value Meal [733.0 Cals]\\\",\\\"description\\\":\\\"\\\",\\\"displayPrice\\\":\\\"CA$12.19\\\",\\\"displayStrikethroughPrice\\\":\\\"\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/i"
+     }
+    ],
+    "jsonld_shape": {
+     "blocks": [
+      {
+       "type": "Restaurant",
+       "keys": [
+        "@context",
+        "@type",
+        "address",
+        "aggregateRating",
+        "geo",
+        "hasMenu",
+        "image",
+        "name",
+        "priceRange",
+        "review",
+        "servesCuisine"
+       ],
+       "address": "{\"@type\": \"PostalAddress\", \"streetAddress\": \"121 Front Street East\", \"addressLocality\": \"Toronto\", \"addressRegion\": \"ON\", \"addressCountry\": \"CA\"}",
+       "menu_where": "Restaurant.hasMenu",
+       "menu_keys": [
+        "@type",
+        "hasMenuSection"
+       ],
+       "section_nesting": "list of lists",
+       "sections": 9,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"Sausage 'N Egg McMuffin Extra Value Meal [590.0 Cals]\", \"description\": \"\", \"offers\": {\"@type\": \"Offer\", \"price\": \"CA$10.89\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"Chicken McMuffin [360.0 Cals]\", \"description\": \"\", \"offers\": {\"@type\": \"Offer\", \"price\": \"CA$5.99\"}}"
+       ],
+       "name": "\"McDonald's\"",
+       "servesCuisine": "[\"Burgers\", \"Chicken\", \"Wraps\", \"Breakfast\", \"Fish\", \"Coffee\"]",
+       "priceRange": "\"$$\""
+      },
+      {
+       "type": "Organization",
+       "keys": [
+        "@context",
+        "@type",
+        "name",
+        "sameAs",
+        "url"
+       ],
+       "url": "\"http://www.doordash.com\"",
+       "name": "\"DoorDash\""
+      },
+      {
+       "type": "Menu",
+       "keys": [
+        "@type",
+        "hasMenuSection"
+       ],
+       "menu_where": "top-level Menu block",
+       "menu_keys": [
+        "@type",
+        "hasMenuSection"
+       ],
+       "section_nesting": "list of lists",
+       "sections": 9,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"Sausage 'N Egg McMuffin Extra Value Meal [590.0 Cals]\", \"description\": \"\", \"offers\": {\"@type\": \"Offer\", \"price\": \"CA$10.89\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"Chicken McMuffin [360.0 Cals]\", \"description\": \"\", \"offers\": {\"@type\": \"Offer\", \"price\": \"CA$5.99\"}}"
+       ]
+      },
+      {
+       "type": "FAQPage",
+       "keys": [
+        "@context",
+        "@type",
+        "mainEntity"
+       ]
+      },
+      {
+       "type": "BreadcrumbList",
+       "keys": [
+        "@context",
+        "@type",
+        "itemListElement"
+       ]
+      }
+     ],
+     "items_of_interest": [],
+     "offers": 182,
+     "offers_with_priceCurrency": 0,
+     "priceCurrency_values": [],
+     "currency_mentions": {
+      "currency": "ame\\\":\\\"Coffee\\\",\\\"link\\\":\\\"/coffee-near-me/\\\",\\\"__typename\\\":\\\"BusinessTag\\\"}],\\\"currency\\\":\\\"CAD\\\",\\\"coverImgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/image/fit=",
+      "currencyCode": ",\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\":{\\\"kind\\\":\\\"Name\\\",\\\"value\\\":\\\"currencyCode\\\"},\\\"arguments\\\":[],\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\"",
+      "USD": " {{senderName}}\\\",\\\"nativeGiftCard_preview_messageSection_amount\\\":\\\"{{amount}} USD\\\",\\\"nativeGiftCard_preview_messageSection_disclaimer\\\":\\\"Terms and Condition"
+     }
+    }
+   },
+   {
+    "group": "mcdonalds-",
+    "original": "https://www.doordash.com/store/mcdonalds-1498242/",
+    "captured": "20260517000910",
+    "status": 200,
+    "bytes": 2991184,
+    "challenge": false,
+    "challenge_markers": [],
+    "title": "Order McDonald&#x27;s - Port Coquitlam, BC Menu Delivery [Menu &amp; Prices] | Port Coquitlam - DoorDash",
+    "jsonld_types": [
+     "restaurant",
+     "postaladdress",
+     "geocoordinates",
+     "menu",
+     "review",
+     "person",
+     "aggregaterating",
+     "organization",
+     "menuitem",
+     "faqpage",
+     "question",
+     "answer",
+     "breadcrumblist",
+     "listitem"
+    ],
+    "restaurant_found": true,
+    "name": "McDonald's",
+    "us_address": null,
+    "address_problem": "country 'ca' is outside the US",
+    "menu_items": 75,
+    "priced_items": 0,
+    "currencies": [],
+    "sample_items": [],
+    "embedded_json": [
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 15932,
+      "parsed": "json",
+      "price_paths": [
+       {
+        "path": ".priceRange",
+        "sample": "$$"
+       },
+       {
+        "path": ".hasMenu.hasMenuSection[][].hasMenuItem[].offers.price",
+        "sample": "CA$3.49"
+       }
+      ],
+      "menu_paths": [
+       ".hasMenu"
+      ]
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 227,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 13321,
+      "parsed": "json",
+      "price_paths": [
+       {
+        "path": ".hasMenuSection[][].hasMenuItem[].offers.price",
+        "sample": "CA$3.49"
+       }
+      ],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 1391,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 414,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": [
+       ".itemListElement[].item"
+      ]
+     }
+    ],
+    "counts": {
+     "\"price\"": 182,
+     "\\\"price\\\"": 322,
+     "displayPrice": 321,
+     "__next_f": 66,
+     "__APOLLO_STATE__": 0,
+     "__REACT_QUERY_STATE__": 0,
+     "application/ld+json": 5,
+     "MenuItem": 201,
+     "storeUuid": 0
+    },
+    "phrases": {
+     "estimated based on": "p from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across store, enter address for menu prices at your ne",
+     "prices are estimated": "ry or pickup from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across store, enter address for menu prices",
+     "may vary": "ailStore_schedule_delivery_callout_modal_primary_text\\\":\\\"Got it\\\",\\\"stores_pricing_disclosure_one\\\":\\\"Prices may vary from in-store or elsewhere for this location. Prices for delivery and pickup may vary.\\\",\\\"stores_pri",
+     "prices may differ": "trings_orderCheckInModal_secondaryActionText\\\":\\\"Cancel\\\",\\\"checkoutStrings_itemPriceMayDiffer_title\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\"",
+     "prices vary": "_q10\\\":\\\"How much do popular {{business}} menu items cost?\\\",\\\"seo_faq_business_redesign_a10\\\":\\\"{{business}} prices vary by location. To view the most up-to-date information, check out your nearest {{business}} restaura",
+     "menu prices": "tle\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverSubtitle\\\":\\\"Prices for menus are set directly by th",
+     "service fee": "ble, select store locations will not be awarded 5% credit\\nback in addition to $10 off promo. Fees (including service fee),\\ntaxes, and gratuity apply. $0 delivery fees and 10% off due to\\nreduced service fees only apply"
+    },
+    "price_contexts": [
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "ouselItem\\\",\\\"id\\\":\\\"10067803556\\\",\\\"name\\\":\\\"Big Mac Extra Value Meal [710-1140 Cals]\\\",\\\"description\\\":\\\"\\\",\\\"displayPrice\\\":\\\"CA$14.29\\\",\\\"displayStrikethroughPrice\\\":\\\"\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/i"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "ull,\\\"specialInstructions\\\":\\\"\\\",\\\"quickAddContext\\\":{\\\"__typename\\\":\\\"QuickAddContext\\\",\\\"isEligible\\\":false,\\\"price\\\":{\\\"__typename\\\":\\\"QuickAddMonetaryFields\\\",\\\"currency\\\":\\\"CAD\\\",\\\"decimalPlaces\\\":2,\\\"displayString\\"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "\"10067797543\\\",\\\"name\\\":\\\"Quarter Pounder with Cheese Extra Value Meal [670-1100 Cals]\\\",\\\"description\\\":\\\"\\\",\\\"displayPrice\\\":\\\"CA$16.89\\\",\\\"displayStrikethroughPrice\\\":\\\"\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/i"
+     }
+    ],
+    "jsonld_shape": {
+     "blocks": [
+      {
+       "type": "Restaurant",
+       "keys": [
+        "@context",
+        "@type",
+        "address",
+        "aggregateRating",
+        "geo",
+        "hasMenu",
+        "image",
+        "name",
+        "priceRange",
+        "review",
+        "servesCuisine"
+       ],
+       "address": "{\"@type\": \"PostalAddress\", \"streetAddress\": \"1940 Oxford Connector\", \"addressLocality\": \"Port Coquitlam\", \"addressRegion\": \"BC\", \"addressCountry\": \"CA\"}",
+       "menu_where": "Restaurant.hasMenu",
+       "menu_keys": [
+        "@type",
+        "hasMenuSection"
+       ],
+       "section_nesting": "list of lists",
+       "sections": 7,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"World Famous Fries [240.0 Cals]\", \"description\": \"\", \"offers\": {\"@type\": \"Offer\", \"price\": \"CA$3.49\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"6 Chicken McNuggets [290-360 Cals]\", \"description\": \"\", \"offers\": {\"@type\": \"Offer\", \"price\": \"CA$7.59\"}}"
+       ],
+       "name": "\"McDonald's\"",
+       "servesCuisine": "[\"Burgers\", \"Chicken\", \"Wraps\", \"Breakfast\", \"Fish\", \"Coffee\"]",
+       "priceRange": "\"$$\""
+      },
+      {
+       "type": "Organization",
+       "keys": [
+        "@context",
+        "@type",
+        "name",
+        "sameAs",
+        "url"
+       ],
+       "url": "\"http://www.doordash.com\"",
+       "name": "\"DoorDash\""
+      },
+      {
+       "type": "Menu",
+       "keys": [
+        "@type",
+        "hasMenuSection"
+       ],
+       "menu_where": "top-level Menu block",
+       "menu_keys": [
+        "@type",
+        "hasMenuSection"
+       ],
+       "section_nesting": "list of lists",
+       "sections": 7,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"World Famous Fries [240.0 Cals]\", \"description\": \"\", \"offers\": {\"@type\": \"Offer\", \"price\": \"CA$3.49\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"6 Chicken McNuggets [290-360 Cals]\", \"description\": \"\", \"offers\": {\"@type\": \"Offer\", \"price\": \"CA$7.59\"}}"
+       ]
+      },
+      {
+       "type": "FAQPage",
+       "keys": [
+        "@context",
+        "@type",
+        "mainEntity"
+       ]
+      },
+      {
+       "type": "BreadcrumbList",
+       "keys": [
+        "@context",
+        "@type",
+        "itemListElement"
+       ]
+      }
+     ],
+     "items_of_interest": [
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"6 Chicken McNuggets [290-360 Cals]\", \"description\": \"\", \"offers\": {\"@type\": \"Offer\", \"price\": \"CA$7.59\"}}",
+       "displayed": [
+        "CA$7.59",
+        "CA$7.59",
+        "CA$7.59"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"10 Chicken McNuggets [490-630 Cals]\", \"description\": \"\", \"offers\": {\"@type\": \"Offer\", \"price\": \"CA$10.99\"}}",
+       "displayed": [
+        "CA$10.99",
+        "CA$10.99",
+        "CA$10.99"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Happy Meal 4 McNuggets with Small Fries [480-660 Cals]\", \"description\": \"\", \"offers\": {\"@type\": \"Offer\", \"price\": \"CA$6.89\"}}",
+       "displayed": [
+        "CA$6.89",
+        "CA$6.89",
+        "CA$6.89"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"10 McNuggets Extra Value Meal [840-1190 Cals]\", \"description\": \"\", \"offers\": {\"@type\": \"Offer\", \"price\": \"CA$17.29\"}}",
+       "displayed": [
+        "CA$17.29",
+        "CA$17.29",
+        "CA$17.29"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"10 McNuggets Extra Value Meal [840-1190 Cals]\", \"description\": \"\", \"offers\": {\"@type\": \"Offer\", \"price\": \"CA$17.29\"}}",
+       "displayed": [
+        "CA$17.29",
+        "CA$17.29",
+        "CA$17.29"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"6 McNuggets Extra Value Meal [640-920 Cals]\", \"description\": \"\", \"offers\": {\"@type\": \"Offer\", \"price\": \"CA$13.39\"}}",
+       "displayed": [
+        "CA$13.39",
+        "CA$13.39"
+       ]
+      }
+     ],
+     "offers": 182,
+     "offers_with_priceCurrency": 0,
+     "priceCurrency_values": [],
+     "currency_mentions": {
+      "currency": "ame\\\":\\\"Coffee\\\",\\\"link\\\":\\\"/coffee-near-me/\\\",\\\"__typename\\\":\\\"BusinessTag\\\"}],\\\"currency\\\":\\\"CAD\\\",\\\"coverImgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/image/fit=",
+      "currencyCode": ",\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\":{\\\"kind\\\":\\\"Name\\\",\\\"value\\\":\\\"currencyCode\\\"},\\\"arguments\\\":[],\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\"",
+      "USD": " {{senderName}}\\\",\\\"nativeGiftCard_preview_messageSection_amount\\\":\\\"{{amount}} USD\\\",\\\"nativeGiftCard_preview_messageSection_disclaimer\\\":\\\"Terms and Condition"
+     }
+    }
+   },
+   {
+    "group": "chipotle-mexican-grill-",
+    "original": "https://www.doordash.com/store/chipotle-mexican-grill-26003435/",
+    "captured": "20261007000234",
+    "status": 200,
+    "bytes": 2717277,
+    "challenge": false,
+    "challenge_markers": [],
+    "title": "Order Chipotle Mexican Grill - Waukee, IA Menu Delivery [Menu &amp; Prices] | Waukee - DoorDash",
+    "jsonld_types": [
+     "restaurant",
+     "postaladdress",
+     "geocoordinates",
+     "menu",
+     "review",
+     "person",
+     "aggregaterating",
+     "organization",
+     "menuitem",
+     "faqpage",
+     "question",
+     "answer",
+     "breadcrumblist",
+     "listitem"
+    ],
+    "restaurant_found": true,
+    "name": "Chipotle Mexican Grill",
+    "us_address": {
+     "city": "Waukee",
+     "state": "IA",
+     "zip": ""
+    },
+    "address_problem": null,
+    "menu_items": 63,
+    "priced_items": 63,
+    "currencies": [
+     "?"
+    ],
+    "sample_items": [
+     {
+      "name": "Burrito Bowl",
+      "price_cents": 1275,
+      "currency": null
+     },
+     {
+      "name": "Burrito",
+      "price_cents": 1275,
+      "currency": null
+     },
+     {
+      "name": "Quesadilla",
+      "price_cents": 1345,
+      "currency": null
+     },
+     {
+      "name": "Chips & Queso Blanco",
+      "price_cents": 635,
+      "currency": null
+     },
+     {
+      "name": "Chips & Guacamole",
+      "price_cents": 635,
+      "currency": null
+     }
+    ],
+    "embedded_json": [
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 16511,
+      "parsed": "json",
+      "price_paths": [
+       {
+        "path": ".priceRange",
+        "sample": "$"
+       },
+       {
+        "path": ".hasMenu.hasMenuSection[][].hasMenuItem[].offers.price",
+        "sample": "US$12.75"
+       }
+      ],
+      "menu_paths": [
+       ".hasMenu"
+      ]
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 227,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 13497,
+      "parsed": "json",
+      "price_paths": [
+       {
+        "path": ".hasMenuSection[][].hasMenuItem[].offers.price",
+        "sample": "US$12.75"
+       }
+      ],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 1345,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 431,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": [
+       ".itemListElement[].item"
+      ]
+     }
+    ],
+    "counts": {
+     "\"price\"": 164,
+     "\\\"price\\\"": 111,
+     "displayPrice": 110,
+     "__next_f": 64,
+     "__APOLLO_STATE__": 0,
+     "__REACT_QUERY_STATE__": 0,
+     "application/ld+json": 5,
+     "MenuItem": 179,
+     "storeUuid": 0
+    },
+    "phrases": {
+     "estimated based on": "p from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across stores. Enter address for menu prices at your n",
+     "prices are estimated": "ry or pickup from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across stores. Enter address for menu price",
+     "may vary": "ailStore_schedule_delivery_callout_modal_primary_text\\\":\\\"Got it\\\",\\\"stores_pricing_disclosure_one\\\":\\\"Prices may vary from in-store or elsewhere for this location. Prices for delivery and pickup may vary.\\\",\\\"stores_pri",
+     "prices may differ": "trings_orderCheckInModal_secondaryActionText\\\":\\\"Cancel\\\",\\\"checkoutStrings_itemPriceMayDiffer_title\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\"",
+     "prices vary": "_q10\\\":\\\"How much do popular {{business}} menu items cost?\\\",\\\"seo_faq_business_redesign_a10\\\":\\\"{{business}} prices vary by location. To view the most up-to-date information, check out your nearest {{business}} restaura",
+     "menu prices": "tle\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverSubtitle\\\":\\\"Prices for menus are set directly by th",
+     "service fee": "ble, select store locations will not be awarded 5% credit\\nback in addition to $10 off promo. Fees (including service fee),\\ntaxes and gratuity apply. $0 delivery fees and 10% off due to\\nreduced service fees only apply "
+    },
+    "price_contexts": [
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": " bowl with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\\\",\\\"displayPrice\\\":\\\"US$12.75\\\",\\\"displayStrikethroughPrice\\\":\\\"\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/i"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "ull,\\\"specialInstructions\\\":\\\"\\\",\\\"quickAddContext\\\":{\\\"__typename\\\":\\\"QuickAddContext\\\",\\\"isEligible\\\":false,\\\"price\\\":{\\\"__typename\\\":\\\"QuickAddMonetaryFields\\\",\\\"currency\\\":\\\"USD\\\",\\\"decimalPlaces\\\":2,\\\"displayString\\"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "tilla with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\\\",\\\"displayPrice\\\":\\\"US$12.75\\\",\\\"displayStrikethroughPrice\\\":\\\"\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/i"
+     }
+    ],
+    "jsonld_shape": {
+     "blocks": [
+      {
+       "type": "Restaurant",
+       "keys": [
+        "@context",
+        "@type",
+        "address",
+        "aggregateRating",
+        "geo",
+        "hasMenu",
+        "image",
+        "name",
+        "priceRange",
+        "review",
+        "servesCuisine"
+       ],
+       "address": "{\"@type\": \"PostalAddress\", \"streetAddress\": \"425 Hickman Road\", \"addressLocality\": \"Waukee\", \"addressRegion\": \"IA\", \"addressCountry\": \"US\"}",
+       "menu_where": "Restaurant.hasMenu",
+       "menu_keys": [
+        "@type",
+        "hasMenuSection"
+       ],
+       "section_nesting": "list of lists",
+       "sections": 6,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"Burrito Bowl\", \"description\": \"Your choice of freshly grilled meat or sofritas served in a delicious bowl with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"US$12.75\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"Burrito\", \"description\": \"Your choice of freshly grilled meat or sofritas wrapped in a warm flour tortilla with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"US$12.75\"}}"
+       ],
+       "name": "\"Chipotle Mexican Grill\"",
+       "servesCuisine": "[\"Mexican\", \"Bowls\", \"Chicken\", \"Tacos\", \"Salads\", \"Healthy\", \"Burritos\", \"Fresh Steak\", \"Quesadillas\", \"Chips and Salsa\", \"Barbacoa\", \"Carnitas\", \"Guacamole\", \u2026",
+       "priceRange": "\"$\""
+      },
+      {
+       "type": "Organization",
+       "keys": [
+        "@context",
+        "@type",
+        "name",
+        "sameAs",
+        "url"
+       ],
+       "url": "\"http://www.doordash.com\"",
+       "name": "\"DoorDash\""
+      },
+      {
+       "type": "Menu",
+       "keys": [
+        "@type",
+        "hasMenuSection"
+       ],
+       "menu_where": "top-level Menu block",
+       "menu_keys": [
+        "@type",
+        "hasMenuSection"
+       ],
+       "section_nesting": "list of lists",
+       "sections": 6,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"Burrito Bowl\", \"description\": \"Your choice of freshly grilled meat or sofritas served in a delicious bowl with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"US$12.75\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"Burrito\", \"description\": \"Your choice of freshly grilled meat or sofritas wrapped in a warm flour tortilla with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"US$12.75\"}}"
+       ]
+      },
+      {
+       "type": "FAQPage",
+       "keys": [
+        "@context",
+        "@type",
+        "mainEntity"
+       ]
+      },
+      {
+       "type": "BreadcrumbList",
+       "keys": [
+        "@context",
+        "@type",
+        "itemListElement"
+       ]
+      }
+     ],
+     "items_of_interest": [
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Burrito Bowl\", \"description\": \"Your choice of freshly grilled meat or sofritas served in a delicious bowl with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"US$12.75\"}}",
+       "displayed": [
+        "US$12.75",
+        "US$12.75",
+        "US$12.75"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Burrito Bowl\", \"description\": \"Your choice of freshly grilled meat or sofritas served in a delicious bowl with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"US$12.75\"}}",
+       "displayed": [
+        "US$12.75",
+        "US$12.75",
+        "US$12.75"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Burrito Bowl\", \"description\": \"Your choice of freshly grilled meat or sofritas served in a delicious bowl with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"US$12.75\"}}",
+       "displayed": [
+        "US$12.75",
+        "US$12.75",
+        "US$12.75"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Burrito Bowl\", \"description\": \"Your choice of freshly grilled meat or sofritas served in a delicious bowl with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"US$12.75\"}}",
+       "displayed": [
+        "US$12.75",
+        "US$12.75",
+        "US$12.75"
+       ]
+      }
+     ],
+     "offers": 164,
+     "offers_with_priceCurrency": 0,
+     "priceCurrency_values": [],
+     "currency_mentions": {
+      "currency": "ly Meals\\\",\\\"link\\\":\\\"/family-meals-near-me/\\\",\\\"__typename\\\":\\\"BusinessTag\\\"}],\\\"currency\\\":\\\"USD\\\",\\\"coverImgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/image/fit=",
+      "currencyCode": ",\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\":{\\\"kind\\\":\\\"Name\\\",\\\"value\\\":\\\"currencyCode\\\"},\\\"arguments\\\":[],\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\"",
+      "USD": " {{senderName}}\\\",\\\"nativeGiftCard_preview_messageSection_amount\\\":\\\"{{amount}} USD\\\",\\\"nativeGiftCard_preview_messageSection_disclaimer\\\":\\\"Terms and Condition"
+     }
+    }
+   },
+   {
+    "group": "chipotle-mexican-grill-",
+    "original": "https://www.doordash.com/store/chipotle-mexican-grill-269795/",
+    "captured": "20261006232727",
+    "status": 200,
+    "bytes": 2718442,
+    "challenge": false,
+    "challenge_markers": [],
+    "title": "Order Chipotle Mexican Grill - Cambridge, MA Menu Delivery [Menu &amp; Prices] | Cambridge - DoorDash",
+    "jsonld_types": [
+     "restaurant",
+     "postaladdress",
+     "geocoordinates",
+     "menu",
+     "review",
+     "person",
+     "aggregaterating",
+     "organization",
+     "menuitem",
+     "faqpage",
+     "question",
+     "answer",
+     "breadcrumblist",
+     "listitem"
+    ],
+    "restaurant_found": true,
+    "name": "Chipotle Mexican Grill",
+    "us_address": {
+     "city": "Cambridge",
+     "state": "MA",
+     "zip": ""
+    },
+    "address_problem": null,
+    "menu_items": 63,
+    "priced_items": 63,
+    "currencies": [
+     "?"
+    ],
+    "sample_items": [
+     {
+      "name": "Burrito Bowl",
+      "price_cents": 1295,
+      "currency": null
+     },
+     {
+      "name": "Burrito",
+      "price_cents": 1295,
+      "currency": null
+     },
+     {
+      "name": "Chips & Queso Blanco",
+      "price_cents": 665,
+      "currency": null
+     },
+     {
+      "name": "Quesadilla",
+      "price_cents": 1365,
+      "currency": null
+     },
+     {
+      "name": "Chips & Guacamole",
+      "price_cents": 665,
+      "currency": null
+     }
+    ],
+    "embedded_json": [
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 16597,
+      "parsed": "json",
+      "price_paths": [
+       {
+        "path": ".priceRange",
+        "sample": "$$"
+       },
+       {
+        "path": ".hasMenu.hasMenuSection[][].hasMenuItem[].offers.price",
+        "sample": "US$12.95"
+       }
+      ],
+      "menu_paths": [
+       ".hasMenu"
+      ]
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 227,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 13273,
+      "parsed": "json",
+      "price_paths": [
+       {
+        "path": ".hasMenuSection[][].hasMenuItem[].offers.price",
+        "sample": "US$12.95"
+       }
+      ],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 1355,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 472,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": [
+       ".itemListElement[].item"
+      ]
+     }
+    ],
+    "counts": {
+     "\"price\"": 164,
+     "\\\"price\\\"": 111,
+     "displayPrice": 110,
+     "__next_f": 65,
+     "__APOLLO_STATE__": 0,
+     "__REACT_QUERY_STATE__": 0,
+     "application/ld+json": 5,
+     "MenuItem": 179,
+     "storeUuid": 0
+    },
+    "phrases": {
+     "estimated based on": "p from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across stores. Enter address for menu prices at your n",
+     "prices are estimated": "ry or pickup from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across stores. Enter address for menu price",
+     "may vary": "ailStore_schedule_delivery_callout_modal_primary_text\\\":\\\"Got it\\\",\\\"stores_pricing_disclosure_one\\\":\\\"Prices may vary from in-store or elsewhere for this location. Prices for delivery and pickup may vary.\\\",\\\"stores_pri",
+     "prices may differ": "trings_orderCheckInModal_secondaryActionText\\\":\\\"Cancel\\\",\\\"checkoutStrings_itemPriceMayDiffer_title\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\"",
+     "prices vary": "_q10\\\":\\\"How much do popular {{business}} menu items cost?\\\",\\\"seo_faq_business_redesign_a10\\\":\\\"{{business}} prices vary by location. To view the most up-to-date information, check out your nearest {{business}} restaura",
+     "menu prices": "tle\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverSubtitle\\\":\\\"Prices for menus are set directly by th",
+     "service fee": "ble, select store locations will not be awarded 5% credit\\nback in addition to $10 off promo. Fees (including service fee),\\ntaxes and gratuity apply. $0 delivery fees and 10% off due to\\nreduced service fees only apply "
+    },
+    "price_contexts": [
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": " bowl with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\\\",\\\"displayPrice\\\":\\\"US$12.95\\\",\\\"displayStrikethroughPrice\\\":\\\"\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/i"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "ull,\\\"specialInstructions\\\":\\\"\\\",\\\"quickAddContext\\\":{\\\"__typename\\\":\\\"QuickAddContext\\\",\\\"isEligible\\\":false,\\\"price\\\":{\\\"__typename\\\":\\\"QuickAddMonetaryFields\\\",\\\"currency\\\":\\\"USD\\\",\\\"decimalPlaces\\\":2,\\\"displayString\\"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "tilla with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\\\",\\\"displayPrice\\\":\\\"US$12.95\\\",\\\"displayStrikethroughPrice\\\":\\\"\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/i"
+     }
+    ],
+    "jsonld_shape": {
+     "blocks": [
+      {
+       "type": "Restaurant",
+       "keys": [
+        "@context",
+        "@type",
+        "address",
+        "aggregateRating",
+        "geo",
+        "hasMenu",
+        "image",
+        "name",
+        "priceRange",
+        "review",
+        "servesCuisine"
+       ],
+       "address": "{\"@type\": \"PostalAddress\", \"streetAddress\": \"50 Broadway\", \"addressLocality\": \"Cambridge\", \"addressRegion\": \"MA\", \"addressCountry\": \"US\"}",
+       "menu_where": "Restaurant.hasMenu",
+       "menu_keys": [
+        "@type",
+        "hasMenuSection"
+       ],
+       "section_nesting": "list of lists",
+       "sections": 6,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"Burrito Bowl\", \"description\": \"Your choice of freshly grilled meat or sofritas served in a delicious bowl with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"US$12.95\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"Burrito\", \"description\": \"Your choice of freshly grilled meat or sofritas wrapped in a warm flour tortilla with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"US$12.95\"}}"
+       ],
+       "name": "\"Chipotle Mexican Grill\"",
+       "servesCuisine": "[\"Mexican\", \"Bowls\", \"Chicken\", \"Tacos\", \"Salads\", \"Healthy\", \"Burritos\", \"Fresh Steak\", \"Quesadillas\", \"Chips and Salsa\", \"Barbacoa\", \"Carnitas\", \"Guacamole\", \u2026",
+       "priceRange": "\"$$\""
+      },
+      {
+       "type": "Organization",
+       "keys": [
+        "@context",
+        "@type",
+        "name",
+        "sameAs",
+        "url"
+       ],
+       "url": "\"http://www.doordash.com\"",
+       "name": "\"DoorDash\""
+      },
+      {
+       "type": "Menu",
+       "keys": [
+        "@type",
+        "hasMenuSection"
+       ],
+       "menu_where": "top-level Menu block",
+       "menu_keys": [
+        "@type",
+        "hasMenuSection"
+       ],
+       "section_nesting": "list of lists",
+       "sections": 6,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"Burrito Bowl\", \"description\": \"Your choice of freshly grilled meat or sofritas served in a delicious bowl with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"US$12.95\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"Burrito\", \"description\": \"Your choice of freshly grilled meat or sofritas wrapped in a warm flour tortilla with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"US$12.95\"}}"
+       ]
+      },
+      {
+       "type": "FAQPage",
+       "keys": [
+        "@context",
+        "@type",
+        "mainEntity"
+       ]
+      },
+      {
+       "type": "BreadcrumbList",
+       "keys": [
+        "@context",
+        "@type",
+        "itemListElement"
+       ]
+      }
+     ],
+     "items_of_interest": [
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Burrito Bowl\", \"description\": \"Your choice of freshly grilled meat or sofritas served in a delicious bowl with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"US$12.95\"}}",
+       "displayed": [
+        "US$12.95",
+        "US$12.95",
+        "US$12.95"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Burrito Bowl\", \"description\": \"Your choice of freshly grilled meat or sofritas served in a delicious bowl with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"US$12.95\"}}",
+       "displayed": [
+        "US$12.95",
+        "US$12.95",
+        "US$12.95"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Burrito Bowl\", \"description\": \"Your choice of freshly grilled meat or sofritas served in a delicious bowl with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"US$12.95\"}}",
+       "displayed": [
+        "US$12.95",
+        "US$12.95",
+        "US$12.95"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Burrito Bowl\", \"description\": \"Your choice of freshly grilled meat or sofritas served in a delicious bowl with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"US$12.95\"}}",
+       "displayed": [
+        "US$12.95",
+        "US$12.95",
+        "US$12.95"
+       ]
+      }
+     ],
+     "offers": 164,
+     "offers_with_priceCurrency": 0,
+     "priceCurrency_values": [],
+     "currency_mentions": {
+      "currency": "ly Meals\\\",\\\"link\\\":\\\"/family-meals-near-me/\\\",\\\"__typename\\\":\\\"BusinessTag\\\"}],\\\"currency\\\":\\\"USD\\\",\\\"coverImgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/image/fit=",
+      "currencyCode": ",\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\":{\\\"kind\\\":\\\"Name\\\",\\\"value\\\":\\\"currencyCode\\\"},\\\"arguments\\\":[],\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\"",
+      "USD": " {{senderName}}\\\",\\\"nativeGiftCard_preview_messageSection_amount\\\":\\\"{{amount}} USD\\\",\\\"nativeGiftCard_preview_messageSection_disclaimer\\\":\\\"Terms and Condition"
+     }
+    }
+   },
+   {
+    "group": "chipotle-mexican-grill-",
+    "original": "https://www.doordash.com/store/chipotle-mexican-grill-24880646/",
+    "captured": "20260712214739",
+    "status": 200,
+    "bytes": 2545864,
+    "challenge": false,
+    "challenge_markers": [],
+    "title": "Order Chipotle Mexican Grill - St. George, UT Menu Delivery [Menu &amp; Prices] | St. George - DoorDash",
+    "jsonld_types": [
+     "restaurant",
+     "postaladdress",
+     "geocoordinates",
+     "menu",
+     "review",
+     "person",
+     "aggregaterating",
+     "organization",
+     "menuitem",
+     "faqpage",
+     "question",
+     "answer",
+     "breadcrumblist",
+     "listitem"
+    ],
+    "restaurant_found": true,
+    "name": "Chipotle Mexican Grill",
+    "us_address": {
+     "city": "St. George",
+     "state": "UT",
+     "zip": ""
+    },
+    "address_problem": null,
+    "menu_items": 52,
+    "priced_items": 52,
+    "currencies": [
+     "?"
+    ],
+    "sample_items": [
+     {
+      "name": "Burrito Bowl",
+      "price_cents": 1235,
+      "currency": null
+     },
+     {
+      "name": "Burrito",
+      "price_cents": 1235,
+      "currency": null
+     },
+     {
+      "name": "Quesadilla",
+      "price_cents": 1305,
+      "currency": null
+     },
+     {
+      "name": "Chips & Queso Blanco",
+      "price_cents": 605,
+      "currency": null
+     },
+     {
+      "name": "Three Tacos",
+      "price_cents": 1235,
+      "currency": null
+     }
+    ],
+    "embedded_json": [
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 14605,
+      "parsed": "json",
+      "price_paths": [
+       {
+        "path": ".priceRange",
+        "sample": "$$"
+       },
+       {
+        "path": ".hasMenu.hasMenuSection[][].hasMenuItem[].offers.price",
+        "sample": "$12.35"
+       }
+      ],
+      "menu_paths": [
+       ".hasMenu"
+      ]
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 227,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 11875,
+      "parsed": "json",
+      "price_paths": [
+       {
+        "path": ".hasMenuSection[][].hasMenuItem[].offers.price",
+        "sample": "$12.35"
+       }
+      ],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 1354,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 435,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": [
+       ".itemListElement[].item"
+      ]
+     }
+    ],
+    "counts": {
+     "\"price\"": 142,
+     "\\\"price\\\"": 100,
+     "displayPrice": 99,
+     "__next_f": 62,
+     "__APOLLO_STATE__": 0,
+     "__REACT_QUERY_STATE__": 0,
+     "application/ld+json": 5,
+     "MenuItem": 155,
+     "storeUuid": 0
+    },
+    "phrases": {
+     "estimated based on": "p from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across store, enter address for menu prices at your ne",
+     "prices are estimated": "ry or pickup from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across store, enter address for menu prices",
+     "may vary": "ailStore_schedule_delivery_callout_modal_primary_text\\\":\\\"Got it\\\",\\\"stores_pricing_disclosure_one\\\":\\\"Prices may vary from in-store or elsewhere for this location. Prices for delivery and pickup may vary.\\\",\\\"stores_pri",
+     "prices may differ": "trings_orderCheckInModal_secondaryActionText\\\":\\\"Cancel\\\",\\\"checkoutStrings_itemPriceMayDiffer_title\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\"",
+     "prices vary": "_q10\\\":\\\"How much do popular {{business}} menu items cost?\\\",\\\"seo_faq_business_redesign_a10\\\":\\\"{{business}} prices vary by location. To view the most up-to-date information, check out your nearest {{business}} restaura",
+     "menu prices": "tle\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverSubtitle\\\":\\\"Prices for menus are set directly by th",
+     "service fee": "ble, select store locations will not be awarded 5% credit\\nback in addition to $10 off promo. Fees (including service fee),\\ntaxes, and gratuity apply. $0 delivery fees and 10% off due to\\nreduced service fees only apply"
+    },
+    "price_contexts": [
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": " 10 flour tortillas, rice, beans, 3 dips, and guac or queso. Top things off with even more salsas and dips.\\\",\\\"displayPrice\\\":\\\"$$75.00\\\",\\\"displayStrikethroughPrice\\\":\\\"\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/im"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "ull,\\\"specialInstructions\\\":\\\"\\\",\\\"quickAddContext\\\":{\\\"__typename\\\":\\\"QuickAddContext\\\",\\\"isEligible\\\":false,\\\"price\\\":{\\\"__typename\\\":\\\"QuickAddMonetaryFields\\\",\\\"currency\\\":\\\"USD\\\",\\\"decimalPlaces\\\":2,\\\"displayString\\"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": " bowl with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\\\",\\\"displayPrice\\\":\\\"$$12.35\\\",\\\"displayStrikethroughPrice\\\":\\\"\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/im"
+     }
+    ],
+    "jsonld_shape": {
+     "blocks": [
+      {
+       "type": "Restaurant",
+       "keys": [
+        "@context",
+        "@type",
+        "address",
+        "aggregateRating",
+        "geo",
+        "hasMenu",
+        "image",
+        "name",
+        "priceRange",
+        "review",
+        "servesCuisine"
+       ],
+       "address": "{\"@type\": \"PostalAddress\", \"streetAddress\": \"1687 West Sunset Boulevard\", \"addressLocality\": \"St. George\", \"addressRegion\": \"UT\", \"addressCountry\": \"US\"}",
+       "menu_where": "Restaurant.hasMenu",
+       "menu_keys": [
+        "@type",
+        "hasMenuSection"
+       ],
+       "section_nesting": "list of lists",
+       "sections": 5,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"Burrito Bowl\", \"description\": \"Your choice of freshly grilled meat or sofritas served in a delicious bowl with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$12.35\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"Burrito\", \"description\": \"Your choice of freshly grilled meat or sofritas wrapped in a warm flour tortilla with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$12.35\"}}"
+       ],
+       "name": "\"Chipotle Mexican Grill\"",
+       "servesCuisine": "[\"Mexican\", \"Burritos\", \"Tacos\", \"Salads\", \"Chicken\", \"Healthy\", \"Bowls\", \"Steak\", \"Vegetarian Friendly\", \"Chips and Salsa\", \"Fresh Steak\", \"Vegan Friendly\", \"B\u2026",
+       "priceRange": "\"$$\""
+      },
+      {
+       "type": "Organization",
+       "keys": [
+        "@context",
+        "@type",
+        "name",
+        "sameAs",
+        "url"
+       ],
+       "url": "\"http://www.doordash.com\"",
+       "name": "\"DoorDash\""
+      },
+      {
+       "type": "Menu",
+       "keys": [
+        "@type",
+        "hasMenuSection"
+       ],
+       "menu_where": "top-level Menu block",
+       "menu_keys": [
+        "@type",
+        "hasMenuSection"
+       ],
+       "section_nesting": "list of lists",
+       "sections": 5,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"Burrito Bowl\", \"description\": \"Your choice of freshly grilled meat or sofritas served in a delicious bowl with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$12.35\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"Burrito\", \"description\": \"Your choice of freshly grilled meat or sofritas wrapped in a warm flour tortilla with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$12.35\"}}"
+       ]
+      },
+      {
+       "type": "FAQPage",
+       "keys": [
+        "@context",
+        "@type",
+        "mainEntity"
+       ]
+      },
+      {
+       "type": "BreadcrumbList",
+       "keys": [
+        "@context",
+        "@type",
+        "itemListElement"
+       ]
+      }
+     ],
+     "items_of_interest": [
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Burrito Bowl\", \"description\": \"Your choice of freshly grilled meat or sofritas served in a delicious bowl with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$12.35\"}}",
+       "displayed": [
+        "$$12.35",
+        "$$12.35",
+        "$$12.35"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Burrito Bowl\", \"description\": \"Your choice of freshly grilled meat or sofritas served in a delicious bowl with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$12.35\"}}",
+       "displayed": [
+        "$$12.35",
+        "$$12.35",
+        "$$12.35"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Burrito Bowl\", \"description\": \"Your choice of freshly grilled meat or sofritas served in a delicious bowl with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$12.35\"}}",
+       "displayed": [
+        "$$12.35",
+        "$$12.35",
+        "$$12.35"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Burrito Bowl\", \"description\": \"Your choice of freshly grilled meat or sofritas served in a delicious bowl with rice, beans, or fajita veggies, and topped with guac, salsa, queso blanco, sour cream or cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$12.35\"}}",
+       "displayed": [
+        "$$12.35",
+        "$$12.35",
+        "$$12.35"
+       ]
+      }
+     ],
+     "offers": 142,
+     "offers_with_priceCurrency": 0,
+     "priceCurrency_values": [],
+     "currency_mentions": {
+      "currency": "\\\"Guacamole\\\",\\\"link\\\":\\\"/guacamole-near-me/\\\",\\\"__typename\\\":\\\"BusinessTag\\\"}],\\\"currency\\\":\\\"USD\\\",\\\"coverImgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/image/fit=",
+      "currencyCode": ",\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\":{\\\"kind\\\":\\\"Name\\\",\\\"value\\\":\\\"currencyCode\\\"},\\\"arguments\\\":[],\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\"",
+      "USD": " {{senderName}}\\\",\\\"nativeGiftCard_preview_messageSection_amount\\\":\\\"{{amount}} USD\\\",\\\"nativeGiftCard_preview_messageSection_disclaimer\\\":\\\"Terms and Condition"
+     }
+    }
+   },
+   {
+    "group": "lou-malnatis-pizzeria-",
+    "original": "https://www.doordash.com/store/lou-malnatis-pizzeria-glenview-869569/?srsltid=AfmBOopS-TKmCiHuf88h7Q8CJU1DqTtXWWyC5XoJxWpwlqx9PduUOG0b",
+    "captured": "20260326025531",
+    "status": 200,
+    "bytes": 2428281,
+    "challenge": false,
+    "challenge_markers": [],
+    "title": "Order Lou Malnati&#x27;s Pizzeria - Glenview, IL Menu Delivery [Menu &amp; Prices] | Glenview - DoorDash",
+    "jsonld_types": [
+     "restaurant",
+     "postaladdress",
+     "geocoordinates",
+     "menu",
+     "review",
+     "person",
+     "aggregaterating",
+     "organization",
+     "menuitem",
+     "faqpage",
+     "question",
+     "answer",
+     "breadcrumblist",
+     "listitem"
+    ],
+    "restaurant_found": true,
+    "name": "Lou Malnati's Pizzeria",
+    "us_address": {
+     "city": "Glenview",
+     "state": "IL",
+     "zip": ""
+    },
+    "address_problem": null,
+    "menu_items": 68,
+    "priced_items": 38,
+    "currencies": [
+     "?"
+    ],
+    "sample_items": [
+     {
+      "name": "4 Chocolate Chip Carol's Cookies",
+      "price_cents": 739,
+      "currency": null
+     },
+     {
+      "name": "Small Gluten Free Deep Dish Cheese",
+      "price_cents": 2349,
+      "currency": null
+     },
+     {
+      "name": "Small Gluten Free Deep Dish Malnati Chicago Classic\u2122",
+      "price_cents": 2839,
+      "currency": null
+     },
+     {
+      "name": "Small Gluten Free Thin Crust Cheese",
+      "price_cents": 1549,
+      "currency": null
+     },
+     {
+      "name": "Small Gluten Free Thin Crust Mike's Hot Honey\u00ae",
+      "price_cents": 1809,
+      "currency": null
+     }
+    ],
+    "embedded_json": [
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 21765,
+      "parsed": "json",
+      "price_paths": [
+       {
+        "path": ".priceRange",
+        "sample": "$$"
+       },
+       {
+        "path": ".hasMenu.hasMenuSection[][].hasMenuItem[].offers.price",
+        "sample": "$15.59+"
+       }
+      ],
+      "menu_paths": [
+       ".hasMenu"
+      ]
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 227,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 19321,
+      "parsed": "json",
+      "price_paths": [
+       {
+        "path": ".hasMenuSection[][].hasMenuItem[].offers.price",
+        "sample": "$15.59+"
+       }
+      ],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 1448,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 478,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": [
+       ".itemListElement[].item"
+      ]
+     }
+    ],
+    "counts": {
+     "\"price\"": 182,
+     "\\\"price\\\"": 144,
+     "displayPrice": 143,
+     "__next_f": 58,
+     "__APOLLO_STATE__": 0,
+     "__REACT_QUERY_STATE__": 0,
+     "application/ld+json": 5,
+     "MenuItem": 209,
+     "storeUuid": 0
+    },
+    "phrases": {
+     "estimated based on": "p from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across store, enter address for menu prices at your ne",
+     "prices are estimated": "ry or pickup from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across store, enter address for menu prices",
+     "may vary": "ailStore_schedule_delivery_callout_modal_primary_text\\\":\\\"Got it\\\",\\\"stores_pricing_disclosure_one\\\":\\\"Prices may vary from in-store or elsewhere for this location. Prices for delivery and pickup may vary.\\\",\\\"stores_pri",
+     "prices may differ": "trings_orderCheckInModal_secondaryActionText\\\":\\\"Cancel\\\",\\\"checkoutStrings_itemPriceMayDiffer_title\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\"",
+     "prices vary": "_q10\\\":\\\"How much do popular {{business}} menu items cost?\\\",\\\"seo_faq_business_redesign_a10\\\":\\\"{{business}} prices vary by location. To view the most up-to-date information, check out your nearest {{business}} restaura",
+     "menu prices": "tle\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverSubtitle\\\":\\\"Prices for menus are set directly by th",
+     "service fee": "ble, select store locations will not be awarded 5% credit\\nback in addition to $10 off promo. Fees (including service fee),\\ntaxes, and gratuity apply. $0 delivery fees and 10% off due to\\nreduced service fees only apply"
+    },
+    "price_contexts": [
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "\",\\\"name\\\":\\\"Thin Crust Cheese\\\",\\\"description\\\":\\\"Vine-ripened tomato sauce topped with mozzarella cheese.\\\",\\\"displayPrice\\\":\\\"$$13.69+\\\",\\\"displayStrikethroughPrice\\\":\\\"\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/i"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "ull,\\\"specialInstructions\\\":\\\"\\\",\\\"quickAddContext\\\":{\\\"__typename\\\":\\\"QuickAddContext\\\",\\\"isEligible\\\":false,\\\"price\\\":{\\\"__typename\\\":\\\"QuickAddMonetaryFields\\\",\\\"currency\\\":null,\\\"decimalPlaces\\\":null,\\\"displayString\\"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "\\\",\\\"name\\\":\\\"Deep Dish Cheese\\\",\\\"description\\\":\\\"Mozzarella cheese topped with vine-ripened tomato sauce.\\\",\\\"displayPrice\\\":\\\"$$13.59+\\\",\\\"displayStrikethroughPrice\\\":\\\"\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/i"
+     }
+    ],
+    "jsonld_shape": {
+     "blocks": [
+      {
+       "type": "Restaurant",
+       "keys": [
+        "@context",
+        "@type",
+        "address",
+        "aggregateRating",
+        "geo",
+        "hasMenu",
+        "image",
+        "name",
+        "priceRange",
+        "review",
+        "servesCuisine"
+       ],
+       "address": "{\"@type\": \"PostalAddress\", \"streetAddress\": \"3120 Glenview Road\", \"addressLocality\": \"Glenview\", \"addressRegion\": \"IL\", \"addressCountry\": \"US\"}",
+       "menu_where": "Restaurant.hasMenu",
+       "menu_keys": [
+        "@type",
+        "hasMenuSection"
+       ],
+       "section_nesting": "list of lists",
+       "sections": 11,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"Malnati Salad\", \"description\": \"Romaine lettuce, tomatoes, black olives, mushrooms, Volpi salami bits and gorgonzola cheese with our Sweet Vinaigrette and romano cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$15.59+\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"Deep Dish Cheese\", \"description\": \"Mozzarella cheese topped with vine-ripened tomato sauce.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$13.59+\"}}"
+       ],
+       "name": "\"Lou Malnati&apos;s Pizzeria\"",
+       "servesCuisine": "[\"Italian\", \"Pizzeria\", \"Deep Dish Pizza\", \"Pizza\", \"Chicken Wings\", \"Salads\", \"Happy Hour\", \"Sandwich\", \"Appetizers\", \"Sandwiches\", \"Vegetarian\", \"Desserts\", \"\u2026",
+       "priceRange": "\"$$\""
+      },
+      {
+       "type": "Organization",
+       "keys": [
+        "@context",
+        "@type",
+        "name",
+        "sameAs",
+        "url"
+       ],
+       "url": "\"http://www.doordash.com\"",
+       "name": "\"DoorDash\""
+      },
+      {
+       "type": "Menu",
+       "keys": [
+        "@type",
+        "hasMenuSection"
+       ],
+       "menu_where": "top-level Menu block",
+       "menu_keys": [
+        "@type",
+        "hasMenuSection"
+       ],
+       "section_nesting": "list of lists",
+       "sections": 11,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"Malnati Salad\", \"description\": \"Romaine lettuce, tomatoes, black olives, mushrooms, Volpi salami bits and gorgonzola cheese with our Sweet Vinaigrette and romano cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$15.59+\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"Deep Dish Cheese\", \"description\": \"Mozzarella cheese topped with vine-ripened tomato sauce.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$13.59+\"}}"
+       ]
+      },
+      {
+       "type": "FAQPage",
+       "keys": [
+        "@context",
+        "@type",
+        "mainEntity"
+       ]
+      },
+      {
+       "type": "BreadcrumbList",
+       "keys": [
+        "@context",
+        "@type",
+        "itemListElement"
+       ]
+      }
+     ],
+     "items_of_interest": [
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Deep Dish Cheese\", \"description\": \"Mozzarella cheese topped with vine-ripened tomato sauce.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$13.59+\"}}",
+       "displayed": [
+        "$$13.59+",
+        "$$13.59+",
+        "$$13.59+"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Deep Dish Create Your Own\", \"description\": \"Order your pizza just how you like it \u2013 topped with a mixture of your favorite ingredients, and cooked to your liking!\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$13.59+\"}}",
+       "displayed": [
+        "$$13.59+",
+        "$$13.59+",
+        "$$13.59+"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Deep Dish Malnati Chicago Classic\u2122\", \"description\": \"Made with Lou&apos;s lean sausage, some extra mozzarella cheese and vine-ripened tomato sauce on Buttercrust\u2122. It&apos;s authentic Chicago!\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$16.09+\"}}",
+       "displayed": [
+        "$$16.09+",
+        "$$16.09+",
+        "$$16.09+"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Deep Dish The Lou\", \"description\": \"A pizza so good we gave it his name! Spinach mix (enhanced with garlic, basil &amp; onion), mushrooms and sliced Roma tomatoes covered with three cheeses, on a garlic Buttercrust\u2122.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$17.39+\"}}",
+       "displayed": [
+        "$$17.39+",
+        "$$17.39+",
+        "$$17.39+"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Deep Dish Malnati Chicago Classic\u2122\", \"description\": \"Made with Lou&apos;s lean sausage, some extra mozzarella cheese and vine-ripened tomato sauce on Buttercrust\u2122. It&apos;s authentic Chicago!\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$16.09+\"}}",
+       "displayed": [
+        "$$16.09+",
+        "$$16.09+",
+        "$$16.09+"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Deep Dish The Lou\", \"description\": \"A pizza so good we gave it his name! Spinach mix (enhanced with garlic, basil &amp; onion), mushrooms and sliced Roma tomatoes covered with three cheeses, on a garlic Buttercrust\u2122.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$17.39+\"}}",
+       "displayed": [
+        "$$17.39+",
+        "$$17.39+",
+        "$$17.39+"
+       ]
+      }
+     ],
+     "offers": 182,
+     "offers_with_priceCurrency": 0,
+     "priceCurrency_values": [],
+     "currency_mentions": {
+      "currency": "y\\\",\\\"link\\\":\\\"/vegetarian-friendly-near-me/\\\",\\\"__typename\\\":\\\"BusinessTag\\\"}],\\\"currency\\\":\\\"USD\\\",\\\"coverImgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/image/fit=",
+      "currencyCode": ",\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\":{\\\"kind\\\":\\\"Name\\\",\\\"value\\\":\\\"currencyCode\\\"},\\\"arguments\\\":[],\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\"",
+      "USD": " {{senderName}}\\\",\\\"nativeGiftCard_preview_messageSection_amount\\\":\\\"{{amount}} USD\\\",\\\"nativeGiftCard_preview_messageSection_disclaimer\\\":\\\"Terms and Condition"
+     }
+    }
+   },
+   {
+    "group": "lou-malnatis-pizzeria-",
+    "original": "https://www.doordash.com/store/lou-malnatis-pizzeria-palatine-100798/",
+    "captured": "20260310162607",
+    "status": 200,
+    "bytes": 2513616,
+    "challenge": false,
+    "challenge_markers": [],
+    "title": "Order Lou Malnati&#x27;s Pizzeria - Palatine, IL Menu Delivery [Menu &amp; Prices] | Palatine - DoorDash",
+    "jsonld_types": [
+     "restaurant",
+     "postaladdress",
+     "geocoordinates",
+     "menu",
+     "review",
+     "person",
+     "aggregaterating",
+     "organization",
+     "menuitem",
+     "faqpage",
+     "question",
+     "answer",
+     "breadcrumblist",
+     "listitem"
+    ],
+    "restaurant_found": true,
+    "name": "Lou Malnati's Pizzeria",
+    "us_address": {
+     "city": "Palatine",
+     "state": "IL",
+     "zip": ""
+    },
+    "address_problem": null,
+    "menu_items": 68,
+    "priced_items": 38,
+    "currencies": [
+     "?"
+    ],
+    "sample_items": [
+     {
+      "name": "4 Chocolate Chip Carol's Cookies",
+      "price_cents": 719,
+      "currency": null
+     },
+     {
+      "name": "Small Gluten Free Thin Crust Cheese",
+      "price_cents": 1539,
+      "currency": null
+     },
+     {
+      "name": "Small Gluten Free Deep Dish Mike's Hot Honey\u00ae",
+      "price_cents": 2959,
+      "currency": null
+     },
+     {
+      "name": "Small Gluten Free Deep Dish Malnati Chicago Classic\u2122",
+      "price_cents": 2799,
+      "currency": null
+     },
+     {
+      "name": "Small Gluten Free Deep Dish The Lou",
+      "price_cents": 2979,
+      "currency": null
+     }
+    ],
+    "embedded_json": [
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 22367,
+      "parsed": "json",
+      "price_paths": [
+       {
+        "path": ".priceRange",
+        "sample": "$$"
+       },
+       {
+        "path": ".hasMenu.hasMenuSection[][].hasMenuItem[].offers.price",
+        "sample": "$13.59+"
+       }
+      ],
+      "menu_paths": [
+       ".hasMenu"
+      ]
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 227,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 19275,
+      "parsed": "json",
+      "price_paths": [
+       {
+        "path": ".hasMenuSection[][].hasMenuItem[].offers.price",
+        "sample": "$13.59+"
+       }
+      ],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 1470,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 478,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": [
+       ".itemListElement[].item"
+      ]
+     }
+    ],
+    "counts": {
+     "\"price\"": 182,
+     "\\\"price\\\"": 144,
+     "displayPrice": 141,
+     "__next_f": 56,
+     "__APOLLO_STATE__": 0,
+     "__REACT_QUERY_STATE__": 0,
+     "application/ld+json": 5,
+     "MenuItem": 209,
+     "storeUuid": 0
+    },
+    "phrases": {
+     "estimated based on": "p from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across store, enter address for menu prices at your ne",
+     "prices are estimated": "ry or pickup from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across store, enter address for menu prices",
+     "may vary": "ailStore_schedule_delivery_callout_modal_primary_text\\\":\\\"Got it\\\",\\\"stores_pricing_disclosure_one\\\":\\\"Prices may vary from in-store or elsewhere for this location. Prices for delivery and pickup may vary.\\\",\\\"stores_pri",
+     "prices may differ": "trings_orderCheckInModal_secondaryActionText\\\":\\\"Cancel\\\",\\\"checkoutStrings_itemPriceMayDiffer_title\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\"",
+     "prices vary": "_q10\\\":\\\"How much do popular {{business}} menu items cost?\\\",\\\"seo_faq_business_redesign_a10\\\":\\\"{{business}} prices vary by location. To view the most up-to-date information, check out your nearest {{business}} restaura",
+     "menu prices": "tle\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverSubtitle\\\":\\\"Prices for menus are set directly by th",
+     "service fee": "ble, select store locations will not be awarded 5% credit\\nback in addition to $10 off promo. Fees (including service fee),\\ntaxes, and gratuity apply. $0 delivery fees and 10% off due to\\nreduced service fees only apply"
+    },
+    "price_contexts": [
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "\\\",\\\"name\\\":\\\"Deep Dish Cheese\\\",\\\"description\\\":\\\"Mozzarella cheese topped with vine-ripened tomato sauce.\\\",\\\"displayPrice\\\":\\\"$$12.99+\\\",\\\"displayStrikethroughPrice\\\":\\\"\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/i"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "ull,\\\"specialInstructions\\\":\\\"\\\",\\\"quickAddContext\\\":{\\\"__typename\\\":\\\"QuickAddContext\\\",\\\"isEligible\\\":false,\\\"price\\\":{\\\"__typename\\\":\\\"QuickAddMonetaryFields\\\",\\\"currency\\\":null,\\\"decimalPlaces\\\":null,\\\"displayString\\"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "pizza just how you like it \u2013 topped with a mixture of your favorite ingredients, and cooked to your liking!\\\",\\\"displayPrice\\\":\\\"$$12.99+\\\",\\\"displayStrikethroughPrice\\\":\\\"\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/i"
+     }
+    ],
+    "jsonld_shape": {
+     "blocks": [
+      {
+       "type": "Restaurant",
+       "keys": [
+        "@context",
+        "@type",
+        "address",
+        "aggregateRating",
+        "geo",
+        "hasMenu",
+        "image",
+        "name",
+        "priceRange",
+        "review",
+        "servesCuisine"
+       ],
+       "address": "{\"@type\": \"PostalAddress\", \"streetAddress\": \"287 North Northwest Highway\", \"addressLocality\": \"Palatine\", \"addressRegion\": \"IL\", \"addressCountry\": \"US\"}",
+       "menu_where": "Restaurant.hasMenu",
+       "menu_keys": [
+        "@type",
+        "hasMenuSection"
+       ],
+       "section_nesting": "list of lists",
+       "sections": 11,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"Thin Crust Create Your Own\", \"description\": \"Order your pizza just how you like it \u2013 topped with a mixture of your favorite ingredients, and cooked to your liking!\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$13.59+\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"Deep Dish Cheese\", \"description\": \"Mozzarella cheese topped with vine-ripened tomato sauce.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$12.99+\"}}"
+       ],
+       "name": "\"Lou Malnati&apos;s Pizzeria\"",
+       "servesCuisine": "[\"Italian\", \"Pizzeria\", \"Deep Dish Pizza\", \"Pizza\", \"Chicken Wings\", \"Salads\", \"Happy Hour\", \"Sandwich\", \"Appetizers\", \"Sandwiches\", \"Vegetarian\", \"Desserts\", \"\u2026",
+       "priceRange": "\"$$\""
+      },
+      {
+       "type": "Organization",
+       "keys": [
+        "@context",
+        "@type",
+        "name",
+        "sameAs",
+        "url"
+       ],
+       "url": "\"http://www.doordash.com\"",
+       "name": "\"DoorDash\""
+      },
+      {
+       "type": "Menu",
+       "keys": [
+        "@type",
+        "hasMenuSection"
+       ],
+       "menu_where": "top-level Menu block",
+       "menu_keys": [
+        "@type",
+        "hasMenuSection"
+       ],
+       "section_nesting": "list of lists",
+       "sections": 11,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"Thin Crust Create Your Own\", \"description\": \"Order your pizza just how you like it \u2013 topped with a mixture of your favorite ingredients, and cooked to your liking!\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$13.59+\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"Deep Dish Cheese\", \"description\": \"Mozzarella cheese topped with vine-ripened tomato sauce.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$12.99+\"}}"
+       ]
+      },
+      {
+       "type": "FAQPage",
+       "keys": [
+        "@context",
+        "@type",
+        "mainEntity"
+       ]
+      },
+      {
+       "type": "BreadcrumbList",
+       "keys": [
+        "@context",
+        "@type",
+        "itemListElement"
+       ]
+      }
+     ],
+     "items_of_interest": [
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Deep Dish Cheese\", \"description\": \"Mozzarella cheese topped with vine-ripened tomato sauce.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$12.99+\"}}",
+       "displayed": [
+        "$$12.99+",
+        "$$12.99+",
+        "$$12.99+"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Deep Dish Create Your Own\", \"description\": \"Order your pizza just how you like it \u2013 topped with a mixture of your favorite ingredients, and cooked to your liking!\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$12.99+\"}}",
+       "displayed": [
+        "$$12.99+",
+        "$$12.99+",
+        "$$12.99+"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Deep Dish Malnati Chicago Classic\u2122\", \"description\": \"Made with Lou&apos;s lean sausage, some extra mozzarella cheese and vine-ripened tomato sauce on Buttercrust\u2122. It&apos;s authentic Chicago!\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$15.59+\"}}",
+       "displayed": [
+        "$$15.59+",
+        "$$15.59+",
+        "$$15.59+"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Deep Dish The Lou\", \"description\": \"A pizza so good we gave it his name! Spinach mix (enhanced with garlic, basil &amp; onion), mushrooms and sliced Roma tomatoes covered with three cheeses, on a garlic Buttercrust\u2122.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$16.89+\"}}",
+       "displayed": [
+        "$$16.89+",
+        "$$16.89+",
+        "$$16.89+"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Deep Dish Malnati Chicago Classic\u2122\", \"description\": \"Made with Lou&apos;s lean sausage, some extra mozzarella cheese and vine-ripened tomato sauce on Buttercrust\u2122. It&apos;s authentic Chicago!\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$15.59+\"}}",
+       "displayed": [
+        "$$15.59+",
+        "$$15.59+",
+        "$$15.59+"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Deep Dish Mike&apos;s Hot Honey\u00ae\", \"description\": \"A Chicago take on pizza\u2019s hottest condiment, with sausage, hot giardiniera, cupped pepperoni, and a drizzle of Mike\u2019s Hot Honey\u00ae.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$16.79+\"}}",
+       "displayed": []
+      }
+     ],
+     "offers": 182,
+     "offers_with_priceCurrency": 0,
+     "priceCurrency_values": [],
+     "currency_mentions": {
+      "currency": "y\\\",\\\"link\\\":\\\"/vegetarian-friendly-near-me/\\\",\\\"__typename\\\":\\\"BusinessTag\\\"}],\\\"currency\\\":\\\"USD\\\",\\\"coverImgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/image/fit=",
+      "currencyCode": ",\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\":{\\\"kind\\\":\\\"Name\\\",\\\"value\\\":\\\"currencyCode\\\"},\\\"arguments\\\":[],\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\"",
+      "USD": " {{senderName}}\\\",\\\"nativeGiftCard_preview_messageSection_amount\\\":\\\"{{amount}} USD\\\",\\\"nativeGiftCard_preview_messageSection_disclaimer\\\":\\\"Terms and Condition"
+     }
+    }
+   },
+   {
+    "group": "lou-malnatis-pizzeria-",
+    "original": "https://www.doordash.com/store/lou-malnatis-pizzeria-chicago-35688991/",
+    "captured": "20260301062246",
+    "status": 200,
+    "bytes": 2377343,
+    "challenge": false,
+    "challenge_markers": [],
+    "title": "Order Lou Malnati&#x27;s Pizzeria - Chicago, IL Menu Delivery [Menu &amp; Prices] | Chicago - DoorDash",
+    "jsonld_types": [
+     "organization",
+     "menu",
+     "menuitem",
+     "faqpage",
+     "question",
+     "answer",
+     "breadcrumblist",
+     "listitem"
+    ],
+    "restaurant_found": false,
+    "name": "Order Lou Malnati's Pizzeria - Chicago, IL Menu Delivery [Menu & Prices] | Chicago - DoorDash",
+    "us_address": null,
+    "address_problem": "no address",
+    "menu_items": 64,
+    "priced_items": 31,
+    "currencies": [
+     "?"
+    ],
+    "sample_items": [
+     {
+      "name": "Heart-Shaped Pepperoni Deep Dish Pizza",
+      "price_cents": 2739,
+      "currency": null
+     },
+     {
+      "name": "Heart-Shaped Cheese Deep Dish Pizza",
+      "price_cents": 2409,
+      "currency": null
+     },
+     {
+      "name": "Heart-Shaped Sausage Deep Dish Pizza",
+      "price_cents": 2739,
+      "currency": null
+     },
+     {
+      "name": "Small Gluten Free Deep Dish Cheese",
+      "price_cents": 2629,
+      "currency": null
+     },
+     {
+      "name": "Small Gluten Free Thin Crust Mike's Hot Honey\u00ae",
+      "price_cents": 2049,
+      "currency": null
+     }
+    ],
+    "embedded_json": [
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 227,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 20417,
+      "parsed": "json",
+      "price_paths": [
+       {
+        "path": ".hasMenuSection[][].hasMenuItem[].offers.price",
+        "sample": "$17.79+"
+       }
+      ],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 1450,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 476,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": [
+       ".itemListElement[].item"
+      ]
+     }
+    ],
+    "counts": {
+     "\"price\"": 91,
+     "\\\"price\\\"": 124,
+     "displayPrice": 121,
+     "__next_f": 54,
+     "__APOLLO_STATE__": 0,
+     "__REACT_QUERY_STATE__": 0,
+     "application/ld+json": 4,
+     "MenuItem": 107,
+     "storeUuid": 0
+    },
+    "phrases": {
+     "estimated based on": "p from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across store, enter address for menu prices at your ne",
+     "prices are estimated": "ry or pickup from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across store, enter address for menu prices",
+     "may vary": "ailStore_schedule_delivery_callout_modal_primary_text\\\":\\\"Got it\\\",\\\"stores_pricing_disclosure_one\\\":\\\"Prices may vary from in-store or elsewhere for this location. Prices for delivery and pickup may vary.\\\",\\\"stores_pri",
+     "prices may differ": "trings_orderCheckInModal_secondaryActionText\\\":\\\"Cancel\\\",\\\"checkoutStrings_itemPriceMayDiffer_title\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\"",
+     "prices vary": "_q10\\\":\\\"How much do popular {{business}} menu items cost?\\\",\\\"seo_faq_business_redesign_a10\\\":\\\"{{business}} prices vary by location. To view the most up-to-date information, check out your nearest {{business}} restaura",
+     "menu prices": "tle\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverSubtitle\\\":\\\"Prices for menus are set directly by th",
+     "service fee": "ble, select store locations will not be awarded 5% credit\\nback in addition to $10 off promo. Fees (including service fee),\\ntaxes, and gratuity apply. $0 delivery fees and 10% off due to\\nreduced service fees only apply"
+    },
+    "price_contexts": [
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "\",\\\"name\\\":\\\"Thin Crust Cheese\\\",\\\"description\\\":\\\"Vine-ripened tomato sauce topped with mozzarella cheese.\\\",\\\"displayPrice\\\":\\\"$$14.99+\\\",\\\"displayStrikethroughPrice\\\":\\\"\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/i"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "ull,\\\"specialInstructions\\\":\\\"\\\",\\\"quickAddContext\\\":{\\\"__typename\\\":\\\"QuickAddContext\\\",\\\"isEligible\\\":false,\\\"price\\\":{\\\"__typename\\\":\\\"QuickAddMonetaryFields\\\",\\\"currency\\\":null,\\\"decimalPlaces\\\":null,\\\"displayString\\"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "\\\",\\\"name\\\":\\\"Deep Dish Cheese\\\",\\\"description\\\":\\\"Mozzarella cheese topped with vine-ripened tomato sauce.\\\",\\\"displayPrice\\\":\\\"$$14.89+\\\",\\\"displayStrikethroughPrice\\\":\\\"\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/i"
+     }
+    ],
+    "jsonld_shape": {
+     "blocks": [
+      {
+       "type": "Organization",
+       "keys": [
+        "@context",
+        "@type",
+        "name",
+        "sameAs",
+        "url"
+       ],
+       "url": "\"http://www.doordash.com\"",
+       "name": "\"DoorDash\""
+      },
+      {
+       "type": "Menu",
+       "keys": [
+        "@type",
+        "hasMenuSection"
+       ],
+       "menu_where": "top-level Menu block",
+       "menu_keys": [
+        "@type",
+        "hasMenuSection"
+       ],
+       "section_nesting": "list of lists",
+       "sections": 11,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"Deep Dish Malnati Chicago Classic\u2122\", \"description\": \"Made with Lou&apos;s lean sausage, some extra mozzarella cheese and vine-ripened tomato sauce on Buttercrust\u2122. It&apos;s authentic Chicago!\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$17.79+\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"Malnati Salad\", \"description\": \"Romaine lettuce, tomatoes, black olives, mushrooms, Volpi salami bits and gorgonzola cheese with our Sweet Vinaigrette and romano cheese.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$18.19+\"}}"
+       ]
+      },
+      {
+       "type": "FAQPage",
+       "keys": [
+        "@context",
+        "@type",
+        "mainEntity"
+       ]
+      },
+      {
+       "type": "BreadcrumbList",
+       "keys": [
+        "@context",
+        "@type",
+        "itemListElement"
+       ]
+      }
+     ],
+     "items_of_interest": [
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Deep Dish Malnati Chicago Classic\u2122\", \"description\": \"Made with Lou&apos;s lean sausage, some extra mozzarella cheese and vine-ripened tomato sauce on Buttercrust\u2122. It&apos;s authentic Chicago!\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$17.79+\"}}",
+       "displayed": [
+        "$$17.79+",
+        "$$17.79+",
+        "$$17.79+"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Deep Dish Cheese\", \"description\": \"Mozzarella cheese topped with vine-ripened tomato sauce.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$14.89+\"}}",
+       "displayed": [
+        "$$14.89+",
+        "$$14.89+",
+        "$$14.89+"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Deep Dish Create Your Own\", \"description\": \"Order your pizza just how you like it \u2013 topped with a mixture of your favorite ingredients, and cooked to your liking!\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$14.89+\"}}",
+       "displayed": [
+        "$$14.89+",
+        "$$14.89+",
+        "$$14.89+"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Deep Dish Pepperoni\", \"description\": \"Mozzarella cheese, topped with slices of pepperoni and vine-ripened tomato sauce.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$16.99+\"}}",
+       "displayed": [
+        "$$16.99+",
+        "$$16.99+",
+        "$$16.99+"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Heart-Shaped Pepperoni Deep Dish Pizza\", \"description\": \"Heart-shaped crust with mozzarella cheese, topped with slices of pepperoni and vine-ripened tomato sauce.\\r\\n\\r\\n*Heart-Shaped Pizzas are available only in small size, and a specialty artisan product.  Unfortunately, additional toppings and other modifications cannot be accommodated.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$27.39\"}}",
+       "displayed": [
+        "$$27.39",
+        "$$27.39"
+       ]
+      },
+      {
+       "item": "{\"@type\": \"MenuItem\", \"name\": \"Heart-Shaped Cheese Deep Dish Pizza\", \"description\": \"Heart-shaped crust with mozzarella cheese and vine-ripened tomato sauce. \\r\\n\\r\\n*Heart-Shaped Pizzas are available only in small size, and a specialty artisan product.  Unfortunately, additional toppings and other modifications cannot be accommodated.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$24.09\"}}",
+       "displayed": [
+        "$$24.09",
+        "$$24.09",
+        "$$24.09"
+       ]
+      }
+     ],
+     "offers": 91,
+     "offers_with_priceCurrency": 0,
+     "priceCurrency_values": [],
+     "currency_mentions": {
+      "currency": "y\\\",\\\"link\\\":\\\"/vegetarian-friendly-near-me/\\\",\\\"__typename\\\":\\\"BusinessTag\\\"}],\\\"currency\\\":\\\"USD\\\",\\\"coverImgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/image/fit=",
+      "currencyCode": ",\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\":{\\\"kind\\\":\\\"Name\\\",\\\"value\\\":\\\"currencyCode\\\"},\\\"arguments\\\":[],\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\"",
+      "USD": " {{senderName}}\\\",\\\"nativeGiftCard_preview_messageSection_amount\\\":\\\"{{amount}} USD\\\",\\\"nativeGiftCard_preview_messageSection_disclaimer\\\":\\\"Terms and Condition"
+     }
+    }
+   },
+   {
+    "group": "any",
+    "original": "https://www.doordash.com/store/$12-eats-12-dollars-combo-meal-baltimore-43658093/",
+    "captured": "20260703020245",
+    "status": 200,
+    "bytes": 2572132,
+    "challenge": false,
+    "challenge_markers": [],
+    "title": "Order $12 Eats (12-Dollars Combo Meal) - Baltimore, MD Menu Delivery [Menu &amp; Prices] | Baltimore - DoorDash",
+    "jsonld_types": [
+     "organization",
+     "menu",
+     "menuitem",
+     "faqpage",
+     "question",
+     "answer",
+     "breadcrumblist",
+     "listitem"
+    ],
+    "restaurant_found": false,
+    "name": "Order $12 Eats (12-Dollars Combo Meal) - Baltimore, MD Menu Delivery [Menu & Prices] | Baltimore - DoorDash",
+    "us_address": null,
+    "address_problem": "no address",
+    "menu_items": 67,
+    "priced_items": 63,
+    "currencies": [
+     "?"
+    ],
+    "sample_items": [
+     {
+      "name": "8-Inch Philly Steak Sub with Fries Can Soda",
+      "price_cents": 1200,
+      "currency": null
+     },
+     {
+      "name": "Honey Garlic Chicken Over Rice",
+      "price_cents": 1200,
+      "currency": null
+     },
+     {
+      "name": "Jerk chicken Over Rice",
+      "price_cents": 1200,
+      "currency": null
+     },
+     {
+      "name": "Crispy Funnel Cake",
+      "price_cents": 799,
+      "currency": null
+     },
+     {
+      "name": "8-Inch Fried Fish Sub (Whiting) with Fries Can Soda",
+      "price_cents": 1200,
+      "currency": null
+     }
+    ],
+    "embedded_json": [
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 227,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 18931,
+      "parsed": "json",
+      "price_paths": [
+       {
+        "path": ".hasMenuSection[][].hasMenuItem[].offers.price",
+        "sample": "2 for $12.00"
+       }
+      ],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 1588,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 456,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": [
+       ".itemListElement[].item"
+      ]
+     }
+    ],
+    "counts": {
+     "\"price\"": 79,
+     "\\\"price\\\"": 108,
+     "displayPrice": 107,
+     "__next_f": 64,
+     "__APOLLO_STATE__": 0,
+     "__REACT_QUERY_STATE__": 0,
+     "application/ld+json": 4,
+     "MenuItem": 94,
+     "storeUuid": 0
+    },
+    "phrases": {
+     "estimated based on": "p from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across store, enter address for menu prices at your ne",
+     "prices are estimated": "ry or pickup from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across store, enter address for menu prices",
+     "may vary": "ailStore_schedule_delivery_callout_modal_primary_text\\\":\\\"Got it\\\",\\\"stores_pricing_disclosure_one\\\":\\\"Prices may vary from in-store or elsewhere for this location. Prices for delivery and pickup may vary.\\\",\\\"stores_pri",
+     "prices may differ": "trings_orderCheckInModal_secondaryActionText\\\":\\\"Cancel\\\",\\\"checkoutStrings_itemPriceMayDiffer_title\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\"",
+     "prices vary": "_q10\\\":\\\"How much do popular {{business}} menu items cost?\\\",\\\"seo_faq_business_redesign_a10\\\":\\\"{{business}} prices vary by location. To view the most up-to-date information, check out your nearest {{business}} restaura",
+     "menu prices": "tle\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverSubtitle\\\":\\\"Prices for menus are set directly by th",
+     "service fee": "ble, select store locations will not be awarded 5% credit\\nback in addition to $10 off promo. Fees (including service fee),\\ntaxes, and gratuity apply. $0 delivery fees and 10% off due to\\nreduced service fees only apply"
+    },
+    "price_contexts": [
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "ors. Accompanied by fries, turmeric butter rice, or a selection of sides like onion rings and sweet potato.\\\",\\\"displayPrice\\\":\\\"2 for $12.00\\\",\\\"displayStrikethroughPrice\\\":\\\"$$24.00\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.co"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "ull,\\\"specialInstructions\\\":\\\"\\\",\\\"quickAddContext\\\":{\\\"__typename\\\":\\\"QuickAddContext\\\",\\\"isEligible\\\":false,\\\"price\\\":{\\\"__typename\\\":\\\"QuickAddMonetaryFields\\\",\\\"currency\\\":\\\"USD\\\",\\\"decimalPlaces\\\":2,\\\"displayString\\"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "ium Fried Shrimp with fries or turmeric butter rice\\\",\\\"description\\\":\\\"7 Pc Medium Fried Shrimp With Fries\\\",\\\"displayPrice\\\":\\\"2 for $12.00\\\",\\\"displayStrikethroughPrice\\\":\\\"$$24.00\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.co"
+     }
+    ],
+    "jsonld_shape": {
+     "blocks": [
+      {
+       "type": "Organization",
+       "keys": [
+        "@context",
+        "@type",
+        "name",
+        "sameAs",
+        "url"
+       ],
+       "url": "\"http://www.doordash.com\"",
+       "name": "\"DoorDash\""
+      },
+      {
+       "type": "Menu",
+       "keys": [
+        "@type",
+        "hasMenuSection"
+       ],
+       "menu_where": "top-level Menu block",
+       "menu_keys": [
+        "@type",
+        "hasMenuSection"
+       ],
+       "section_nesting": "list of lists",
+       "sections": 12,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"5 Pc Buffalo Party Wings with fries or turmeric butter rice\", \"description\": \"Five-piece party wings with diverse wet or dry rub flavors. Accompanied by fries, turmeric butter rice, or a selection of sides like onion rings and sweet potato.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"2 for $12.00\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"2 Pc Whole Wings 1 Pc Whiting with fries or turmeric butter rice\", \"description\": \"2 Pc Whole Wings 1 Pc Whiting With Fries or  turmeric butter rice\", \"offers\": {\"@type\": \"Offer\", \"price\": \"2 for $12.00\"}}"
+       ]
+      },
+      {
+       "type": "FAQPage",
+       "keys": [
+        "@context",
+        "@type",
+        "mainEntity"
+       ]
+      },
+      {
+       "type": "BreadcrumbList",
+       "keys": [
+        "@context",
+        "@type",
+        "itemListElement"
+       ]
+      }
+     ],
+     "items_of_interest": [],
+     "offers": 79,
+     "offers_with_priceCurrency": 0,
+     "priceCurrency_values": [],
+     "currency_mentions": {
+      "currency": "nt\\\",\\\"link\\\":\\\"/seafood-restaurant-near-me/\\\",\\\"__typename\\\":\\\"BusinessTag\\\"}],\\\"currency\\\":\\\"USD\\\",\\\"coverImgUrl\\\":\\\"\\\",\\\"numRatings\\\":41,\\\"coverSquareImgUrl\\",
+      "currencyCode": ",\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\":{\\\"kind\\\":\\\"Name\\\",\\\"value\\\":\\\"currencyCode\\\"},\\\"arguments\\\":[],\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\"",
+      "USD": " {{senderName}}\\\",\\\"nativeGiftCard_preview_messageSection_amount\\\":\\\"{{amount}} USD\\\",\\\"nativeGiftCard_preview_messageSection_disclaimer\\\":\\\"Terms and Condition"
+     }
+    }
+   },
+   {
+    "group": "any",
+    "original": "https://www.doordash.com/store/%22the-original%22-jj-twigs-pizza-palatine-162127/",
+    "captured": "20260222083309",
+    "status": 200,
+    "bytes": 2539290,
+    "challenge": false,
+    "challenge_markers": [],
+    "title": "Order &quot;The Original&quot; JJ Twig&#x27;s Pizza - Palatine, IL Menu Delivery [Menu &amp; Prices] | Palatine - DoorDash",
+    "jsonld_types": [
+     "organization",
+     "menu",
+     "menuitem",
+     "faqpage",
+     "question",
+     "answer",
+     "breadcrumblist",
+     "listitem"
+    ],
+    "restaurant_found": false,
+    "name": "Order \"The Original\" JJ Twig's Pizza - Palatine, IL Menu Delivery [Menu & Prices] | Palatine - DoorDash",
+    "us_address": null,
+    "address_problem": "no address",
+    "menu_items": 88,
+    "priced_items": 76,
+    "currencies": [
+     "?"
+    ],
+    "sample_items": [
+     {
+      "name": "Custom Pizza",
+      "price_cents": 1550,
+      "currency": null
+     },
+     {
+      "name": "JJ Twigs Pizza",
+      "price_cents": 2230,
+      "currency": null
+     },
+     {
+      "name": "Pepperoni Lovers Pizza",
+      "price_cents": 1890,
+      "currency": null
+     },
+     {
+      "name": "6pc Boneless Wings",
+      "price_cents": 1100,
+      "currency": null
+     },
+     {
+      "name": "6pc Bone In Wings",
+      "price_cents": 1210,
+      "currency": null
+     }
+    ],
+    "embedded_json": [
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 227,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 21661,
+      "parsed": "json",
+      "price_paths": [
+       {
+        "path": ".hasMenuSection[][].hasMenuItem[].offers.price",
+        "sample": "$15.50"
+       }
+      ],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 1635,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": []
+     },
+     {
+      "id": "",
+      "type": "application/ld+json",
+      "bytes": 406,
+      "parsed": "json",
+      "price_paths": [],
+      "menu_paths": [
+       ".itemListElement[].item"
+      ]
+     }
+    ],
+    "counts": {
+     "\"price\"": 91,
+     "\\\"price\\\"": 171,
+     "displayPrice": 168,
+     "__next_f": 57,
+     "__APOLLO_STATE__": 0,
+     "__REACT_QUERY_STATE__": 0,
+     "application/ld+json": 4,
+     "MenuItem": 105,
+     "storeUuid": 0
+    },
+    "phrases": {
+     "estimated based on": "p from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across store, enter address for menu prices at your ne",
+     "prices are estimated": "ry or pickup from {{name}} when you order online with DoorDash\\\",\\\"seo_business_menu_redesign_description\\\":\\\"Prices are estimated based on your predicted location and may vary across store, enter address for menu prices",
+     "may vary": "ailStore_schedule_delivery_callout_modal_primary_text\\\":\\\"Got it\\\",\\\"stores_pricing_disclosure_one\\\":\\\"Prices may vary from in-store or elsewhere for this location. Prices for delivery and pickup may vary.\\\",\\\"stores_pri",
+     "prices may differ": "trings_orderCheckInModal_secondaryActionText\\\":\\\"Cancel\\\",\\\"checkoutStrings_itemPriceMayDiffer_title\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\"",
+     "prices vary": "_q10\\\":\\\"How much do popular {{business}} menu items cost?\\\",\\\"seo_faq_business_redesign_a10\\\":\\\"{{business}} prices vary by location. To view the most up-to-date information, check out your nearest {{business}} restaura",
+     "menu prices": "tle\\\":\\\"Item prices may differ on Delivery and Pickup\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverTitle\\\":\\\"Menu Prices\\\",\\\"checkoutStrings_itemPriceMayDiffer_popoverSubtitle\\\":\\\"Prices for menus are set directly by th",
+     "service fee": "ble, select store locations will not be awarded 5% credit\\nback in addition to $10 off promo. Fees (including service fee),\\ntaxes, and gratuity apply. $0 delivery fees and 10% off due to\\nreduced service fees only apply"
+    },
+    "price_contexts": [
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "\\\"CREATE your own pizza- start here. To alter a specialty pizza, just key in the toppings you would prefer.\\\",\\\"displayPrice\\\":\\\"$$15.50\\\",\\\"displayStrikethroughPrice\\\":\\\"\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/im"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "ull,\\\"specialInstructions\\\":\\\"\\\",\\\"quickAddContext\\\":{\\\"__typename\\\":\\\"QuickAddContext\\\",\\\"isEligible\\\":false,\\\"price\\\":{\\\"__typename\\\":\\\"QuickAddMonetaryFields\\\",\\\"currency\\\":null,\\\"decimalPlaces\\\":null,\\\"displayString\\"
+     },
+     {
+      "pattern": "\\\\?\"(?:displayPrice|price|unitPrice|priceTagline)\\\\?\"\\s*:",
+      "context": "ith our mozzarella- its' a Chicago classic! (Sorry we do not allow substitutions to our specialty pizzas) \\\",\\\"displayPrice\\\":\\\"$$22.30\\\",\\\"displayStrikethroughPrice\\\":\\\"\\\",\\\"imgUrl\\\":\\\"https://img.cdn4dd.com/cdn-cgi/im"
+     }
+    ],
+    "jsonld_shape": {
+     "blocks": [
+      {
+       "type": "Organization",
+       "keys": [
+        "@context",
+        "@type",
+        "name",
+        "sameAs",
+        "url"
+       ],
+       "url": "\"http://www.doordash.com\"",
+       "name": "\"DoorDash\""
+      },
+      {
+       "type": "Menu",
+       "keys": [
+        "@type",
+        "hasMenuSection"
+       ],
+       "menu_where": "top-level Menu block",
+       "menu_keys": [
+        "@type",
+        "hasMenuSection"
+       ],
+       "section_nesting": "list of lists",
+       "sections": 9,
+       "first_section_keys": [
+        "hasMenuItem",
+        "name"
+       ],
+       "first_items": [
+        "{\"@type\": \"MenuItem\", \"name\": \"Custom Pizza\", \"description\": \"CREATE your own pizza- start here. To alter a specialty pizza, just key in the toppings you would prefer.\", \"offers\": {\"@type\": \"Offer\", \"price\": \"$15.50\"}}",
+        "{\"@type\": \"MenuItem\", \"name\": \"JJ Twigs Pizza\", \"description\": \"Our homemade pizza sauce topped with our sausage, freshly sliced mushrooms, onions and green peppers. Topped with our mozzarella- its&apos; a Chicago classic! (Sorry we do not allow substitutions to our specialty pizzas)  \", \"offers\": {\"@type\": \"Offer\", \"price\": \"$22.30\"}}"
+       ]
+      },
+      {
+       "type": "FAQPage",
+       "keys": [
+        "@context",
+        "@type",
+        "mainEntity"
+       ]
+      },
+      {
+       "type": "BreadcrumbList",
+       "keys": [
+        "@context",
+        "@type",
+        "itemListElement"
+       ]
+      }
+     ],
+     "items_of_interest": [],
+     "offers": 91,
+     "offers_with_priceCurrency": 0,
+     "priceCurrency_values": [],
+     "currency_mentions": {
+      "currency": "erentialPricingEnabled\\\":false,\\\"__typename\\\":\\\"Business\\\"},\\\"businessTags\\\":[],\\\"currency\\\":\\\"USD\\\",\\\"coverImgUrl\\\":\\\"\\\",\\\"numRatings\\\":0,\\\"coverSquareImgUrl\\\"",
+      "currencyCode": ",\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\":{\\\"kind\\\":\\\"Name\\\",\\\"value\\\":\\\"currencyCode\\\"},\\\"arguments\\\":[],\\\"directives\\\":[]},{\\\"kind\\\":\\\"Field\\\",\\\"name\\\"",
+      "USD": " {{senderName}}\\\",\\\"nativeGiftCard_preview_messageSection_amount\\\":\\\"{{amount}} USD\\\",\\\"nativeGiftCard_preview_messageSection_disclaimer\\\":\\\"Terms and Condition"
+     }
+    }
+   }
+  ],
+  "distinct_stores_with_captures": {
+   "seen in live runs": 1,
+   "taco-bell-": 222,
+   "mcdonalds-": 152,
+   "chipotle-mexican-grill-": 146,
+   "lou-malnatis-pizzeria-": 25,
+   "any": 5
+  }
+ },
+ "common_crawl": {
+  "source": "Common Crawl (index.commoncrawl.org + data.commoncrawl.org), existing WARC records",
+  "indexes": [
+   {
+    "id": "CC-MAIN-2026-39",
+    "status": null,
+    "records": 0
+   },
+   {
+    "id": "CC-MAIN-2026-34",
+    "status": null,
+    "records": 0
+   },
+   {
+    "id": "CC-MAIN-2026-30",
+    "status": null,
+    "records": 0
+   }
+  ],
+  "pages": []
+ },
+ "requests": [
+  {
+   "robots": "web.archive.org",
+   "status": 404
+  },
+  {
+   "url": "https://web.archive.org/cdx/search/cdx?url=www.doordash.com%2Fstore%2F24633898%2F&output=json&fl=timestamp,original,statuscode,mimetype,length&filter=statuscode:200&filter=mimetype:text/html&limit=20",
+   "status": 200,
+   "bytes": 150
+  },
+  {
+   "url": "https://web.archive.org/cdx/search/cdx?url=www.doordash.com%2Fstore%2Ftaco-bell-&matchType=prefix&from=2025&output=json&fl=timestamp,original,statuscode,mimetype,length&filter=statuscode:200&filter=mimetype:text/html&collapse=urlkey&limit=300",
+   "status": 200,
+   "bytes": 31469
+  },
+  {
+   "url": "https://web.archive.org/cdx/search/cdx?url=www.doordash.com%2Fstore%2Fmcdonalds-&matchType=prefix&from=2025&output=json&fl=timestamp,original,statuscode,mimetype,length&filter=statuscode:200&filter=mimetype:text/html&collapse=urlkey&limit=300",
+   "status": 200,
+   "bytes": 32126
+  },
+  {
+   "url": "https://web.archive.org/cdx/search/cdx?url=www.doordash.com%2Fstore%2Fchipotle-mexican-grill-&matchType=prefix&from=2025&output=json&fl=timestamp,original,statuscode,mimetype,length&filter=statuscode:200&filter=mimetype:text/html&collapse=urlkey&limit=300",
+   "status": 200,
+   "bytes": 36135
+  },
+  {
+   "url": "https://web.archive.org/cdx/search/cdx?url=www.doordash.com%2Fstore%2Flou-malnatis-pizzeria-&matchType=prefix&from=2025&output=json&fl=timestamp,original,statuscode,mimetype,length&filter=statuscode:200&filter=mimetype:text/html&collapse=urlkey&limit=300",
+   "status": 200,
+   "bytes": 4100
+  },
+  {
+   "url": "https://web.archive.org/cdx/search/cdx?url=www.doordash.com%2Fstore%2F&matchType=prefix&from=2025&output=json&fl=timestamp,original,statuscode,mimetype,length&filter=statuscode:200&filter=mimetype:text/html&collapse=urlkey&limit=300",
+   "status": 200,
+   "bytes": 26440
+  },
+  {
+   "url": "https://web.archive.org/web/20240715181343id_/https://www.doordash.com/store/24633898/",
+   "status": 200,
+   "bytes": 1048576
+  },
+  {
+   "url": "https://web.archive.org/web/20261007071635id_/https://www.doordash.com/store/taco-bell---live-mas-caf%C3%A9-irvine-1168597/",
+   "status": 200,
+   "bytes": 3230443
+  },
+  {
+   "url": "https://web.archive.org/web/20260724233050id_/https://www.doordash.com/store/taco-bell-1194579/",
+   "status": 200,
+   "bytes": 3099990
+  },
+  {
+   "url": "https://web.archive.org/web/20260722012438id_/https://www.doordash.com/store/taco-bell-1194846/",
+   "status": 200,
+   "bytes": 3131597
+  },
+  {
+   "url": "https://web.archive.org/web/20260726012051id_/https://www.doordash.com/store/mcdonalds-1140158/",
+   "status": 200,
+   "bytes": 3335017
+  },
+  {
+   "url": "https://web.archive.org/web/20260704075532id_/https://www.doordash.com/store/mcdonalds-1139987/",
+   "status": 200,
+   "bytes": 3017012
+  },
+  {
+   "url": "https://web.archive.org/web/20260517000910id_/https://www.doordash.com/store/mcdonalds-1498242/",
+   "status": 200,
+   "bytes": 2992430
+  },
+  {
+   "url": "https://web.archive.org/web/20261007000234id_/https://www.doordash.com/store/chipotle-mexican-grill-26003435/",
+   "status": 200,
+   "bytes": 2718512
+  },
+  {
+   "url": "https://web.archive.org/web/20261006232727id_/https://www.doordash.com/store/chipotle-mexican-grill-269795/",
+   "status": 200,
+   "bytes": 2719678
+  },
+  {
+   "url": "https://web.archive.org/web/20260712214739id_/https://www.doordash.com/store/chipotle-mexican-grill-24880646/",
+   "status": 200,
+   "bytes": 2547167
+  },
+  {
+   "url": "https://web.archive.org/web/20260326025531id_/https://www.doordash.com/store/lou-malnatis-pizzeria-glenview-869569/?srsltid=AfmBOopS-TKmCiHuf88h7Q8CJU1DqTtXWWyC5XoJxWpwlqx9PduUOG0b",
+   "status": 200,
+   "bytes": 2429787
+  },
+  {
+   "url": "https://web.archive.org/web/20260310162607id_/https://www.doordash.com/store/lou-malnatis-pizzeria-palatine-100798/",
+   "status": 200,
+   "bytes": 2515145
+  },
+  {
+   "url": "https://web.archive.org/web/20260301062246id_/https://www.doordash.com/store/lou-malnatis-pizzeria-chicago-35688991/",
+   "status": 200,
+   "bytes": 2378731
+  },
+  {
+   "url": "https://web.archive.org/web/20260703020245id_/https://www.doordash.com/store/$12-eats-12-dollars-combo-meal-baltimore-43658093/",
+   "status": 200,
+   "bytes": 2573448
+  },
+  {
+   "url": "https://web.archive.org/web/20260222083309id_/https://www.doordash.com/store/%22the-original%22-jj-twigs-pizza-palatine-162127/",
+   "status": 200,
+   "bytes": 2540504
+  },
+  {
+   "robots": "index.commoncrawl.org",
+   "status": 200
+  },
+  {
+   "url": "https://index.commoncrawl.org/collinfo.json",
+   "status": 200,
+   "bytes": 35226
+  },
+  {
+   "url": "https://index.commoncrawl.org/CC-MAIN-2026-39-index?url=www.doordash.com%2Fstore%2F*&output=json&limit=60&filter=status:200",
+   "skipped": "robots.txt disallows (or not an archive host)"
+  },
+  {
+   "url": "https://index.commoncrawl.org/CC-MAIN-2026-34-index?url=www.doordash.com%2Fstore%2F*&output=json&limit=60&filter=status:200",
+   "skipped": "robots.txt disallows (or not an archive host)"
+  },
+  {
+   "url": "https://index.commoncrawl.org/CC-MAIN-2026-30-index?url=www.doordash.com%2Fstore%2F*&output=json&limit=60&filter=status:200",
+   "skipped": "robots.txt disallows (or not an archive host)"
+  }
+ ],
+ "finished_at": "2026-10-15T04:55:43Z"
+}

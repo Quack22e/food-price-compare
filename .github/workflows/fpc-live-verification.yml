@@ -1,0 +1,73 @@
+# Live verification for this project: runs the real service code against
+# the real DoorDash / Uber Eats sites from a GitHub-hosted runner (the build
+# sandbox's egress policy blocks them). Bounded and robots.txt-compliant; see
+# scripts/live_verify.py for the request budget. Raw HTML is
+# kept only as a short-lived artifact; a JSON report is committed back.
+name: fpc-live-verification
+on:
+  workflow_dispatch: {}   # manual runs only; nothing crawls on a push
+permissions:
+  contents: write
+concurrency:
+  group: fpc-live-verification
+  cancel-in-progress: false
+jobs:
+  live:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0   # full history, so the commit step can rebase onto a moved branch
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: |
+          pip install requests pytest playwright
+          python -m playwright install --with-deps chromium
+      - name: Unit tests (synthetic fixtures)
+        id: unit
+        run: python -m pytest -q -p no:cacheprovider tests/test_backend.py
+      - name: Live verification (bounded, robots.txt-compliant)
+        env:
+          FPC_MIN_INTERVAL: "3"
+          FPC_MAX_SITEMAPS_PER_RUN: "3"
+          FPC_DATA_DIR: /tmp/fpc-data
+        run: python scripts/live_verify.py --out live-verification
+      - name: Snapshot for the static price board (bounded, robots.txt-compliant)
+        # Never crawl with code the unit tests rejected, or after a cancel.
+        if: ${{ !cancelled() && steps.unit.outcome == 'success' }}
+        env:
+          FPC_MIN_INTERVAL: "3"
+          FPC_MAX_SITEMAPS_PER_RUN: "12"
+          FPC_DATA_DIR: /tmp/fpc-data
+        run: python scripts/snapshot.py --out live-verification
+      - name: Extractor tests on the real captures
+        run: python -m pytest -q -rs -s -p no:cacheprovider tests/test_real_captures.py 2>&1 | tee live-verification/real-captures-pytest.txt || true
+      - name: Upload raw captures (artifact only)
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: real-captures
+          path: |
+            tests/captures/
+            tests/captures_barriers/
+            tests/captures_mirrors/
+            live-verification/
+          retention-days: 14
+          if-no-files-found: ignore
+      - name: Commit report
+        if: always()
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add live-verification || exit 0
+          git commit -m "Live verification report (run ${{ github.run_id }})" || exit 0
+          # The branch may have moved during the run: rebase this one commit
+          # onto it (the report files are only written by this workflow).
+          for i in 1 2 3 4; do
+            git pull --rebase origin "${GITHUB_REF_NAME}" && git push origin "HEAD:${GITHUB_REF_NAME}" && exit 0
+            sleep $((i * 5))
+          done
+          exit 1

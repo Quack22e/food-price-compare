@@ -1,0 +1,8 @@
+.fpc-data/
+__pycache__/
+*.pyc
+.pytest_cache/
+tests/captures_barriers/
+live-verification/*.html
+tests/captures_mirrors/
+tests/captures_archive/

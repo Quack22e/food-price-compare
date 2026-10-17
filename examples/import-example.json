@@ -1,0 +1,35 @@
+{
+  "_comment": "FORMAT EXAMPLE ONLY. 'Example Schema Grill' is fictional and its prices are made up; it can never match a real order because chain identity must be exact. Replace with menus you actually collected (keep the real source URL and observation time).",
+  "observations": [
+    {
+      "platform": "doordash",
+      "store_id": "0000001",
+      "store_name": "Example Schema Grill",
+      "store_url": "https://www.doordash.com/store/example-schema-grill-0000001/",
+      "address": { "street": "100 Example St", "city": "Columbus", "state": "OH", "zip": "43215", "country": "US" },
+      "observed_at": "2026-10-07T18:30:00Z",
+      "order_mode": "delivery",
+      "currency": "USD",
+      "mode_basis": "Delivery toggle selected on the store page",
+      "price_context": "Logged out, no address entered",
+      "items": [
+        {
+          "name": "Chicken Tenders",
+          "variant": "6 pc",
+          "section": "Entrees",
+          "price": "8.99",
+          "availability": "available",
+          "required_options": [{ "name": "Choose a sauce", "required": true }],
+          "addons": [
+            { "name": "Honey Mustard", "group": "Choose a sauce", "price": "0.00" },
+            { "name": "Ranch", "group": "Choose a sauce", "price": "0.00" },
+            { "name": "Extra Sauce", "group": "Extras", "price": "0.75" }
+          ],
+          "promotions": [{ "description": "20% off for members", "price": "7.19", "conditions": "Subscription members only" }]
+        },
+        { "name": "Fries", "variant": "Large", "price": "3.49", "availability": "unknown", "required_options": "none" }
+      ],
+      "fees": { "delivery_fee": "2.99", "service_fee": "1.80", "small_order_fee": "0.00", "tax": "1.02", "destination_zip": "43215" }
+    }
+  ]
+}
