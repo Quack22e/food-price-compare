@@ -27,7 +27,7 @@ The project lives at [Quack22e/food-price-compare](https://github.com/Quack22e/f
 Python 3.10+.
 
 ```bash
-git clone https://github.com/Quack22e/food-price-compare && cd food-price-compare
+git clone https://github.com/Quack22e/food-price-compare && cd food-price-compare   # or Code → Download ZIP on GitHub, unpack, cd into it
 python3 -m venv .venv && . .venv/bin/activate
 pip install -r requirements.txt                 # requests
 
@@ -294,13 +294,15 @@ The UI test clicks through every control and asserts there were no page errors.
 
 ### Live runs against the real sites
 
-The build sandbox's egress policy blocks all three sites; the attempts and alternatives tried are listed below. The live runs therefore use `.github/workflows/fpc-live-verification.yml`. In `Quack22e/food-price-compare` it runs only when started by hand (Actions → fpc-live-verification → Run workflow), so nothing crawls on a push; in `Quack22e/prediction-market-analytics` it also runs on pushes to the build branch that changed `scripts/live_verify.py`, `scripts/snapshot.py` or the workflow. It uses a GitHub-hosted runner with ordinary internet access. It runs the unchanged service code with its robots.txt and rate limits (3 s per host).
+The build sandbox's egress policy blocks all three sites; the attempts and alternatives tried are listed below. The live runs therefore use `.github/workflows/fpc-live-verification.yml`. It runs only when started by hand (Actions → fpc-live-verification → Run workflow), so nothing crawls on a push. It uses a GitHub-hosted runner with ordinary internet access. It runs the unchanged service code with its robots.txt and rate limits (3 s per host).
 
 Each run's budget is bounded:
 * robots.txt for each site
 * two jobs, each limited to 3 sitemap documents and 3–6 stores
 * up to 7 inspected pages
-* the snapshot: three Uber Eats searches capped at 24, 10 and 12 store pages and 12 sitemap documents each, plus two Grubhub listings looked up on MenuPages
+* the snapshot: seven Uber Eats searches capped at 24, 10, 12, 8, 8, 12 and 8 store pages and 12 sitemap documents each, a cancel-and-resume check, and two Grubhub listings looked up on MenuPages
+* a wider run: the **scale** input (1, 3 or 5) multiplies the store cap and time limit of the three nationwide delivery searches (McNuggets, Crunchwrap, the Taco Bell basket) and allows 24 or 40 sitemap documents. Spacing (3 s per host), robots.txt and barrier handling are unchanged, so Uber Eats' bot check still ends a platform's run after 4 challenges in a row
+* the terms check (`scripts/terms_check.py`): the three platforms' published terms pages, or their newest Wayback Machine capture when a page cannot be read, with the sentences about scripts, robots and scraping quoted verbatim in `live-verification/terms.json`
 
 It commits `live-verification/report.json` and `live-verification/snapshot.json`, which hold observations, coverage, barriers and structure summaries, plus the real-capture test output. They contain no raw pages; structure summaries quote at most short snippets (a few hundred characters) around price and challenge markers. Raw pages are kept only as a 14-day workflow artifact. The snapshot step runs only when the unit tests passed, and the commit step rebases onto the branch if it moved during the run.
 
@@ -462,6 +464,7 @@ food-price-compare/
 ├── scripts/live_verify.py     # bounded live run (used by .github/workflows/fpc-live-verification.yml)
 ├── scripts/archive_probe.py   # DoorDash store-page structure from existing archive captures (.github/workflows/fpc-archive-probe.yml)
 ├── scripts/snapshot.py        # bounded live searches → live-verification/snapshot.json (board data)
+├── scripts/terms_check.py     # what each platform's terms say about scripts → live-verification/terms.json
 ├── scripts/build_board.py     # builds board/index.html from the template, engine and snapshots
 ├── scripts/rank_report.mjs    # rank a live report's real observations with the shipped engine
 ├── live-verification/         # latest live report (committed by the workflow)

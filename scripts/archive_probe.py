@@ -54,9 +54,10 @@ class Client:
     429/503, ends all requests to that host), redirects followed only to the
     archive hosts and only where robots.txt allows."""
 
-    def __init__(self):
+    def __init__(self, hosts=ARCHIVE_HOSTS, user_agent=UA):
+        self.hosts = set(hosts)
         self.s = requests.Session()
-        self.s.headers["User-Agent"] = UA
+        self.s.headers["User-Agent"] = user_agent
         self.last: dict[str, float] = {}
         self.robots: dict[str, object] = {}
         self.stopped: dict[str, str] = {}
@@ -73,7 +74,7 @@ class Client:
     def allowed(self, url) -> bool:
         p = urlsplit(url)
         host = p.netloc
-        if host not in ARCHIVE_HOSTS:
+        if host not in self.hosts:
             return False
         if host not in self.robots:
             self._wait(host)

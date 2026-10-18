@@ -35,8 +35,13 @@ from server.http_client import utcnow_iso  # noqa: E402
 
 # Seeds are pages observed in earlier live runs (live-verification/report.json);
 # searches without a seed use the platform's robots.txt-declared sitemaps.
+# A wider run (workflow input "scale", FPC_SNAPSHOT_SCALE 1-5) multiplies the
+# store cap and time limit of the nationwide delivery searches ("wide") only.
+# Request spacing, robots.txt and barrier handling stay the same, so Uber Eats'
+# bot check still ends a platform's run after FPC_BREAKER challenges in a row.
+SCALE_MAX = 5
 SEARCHES = [
-    {"label": "McDonald's 10 pc. Chicken McNuggets (Uber Eats, nationwide)",
+    {"label": "McDonald's 10 pc. Chicken McNuggets (Uber Eats, nationwide)", "wide": True,
      "request": {"order": {"chain": "McDonald's", "items": [{"name": "10 pc. Chicken McNuggets"}]},
                  "platforms": ["ubereats"], "seed_urls": ["https://www.ubereats.com/brand/mcdonalds"],
                  "max_stores_per_platform": 24}},
@@ -44,13 +49,13 @@ SEARCHES = [
      "request": {"order": {"chain": "Lou Malnati's Pizzeria", "items": [{"name": "Small Deep Dish Margherita"}]},
                  "platforms": ["ubereats"], "max_stores_per_platform": 10,
                  "prioritize": {"state": "IL", "city": "Chicago"}}},
-    {"label": "Taco Bell Crunchwrap Supreme (Uber Eats, nationwide)",
+    {"label": "Taco Bell Crunchwrap Supreme (Uber Eats, nationwide)", "wide": True,
      "request": {"order": {"chain": "Taco Bell", "items": [{"name": "Crunchwrap Supreme"}]},
                  "platforms": ["ubereats"], "max_stores_per_platform": 12}},
     # Live checks of engine rules on real pages (see README "Live checks"):
     # a two-item basket that must come from one branch, and the same item with
     # Uber Eats' pickup mode requested, never mixed with delivery prices.
-    {"label": "Taco Bell basket: Crunchwrap Supreme + Chalupa Supreme (Uber Eats)",
+    {"label": "Taco Bell basket: Crunchwrap Supreme + Chalupa Supreme (Uber Eats)", "wide": True,
      "request": {"order": {"chain": "Taco Bell", "items": [{"name": "Crunchwrap Supreme"}, {"name": "Chalupa Supreme"}]},
                  "platforms": ["ubereats"], "max_stores_per_platform": 8}},
     {"label": "Taco Bell Crunchwrap Supreme, pickup (Uber Eats)",
@@ -85,14 +90,29 @@ def slim(obs: dict) -> dict:
     return out
 
 
-def run_search(svc: Service, spec: dict, fetch_mode: str) -> dict:
+def snapshot_scale() -> float:
+    try:
+        return max(1.0, min(float(SCALE_MAX), float(os.environ.get("FPC_SNAPSHOT_SCALE") or 1)))
+    except ValueError:
+        return 1.0
+
+
+def widen(spec: dict, scale: float, cap: int) -> tuple[dict, int]:
+    """The search to run and its time limit in seconds."""
+    if not spec.get("wide") or scale <= 1:
+        return spec, 300
+    req = dict(spec["request"], max_stores_per_platform=min(cap, round(spec["request"]["max_stores_per_platform"] * scale)))
+    return dict(spec, request=req), min(1500, round(300 * scale))
+
+
+def run_search(svc: Service, spec: dict, fetch_mode: str, seconds: int = 300) -> dict:
     req = dict({"order_mode": "delivery"}, **spec["request"], fetch_mode=fetch_mode)
     entry = {"label": spec["label"], "request": {k: v for k, v in req.items() if k != "prioritize"},
              "prioritize": req.get("prioritize")}
     started = time.time()
     try:
         job = svc.jobs.start(req)
-        deadline = time.time() + 300
+        deadline = time.time() + seconds
         while time.time() < deadline and job.thread and job.thread.is_alive():
             time.sleep(1)
         if job.thread and job.thread.is_alive():
@@ -175,9 +195,10 @@ def main() -> None:
             "github_sha": os.environ.get("GITHUB_SHA"), "user_agent": cfg.user_agent,
             "price_basis": "Public menu prices as published on each store page, anonymous session, no delivery address; "
                            "before tax, fees, tip and promotions.",
-            "searches": [], "grubhub_menus": []}
+            "searches": [], "grubhub_menus": [], "scale": snapshot_scale()}
     for spec in SEARCHES:
-        snap["searches"].append(run_search(svc, spec, "http"))
+        wide, seconds = widen(spec, snap["scale"], cfg.max_stores_cap)
+        snap["searches"].append(run_search(svc, wide, "http", seconds))
     snap["checks"] = {"cancel_resume": check_cancel_resume(cfg)}
     for url in GRUBHUB_URLS:
         try:

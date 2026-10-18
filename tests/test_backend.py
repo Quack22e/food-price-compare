@@ -936,3 +936,41 @@ def test_store_currency_counts_every_stated_currency():
     fetched = FetchOutcome(url=ref["canonical"], ok=True, status=200, fetched_at="2026-10-14T00:00:00Z")
     status, obs, _ = build_observation(ad, ref, parsed, fetched, "delivery", "requested", set())
     assert status == "checked" and obs["currency"] == "USD"
+
+
+def test_terms_check_quotes_and_snapshot_scale(monkeypatch):
+    import importlib.util
+    import sys
+    from pathlib import Path
+    root = Path(__file__).resolve().parent.parent
+
+    def load(name):
+        sys.path.insert(0, str(root / "scripts"))
+        spec = importlib.util.spec_from_file_location(name, root / "scripts" / f"{name}.py")
+        mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        return mod
+
+    t = load("terms_check")
+    raw = ('<html><head><script>var s="scraping";</script><style>p{}</style></head><body><p>Last updated: March 3, 2026.</p>'
+           '<p>You may not (v) cause or launch any programs or scripts for the purpose of scraping, indexing, surveying, or '
+           'otherwise data mining any portion of the Services. Unrelated text.</p><script type="application/json">'
+           '{"body":"\\u003cp\\u003eYou agree not to use any robot, spider, or other automated means to access the site.\\u003c/p\\u003e"}'
+           '</script></body></html>')
+    text = t.page_text(raw)
+    assert "var s" not in text and "p{}" not in text                      # code and styles are not terms text
+    assert t.quotes(text) == ["You may not (v) cause or launch any programs or scripts for the purpose of scraping, indexing, "
+                              "surveying, or otherwise data mining any portion of the Services.",
+                              "You agree not to use any robot, spider, or other automated means to access the site."]
+    assert [m.group(1) for m in t.DATE.finditer(text)] == ["March 3, 2026"]
+    snap = load("snapshot")
+    monkeypatch.setenv("FPC_SNAPSHOT_SCALE", "9")
+    assert snap.snapshot_scale() == 5                                    # capped
+    monkeypatch.setenv("FPC_SNAPSHOT_SCALE", "x")
+    assert snap.snapshot_scale() == 1
+    wide, secs = snap.widen(snap.SEARCHES[0], 5, 500)
+    assert wide["request"]["max_stores_per_platform"] == 120 and secs == 1500 and snap.SEARCHES[0]["request"]["max_stores_per_platform"] == 24
+    narrow, secs = snap.widen(snap.SEARCHES[1], 5, 500)                  # Lou Malnati's: every branch is already read
+    assert narrow is snap.SEARCHES[1] and secs == 300
+    assert snap.widen(snap.SEARCHES[0], 5, 50)[0]["request"]["max_stores_per_platform"] == 50
+
