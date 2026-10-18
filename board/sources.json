@@ -9,7 +9,7 @@
         "Prices read from real US store pages in every live run since 37708779121 (up to 335 menu items per page); 40 branches in the 00:01 UTC run on 9 Oct.",
         "Store links come from robots.txt-declared sitemaps and brand pages. Non-US country sections are skipped without a request.",
         "A few store pages answered with a challenge. Those are counted as blocked and not worked around.",
-        "Uber's terms reportedly bar scripts that scrape or data-mine the service (the US wording was not confirmed)."
+        "Uber's US terms (2026-07-30 capture) bar scripts that unduly burden or hinder the service; unlike some other countries' terms they do not mention scraping."
       ]
     },
     {
@@ -18,7 +18,7 @@
       "tone": "bad",
       "summary": "Branch discovery works, but store pages answer datacenter requests with a Cloudflare challenge, so no current DoorDash branch price could be read from a server. Type the prices you see in the DoorDash app instead (below).",
       "evidence": [
-        "94 of 94 store-page requests across 19 live runs returned 403 “Just a moment…”.",
+        "99 of 99 store-page requests across 20 live runs returned 403 “Just a moment…”.",
         "131 per-state store sitemaps are readable (California alone lists 106,228 store URLs).",
         "/business/…/menu pages show prices DoorDash labels “estimated based on your predicted location”, so they are not used as branch prices.",
         "15 archived copies of real store pages per probe run (Wayback Machine; the latest, 2026-10-15, holds captures from Jul 2024 to Oct 2026) show the layout: Restaurant + Menu JSON-LD on 11 (a bare Menu on 3, nothing on 1 from 2024), prices like “$8.53” or “$13.59+” (a starting price), no currency field and no ZIP. The reader handles it: 8 US stores read with USD prices, 3 Canadian excluded. Archived prices are never used.",
@@ -52,7 +52,7 @@
         "branch_prices": "Yes",
         "fit": "now",
         "fit_label": "In use · verified live",
-        "fit_note": "Uber's terms reportedly bar scraping scripts; a few pages answer with a challenge, which is reported, not bypassed.",
+        "fit_note": "Uber's US terms bar scripts that unduly burden the service; runs are spaced 3 s apart, and pages that answer with a challenge are reported, not bypassed.",
         "evidence": [
           "https://www.ubereats.com/brand-city/chicago-il/wingstop"
         ]
@@ -113,7 +113,7 @@
         "branch_prices": "Yes for fixed Uber Eats prices; “$0.00” and “+” prices are kept as not published",
         "fit": "user",
         "fit_label": "Built · your action",
-        "fit_note": "Switched off on DoorDash, whose terms ban copying its site with scripts, even manually run ones. Uber's terms restrict scraping, so it is your call on Uber Eats.",
+        "fit_note": "Switched off on DoorDash, whose terms ban copying its site with scripts, even manually run ones. Uber's US terms bar scripts that unduly burden the service, so on Uber Eats it is your call.",
         "evidence": [
           "https://help.doordash.com/en-us/consumers/article/storefront-consumer-terms-and-conditions-english"
         ]

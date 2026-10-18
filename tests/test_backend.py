@@ -963,6 +963,7 @@ def test_terms_check_quotes_and_snapshot_scale(monkeypatch):
                               "surveying, or otherwise data mining any portion of the Services.",
                               "You agree not to use any robot, spider, or other automated means to access the site."]
     assert [m.group(1) for m in t.DATE.finditer(text)] == ["March 3, 2026"]
+    assert t.quotes("Send us a description of your claim and your subscriptions. Thanks for reading this page today.") == []
     snap = load("snapshot")
     monkeypatch.setenv("FPC_SNAPSHOT_SCALE", "9")
     assert snap.snapshot_scale() == 5                                    # capped

@@ -85,7 +85,7 @@ def snapshot_from_report(report: dict) -> dict:
 def board_snapshot(snap: dict) -> dict:
     """Keep only what the page uses."""
     keep_search = ("label", "request", "status", "coverage", "barriers", "observations", "seconds", "error")
-    out = {k: snap.get(k) for k in ("generated_at", "github_run_id", "price_basis")}
+    out = {k: snap.get(k) for k in ("generated_at", "finished_at", "github_run_id", "price_basis")}
     out["searches"] = []
     for s in snap.get("searches", []):
         e = {k: s.get(k) for k in keep_search if s.get(k) is not None}

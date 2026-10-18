@@ -37,7 +37,7 @@ TERMS = [
      "url": "https://www.grubhub.com/legal/terms-of-use"},
 ]
 HOSTS = {"www.uber.com", "help.doordash.com", "www.grubhub.com", "web.archive.org"}
-KEYWORDS = re.compile(r"scrap|data[\s-]?min|spider|robot|crawl|script|automated (?:means|system|device|access)", re.I)
+KEYWORDS = re.compile(r"scrap|data[\s-]?min|spider|\brobots?\b|crawl|\bscripts?\b|automated (?:means|process|system|device|access)", re.I)
 DATE = re.compile(r"(?:effective|last (?:modified|updated|revised))[^.]{0,40}?\b((?:January|February|March|April|May|June|July|"
                   r"August|September|October|November|December) \d{1,2}, \d{4}|\d{4}-\d{2}-\d{2})", re.I)
 
@@ -87,6 +87,7 @@ def main() -> None:
     ap.add_argument("--out", default="live-verification")
     args = ap.parse_args()
     c = Client(hosts=HOSTS, user_agent=UA)
+    c.s.headers["Accept"] = "text/html,application/xhtml+xml"      # uber.com answered 406 to */*
     out = {"started_at": utcnow_iso(), "user_agent": UA, "terms": []}
     for t in TERMS:
         entry = dict(t, live=read(c, t["url"]))

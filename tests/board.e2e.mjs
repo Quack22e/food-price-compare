@@ -144,8 +144,9 @@ test('closest listings: a worded-differently listing is suggested, and "Same ite
 });
 
 test('switching snapshot runs keeps each run separate', async () => {
-  // Every price shown for a run must have been observed during that run.
+  // Every price shown for a run must have been observed during that run (a wide run takes a while).
   const n = await page.locator('#runSel option').count();
+  const runs = embedded.runs.slice().sort((a, b) => String(b.generated_at).localeCompare(String(a.generated_at)));
   assert.ok(n >= 2, 'the committed board should hold several runs');
   await page.locator('#presets button', { hasText: "McDonald's" }).first().click();
   const when = (t) => { const m = /(\d{1,2}) (\w{3}) (\d{4}), (\d\d):(\d\d) UTC/.exec(t); return m && Date.parse(`${m[1]} ${m[2]} ${m[3]} ${m[4]}:${m[5]} UTC`); };
@@ -159,7 +160,8 @@ test('switching snapshot runs keeps each run separate', async () => {
     if (!seen) continue;
     withWinner++;
     const at = when(seen[1]);
-    assert.ok(at <= runAt + 5 * 60000 && at >= runAt - 30 * 60000, `run ${i}: price observed ${seen[1]} outside the run at ${new Date(runAt).toISOString()}`);
+    const endAt = Math.max(runAt, Date.parse(runs[i].finished_at || '') || 0);
+    assert.ok(at <= endAt + 5 * 60000 && at >= runAt - 30 * 60000, `run ${i}: price observed ${seen[1]} outside the run at ${new Date(runAt).toISOString()}`);
     const rows = page.locator('#tabBody tbody tr:not(.details) td:nth-child(5)');
     assert.ok(await rows.count() >= 1);
   }
