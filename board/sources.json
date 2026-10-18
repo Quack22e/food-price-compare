@@ -18,10 +18,10 @@
       "tone": "bad",
       "summary": "Branch discovery works, but store pages answer datacenter requests with a Cloudflare challenge, so no current DoorDash branch price could be read from a server. Type the prices you see in the DoorDash app instead (below).",
       "evidence": [
-        "89 of 89 store-page requests across 18 live runs returned 403 “Just a moment…”.",
+        "94 of 94 store-page requests across 19 live runs returned 403 “Just a moment…”.",
         "131 per-state store sitemaps are readable (California alone lists 106,228 store URLs).",
         "/business/…/menu pages show prices DoorDash labels “estimated based on your predicted location”, so they are not used as branch prices.",
-        "15 archived copies of real store pages (Wayback Machine, Sep 2025 – Oct 2026) show the layout: Restaurant + Menu JSON-LD on 12 (a bare Menu on 3), prices like “$8.53” or “$13.59+” (a starting price), no currency field and no ZIP. The reader handles it: 9 US stores read with USD prices, 3 Canadian excluded. Archived prices are never used.",
+        "15 archived copies of real store pages per probe run (Wayback Machine; the latest, 2026-10-15, holds captures from Jul 2024 to Oct 2026) show the layout: Restaurant + Menu JSON-LD on 11 (a bare Menu on 3, nothing on 1 from 2024), prices like “$8.53” or “$13.59+” (a starting price), no currency field and no ZIP. The reader handles it: 8 US stores read with USD prices, 3 Canadian excluded. Archived prices are never used.",
         "The capture bookmarklet is switched off on DoorDash pages: DoorDash's terms forbid copying its site with scripts, even ones you run yourself."
       ]
     },
