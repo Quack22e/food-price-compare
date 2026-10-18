@@ -657,12 +657,15 @@ tr.details td { background: var(--sunken); }
     t = t.replace(/&/g, ' and ').replace(/\+/g, ' and ');
     t = t.replace(/(\d),(\d{3})/g, '$1$2');
     t = t.replace(/(^|[^0-9])\.(\d)/g, '$10.$2');                               // ".5 oz" is 0.5 oz
-    // Letters of any script and emoji are kept: "麻婆豆腐" is not "宫保鸡丁".
-    t = t.replace(/(\p{Extended_Pictographic})/gu, ' $1 ').replace(/[^\p{L}\p{N}\p{Extended_Pictographic}.]+/gu, ' ');
+    // Letters of any script and emoji are kept: "麻婆豆腐" is not "宫保鸡丁". So are
+    // the vowel signs and voicing marks of other scripts ("หมี่" is not "หมู",
+    // "ぎ" is not "き") and flags; only accents on Latin letters are dropped (above).
+    t = t.replace(/[\uFE00-\uFE0F\u20E3]/g, '')
+      .replace(/(\p{Extended_Pictographic}|\p{Regional_Indicator}{2})/gu, ' $1 ').replace(/[^\p{L}\p{M}\p{N}\p{Extended_Pictographic}\p{Regional_Indicator}.]+/gu, ' ');
     t = t.replace(/(^|[^0-9])\.|\.(?![0-9])/g, '$1 ');
-    return t.replace(/\s+/g, ' ').trim();
+    return t.replace(/\s+/g, ' ').trim().normalize('NFC');
   }
-  var TOKEN_MAP = { n: 'and', jr: 'junior', dbl: 'double', one: '1', two: '2', three: '3', four: '4', five: '5', six: '6', seven: '7',
+  var TOKEN_MAP = { n: 'and', w: 'with', jr: 'junior', dbl: 'double', one: '1', two: '2', three: '3', four: '4', five: '5', six: '6', seven: '7',
                     eight: '8', nine: '9', ten: '10', eleven: '11', twelve: '12', twenty: '20' };
   var STOP = { the: 1 };
   function mapTokens(words) {
@@ -692,11 +695,20 @@ tr.details td { background: var(--sunken); }
 
   // Nutrition notes are not part of a product name: "10 Chicken McNuggets
   // [490-630 Cals]" (archived DoorDash pages), "Chalupa Supreme (350 cal.)".
-  // A bracketed note with a calorie figure is removed whole ("(250 Cal Each)",
-  // "(90 Cal/Wing)"); an unbracketed one only from its own number on, so
+  // In a bracket only the calorie part goes: "(250 Cal Each)" and "(90 Cal/Wing)"
+  // vanish, "(Bowl, 360 Cal)" keeps "(Bowl)" and "(10 pc, 900-1,100 Cal)" keeps
+  // "(10 pc)". An unbracketed note goes only from its own number on, so
   // "Chicken Tenders 3 - 360 Cal" keeps its 3.
-  var CAL_NOTE = /[\[(][^\[\]()]*?\d[^\[\]()]*?(?:k?cals?|calories|kcal)\b[^\[\]()]*[\])]|(?:^|\s)[-–—·|]?\s*\d[\d.,]*(?:[-–—\/]\d[\d.,]*)?\s*(?:k?cals?|calories|kcal)\b\.?(?:\s*(?:\/|per)\s*[a-z]+\.?)?/gi;
-  function stripNotes(s) { return String(s == null ? '' : s).replace(CAL_NOTE, ' '); }
+  var CAL_FIG = /\d[\d.,\s&~\/–—-]*(?:to\s*\d[\d.,]*\s*)?(?:k?cals?|calories|kcal)\b/i;
+  var CAL_SEP = /\s*(?:[;|·•]|(?<!\d),|,(?!\d{3}(?!\d))|\s[-–—]\s)\s*/;     // "1,100" is one number
+  var CAL_LOOSE = /(?:^|\s)[-–—·|]?\s*\d[\d.,]*(?:[-–—\/]\d[\d.,]*)?\s*(?:k?cals?|calories|kcal)\b\.?(?:\s*(?:\/|per)\s*[a-z]+\.?)?/gi;
+  function stripNotes(s) {
+    return String(s == null ? '' : s).replace(/[\[(]([^\[\]()]*)[\])]/g, function (m, inner) {
+      if (!CAL_FIG.test(inner)) return m;
+      var keep = inner.split(CAL_SEP).filter(function (seg) { return seg.trim() && !CAL_FIG.test(seg); });
+      return keep.length ? ' (' + keep.join(', ') + ') ' : ' ';
+    }).replace(CAL_LOOSE, ' ');
+  }
   // Menu numbers ("#1 Big Mac Meal", "Combo #3") and serving sizes ("(Serves 4)",
   // "- Feeds 10-12 people") are read as attributes and compared, never dropped.
   var MENU_LEAD = /^\s*(?:#\s*|no\.\s*)(\d{1,3})\b\s*[-.:)]?\s*/i;
@@ -710,14 +722,24 @@ tr.details td { background: var(--sunken); }
     function set(k, v) { if (a[k] !== null && a[k] !== v) a.conflicts.push(k + ': ' + a[k] + ' vs ' + v); else a[k] = v; }
     var raw = stripNotes(s)
       .replace(MENU_LEAD, function (m, n) { a.menuNo = +n; return ' '; }).replace(MENU_TRAIL, function (m, n) { a.menuNo = +n; return ' '; })
+      .replace(/[\[(]\s*(?:#\s*|no\.\s*)(\d{1,3})\s*[\])]/gi, function (m, n) { a.menuNo = +n; return ' '; })
       .replace(SERVES, function (m, x, y) { set('serves', y ? x + '-' + y : x); return ' '; })
-      .replace(/\(\s*(xs|s|m|l|xl)\s*\)/gi, function (m, x) { return ' ' + LETTER_SIZE[x.toLowerCase()] + ' '; });
+      .replace(/\(\s*(xs|s|m|l|xl)\s*\)/gi, function (m, x) { return ' ' + LETTER_SIZE[x.toLowerCase()] + ' '; })
+      .replace(/(?<!\d),|,(?!\d{3}(?!\d))|\s\/\s/g, ' zzjn ');           // a comma or " / " starts a part too
     var t = ' ' + normText(raw) + ' ';
     t = t.replace(/\bbakers? dozen\b/g, function () { set('count', 13); return ' '; });
     t = t.replace(/\bhalf (?:a )?dozen\b/g, function () { set('count', 6); return ' '; });
     t = t.replace(/\b(?:(\d{1,2}) )?dozen\b/g, function (m, n) { set('count', (n ? +n : 1) * 12); return ' '; });
     t = t.replace(/\b(\d{1,3}) ?(?:pc|pcs|piece|pieces|ct|count|pk|pack)\b/g, function (m, n) { set('count', +n); return ' '; });
     t = t.replace(/\b(\d+(?:\.\d+)?) ?(?:fl oz|oz|ounce|ounces)\b/g, function (m, n) { set('oz', numKey(n)); return ' '; });
+    // Gallons, quarts and pints are volumes too ("Sweet Tea Gallon", "Wonton Soup (Qt)").
+    [[/\b(?:(\d+(?:\.\d+)?|half) )?(?:gallons?|gal)\b/g, 3.785, 'gallon'], [/\b(?:(\d+(?:\.\d+)?|half) )?(?:quarts?|qts?)\b/g, 0.946, 'quart'],
+     [/\b(?:(\d+(?:\.\d+)?|half) )?pints?\b/g, 0.473, 'pint']].forEach(function (v) {
+      t = t.replace(v[0], function (m, n) {
+        var k = n === 'half' ? 0.5 : n ? +n : 1;
+        set('liter', numKey((k * v[1]).toFixed(3))); a.volText = (n ? n + ' ' : '') + v[2]; return ' ';
+      });
+    });
     t = t.replace(/\b(\d+(?:\.\d+)?) inch\b/g, function (m, n) { set('inch', numKey(n)); return ' '; });
     t = t.replace(/\b(?:footlong|foot long)\b/g, function () { set('inch', '12'); return ' '; });
     t = t.replace(/\b(\d+(?:\.\d+)?) ?(?:l|liters?|litres?)\b/g, function (m, n) { set('liter', numKey(n)); return ' '; });
@@ -730,10 +752,11 @@ tr.details td { background: var(--sunken); }
       t = t.replace(pair[0], function (m) { found.push(pair[1] || m.trim()); return ' zzsz' + (found.length - 1) + ' '; });
     });
     var words = t.split(/\s+/).filter(Boolean), joined = false, rest = [];
+    var joiner = function (w) { var x = TOKEN_MAP[w] || w; return x === 'and' || x === 'with' || x === 'plus' || x === 'zzjn'; };
     words.forEach(function (w, i) {
       var mm = /^zzsz(\d+)$/.exec(w);
-      if (!mm) { if (w === 'and' || w === 'with') joined = true; rest.push(w); return; }
-      var v = found[+mm[1]], next = words.slice(i + 1).filter(function (x) { return !/^zzsz/.test(x) && x !== 'and' && x !== 'with'; })[0];
+      if (!mm) { if (joiner(w)) joined = true; if (w !== 'zzjn') rest.push(w); return; }
+      var v = found[+mm[1]], next = words.slice(i + 1).filter(function (x) { return !/^zzsz/.test(x) && !joiner(x); })[0];
       if (joined && next) a.parts.push(v + ' ' + (TOKEN_MAP[next] || next)); else set('sizeWord', v);
     });
     a.parts.sort();
@@ -745,7 +768,7 @@ tr.details td { background: var(--sunken); }
     if (a.sizeWord) parts.push(a.sizeWord);
     if (a.oz) parts.push(a.oz + ' oz');
     if (a.inch) parts.push(a.inch + '"');
-    if (a.liter) parts.push(a.liter + ' L');
+    if (a.liter) parts.push(a.volText || a.liter + ' L');
     if (a.custom && a.custom.length) parts.push(a.custom.join(' '));
     return parts.join(' / ') || 'none';
   }
@@ -788,16 +811,25 @@ tr.details td { background: var(--sunken); }
     var issues = [];
     var nameAttrs = extractAttrs(name);
     if (nameAttrs.conflicts.length) issues.push('Item name has conflicting attributes (' + nameAttrs.conflicts.join('; ') + ')');
-    var size = { sizeWord: nameAttrs.sizeWord, oz: nameAttrs.oz, inch: nameAttrs.inch, liter: nameAttrs.liter, custom: [],
+    var size = { sizeWord: nameAttrs.sizeWord, oz: nameAttrs.oz, inch: nameAttrs.inch, liter: nameAttrs.liter, volText: nameAttrs.volText, custom: [],
                  parts: nameAttrs.parts, fieldOnly: nameAttrs.sizeWord == null };
+    var nt0 = nameAttrs.tokens, join0 = nt0.findIndex(function (t) { return t === 'and' || t === 'with'; });
     if (raw.size && String(raw.size).trim()) {
       var fa = extractAttrs(raw.size);
       var any = false;
+      // "Large Guacamole" for "Chips & Guacamole" sizes the guacamole, as "Chips &
+      // Large Guacamole" would; "Large Chips" sizes the first part, written as a
+      // leading size word in names.
+      var at = fa.sizeWord && fa.tokens.length && join0 >= 0 && fa.oz == null && fa.inch == null && fa.liter == null &&
+               fa.tokens.every(function (t) { return nt0.indexOf(t) >= 0; }) ? nt0.indexOf(fa.tokens[0]) : -1;
+      if (at > join0) { size.parts = size.parts.concat([fa.sizeWord + ' ' + fa.tokens[0]]).sort(); size.fieldOnly = false; fa = extractAttrs(''); }
+      else if (at >= 0) { fa.tokens = []; size.fieldOnly = false; }
       ['sizeWord', 'oz', 'inch', 'liter'].forEach(function (d) {
         if (fa[d] !== null) {
           any = true;
           if (size[d] !== null && size[d] !== fa[d]) issues.push('Size field "' + raw.size + '" conflicts with item name (' + size[d] + ')');
           size[d] = fa[d];
+          if (d === 'liter') size.volText = fa.volText;
         }
       });
       if ((!any && fa.count === null) || fa.tokens.length) size.custom = fa.tokens.slice();
@@ -860,8 +892,13 @@ tr.details td { background: var(--sunken); }
     if (pref.length && oneCharge(pref)) return pref[0];
     return { name: hits[0].name, group: null, price_cents: null, ambiguous: hits.length };
   }
+  // Ounces, liters, gallons, quarts and pints are one dimension: volume in ml,
+  // equal within 5% ("1 Liter" = "33.8 oz"; "20 oz" is not "2 Liter").
+  function volumeMl(x) { return x.oz != null ? +x.oz * 29.5735 : x.liter != null ? +x.liter * 1000 : null; }
+  var SIZE_DIMS = { sizeWord: function (x) { return x.sizeWord; }, vol: volumeMl, inch: function (x) { return x.inch; } };
+  function sameDim(d, a, b) { return d === 'vol' ? Math.abs(a - b) <= 0.05 * Math.max(a, b) : a === b; }
   function compareSize(o, c) {
-    var dims = ['sizeWord', 'oz', 'inch', 'liter'];
+    var dims = keys(SIZE_DIMS);
     var op = o.parts || [], cp = c.parts || [];
     if (op.length || cp.length) {
       var anySize = function (x, p) { return p.length || x.sizeWord != null || x.oz != null || x.inch != null; };
@@ -877,13 +914,13 @@ tr.details td { background: var(--sunken); }
         return { level: 'fail', text: 'Sized parts differ: order ' + [o.sizeWord].concat(op).filter(Boolean).join(' + ') + ', candidate ' + [c.sizeWord].concat(cp).filter(Boolean).join(' + ') };
       }
     }
-    var oHas = dims.filter(function (d) { return o[d] != null; }), cHas = dims.filter(function (d) { return c[d] != null; });
+    var oHas = dims.filter(function (d) { return SIZE_DIMS[d](o) != null; }), cHas = dims.filter(function (d) { return SIZE_DIMS[d](c) != null; });
     var custom = o.custom && o.custom.length ? o.custom.join(' ') : '';
     // Words typed in the size field ("Gluten Free", "Deep Dish") must appear in the listing.
     if (custom && !c.customMatched) return { level: 'warn', text: 'Size "' + custom + '" is not stated in the candidate name' };
     if (!oHas.length && !cHas.length) return { level: 'ok', text: custom ? 'Size "' + custom + '" appears in candidate name' : 'No size stated on either side' };
     var shared = oHas.filter(function (d) { return cHas.indexOf(d) >= 0; });
-    for (var i = 0; i < shared.length; i++) if (o[shared[i]] !== c[shared[i]]) return { level: 'fail', text: 'Size differs: order ' + sizeText(o) + ', candidate ' + sizeText(c) };
+    for (var i = 0; i < shared.length; i++) if (!sameDim(shared[i], SIZE_DIMS[shared[i]](o), SIZE_DIMS[shared[i]](c))) return { level: 'fail', text: 'Size differs: order ' + sizeText(o) + ', candidate ' + sizeText(c) };
     var unstated = oHas.filter(function (d) { return cHas.indexOf(d) < 0; });
     if (shared.length && !unstated.length) return { level: 'ok', text: 'Size matches (' + sizeText(o) + ')' + (cHas.length > shared.length ? '; candidate also lists ' + sizeText(c) : '') };
     if (shared.length) return { level: 'warn', text: 'Candidate states only part of the size (order ' + sizeText(o) + ', candidate ' + sizeText(c) + ')' };
@@ -928,16 +965,32 @@ tr.details td { background: var(--sunken); }
     for (k in gb) n += gb[k];
     return n ? 2 * inter / n : 0;
   }
-  function nameDiff(oSet, cSet) {
-    var extra = keys(cSet).filter(function (t) { return !oSet[t]; });
-    var missing = keys(oSet).filter(function (t) { return !cSet[t]; });
-    var shared = keys(cSet).filter(function (t) { return oSet[t] && t.length >= 3; });
-    var diff = extra.concat(missing);
-    var hard = diff.filter(function (t) { return VARIANT_WORDS[t] || /\d/.test(t); });
+  function plural(x, y) { return x !== y && (x + 's' === y || y + 's' === x || x + 'es' === y || y + 'es' === x); }
+  // Word bags (word -> how often): a repeated word or number counts ("2 Large
+  // 2-Topping Pizzas", "Double-Double"). A plural of the same word is spelling,
+  // even of a variant word ("Quesadilla" / "Quesadillas").
+  function nameDiff(o, c) {
+    var extra = keys(c).filter(function (t) { return c[t] > (o[t] || 0); });
+    var missing = keys(o).filter(function (t) { return o[t] > (c[t] || 0); });
+    var shared = keys(c).filter(function (t) { return o[t] && t.length >= 3; });
+    var diff = extra.concat(missing), pl = {};
+    extra.forEach(function (x) { missing.forEach(function (y) { if (plural(x, y)) { pl[x] = 1; pl[y] = 1; } }); });
+    var hard = diff.filter(function (t) { return !pl[t] && (VARIANT_WORDS[t] || /\d/.test(t)); });
     var soft = shared.length > 0 && !(extra.length && missing.length) && diff.length > 0 && diff.length <= 2 && !hard.length;
     return { extra: extra, missing: missing, shared: shared, hard: hard, soft: soft };
   }
 
+  // A name's parts are split at "and" / "with"; each part's words, in any order.
+  function partsKey(toks) {
+    var parts = [[]];
+    toks.forEach(function (t) { if (t === 'and' || t === 'with') parts.push([]); else parts[parts.length - 1].push(t); });
+    return parts.map(function (p) { return p.slice().sort().join(' '); }).sort().join(' | ');
+  }
+  // Each number with the word right after it ("2 tacos", "3 enchiladas").
+  function numberPairs(toks) {
+    return toks.map(function (t, k) { var nx = toks[k + 1]; return /^\d/.test(t) ? t + '>' + (nx && !/^\d/.test(nx) ? nx : '') : null; })
+      .filter(Boolean).sort().join(' ');
+  }
   function matchItem(oi, cand, ctx) {
     ctx = ctx || {};
     var reasons = [];
@@ -969,24 +1022,40 @@ tr.details td { background: var(--sunken); }
     // A bare number at the start or end ("10 Chicken McNuggets [490-630 Cals]",
     // "Fried Chicken Wings (7)") is the piece count only when it equals the count
     // the other side states; "7 Layer Burrito" stays a name.
-    var oCount = oi.count, leadNote = null;
     var bare = function (toks, n) {
       if (n === null || n === undefined || toks.length < 2) return -1;
       if (/^\d{1,3}$/.test(toks[0]) && +toks[0] === n) return 0;
       var k = toks.length - 1;
       return /^\d{1,3}$/.test(toks[k]) && +toks[k] === n ? k : -1;
     };
+    // Confirmed same-item names are the same item, so what they state (size,
+    // count, serving size, menu number) holds for your item where it states
+    // none, when they agree.
+    var aliasAt = oi.aliases.map(function (al) { return { alias: al, attrs: extractAttrs(al) }; });
+    var agree = function (vals) {
+      vals = vals.filter(function (v) { return v != null; });
+      return vals.length && vals.every(function (v) { return String(v) === String(vals[0]); }) ? vals[0] : null;
+    };
+    var fromAliases = function (k) { return agree(aliasAt.map(function (x) { return x.attrs[k]; })); };
+    var oCount = oi.count !== null ? oi.count : fromAliases('count'), leadNote = null;
     var ci = cAttr.count === null ? bare(cAll, oCount) : -1;
     if (ci >= 0) { cAll.splice(ci, 1); cAttr.count = oCount; leadNote = 'the listing states it as a bare number'; }
     var oTok0 = dropChain(oi.nameAttrs.tokens);
     if (oCount === null && cAttr.count !== null && bare(oTok0, cAttr.count) >= 0) { oCount = cAttr.count; leadNote = 'your item name states it as a bare number'; }
+    // A confirmed name's bare number is its count when it equals the listing's ("10 Chicken McNuggets").
+    aliasAt.forEach(function (x) {
+      x.toks = dropChain(x.attrs.tokens);
+      var k = x.attrs.count === null && cAttr.count !== null ? bare(x.toks, cAttr.count) : -1;
+      if (k >= 0) { x.attrs = Object.assign({}, x.attrs, { count: cAttr.count }); x.toks = x.toks.slice(0, k).concat(x.toks.slice(k + 1)); }
+    });
+    if (oCount === null) oCount = fromAliases('count');
     var dropCount = function (toks) { var k = bare(toks, oCount); return k >= 0 ? toks.slice(0, k).concat(toks.slice(k + 1)) : toks; };
     var names = [{ toks: dropCount(oTok0), alias: null, attrs: null }]
-      .concat(oi.aliases.map(function (al) { var at = extractAttrs(al); return { toks: dropCount(dropChain(at.tokens)), alias: al, attrs: at }; }));
+      .concat(aliasAt.map(function (x) { return { toks: dropCount(x.toks), alias: x.alias, attrs: x.attrs }; }));
     var bag = function (toks) { var o = {}; toks.forEach(function (t) { o[t] = (o[t] || 0) + 1; }); return o; };
     var eqBag = function (x, y) { var kx = keys(x); return kx.length === keys(y).length && kx.every(function (t) { return x[t] === y[t]; }); };
     var noDigits = function (toks) { return toks.every(function (t) { return !/\d/.test(t); }); };
-    var productOk = false, flavorInName = false, used = null, cToks = forVariant(names[0].toks);
+    var productOk = false, flavorInName = false, used = null, cToks = forVariant(names[0].toks), sameWords = null;
     var fT = setOf(oi.flavorTokens);
     for (var i = 0; i < names.length && !productOk; i++) {
       var nt = names[i].toks, cv = forVariant(nt), cvBag = bag(cv);
@@ -994,7 +1063,7 @@ tr.details td { background: var(--sunken); }
       // Same words, or the same letters with different spacing ("Cheese Burger" /
       // "Cheeseburger"; never with digits, so "1/2 Chicken" is not "12 Chicken").
       if (eqBag(cvBag, bag(nt)) || (noDigits(cv) && noDigits(nt) && cv.join('') === nt.join(''))) {
-        productOk = true; used = names[i]; cToks = cv;
+        productOk = true; used = names[i]; cToks = cv; sameWords = eqBag(cvBag, bag(nt)) ? nt : null;
         flavorInName = oi.flavorTokens.length > 0 && oi.flavorTokens.every(function (t) { return cv.indexOf(t) >= 0; });
       } else if (oi.flavorTokens.length) {
         var withFlavor = nt.concat(oi.flavorTokens.filter(function (t) { return nt.indexOf(t) < 0; }));
@@ -1002,25 +1071,31 @@ tr.details td { background: var(--sunken); }
       }
     }
     var usedAlias = used && used.alias;
-    var cBase = setOf(cToks);
-    // A confirmed alias brings its own size, count and serving size where the
-    // order states none ("10 pc Classic Wings" keeps 10).
-    var effSize = oi.size, effServes = oi.nameAttrs.serves;
-    if (used && used.attrs) {
-      effSize = Object.assign({}, oi.size);
-      ['sizeWord', 'oz', 'inch', 'liter'].forEach(function (d) { if (effSize[d] == null && used.attrs[d] != null) effSize[d] = used.attrs[d]; });
-      if (!(effSize.parts || []).length && used.attrs.parts.length) effSize.parts = used.attrs.parts;
-      if (oCount === null && used.attrs.count !== null) oCount = used.attrs.count;
-      if (effServes == null) effServes = used.attrs.serves;
+    var cBase = bag(cToks);
+    // A confirmed alias brings its own size, count, serving size and menu number
+    // where the order states none ("10 pc Classic Wings" keeps 10): the one that
+    // matched, else what all confirmed names agree on.
+    var aliasVal = function (k) { return used && used.attrs ? used.attrs[k] : fromAliases(k); };
+    var effSize = Object.assign({}, oi.size), effServes = oi.nameAttrs.serves, effMenu = oi.nameAttrs.menuNo;
+    var sized = ['sizeWord', 'oz', 'inch', 'liter'].some(function (d) { return effSize[d] != null; }) || (effSize.parts || []).length;
+    if (!sized && aliasAt.length) {
+      ['sizeWord', 'oz', 'inch', 'liter', 'volText'].forEach(function (d) { if (aliasVal(d) != null) effSize[d] = aliasVal(d); });
+      var ap = used && used.attrs ? used.attrs.parts : agree(aliasAt.map(function (x) { return x.attrs.parts.length ? x.attrs.parts.join('|') : null; }));
+      if (ap && ap.length) effSize.parts = Array.isArray(ap) ? ap : ap.split('|');
+      if (effSize.sizeWord != null || (effSize.parts || []).length) effSize.fieldOnly = false;   // the name places it
     }
+    if (oCount === null) oCount = aliasVal('count');
+    if (effServes == null) effServes = aliasVal('serves');
+    if (effMenu == null) effMenu = aliasVal('menuNo');
     var result = { status: 'rejected', label: label, reasons: reasons, baseCents: null, modifierCents: null, unitCents: null, lineCents: null, availability: cand.availability || 'unknown', promotions: cand.promotions || [], section: cand.section || null, nearMiss: false,
                    listedCents: Number.isInteger(cand.price_cents) ? cand.price_cents : null, nameDiff: null, attrConflict: false,
                    itemObservedAt: typeof cand.observed_at === 'string' ? cand.observed_at : null };
     if (!productOk) {
-      var ob = setOf(names[0].toks), uu = Object.assign({}, ob, fT);
+      var ob = bag(names[0].toks), uu = Object.assign({}, ob);
+      oi.flavorTokens.forEach(function (t) { uu[t] = Math.max(uu[t] || 0, 1); });
       // A size or count that already conflicts rules a listing out of suggestions.
-      result.attrConflict = compareSize(oi.size, cAttr).level === 'fail' || compareCount(oCount, cAttr.count).level === 'fail' ||
-        (oi.nameAttrs.menuNo != null && cAttr.menuNo != null && oi.nameAttrs.menuNo !== cAttr.menuNo);
+      result.attrConflict = compareSize(effSize, cAttr).level === 'fail' || compareCount(oCount, cAttr.count).level === 'fail' ||
+        (effMenu != null && cAttr.menuNo != null && effMenu !== cAttr.menuNo) || (effServes != null && cAttr.serves != null && effServes !== cAttr.serves);
       // A flavor the order names is part of the comparison ("Lemon Pepper Wings"
       // is not Wings + flavor Buffalo), unless the listing offers it as an option.
       var nd = nameDiff(uu, cBase);
@@ -1043,10 +1118,20 @@ tr.details td { background: var(--sunken); }
       warn(nd.connector ? 'Name differs only by connecting words ("and", "with") or word order. Confirm it is the same item, or confirm the listing once as a same-item name.'
         : 'Name differs only by "' + nd.extra.concat(nd.missing).join(' ') + '" (the listing ' + (nd.extra.length ? 'adds' : 'lacks') +
           ' it). Confirm it is the same item, or confirm the listing once as a same-item name.');
-    } else add('ok', usedAlias ? 'Product name matches via your confirmed alias "' + usedAlias + '"' : 'Product name matches (case/punctuation normalized)');
+    } else {
+      add('ok', usedAlias ? 'Product name matches via your confirmed alias "' + usedAlias + '"' : 'Product name matches (case/punctuation normalized)');
+      // The same words are not enough when they sit in other parts of the name
+      // ("3 Tacos & 2 Enchiladas" / "2 Tacos & 3 Enchiladas") or a number goes
+      // with another word ("2 Large 3-Topping" / "3 Large 2-Topping").
+      if (sameWords) {
+        if (partsKey(sameWords) !== partsKey(cToks)) fail('The same words sit in other parts of the name (order "' + sameWords.join(' ') + '", candidate "' + cToks.join(' ') + '"), so it is another item');
+        else if (numberPairs(sameWords) !== numberPairs(cToks)) warn('The same numbers go with different words (order "' + sameWords.join(' ') + '", candidate "' + cToks.join(' ') + '"); confirm it is the same item');
+      }
+    }
+    result.viaAlias = !!usedAlias;
 
     // Menu numbers and serving sizes are compared when both sides state them.
-    if (oi.nameAttrs.menuNo != null && cAttr.menuNo != null && oi.nameAttrs.menuNo !== cAttr.menuNo) fail('Menu number differs: order #' + oi.nameAttrs.menuNo + ', candidate #' + cAttr.menuNo);
+    if (effMenu != null && cAttr.menuNo != null && effMenu !== cAttr.menuNo) fail('Menu number differs: order #' + effMenu + ', candidate #' + cAttr.menuNo);
     if (effServes != null && cAttr.serves != null && effServes !== cAttr.serves) fail('Serving size differs: order serves ' + effServes + ', candidate serves ' + cAttr.serves);
     else if (effServes != null && cAttr.serves == null) warn('Candidate does not state the serving size (order: serves ' + effServes + ')');
     else if (effServes == null && cAttr.serves != null && !(oCount !== null && oCount === cAttr.count)) warn('Order does not specify the serving size; candidate serves ' + cAttr.serves);
@@ -1062,30 +1147,37 @@ tr.details td { background: var(--sunken); }
     if (cAttr.conflicts.length) warn('Candidate name has conflicting attributes (' + cAttr.conflicts.join('; ') + ')');
 
     var modCents = 0, modKnown = true, chosen = [];
+    var counted = function (ad) { return chosen.some(function (x) { return x === ad || (x.name === ad.name && (x.group || null) === (ad.group || null)); }); };
     var prefer = [effSize.sizeWord, 'whole'].concat(oi.size.custom || []).filter(Boolean).map(function (w) { return String(w).split(' ')[0]; });
     if (used && used.alias) {
       // Words of your item name the confirmed name leaves out ("Steak" Burrito
       // Bowl vs "Burrito Bowl"): an option of the listing, priced, or unconfirmed.
       var dropped = dropCount(oTok0).filter(function (t) { return used.toks.indexOf(t) < 0 && t !== 'and' && t !== 'with'; });
       if (dropped.length) {
-        var da = findAddon(cand.addons, dropped.join(' '), prefer);
-        if (da && Number.isInteger(da.price_cents)) { chosen.push(da); modCents += da.price_cents; add('ok', '"' + dropped.join(' ') + '" from your item name is the listing\'s option "' + da.name + '" (+' + formatCents(da.price_cents) + ')'); }
-        else if (da) { chosen.push(da); modKnown = false; warn('"' + dropped.join(' ') + '" from your item name is a listed option whose charge is not proven'); }
-        else add('info', 'Your item name also says "' + dropped.join(' ') + '"; you confirmed this listing as the same item');
+        // As one option ("Extra Cheese"), else word by word ("Pepperoni", "Mushroom").
+        var whole = findAddon(cand.addons, dropped.join(' '), prefer), unpriced = [];
+        (whole ? [{ w: dropped.join(' '), ad: whole }] : dropped.map(function (w) { return { w: w, ad: findAddon(cand.addons, w, prefer) }; })).forEach(function (g) {
+          if (g.ad && Number.isInteger(g.ad.price_cents)) { chosen.push(g.ad); modCents += g.ad.price_cents; add('ok', '"' + g.w + '" from your item name is the listing\'s option "' + g.ad.name + '" (+' + formatCents(g.ad.price_cents) + ')'); }
+          else if (g.ad) { chosen.push(g.ad); modKnown = false; warn('"' + g.w + '" from your item name is a listed option whose charge is not proven'); }
+          else unpriced.push(g.w);
+        });
+        if (unpriced.length) { result.aliasUnpriced = unpriced; add('info', 'Your item name also says "' + unpriced.join(' ') + '"; you confirmed this listing as the same item'); }
       }
     }
     if (oi.flavorTokens.length) {
       if (flavorInName) add('ok', 'Flavor "' + oi.flavor + '" is part of the item name');
       else {
         var fa = findAddon(cand.addons, oi.flavor, prefer);
-        if (fa && Number.isInteger(fa.price_cents)) { chosen.push(fa); modCents += fa.price_cents; add('ok', 'Flavor "' + oi.flavor + '" offered as option "' + fa.name + '" (+' + formatCents(fa.price_cents) + ')'); }
+        if (fa && counted(fa)) add('ok', 'Flavor "' + oi.flavor + '" is the option already counted above');
+        else if (fa && Number.isInteger(fa.price_cents)) { chosen.push(fa); modCents += fa.price_cents; add('ok', 'Flavor "' + oi.flavor + '" offered as option "' + fa.name + '" (+' + formatCents(fa.price_cents) + ')'); }
         else if (fa) { chosen.push(fa); modKnown = false; warn(fa.ambiguous ? 'Flavor option "' + fa.name + '" is listed in ' + fa.ambiguous + ' option groups with different charges; which one applies is not proven' : 'Flavor option "' + fa.name + '" is listed but its charge is not published'); }
         else warn('Flavor "' + oi.flavor + '" is not stated in the candidate\'s published data');
       }
     }
     oi.modifiers.forEach(function (m) {
       var ad = findAddon(cand.addons, m.name, prefer);
-      if (ad && Number.isInteger(ad.price_cents)) { chosen.push(ad); modCents += ad.price_cents; add('ok', 'Modifier "' + m.name + '" listed (+' + formatCents(ad.price_cents) + ')'); }
+      if (ad && counted(ad)) add('ok', 'Modifier "' + m.name + '" is the option already counted above');
+      else if (ad && Number.isInteger(ad.price_cents)) { chosen.push(ad); modCents += ad.price_cents; add('ok', 'Modifier "' + m.name + '" listed (+' + formatCents(ad.price_cents) + ')'); }
       else if (ad) { chosen.push(ad); modKnown = false; warn(ad.ambiguous ? 'Modifier "' + m.name + '" is listed in ' + ad.ambiguous + ' option groups with different charges; which one applies is not proven' : 'Modifier "' + m.name + '" is listed but its charge is not published'); }
       else if (REMOVAL_RE.test(normText(m.name))) { modKnown = false; warn('Removal "' + m.name + '" is not listed in platform data (often free, but unconfirmed)'); }
       else { modKnown = false; warn('Modifier "' + m.name + '" not found in platform data; its charge is unknown'); }
@@ -1203,6 +1295,16 @@ tr.details td { background: var(--sunken); }
       var store = { obs: obs, chain: chain, stale: stale, items: [], duplicateOf: dd.addressDuplicateOf[[obs.platform, obs.store_id, obs.order_mode].join('|')] || null };
       prep.items.forEach(function (oi) {
         var res = (obs.items || []).map(function (c) { return matchItem(oi, c, { obsCurrency: obs.currency, chainTokens: chainTokens }); });
+        // A store that lists your item under its own name ("Steak Burrito Bowl")
+        // sells it as that: a shorter confirmed name there ("Burrito Bowl") with a
+        // word that is not one of its options is another version.
+        var own = res.filter(function (r) { return r.status !== 'rejected' && !r.nameDiff && !r.viaAlias; });
+        if (own.length) res.forEach(function (r) {
+          if (r.status === 'exact' && r.viaAlias && r.aliasUnpriced) {
+            r.status = 'uncertain';
+            r.reasons.push({ level: 'warn', text: 'This store also lists "' + own[0].label + '", which matches your item name itself, so "' + r.label + '" may be another version here' });
+          }
+        });
         res.forEach(function (r) {
           var t = r.itemObservedAt ? Date.parse(r.itemObservedAt) : ts;
           r.observedAt = r.itemObservedAt || obs.observed_at;
@@ -1311,15 +1413,13 @@ tr.details td { background: var(--sunken); }
     // that makes another item), ranked by text similarity. They are
     // suggestions: one becomes a match only when the user confirms it as a
     // same-item name, and size, count, currency and price are still checked.
-    var plural = function (x, y) { return x !== y && (x + 's' === y || y + 's' === x || x + 'es' === y || y + 'es' === x); };
     var closest = prep.items.map(function (oi, i) {
       var out = { orderItemIndex: i, orderItemName: oi.name, listings: [] };
       if (!oi.name) return out;
-      // Shown when no fresh, purchasable exact listing exists; not when a listing's
-      // name already matches and only its chain, options or size need confirming.
+      // Shown when no fresh, purchasable exact listing exists, also when another
+      // store's listing has your item's name but needs a size or option confirmed.
       var usable = stores.some(function (s) { return s.items[i].exact.some(function (r) { return !r.stale && r.availability !== 'unavailable'; }); });
-      var named = stores.some(function (s) { return s.items[i].all.some(function (r) { return !r.nameDiff && r.status === 'uncertain' && !r.stale; }); });
-      if (usable || named) return out;
+      if (usable) return out;
       var by = {};
       stores.forEach(function (s) {
         if (s.duplicateOf) return;                              // one branch listed twice counts once

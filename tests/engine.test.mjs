@@ -686,7 +686,7 @@ test('red-team round 2: part sizes, menu numbers, servings, scripts, aliases, su
   assert.equal(st('Sauce .5 oz', 'Sauce 5 oz'), 'rejected');
   assert.equal(st('Sauce .5 oz', 'Sauce 0.5 oz'), 'exact');
   assert.equal(st('Coke 2 Liter', 'Coke 2L'), 'exact');
-  assert.equal(st('Coke 2 Liter', 'Coke 20 oz'), 'uncertain');
+  assert.equal(st('Coke 2 Liter', 'Coke 20 oz'), 'rejected');           // volumes are compared across units
   assert.equal(st('Md Fries', 'Medium Fries'), 'exact');
   assert.equal(st('Fries (M)', 'Medium Fries'), 'exact');
   assert.equal(st('Md Fries', 'Large Fries'), 'rejected');
@@ -734,4 +734,83 @@ test('red-team round 2: part sizes, menu numbers, servings, scripts, aliases, su
   assert.deepEqual(sug('Chalupa Supreme', [item('Chalupa Supreme', 549, { availability: 'unknown' })]), []);
   const staleStore = obs({ observed_at: T(24 * 30), items: [item('Large Fries', 449)] });
   assert.deepEqual(sug('Large Fries', [item('World Famous Fries® - Large', 459)], [staleStore]), ['World Famous Fries® - Large']);
+});
+
+test('red-team round 3: calorie brackets, parts, aliases, option pricing, suggestions, volumes, scripts', () => {
+  const st = (o, c, extra = {}) => match1(typeof o === 'string' ? { name: o } : o, item(c, 900, extra)).status;
+  // A calorie figure removes only its own part of a bracket; the rest is compared.
+  for (const [o, c] of [["Dave's Single", "Dave's Single (Double, 850 Cal)"], ['Broccoli Cheddar Soup', 'Broccoli Cheddar Soup (Bowl, 360 Cal)'],
+    ['Cheeseburger', 'Cheeseburger (No Cheese, 250 Cal)'], ['Caffe Latte', 'Caffè Latte (Iced, Grande, 190 Cal)'],
+    ['Wings (6 pc, 540 Cal)', 'Wings (10 pc, 900 Cal)'], ['Family Meal (Serves 4)', 'Family Meal (Serves 8, 4800-7200 Cal)'],
+    ['Latte (12 oz, 150 Cal)', 'Latte (16 oz, 190 Cal)'], ['#3 Combo', 'Combo (#5, 900 Cal)']]) assert.equal(st(o, c), 'rejected', c);
+  for (const [o, c] of [['Fries', 'Fries (Large, 490 Cal)'], ['Fries', 'Fries [Large | 490 Cal]'], ['Classic Wings', 'Classic Wings (10 pc, 900-1,100 Cal)'],
+    ['Family Meal', 'Family Meal (Serves 8, 4800-7200 Cal)'], ['Coca-Cola', 'Coca-Cola (2 Liter, 800 Cal)'], ['Cheese Pizza', 'Cheese Pizza (14", 2,240 Cal)']]) assert.equal(st(o, c), 'uncertain', c);
+  assert.equal(st('Spicy Wings', 'Wings (Spicy, 900 Cal)'), 'exact');
+  assert.equal(st('#5 Combo', 'Combo (#5, 900 Cal)'), 'exact');
+  assert.equal(st({ name: 'Wings', count: '10' }, 'Wings (10 pc, 900 Cal)'), 'exact');
+  assert.match(E.stripNotes("Dave's Single (Double, 850 Cal)"), /\(Double\)/);
+  assert.doesNotMatch(E.stripNotes('Big Mac (250 Cals/ea) [490-630 Cals]'), /\(|\[|cal/i);
+  // A name confirmed from such a listing keeps the bracket's words.
+  assert.equal(st({ name: 'Chicken Nuggets', aliases: 'Nuggets (Grilled 8 ct)' }, 'Nuggets (12 ct, 380 Cal)'), 'rejected');
+  // Words and numbers stay with their part of a multi-part name.
+  for (const [o, c] of [['3 Tacos & 2 Enchiladas', '2 Tacos & 3 Enchiladas'], ['10 Wings & 5 Tenders', '5 Wings & 10 Tenders'],
+    ['Sweet & Sour Chicken with Pork Fried Rice', 'Sweet & Sour Pork with Chicken Fried Rice'], ['Chicken Lo Mein & Pork Egg Roll', 'Pork Lo Mein & Chicken Egg Roll'],
+    ['Pepperoni Pizza with Extra Cheese', 'Cheese Pizza with Extra Pepperoni'], ['Enchilada Dinner (2 Cheese & 1 Beef)', 'Enchilada Dinner (1 Cheese & 2 Beef)']]) assert.equal(st(o, c), 'rejected', c);
+  assert.equal(st('2 Large 3-Topping Pizzas', '3 Large 2-Topping Pizzas'), 'uncertain');
+  assert.equal(st('Wings & Things (5 Wings, 3 Tenders)', 'Wings & Things (3 Wings, 5 Tenders)'), 'uncertain');
+  assert.equal(st('Chips & Guacamole', 'Guacamole & Chips'), 'exact');
+  assert.equal(st('Sweet & Sour Chicken', 'Sweet and Sour Chicken'), 'exact');
+  assert.equal(st('Combo 2 Tacos 1 Burrito', '1 Burrito 2 Tacos Combo'), 'exact');
+  // A comma, "'N", "plus" or "w" also starts a part that a size can belong to.
+  for (const [o, c] of [['Chips, Large Guacamole', 'Large Chips, Guacamole'], ["Chips 'N Large Queso", "Large Chips 'N Queso"],
+    ['Chips w Large Salsa', 'Large Chips w Salsa'], ['Sandwich plus Large Drink', 'Large Sandwich plus Drink']]) assert.equal(st(o, c), 'rejected', c);
+  assert.equal(st('Fries, Large', 'Large Fries'), 'exact');
+  // A size field that names a part sizes that part.
+  assert.equal(st({ name: 'Chips & Guacamole', size: 'Large Guacamole' }, 'Large Chips & Guacamole'), 'rejected');
+  assert.equal(st({ name: 'Chips & Guacamole', size: 'Large Guacamole' }, 'Chips & Large Guacamole'), 'exact');
+  // A confirmed alias brings its menu number, count, size and serving size, also when your own name matched.
+  assert.equal(st({ name: 'Lunch Special', aliases: 'Lunch Combo #3' }, 'Lunch Combo #9'), 'rejected');
+  assert.equal(st({ name: 'Lunch Special', aliases: 'Lunch Combo #3' }, '#3 Lunch Combo'), 'exact');
+  assert.equal(st({ name: 'Spicy Chicken Combo', aliases: '#3 Spicy Chicken Sandwich Combo' }, '#5 Spicy Chicken Sandwich Combo'), 'rejected');
+  assert.equal(st({ name: 'Classic Wings', aliases: '10 pc Classic Wings' }, 'Classic Wings'), 'uncertain');
+  assert.equal(st({ name: 'Classic Wings', aliases: '10 pc Classic Wings' }, 'Classic Wings', { variant: '20 pc' }), 'rejected');
+  assert.equal(st({ name: 'Classic Wings', aliases: '10 pc Classic Wings' }, '10 pc Classic Wings'), 'exact');
+  assert.equal(st({ name: 'Party Tray', aliases: 'Party Tray (Serves 10)' }, 'Party Tray (Serves 20)'), 'rejected');
+  assert.equal(st({ name: 'Italian BMT', aliases: 'Italian B.M.T. 6 inch' }, 'Italian B.M.T. Footlong'), 'rejected');
+  assert.equal(st({ name: 'Chips & Guac', aliases: 'Large Chips & Guacamole' }, 'Chips & Large Guacamole'), 'rejected');
+  assert.equal(st({ name: 'McNuggets', aliases: '10 pc. Chicken McNuggets®' }, '10 Chicken McNuggets [490-630 Cals]'), 'exact');
+  assert.equal(st({ name: 'Chicken McNuggets', aliases: '10 Chicken McNuggets' }, '10 pc. Chicken McNuggets'), 'exact');
+  // Each word your name adds over the confirmed name is priced as its own option, and no option is charged twice.
+  const pizza = match1({ name: 'Pepperoni & Mushroom Pizza', aliases: 'Create Your Own Pizza' },
+    item('Create Your Own Pizza', 1299, { addons: [{ name: 'Pepperoni', group: 'Toppings', price_cents: 200 }, { name: 'Mushroom', group: 'Toppings', price_cents: 200 }] }));
+  assert.equal(pizza.status, 'exact'); assert.equal(pizza.unitCents, 1699);
+  const wings = match1({ name: 'Buffalo Wings', flavor: 'Buffalo', aliases: 'Classic Wings' }, item('Classic Wings', 900, { addons: [{ name: 'Buffalo', group: 'Flavor', price_cents: 50 }] }));
+  assert.equal(wings.unitCents, 950);
+  const steak = match1({ name: 'Steak Burrito Bowl', aliases: 'Burrito Bowl', modifiers: [{ name: 'Steak', price: '2.00' }] }, item('Burrito Bowl', 900, { addons: [{ name: 'Steak', group: 'Protein', price_cents: 200 }] }));
+  assert.equal(steak.unitCents, 1100);
+  // A store that lists your item under its own name: that listing is the match there, not the confirmed shorter name.
+  const both = run(order([{ name: 'Steak Burrito Bowl', aliases: 'Burrito Bowl' }]), [obs({ items: [item('Burrito Bowl', 1070), item('Steak Burrito Bowl', 1270)] })]);
+  assert.equal(both.winner.row.candidate, 'Steak Burrito Bowl'); assert.equal(both.winner.row.lineCents, 1270);
+  assert.match(both.rows.uncertain.map(r => r.reasons.map(x => x.text).join(' ')).join(' '), /also lists "Steak Burrito Bowl"/);
+  const only = run(order([{ name: 'Steak Burrito Bowl', aliases: 'Burrito Bowl' }]), [obs({ items: [item('Burrito Bowl', 1070)] })]);
+  assert.equal(only.winner.row.lineCents, 1070);
+  // Suggestions: repeated words and numbers count; plurals of variant words are spelling; a name-matched listing elsewhere does not hide them.
+  const sug = (o, items, more = []) => run(order([typeof o === 'string' ? { name: o } : o]), [obs({ items })].concat(more)).closest[0].listings.map(l => l.label);
+  assert.deepEqual(sug('Large 2-Topping Pizza', [item('2 Large 2-Topping Pizzas', 1999)]), []);
+  assert.deepEqual(sug('Double Burger', [item('Double-Double Burgers', 599)]), []);
+  assert.deepEqual(sug('Chicken Quesadilla', [item('Chicken Quesadillas', 599)]), ['Chicken Quesadillas']);
+  assert.deepEqual(sug('Small Fries', [item('Fries', 199)], [obs({ platform: 'ubereats', items: [item('World Famous Fries® - Small', 229)] })]), ['World Famous Fries® - Small']);
+  assert.deepEqual(sug('Coke 20 oz', [item('Coca-Cola Coke 2 Liter', 399)]), []);
+  // Volumes: ounces, liters, gallons, quarts and pints are one dimension.
+  assert.equal(st('Coke 1 Liter', 'Coke 33.8 oz'), 'exact');
+  assert.equal(st('Sweet Tea Gallon', 'Sweet Tea Half Gallon'), 'rejected');
+  assert.equal(st('Sweet Tea Gallon', 'Sweet Tea (1 Gallon)'), 'exact');
+  assert.equal(st('Wonton Soup Quart', 'Wonton Soup Pint'), 'rejected');
+  assert.equal(st('Wonton Soup (Qt)', 'Wonton Soup Quart'), 'exact');
+  assert.notEqual(st({ name: 'Sweet Tea Gallon', aliases: 'Sweet Tea' }, 'Sweet Tea'), 'exact');
+  // Vowel signs, voicing marks and flag emoji are part of the name; accents on Latin letters are not.
+  for (const [o, c] of [['หมี่กรอบ', 'หมูกรอบ'], ['चना मसाला', 'चीनी मसाला'], ['ぎょうざ', 'きょうさ'], ['Tacos 🇺🇸', 'Tacos 🇲🇽']]) assert.equal(st(o, c), 'rejected', c);
+  for (const n of ['หมี่กรอบ', 'चना मसाला', 'ぎょうざ', 'Tacos 🇲🇽']) assert.equal(st(n, n), 'exact', n);
+  assert.equal(st('Café Latte', 'Cafe Latte'), 'exact');
+  assert.equal(st('Jalapeño Poppers', 'Jalapeno Poppers'), 'exact');
 });
