@@ -39,10 +39,10 @@ python -m server.app                            # serves http://127.0.0.1:8765/
 # FPC_DISABLE_GRUBHUB_MIRRORS=1 python -m server.app   # same, without the MenuPages/AllMenus lookups
 ```
 
-**Install from a bundle or ZIP (no GitHub access).** A git bundle is the whole repository, history included, in one file. Make one where the repository is available (`git bundle create food-price-compare.bundle --all`), copy it over, then:
+**Install from a bundle or ZIP (no GitHub access).** A git bundle is the whole repository, history included, in one file. Make one where the repository is available (`git bundle create food-price-compare.bundle HEAD main`), copy it over, then:
 
 ```bash
-git bundle verify food-price-compare.bundle            # checks it is complete
+git bundle list-heads food-price-compare.bundle        # shows what it holds (the clone checks it is complete)
 git clone food-price-compare.bundle food-price-compare && cd food-price-compare
 ```
 
