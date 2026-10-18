@@ -413,6 +413,9 @@ def test_grubhub_extraction_paths(sites, tmp_path):
     r = extract_grubhub(client, gh.base + "/restaurant/mcdonalds-1-main-st-chicago/555?menuItemId=777", gh.base)
     assert r["ok"] and r["fields"]["chain"] == "McDonald's" and r["fields"]["item"] == "10 pc. Chicken McNuggets"
     assert r["fields"]["unit_price_cents"] == 629
+    # The ordered item's ID is matched locally: it is neither sent nor kept in the page cache.
+    cached = " ".join(p.read_text() for p in (cfg.data_dir / "cache").rglob("*.json"))
+    assert "777" not in cached and "/restaurant/mcdonalds-1-main-st-chicago/555" in cached
     gh.route("/robots.txt", "User-agent: *\nDisallow: /restaurant/\n", ctype="text/plain")
     client2 = PoliteClient(cfg, DiskCache(tmp_path / "other"))
     r2 = extract_grubhub(client2, gh.base + "/restaurant/mcdonalds-1-main-st-chicago/555", gh.base)

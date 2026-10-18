@@ -611,7 +611,7 @@ tr.details td { background: var(--bg); }
     // into the letters "TM", "″" into two primes and "½" into "1⁄2".
     var t = String(s).replace(/[®™©℠]/g, ' ').replace(/[″”]|′′/g, '"')
       .replace(/½/g, ' half ').replace(/¼/g, ' quarter ').replace(/¾/g, ' three quarter ')
-      .normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase();
+      .normalize('NFKD').replace(/([\p{Script=Latin}\p{Script=Greek}])[\u0300-\u036f]+/gu, '$1').toLowerCase();
     t = t.replace(/\b1\s*[\/⁄]\s*2\b/g, ' half ').replace(/\b1\s*[\/⁄]\s*4\b/g, ' quarter ').replace(/\b3\s*[\/⁄]\s*4\b/g, ' three quarter ')
       .replace(/\b(\d+)\s*[\/⁄]\s*(\d+)\b/g, ' $1 over $2 ');                 // "1/2 Chicken" is not "12 Chicken"
     t = t.replace(/(\d)\s*(?:''|"|-?\s*inch(?:es)?\b|in\.(?=\s|$)|in\b)/g, '$1 inch ');
@@ -622,12 +622,12 @@ tr.details td { background: var(--bg); }
     t = t.replace(/(\d),(\d{3})/g, '$1$2');
     t = t.replace(/(^|[^0-9])\.(\d)/g, '$10.$2');                               // ".5 oz" is 0.5 oz
     // Letters of any script and emoji are kept: "麻婆豆腐" is not "宫保鸡丁". So are
-    // the vowel signs and voicing marks of other scripts ("หมี่" is not "หมู",
-    // "ぎ" is not "き") and flags; only accents on Latin letters are dropped (above).
+    // the marks of other scripts ("หมี่" is not "หมู", "ぎ" is not "き", "Й" is not
+    // "И") and flags; only accents on Latin and Greek letters are dropped (above).
     t = t.replace(/[\uFE00-\uFE0F\u20E3]/g, '')
       .replace(/(\p{Extended_Pictographic}|\p{Regional_Indicator}{2})/gu, ' $1 ').replace(/[^\p{L}\p{M}\p{N}\p{Extended_Pictographic}\p{Regional_Indicator}.]+/gu, ' ');
     t = t.replace(/(^|[^0-9])\.|\.(?![0-9])/g, '$1 ');
-    return t.replace(/\s+/g, ' ').trim().normalize('NFC');
+    return t.replace(/\s+/g, ' ').trim().normalize('NFC').replace(/ё/g, 'е');      // "Мёд" is written "Мед" too; "Й" is its own letter
   }
   var TOKEN_MAP = { n: 'and', w: 'with', jr: 'junior', dbl: 'double', one: '1', two: '2', three: '3', four: '4', five: '5', six: '6', seven: '7',
                     eight: '8', nine: '9', ten: '10', eleven: '11', twelve: '12', twenty: '20' };
@@ -1097,7 +1097,7 @@ tr.details td { background: var(--bg); }
     // Menu numbers and serving sizes are compared when both sides state them.
     if (effMenu != null && cAttr.menuNo != null && effMenu !== cAttr.menuNo) fail('Menu number differs: order #' + effMenu + ', candidate #' + cAttr.menuNo);
     if (effServes != null && cAttr.serves != null && effServes !== cAttr.serves) fail('Serving size differs: order serves ' + effServes + ', candidate serves ' + cAttr.serves);
-    else if (effServes != null && cAttr.serves == null) warn('Candidate does not state the serving size (order: serves ' + effServes + ')');
+    else if (effServes != null && cAttr.serves == null && !(oCount !== null && oCount === cAttr.count)) warn('Candidate does not state the serving size (order: serves ' + effServes + ')');
     else if (effServes == null && cAttr.serves != null && !(oCount !== null && oCount === cAttr.count)) warn('Order does not specify the serving size; candidate serves ' + cAttr.serves);
 
     var cur = String(cand.currency || ctx.obsCurrency || '').toUpperCase();

@@ -316,8 +316,10 @@ def extract_grubhub(client: PoliteClient, url: str, grubhub_base: str, menupages
 
     # 1) The Grubhub page itself. Always fetched from the configured Grubhub
     # base (the real site unless the test-suite substitutes a local fixture).
+    # The page is the same for every item, so the item ID is matched here and
+    # never sent or cached: the page cache keeps no trace of what was ordered.
     canonical = grubhub_base.rstrip("/") + parts.path
-    fetched = client.fetch(canonical + (f"?menuItemId={menu_item_id}" if menu_item_id else ""), kind="page")
+    fetched = client.fetch(canonical, kind="page")
     parsed = None
     if fetched.barrier:
         out["barriers"].append(fetched.barrier)

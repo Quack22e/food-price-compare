@@ -813,4 +813,12 @@ test('red-team round 3: calorie brackets, parts, aliases, option pricing, sugges
   for (const n of ['หมี่กรอบ', 'चना मसाला', 'ぎょうざ', 'Tacos 🇲🇽']) assert.equal(st(n, n), 'exact', n);
   assert.equal(st('Café Latte', 'Cafe Latte'), 'exact');
   assert.equal(st('Jalapeño Poppers', 'Jalapeno Poppers'), 'exact');
+  // Accents on Latin and Greek letters only; "Й" is its own letter, "ё" is commonly written "е".
+  assert.equal(st('Σουβλάκι', 'Σουβλακι'), 'exact');
+  assert.equal(st('Йогурт', 'Иогурт'), 'rejected');
+  assert.equal(st('Мёд', 'Мед'), 'exact');
+  // Equal piece counts settle an unstated serving size either way round.
+  assert.equal(st('12 pc Nuggets (Serves 4)', '12 pc Nuggets'), 'exact');
+  assert.equal(st('12 pc Nuggets', '12 pc Nuggets (Serves 4)'), 'exact');
+  assert.equal(st('Nuggets (Serves 4)', 'Nuggets'), 'uncertain');
 });
