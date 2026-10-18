@@ -9,7 +9,7 @@
         "Prices read from real US store pages in every live run since 37708779121 (up to 335 menu items per page); 40 branches in the 00:01 UTC run on 9 Oct.",
         "Store links come from robots.txt-declared sitemaps and brand pages. Non-US country sections are skipped without a request.",
         "A few store pages answered with a challenge. Those are counted as blocked and not worked around.",
-        "Uber's US terms (2026-07-30 capture) bar scripts that unduly burden or hinder the service; unlike some other countries' terms they do not mention scraping."
+        "Uber's US terms (read from uber.com on 2026-10-18) bar scripts that unduly burden or hinder the service; unlike Uber's terms for India, they do not mention scraping."
       ]
     },
     {
