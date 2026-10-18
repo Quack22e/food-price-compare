@@ -19,7 +19,7 @@
       "summary": "Branch discovery works, but store pages answer datacenter requests with a Cloudflare challenge, so no current DoorDash branch price could be read from a server. Type the prices you see in the DoorDash app instead (below).",
       "evidence": [
         "99 of 99 store-page requests across 20 live runs returned 403 “Just a moment…”.",
-        "131 per-state store sitemaps are readable (California alone lists 106,228 store URLs).",
+        "131 per-state/province store sitemaps are readable (California alone lists 106,409 store URLs).",
         "/business/…/menu pages show prices DoorDash labels “estimated based on your predicted location”, so they are not used as branch prices.",
         "15 archived copies of real store pages per probe run (Wayback Machine; the latest, 2026-10-15, holds captures from Jul 2024 to Oct 2026) show the layout: Restaurant + Menu JSON-LD on 11 (a bare Menu on 3, nothing on 1 from 2024), prices like “$8.53” or “$13.59+” (a starting price), no currency field and no ZIP. The reader handles it: 8 US stores read with USD prices, 3 Canadian excluded. Archived prices are never used.",
         "The capture bookmarklet is switched off on DoorDash pages: DoorDash's terms forbid copying its site with scripts, even ones you run yourself."
@@ -31,8 +31,8 @@
       "tone": "info",
       "summary": "Grubhub's restaurant pages are drawn by JavaScript and publish no prices. Two Grubhub-owned menu sites publish the same restaurants' menus with prices and link back to each Grubhub listing, so a menu is used only when it links to the same Grubhub restaurant ID.",
       "evidence": [
-        "MenuPages: Lou Malnati's, 6456 S Cicero Ave, Chicago (Grubhub ID 434510), 169 priced listings of 171 from its Menu JSON-LD. Its restaurant sitemap lists 28,133 pages.",
-        "AllMenus: Lou Malnati's, 85 S Buffalo Grove Rd (ID 517712, not on MenuPages), 169 priced listings. Prices are read from the page HTML only because its 217 item names match the page's own JSON-LD names.",
+        "MenuPages: Lou Malnati's, 6456 S Cicero Ave, Chicago (Grubhub ID 434510), 168 priced listings of 170 from its Menu JSON-LD in the newest run. Its restaurant sitemap lists 28,033 pages.",
+        "AllMenus: Lou Malnati's, 85 S Buffalo Grove Rd (ID 517712, not on MenuPages), 165 priced listings in the newest run. Prices are read from the page HTML only because its 216 item names match the page's own JSON-LD names.",
         "A menu is used only from a page that links to exactly that one Grubhub restaurant; a blocked or incomplete lookup is reported as such.",
         "Published menu prices can lag the live Grubhub menu (AllMenus says its menus may not be current) and leave out option charges.",
         "Grubhub's terms limit both sites to personal, non-commercial use and forbid automated access; operators can switch the lookups off (FPC_DISABLE_GRUBHUB_MIRRORS=1)."
@@ -67,7 +67,7 @@
         "branch_prices": "Yes, for listed restaurants",
         "fit": "now",
         "fit_label": "In use · verified live",
-        "fit_note": "Covers a subset of Grubhub (28,133 pages). Terms: personal, non-commercial use only.",
+        "fit_note": "Covers a subset of Grubhub (28,033 pages). Terms: personal, non-commercial use only.",
         "evidence": [
           "https://menupages.com/info/about-us",
           "https://menupages.com/info/terms-of-use"
@@ -403,7 +403,7 @@
         "branch_prices": "Historical only",
         "fit": "no",
         "fit_label": "Historical only · structure evidence",
-        "fit_note": "Never used as prices. Used as evidence of page structure: 15 archived DoorDash store pages verified the DoorDash reader (existing captures only; Common Crawl's index robots.txt disallows the queries, which is honoured). Wayback is for research, non-commercial use; the Kaggle Uber Eats dump has no store ID, URL or timestamp and is for educational use.",
+        "fit_note": "Never used as prices. Used as evidence of page structure: 15 archived DoorDash store pages per probe run verified the DoorDash reader (11 of them carry a Restaurant block) (existing captures only; Common Crawl's index robots.txt disallows the queries, which is honoured). Wayback is for research, non-commercial use; the Kaggle Uber Eats dump has no store ID, URL or timestamp and is for educational use.",
         "evidence": [
           "https://archive.org/help/wayback_api.php",
           "https://commoncrawl.org/common-crawl-url-index/"
