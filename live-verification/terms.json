@@ -1,0 +1,121 @@
+{
+ "started_at": "2026-10-18T02:38:04Z",
+ "user_agent": "FoodPriceCompare/1.0 (terms check; reads published terms pages)",
+ "terms": [
+  {
+   "platform": "ubereats",
+   "name": "Uber U.S. Terms of Use",
+   "url": "https://www.uber.com/legal/en/document/?name=general-terms-of-use&country=united-states&lang=en",
+   "live": {
+    "url": "https://www.uber.com/legal/en/document/?name=general-terms-of-use&country=united-states&lang=en",
+    "status": 406
+   },
+   "archived": {
+    "url": "https://web.archive.org/web/20260730164037id_/https://www.uber.com/legal/en/document/?name=general-terms-of-use&country=united-states&lang=en",
+    "status": 200,
+    "chars": 328706,
+    "quotes": [
+     "To notify Uber that you intend to initiate an informal dispute resolution conference, write to Uber Technologies, Inc., Attn: Legal Department, 1725 3rd Street, San Francisco, CA 94158, providing your name, the telephone number(s) associated with your Uber account (if any), the email address(es) associated with your Uber account, and a description of your claim.",
+     "If Uber intends to initiate an informal dispute resolution conference, it will send notice, including a description of its claim, to you via electronic email to the email address associated with your Uber account.",
+     "(v) cause or launch any programs or scripts for the purpose of, or which result in, unduly burdening or hindering the operation and/or functionality of any aspect of the Services;"
+    ],
+    "dates": []
+   }
+  },
+  {
+   "platform": "doordash",
+   "name": "DoorDash Consumer Terms and Conditions (US)",
+   "url": "https://help.doordash.com/legal/document?type=cx-terms-and-conditions&region=US&locale=en-US",
+   "live": {
+    "url": "https://help.doordash.com/legal/document?type=cx-terms-and-conditions&region=US&locale=en-US",
+    "status": 200,
+    "chars": 143820,
+    "quotes": [
+     "Consumer Marketing Text Message Service Electronic Records Intellectual Property Ownership Payment Terms DashPass Subscriptions Arbitration Agreement Third-Party Interactions Transactions Involving Alcohol and Other Age-Restricted Products Indemnification Disclaimer of Warranties Internet Delays Breach and Limitation of Liability Exclusive Venue Termination Procedure for Making Claims of Copyright Infringement Consumer Marketing Text Messages (United States Consumers Only) General Contact Information 1.",
+     "(p) You will not use, access, or collect content, data, information, or materials published or available on the Services—including, but not limited to, text, photographs, images, illustrations, designs, audio clips, video clips, “look and feel,” metadata, data, or compilations—using automated means unless DoorDash has given you prior permission to do so in writing.",
+     "(q) You will not deep-link to our websites or access our websites manually or with any robot, spider, script, web crawler, extraction software, automated process, service, tool, and/or device to scrape, copy, index, frame, or monitor any portion of our Services or websites or any content on or available through our Services or websites, and you will not attempt any of the foregoing.",
+     "(r) You will not scrape or otherwise conduct any systematic retrieval of data or other content from the Services (including content accessible without being logged into your account), and you will not attempt any of the foregoing.",
+     "You agree that DoorDash is not responsible for Merchants’ food preparation or product offerings, food or product handling, or the safety of the food or other products, or whether the photographs, images, videos, menu or product listings, catalog, item descriptions, or other menu, product, or catalog information (including nutrition, ingredient, and/or allergen information) displayed through the Services accurately reflect the goods and services sold by Merchants and/or delivered by the Delivery Provider and/or Merchant, and does not verify Merchants’ compliance with applicable laws or regulations.",
+     "You also acknowledge and agree that menu, product, or catalog listings, descriptions, or other information (including videos, photographs, or images, or nutrition, ingredient, and/or allergen information) displayed through the Services may not have been provided directly by the Merchant and/or may have been generated or enhanced with the assistance of artificial intelligence.",
+     "You are liable for all transaction taxes (other than taxes based on DoorDash’s income), including sales tax, use tax, goods and services tax, and other transaction taxes if applicable, on the Services provided under this Agreement (which, for the avoidance of doubt, includes any fees DoorDash charges for DashPass subscriptions).",
+     "If you are completing a transaction directly with a Checkout Merchant outside of the DoorDash platform and we determine that you are a registered DoorDash User, we may share certain information about you, including loyalty or rewards information, DashPass subscription status, and/or payment card, payment method, billing, and contact information, with the Checkout Merchant for the purpose of facilitating the transaction."
+    ],
+    "dates": [
+     "October 16, 2026"
+    ]
+   }
+  },
+  {
+   "platform": "grubhub",
+   "name": "Grubhub Terms of Use",
+   "url": "https://www.grubhub.com/legal/terms-of-use",
+   "live": {
+    "url": "https://www.grubhub.com/legal/terms-of-use",
+    "status": 200,
+    "chars": 84964,
+    "quotes": [
+     "Food Delivery | Restaurant Takeout | Order Food Online | Grubhub Help Sign in BGrVxACCjuM2qm2mg8kI {\"title\":\"Terms Of Use - GH \",\"pageTitle\":\"Food Delivery | Restaurant Takeout | Order Food Online | Grubhub\",\"metaDescription\":\"Free online ordering from restaurants near you! With more than 30,000 restaurants in 500+ cities, food delivery or takeout is just a click away.",
+     "Grubhub does not independently verify, and is not liable for, representations made by Merchants regarding their food, including, without limitation, any menu- or Merchant-level descriptors, disclosures, photographs or images displayed through the Platform reflecting the food prepared by the Merchants and/or delivered by Delivery Partners (defined below).",
+     "not to deep-link to or frame the Platform and/or access the Platform manually and/or with any robot, spider, web crawler, extraction software, automated process, and/or device or other means to scrape, copy, and/or monitor any portion of the Platform and/or any Materials and/or other content on the Platform, unless specifically authorized in writing by Grubhub;",
+     "not to conduct any scraping, indexing, surveying, data mining, or any other kind of systematic retrieval of data or other content from the Platform;",
+     "Further, you agree that the consequences of commercial use or re-publication of Your Content (defined below) or Materials from the Platform or other violations of the foregoing proscriptions may be so serious and incalculable that monetary compensation may not be a sufficient or appropriate remedy, and that Grubhub will be entitled to temporary and permanent injunctive relief to prohibit such use or activity without the need to prove damages.",
+     "GRUBHUB DOES NOT REPRESENT OR WARRANT THAT THE INFORMATION ACCESSIBLE THROUGH THE SERVICE IS ACCURATE, COMPLETE, RELIABLE, CURRENT, OR ERROR-FREE, INCLUDING, WITHOUT LIMITATION, MENUS, NUTRITIONAL AND ALLERGEN INFORMATION, PHOTOS, FOOD QUALITY OR DESCRIPTIONS, PRICING, HOURS OF OPERATION, OR REVIEWS.",
+     "GRUBHUB+ By purchasing or using a Grubhub membership subscription service (including Grubhub+ and Seamless+), you agree to this Agreement and the additional Membership Terms of Use .",
+     "This includes first sending a written description of the Dispute to the other party."
+    ],
+    "dates": [
+     "December 17, 2024"
+    ]
+   }
+  }
+ ],
+ "requests": [
+  {
+   "robots": "www.uber.com",
+   "status": 200
+  },
+  {
+   "url": "https://www.uber.com/legal/en/document/?name=general-terms-of-use&country=united-states&lang=en",
+   "status": 406,
+   "bytes": 14
+  },
+  {
+   "robots": "web.archive.org",
+   "status": 404
+  },
+  {
+   "url": "https://web.archive.org/cdx/search/cdx?url=https%3A%2F%2Fwww.uber.com%2Flegal%2Fen%2Fdocument%2F%3Fname%3Dgeneral-terms-of-use%26country%3Dunited-states%26lang%3Den&output=json&filter=statuscode:200&limit=-1&fl=timestamp,original",
+   "status": 200,
+   "bytes": 145
+  },
+  {
+   "url": "https://web.archive.org/web/20260730164037id_/https://www.uber.com/legal/en/document/?name=general-terms-of-use&country=united-states&lang=en",
+   "status": 200,
+   "bytes": 495077
+  },
+  {
+   "robots": "help.doordash.com",
+   "status": 200
+  },
+  {
+   "url": "https://help.doordash.com/legal/document?type=cx-terms-and-conditions&region=US&locale=en-US",
+   "status": 301,
+   "bytes": 15
+  },
+  {
+   "url": "https://help.doordash.com/en-us/legal/article/cx-terms-and-conditions",
+   "status": 200,
+   "bytes": 734196
+  },
+  {
+   "robots": "www.grubhub.com",
+   "status": 200
+  },
+  {
+   "url": "https://www.grubhub.com/legal/terms-of-use",
+   "status": 200,
+   "bytes": 148474
+  }
+ ],
+ "finished_at": "2026-10-18T02:38:23Z"
+}
